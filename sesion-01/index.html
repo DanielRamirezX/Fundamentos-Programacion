@@ -564,6 +564,159 @@
     display: inline-block;
   }
 
+  /* GIT FLOW */
+  .gitflow{
+    margin: 110px 0;
+  }
+  .gitflow .head{
+    margin-bottom: 50px;
+  }
+  .gitflow .head h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 84px);
+    line-height: 1;
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+  }
+  .gitflow .head h2 em{
+    font-style: italic;
+    color: var(--blood);
+    font-weight: 600;
+  }
+  .gitflow .head p{
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0;
+  }
+  .git-commands{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1.5px solid var(--ink);
+    margin-top: 40px;
+  }
+  @media (max-width: 720px){ .git-commands{ grid-template-columns: 1fr; } }
+  .git-cmd{
+    padding: 32px 30px;
+    border: 1px solid var(--line);
+    position: relative;
+    background: var(--paper);
+    transition: background .2s ease;
+  }
+  .git-cmd:hover{ background: var(--paper-deep); }
+  .git-cmd .step{
+    display: inline-block;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1rem;
+    color: var(--blood);
+    letter-spacing: .05em;
+    margin-bottom: 14px;
+  }
+  .git-cmd .cmd-line{
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--paper-deep);
+    border-left: 3px solid var(--blood);
+    padding: 10px 14px;
+    margin: 0 0 14px;
+    display: block;
+    letter-spacing: -.01em;
+  }
+  .git-cmd .cmd-line .prompt{
+    color: var(--ochre);
+    user-select: none;
+  }
+  .git-cmd h4{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 1.25rem;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+  .git-cmd p{
+    font-size: .95rem;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.55;
+  }
+  .git-cmd .sub-cmd{
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .8rem;
+    color: var(--ink-soft);
+    background: none;
+    border-left: none;
+    padding: 0;
+    display: block;
+  }
+  .git-cmd .sub-cmd .prompt{ color: var(--ochre); }
+  .git-flow-diagram{
+    margin-top: 38px;
+    padding: 28px 32px;
+    background: var(--ink);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+  }
+  .git-flow-diagram::before{
+    content:"";
+    position: absolute; inset: 0;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9   0 0 0 0 0.85   0 0 0 0 0.7   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: screen;
+    opacity: .3;
+    pointer-events: none;
+  }
+  .flow-node{
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 16px 20px;
+  }
+  .flow-node .label{
+    font-family: "JetBrains Mono", monospace;
+    font-size: .78rem;
+    color: rgba(239,230,210,.5);
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .flow-node .name{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #efb9a8;
+  }
+  .flow-arrow{
+    position: relative; z-index: 1;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .72rem;
+    color: rgba(239,230,210,.4);
+    text-align: center;
+    padding: 0 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .flow-arrow .git-c{
+    color: #f0c8a0;
+    font-size: .7rem;
+  }
+
   /* MISIÓN */
   .mision{
     margin: 100px 0;
@@ -990,6 +1143,84 @@
           <p>Nada se entrega por correo. Nada por mensaje. Nada por USB. Todo vive en tu repositorio personal de GitHub, con commits descriptivos y fechas reales. Vas a aprender Git la primera semana — no porque sea bonito, sino porque <em>es el idioma de tu profesión</em>.</p>
           <span class="mono-note">$ git commit -m "primer commit"</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GIT FLOW -->
+  <section class="gitflow reveal">
+    <div class="head">
+      <div class="small-caps" style="color:var(--blood);margin-bottom:16px;">Semana 1 · Herramienta obligatoria</div>
+      <h2 class="display">Los cuatro comandos <em>que van a salvar tu vida</em>.</h2>
+      <p>
+        No memorices Git de golpe. Memoriza el flujo. Estos cuatro pasos son el ciclo que vas a
+        repetir cada vez que trabajes: clonar una vez, agregar, guardar, subir — siempre.
+      </p>
+    </div>
+
+    <div class="git-commands">
+      <div class="git-cmd">
+        <span class="step">Paso 0 — una sola vez</span>
+        <code class="cmd-line"><span class="prompt">$ </span>git clone &lt;url-del-repo&gt;</code>
+        <h4>Clonar el repositorio</h4>
+        <p>Descarga todo el historial y los archivos del repo a tu máquina. Lo haces <em>una sola vez</em> por proyecto. La URL la encuentras en el botón verde de GitHub.</p>
+        <code class="sub-cmd"><span class="prompt">$ </span>git clone https://github.com/tu-usuario/fundamentos-programacion-26-3.git</code>
+      </div>
+
+      <div class="git-cmd">
+        <span class="step">Paso 1 — cada vez que cambias algo</span>
+        <code class="cmd-line"><span class="prompt">$ </span>git add .</code>
+        <h4>Agregar cambios al área de espera</h4>
+        <p>Le dices a Git "quiero guardar <em>estos</em> archivos". El punto <code style="font-family:JetBrains Mono,monospace;font-size:.9em">&nbsp;.&nbsp;</code> significa "todo lo que cambié". También puedes nombrar archivos específicos.</p>
+        <code class="sub-cmd"><span class="prompt">$ </span>git add mi_script.py &nbsp;&nbsp;<span style="color:var(--ink-soft);font-style:italic"># solo ese archivo</span></code>
+      </div>
+
+      <div class="git-cmd">
+        <span class="step">Paso 2 — después del add</span>
+        <code class="cmd-line"><span class="prompt">$ </span>git commit -m "mensaje"</code>
+        <h4>Guardar una versión con descripción</h4>
+        <p>Toma una foto del estado actual y le pone un nombre. El mensaje describe <em>qué hiciste</em> — escríbelo en presente, en español o inglés, y que tenga sentido dentro de 3 meses.</p>
+        <code class="sub-cmd"><span class="prompt">$ </span>git commit -m "agrego cálculo de propina con validación"</code>
+      </div>
+
+      <div class="git-cmd">
+        <span class="step">Paso 3 — para compartir / entregar</span>
+        <code class="cmd-line"><span class="prompt">$ </span>git push</code>
+        <h4>Subir los cambios a GitHub</h4>
+        <p>Envía tus commits locales al repositorio en la nube. Sin este paso, tus cambios solo existen en tu máquina — y <em>eso no cuenta como entrega</em>.</p>
+        <code class="sub-cmd"><span class="prompt">$ </span>git push origin main &nbsp;&nbsp;<span style="color:var(--ink-soft);font-style:italic"># la primera vez</span></code>
+      </div>
+    </div>
+
+    <!-- flujo visual -->
+    <div class="git-flow-diagram">
+      <div class="flow-node">
+        <span class="label">tu compu</span>
+        <span class="name">Working Directory</span>
+      </div>
+      <div class="flow-arrow">
+        <span class="git-c">git add</span>
+        <span>──────→</span>
+      </div>
+      <div class="flow-node">
+        <span class="label">área de espera</span>
+        <span class="name">Staging Area</span>
+      </div>
+      <div class="flow-arrow">
+        <span class="git-c">git commit</span>
+        <span>──────→</span>
+      </div>
+      <div class="flow-node">
+        <span class="label">historial local</span>
+        <span class="name">Local Repo</span>
+      </div>
+      <div class="flow-arrow">
+        <span class="git-c">git push</span>
+        <span>──────→</span>
+      </div>
+      <div class="flow-node">
+        <span class="label">la nube</span>
+        <span class="name">GitHub</span>
       </div>
     </div>
   </section>
