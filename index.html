@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fundamentos de Programación · Ciclo 26-3 · El cuaderno del curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2;
+    --paper-deep: #e6dbc2;
+    --paper-darker: #d9ccb0;
+    --ink: #2a1d14;
+    --ink-soft: #4a3a2c;
+    --ink-faint: #8a7a6a;
+    --blood: #a02418;
+    --blood-dark: #6e1810;
+    --ochre: #b5852a;
+    --ochre-deep: #8a6320;
+    --olive: #5d6638;
+    --line: rgba(42,29,20,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px),
+      radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px;
+    background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:"";
+    position: fixed; inset:0;
+    pointer-events:none;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+    opacity:.55;
+    z-index: 1;
+  }
+  main{
+    position: relative;
+    z-index: 2;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  .display{ font-family: "Fraunces", "Times New Roman", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+
+  /* TOP BAR */
+  .top{
+    display:flex; justify-content: space-between; align-items: center;
+    padding: 22px 0 16px;
+    border-bottom: 1.5px solid var(--ink);
+    margin-bottom: 60px;
+  }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.7rem;
+    color: var(--blood);
+  }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+  .top .right .today{ color: var(--blood); font-weight: 600; }
+
+  /* HERO */
+  .hero{
+    position: relative;
+    padding: 30px 0 70px;
+  }
+  .hero .deco{
+    position: absolute;
+    top: -20px; right: -20px;
+    font-family: "Fraunces", serif;
+    font-weight: 900;
+    font-size: clamp(140px, 22vw, 280px);
+    line-height: .85;
+    color: var(--paper-deep);
+    z-index: 0;
+    user-select: none;
+    font-style: italic;
+  }
+  .hero .kicker{
+    position: relative; z-index: 2;
+    font-size: .85rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--blood);
+    margin-bottom: 24px;
+    display:flex; align-items:center; gap: 16px;
+  }
+  .hero .kicker::before{
+    content:""; display:inline-block; width: 50px; height: 2px; background: var(--blood);
+  }
+  .hero h1{
+    position: relative; z-index: 2;
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(48px, 8vw, 110px);
+    line-height: .95;
+    margin: 0 0 30px;
+    letter-spacing: -.02em;
+    max-width: 880px;
+  }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{
+    position: relative; z-index: 2;
+    max-width: 720px;
+    font-size: 1.18rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+
+  /* INFO STRIP */
+  .info-strip{
+    margin: 50px 0 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  @media (max-width: 760px){ .info-strip{ grid-template-columns: repeat(2, 1fr); } }
+  .info-cell{
+    background: var(--paper);
+    padding: 20px 22px;
+  }
+  .info-cell .label{
+    display:block;
+    font-size: .68rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .info-cell .value{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .info-cell .value em{ font-style: italic; color: var(--blood); font-weight: 600; }
+
+  /* PROGRESS */
+  .progress-section{
+    margin: 60px 0;
+    padding: 40px 0;
+    border-top: 1px dashed var(--line);
+    border-bottom: 1px dashed var(--line);
+  }
+  .progress-row{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 700px){ .progress-row{ grid-template-columns: 1fr; gap: 12px; } }
+  .progress-row h3{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(24px, 3.5vw, 36px);
+    margin: 0;
+    line-height: 1.15;
+  }
+  .progress-row h3 em{ color: var(--blood); font-weight: 600; }
+  .progress-row h3 .ochre{ color: var(--ochre-deep); font-weight: 600; }
+  .progress-stats{
+    text-align: right;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 1rem;
+  }
+  .progress-stats .big{
+    font-style: italic;
+    font-weight: 900;
+    font-size: 2.4rem;
+    color: var(--blood);
+    line-height: 1;
+    display: inline-block;
+    margin-right: 4px;
+  }
+  .progress-bar{
+    height: 8px;
+    background: var(--paper-darker);
+    position: relative;
+    overflow: hidden;
+  }
+  .progress-bar .fill{
+    position: absolute; top: 0; left: 0;
+    height: 100%;
+    background: var(--blood);
+    transition: width 1s ease;
+  }
+  .progress-marker{
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .78rem;
+    color: var(--ink-soft);
+    display: flex; justify-content: space-between;
+  }
+
+  /* WEEKS */
+  .calendar{
+    margin: 80px 0;
+  }
+  .calendar h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(34px, 5vw, 56px);
+    line-height: 1;
+    margin: 0 0 12px;
+    letter-spacing: -.015em;
+  }
+  .calendar h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .calendar .intro{
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    max-width: 720px;
+    margin: 0 0 50px;
+  }
+
+  .week{
+    margin-bottom: 32px;
+    padding: 26px 0 30px;
+    border-top: 1.5px solid var(--ink);
+  }
+  .week-head{
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .week-num{
+    font-family: "Fraunces", serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .week-label{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+  }
+  .week-tag{
+    margin-left: auto;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .sessions-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 720px){ .sessions-grid{ grid-template-columns: 1fr; } }
+
+  /* SESSION CARDS */
+  .session{
+    background: var(--paper-deep);
+    border: 1.5px solid var(--ink);
+    padding: 22px 24px 24px;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    cursor: pointer;
+  }
+  .session.locked{
+    background: var(--paper);
+    cursor: not-allowed;
+    opacity: .55;
+    pointer-events: none;
+  }
+  .session.locked::after{
+    content: "";
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(42,29,20,.04) 8px, rgba(42,29,20,.04) 12px);
+    pointer-events: none;
+  }
+  .session:not(.locked):hover{
+    background: var(--paper);
+    transform: translateY(-3px);
+    box-shadow: 4px 6px 0 var(--ink);
+  }
+  .session.today{
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--blood);
+    border-width: 2.5px;
+    box-shadow: 4px 6px 0 var(--blood);
+  }
+  .session.today:hover{
+    background: var(--ink);
+    transform: translateY(-3px);
+    box-shadow: 6px 8px 0 var(--blood);
+  }
+  .session.today .meta-num{ color: #f0c8a0; }
+  .session.today .date{ color: rgba(239,230,210,.7); }
+  .session.today .subtitle{ color: rgba(239,230,210,.65); }
+  .session.today .badge.live{ background: var(--blood); color: var(--paper); }
+
+  .session.soon{
+    background: var(--paper);
+    border-color: var(--ochre);
+  }
+  .session.soon::before{
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--ochre);
+  }
+
+  .session.special-exam{
+    background: var(--paper-deep);
+    border-color: var(--blood);
+    border-style: dashed;
+  }
+
+  .session.special-asueto{
+    background: #fbf3d9;
+    border-color: var(--ochre);
+    border-style: dashed;
+    opacity: .85;
+  }
+
+  .session-head{
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .session .meta-num{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: var(--blood);
+    line-height: 1;
+  }
+  .session .date{
+    font-size: .82rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-family: "Newsreader", serif;
+  }
+  .session h3{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 1.45rem;
+    margin: 0 0 8px;
+    line-height: 1.1;
+    color: inherit;
+  }
+  .session .subtitle{
+    font-size: .9rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .session .badge{
+    position: absolute;
+    top: 18px; right: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: .65rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .session .badge svg{ width: 12px; height: 12px; }
+  .session .badge.locked{
+    background: var(--paper-darker);
+    color: var(--ink-soft);
+  }
+  .session .badge.soon{
+    background: var(--ochre);
+    color: var(--paper);
+  }
+  .session .badge.available{
+    background: transparent;
+    color: var(--blood);
+    border: 1px solid var(--blood);
+  }
+  .session .badge.live{
+    background: var(--paper);
+    color: var(--blood);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%, 100%{ opacity: 1; }
+    50%{ opacity: .55; }
+  }
+  .session .badge.exam{
+    background: var(--blood);
+    color: var(--paper);
+  }
+  .session .badge.asueto{
+    background: var(--ochre);
+    color: var(--paper);
+  }
+  .session .countdown{
+    margin-top: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .72rem;
+    color: var(--ink-soft);
+  }
+  .session.soon .countdown{ color: var(--ochre-deep); font-weight: 700; }
+  .session.today .countdown{ color: #f0c8a0; }
+
+  /* LEGEND */
+  .legend{
+    margin: 60px 0 80px;
+    padding: 30px 0;
+    border-top: 1px dashed var(--line);
+  }
+  .legend h4{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+  .legend-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+  }
+  .legend-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: .85rem;
+    color: var(--ink-soft);
+  }
+  .legend-swatch{
+    width: 28px; height: 28px;
+    border: 1.5px solid var(--ink);
+    flex-shrink: 0;
+  }
+  .legend-swatch.locked{ background: var(--paper); opacity: .55; }
+  .legend-swatch.available{ background: var(--paper-deep); }
+  .legend-swatch.soon{ background: var(--paper); border-color: var(--ochre); border-width: 2.5px; }
+  .legend-swatch.today{ background: var(--ink); border-color: var(--blood); border-width: 2.5px; }
+  .legend-swatch.exam{ background: var(--paper-deep); border-color: var(--blood); border-style: dashed; }
+
+  /* FOOTER */
+  footer.foot{
+    margin: 80px 0 50px;
+    padding: 50px 0;
+    border-top: 2px solid var(--ink);
+    text-align: center;
+  }
+  footer.foot .quote{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(20px, 2.8vw, 28px);
+    line-height: 1.25;
+    color: var(--ink);
+    max-width: 720px;
+    margin: 0 auto 30px;
+  }
+  footer.foot .quote .em{ color: var(--blood); font-weight: 600; }
+  footer.foot .sig{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--ink);
+  }
+  footer.foot .sig::before{ content: "—  "; color: var(--blood); }
+  footer.foot .sig small{
+    display: block;
+    font-style: normal;
+    font-weight: 400;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+  footer.foot .repo{
+    margin-top: 30px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .8rem;
+    color: var(--ink-faint);
+  }
+
+  /* Reveal */
+  .reveal{
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .reveal.in{ opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del curso · Fundamentos de Programación · 26-3</span>
+    </div>
+    <div class="right">
+      <span class="today" id="today-date">—</span><br/>
+      <span style="color:var(--ink-soft)">UNITEC Atizapán · Lun y Jue, 18:00–20:00</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="deco display">F·P</div>
+    <div class="kicker">El cuaderno del curso</div>
+    <h1 class="display">
+      Fundamentos de<br/>
+      <span class="em">Programación.</span>
+    </h1>
+    <p class="lede">
+      Catorce semanas. Veintiocho sesiones. Cincuenta y seis horas para aprender
+      <em>no a escribir código</em>, sino a <strong>pensar con tanta claridad</strong> que una
+      máquina pueda obedecerte. Este es el índice del cuaderno. Cada sesión se abrirá el día
+      en que la veamos en clase.
+    </p>
+  </section>
+
+  <!-- INFO STRIP -->
+  <section class="info-strip">
+    <div class="info-cell">
+      <span class="label">Profesor</span>
+      <span class="value">Carlos Daniel <em>Vaca</em> Ramírez</span>
+    </div>
+    <div class="info-cell">
+      <span class="label">Lenguaje</span>
+      <span class="value"><em>Python</em> · 3.12+</span>
+    </div>
+    <div class="info-cell">
+      <span class="label">Inicio · Fin</span>
+      <span class="value">18 May · <em>20 Ago</em></span>
+    </div>
+    <div class="info-cell">
+      <span class="label">Sesiones · Horas</span>
+      <span class="value">28 · <em>56</em></span>
+    </div>
+  </section>
+
+  <!-- PROGRESS -->
+  <section class="progress-section reveal">
+    <div class="progress-row">
+      <h3 class="display">
+        <span id="progress-headline">El curso aún no <em>empieza</em>.</span>
+      </h3>
+      <div class="progress-stats">
+        <span class="big" id="progress-count">0</span> <span id="progress-suffix">de 28 sesiones</span>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="fill" id="progress-fill" style="width: 0%"></div></div>
+    <div class="progress-marker">
+      <span>18.05.2026</span>
+      <span id="progress-next">Próxima: —</span>
+      <span>20.08.2026</span>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section class="calendar reveal">
+    <h2 class="display">El <em>calendario</em><br/>del viaje.</h2>
+    <p class="intro">
+      Cada sesión se desbloquea el día que la damos en clase. Los recursos que están en
+      candado todavía no se han impartido — vuelve en su fecha para abrirlos. Lo que ya
+      vimos queda disponible permanentemente para que regreses cuando quieras repasar.
+    </p>
+
+    <div id="weeks"></div>
+  </section>
+
+  <!-- LEGEND -->
+  <section class="legend">
+    <h4>Cómo leer este cuaderno:</h4>
+    <div class="legend-grid">
+      <div class="legend-item"><div class="legend-swatch locked"></div>Bloqueada (futura)</div>
+      <div class="legend-item"><div class="legend-swatch available"></div>Disponible (ya impartida)</div>
+      <div class="legend-item"><div class="legend-swatch soon"></div>Próxima (≤ 3 días)</div>
+      <div class="legend-item"><div class="legend-swatch today"></div>Hoy</div>
+      <div class="legend-item"><div class="legend-swatch exam"></div>Examen institucional</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="quote display">
+      «Programar no es escribir código. Es <span class="em">pensar con tanta claridad</span><br/>
+      que una máquina pueda al fin obedecerte.»
+    </div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor titular · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+    <div class="repo">github.com/&lt;tu-usuario&gt;/fundamentos-programacion-26-3</div>
+  </footer>
+
+</main>
+
+<script>
+  // ====== Data: 28 sesiones del curso ======
+  const sessions = [
+    // Semana 1
+    { semana: 1, num: 1,  fecha: '2026-05-18', dia: 'Lun', titulo: 'Los peripatéticos del código',           subtitulo: 'Encuadre · Lógica · Modelo I/P/O · Setup del arsenal', link: 'sesion-01/', tipo: 'normal' },
+    { semana: 1, num: 2,  fecha: '2026-05-21', dia: 'Jue', titulo: 'El método del persa',                    subtitulo: 'Algoritmos · Prueba de escritorio · Al-Khwārizmī',     link: 'sesion-02/', tipo: 'normal' },
+    // Semana 2
+    { semana: 2, num: 3,  fecha: '2026-05-25', dia: 'Lun', titulo: 'La gramática del pensamiento',           subtitulo: 'Pseudocódigo · Sentencias fundamentales · E/S',         link: 'sesion-03/', tipo: 'normal' },
+    { semana: 2, num: 4,  fecha: '2026-05-28', dia: 'Jue', titulo: 'El nombre de las cosas',                 subtitulo: 'Variables · Tipos · Operadores · Tu primer programa',   link: 'sesion-04/', tipo: 'normal' },
+    // Semana 3
+    { semana: 3, num: 5,  fecha: '2026-06-01', dia: 'Lun', titulo: 'Lo que no cambia',                       subtitulo: 'Constantes · Alcance · Importación de bibliotecas',     link: 'sesion-05/', tipo: 'normal' },
+    { semana: 3, num: 6,  fecha: '2026-06-04', dia: 'Jue', titulo: 'Verdadero, falso, y nada en medio',      subtitulo: 'Operadores lógicos · Expresiones booleanas',            link: 'sesion-06/', tipo: 'normal' },
+    // Semana 4
+    { semana: 4, num: 7,  fecha: '2026-06-08', dia: 'Lun', titulo: 'El primer bivio',                        subtitulo: 'Decisión simple con if · Condiciones · Indentación',    link: 'sesion-07/', tipo: 'normal' },
+    { semana: 4, num: 8,  fecha: '2026-06-11', dia: 'Jue', titulo: 'Asueto',                                 subtitulo: 'Posible asueto · Inauguración Mundial 2026',            link: '#',          tipo: 'asueto' },
+    // Semana 5
+    { semana: 5, num: 9,  fecha: '2026-06-15', dia: 'Lun', titulo: 'Los muchos caminos',                     subtitulo: 'if-else · if-elif-else · Decisiones anidadas · match',  link: 'sesion-09/', tipo: 'normal' },
+    { semana: 5, num: 10, fecha: '2026-06-18', dia: 'Jue', titulo: 'El arte de no engañarse',                subtitulo: 'PEP 8 · Debugging · Uso responsable de IA',             link: 'sesion-10/', tipo: 'normal' },
+    // Semana 6
+    { semana: 6, num: 11, fecha: '2026-06-22', dia: 'Lun', titulo: 'Hasta que…',                             subtitulo: 'Ciclo while · Centinela · Validación robusta',          link: 'sesion-11/', tipo: 'normal' },
+    { semana: 6, num: 12, fecha: '2026-06-25', dia: 'Jue', titulo: 'Lo finito y lo cíclico',                 subtitulo: 'Ciclo for · range() · Acumuladores · math y random',    link: 'sesion-12/', tipo: 'normal' },
+    // Semana 7
+    { semana: 7, num: 13, fecha: '2026-06-29', dia: 'Lun', titulo: 'Antes del juicio',                       subtitulo: 'Repaso bimestral integrador · Simulacro de examen',     link: 'sesion-13/', tipo: 'normal' },
+    { semana: 7, num: 14, fecha: '2026-07-02', dia: 'Jue', titulo: 'Examen Bimestral',                       subtitulo: 'Evaluación del primer bloque del curso',                link: 'sesion-14/', tipo: 'examen' },
+    // Semana 8
+    { semana: 8, num: 15, fecha: '2026-07-06', dia: 'Lun', titulo: 'Después del juicio',                     subtitulo: 'Revisión del examen · Intro a ciclos anidados',         link: 'sesion-15/', tipo: 'normal' },
+    { semana: 8, num: 16, fecha: '2026-07-09', dia: 'Jue', titulo: 'El laberinto fractal',                   subtitulo: 'Ciclos anidados · Patrones · Tablas y combinaciones',   link: 'sesion-16/', tipo: 'normal' },
+    // Semana 9
+    { semana: 9, num: 17, fecha: '2026-07-13', dia: 'Lun', titulo: 'Cuando todo falla',                      subtitulo: 'Manejo de excepciones · try/except · Programas robustos', link: 'sesion-17/', tipo: 'normal' },
+    { semana: 9, num: 18, fecha: '2026-07-16', dia: 'Jue', titulo: 'Divide y vencerás',                      subtitulo: 'Funciones · def · return · Modularidad',                link: 'sesion-18/', tipo: 'normal' },
+    // Semana 10
+    { semana: 10, num: 19, fecha: '2026-07-20', dia: 'Lun', titulo: 'Tu propia biblioteca',                  subtitulo: 'Funciones con varios parámetros · math · random · datetime', link: 'sesion-19/', tipo: 'normal' },
+    { semana: 10, num: 20, fecha: '2026-07-23', dia: 'Jue', titulo: 'El primer arreglo',                     subtitulo: 'Listas · Indexación · Recorrido · Métodos básicos',     link: 'sesion-20/', tipo: 'normal' },
+    // Semana 11
+    { semana: 11, num: 21, fecha: '2026-07-27', dia: 'Lun', titulo: 'Buscar y ordenar',                      subtitulo: 'Listas avanzadas · Búsqueda · Ordenamiento · Comprehensions', link: 'sesion-21/', tipo: 'normal' },
+    { semana: 11, num: 22, fecha: '2026-07-30', dia: 'Jue', titulo: 'Dos dimensiones',                       subtitulo: 'Matrices · Listas de listas · Declaración',             link: 'sesion-22/', tipo: 'normal' },
+    // Semana 12
+    { semana: 12, num: 23, fecha: '2026-08-03', dia: 'Lun', titulo: 'El tablero del mundo',                  subtitulo: 'Matrices aplicadas · Recorridos con doble for · Juego del gato', link: 'sesion-23/', tipo: 'normal' },
+    { semana: 12, num: 24, fecha: '2026-08-06', dia: 'Jue', titulo: 'Clave y valor',                         subtitulo: 'Diccionarios · Lista de diccionarios · Modelado de datos', link: 'sesion-24/', tipo: 'normal' },
+    // Semana 13
+    { semana: 13, num: 25, fecha: '2026-08-10', dia: 'Lun', titulo: 'Memoria que persiste',                  subtitulo: 'Archivos .txt y .csv · open · read · write · with',     link: 'sesion-25/', tipo: 'normal' },
+    { semana: 13, num: 26, fecha: '2026-08-13', dia: 'Jue', titulo: 'La víspera',                            subtitulo: 'Repaso final integrador · Simulacro examen final',      link: 'sesion-26/', tipo: 'normal' },
+    // Semana 14
+    { semana: 14, num: 27, fecha: '2026-08-17', dia: 'Lun', titulo: 'Examen Final',                          subtitulo: 'Evaluación integradora del curso',                       link: 'sesion-27/', tipo: 'examen' },
+    { semana: 14, num: 28, fecha: '2026-08-20', dia: 'Jue', titulo: 'El cierre del cuaderno',                subtitulo: 'Revisión del examen · Síntesis · Cierre del curso',     link: 'sesion-28/', tipo: 'normal' },
+  ];
+
+  const monthsShort = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const monthsLong  = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+  function parseISO(s){ return new Date(s + 'T00:00:00'); }
+  function todayMidnight(){ const d = new Date(); d.setHours(0,0,0,0); return d; }
+  function daysBetween(a, b){ return Math.round((a.getTime() - b.getTime()) / 86400000); }
+  function fmtDateLong(d){ return `${d.getDate()} de ${monthsLong[d.getMonth()]} de ${d.getFullYear()}`; }
+  function fmtDateShort(d){ return `${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getFullYear()}`; }
+
+  function getStatus(fechaStr){
+    const today = todayMidnight();
+    const fecha = parseISO(fechaStr);
+    const diff = daysBetween(fecha, today);
+    if (diff < 0) return { state: 'past', diff };
+    if (diff === 0) return { state: 'today', diff };
+    if (diff <= 3) return { state: 'soon', diff };
+    return { state: 'locked', diff };
+  }
+
+  function badgeHtml(session, status){
+    if (session.tipo === 'asueto'){
+      return `<span class="badge asueto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>
+        Asueto
+      </span>`;
+    }
+    if (session.tipo === 'examen' && status.state !== 'past'){
+      return `<span class="badge exam">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>
+        Examen
+      </span>`;
+    }
+    if (status.state === 'today'){
+      return `<span class="badge live">● En vivo hoy</span>`;
+    }
+    if (status.state === 'soon'){
+      return `<span class="badge soon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        Próxima
+      </span>`;
+    }
+    if (status.state === 'locked'){
+      return `<span class="badge locked">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        Bloqueada
+      </span>`;
+    }
+    return `<span class="badge available">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5h14v14H5z M3 9h18 M9 5v14"/></svg>
+      Abrir
+    </span>`;
+  }
+
+  function countdownHtml(status){
+    if (status.state === 'today') return `<div class="countdown">→ se imparte HOY</div>`;
+    if (status.state === 'soon') {
+      const d = status.diff;
+      return `<div class="countdown">→ en ${d} día${d===1?'':'s'}</div>`;
+    }
+    if (status.state === 'locked'){
+      const d = status.diff;
+      if (d <= 30) return `<div class="countdown">→ en ${d} días</div>`;
+      return `<div class="countdown">→ falta(n) ${d} días</div>`;
+    }
+    return '';
+  }
+
+  function renderSession(session){
+    const status = getStatus(session.fecha);
+    const fechaObj = parseISO(session.fecha);
+    let extraClass = '';
+
+    if (session.tipo === 'asueto') extraClass = 'special-asueto locked';
+    else if (session.tipo === 'examen'){
+      extraClass = 'special-exam';
+      if (status.state === 'locked') extraClass += ' locked';
+    } else {
+      if (status.state === 'locked') extraClass = 'locked';
+      else if (status.state === 'soon') extraClass = 'soon';
+      else if (status.state === 'today') extraClass = 'today';
+    }
+
+    const tag = (status.state === 'locked' || session.tipo === 'asueto') ? 'div' : 'a';
+    const href = (tag === 'a') ? `href="${session.link}"` : '';
+
+    return `
+      <${tag} class="session ${extraClass}" ${href}>
+        ${badgeHtml(session, status)}
+        <div class="session-head">
+          <span class="meta-num">${session.num.toString().padStart(2,'0')}</span>
+          <span class="date">${session.dia} ${fechaObj.getDate().toString().padStart(2,'0')} ${monthsShort[fechaObj.getMonth()]}</span>
+        </div>
+        <h3>${session.titulo}</h3>
+        <p class="subtitle">${session.subtitulo}</p>
+        ${countdownHtml(status)}
+      </${tag}>
+    `;
+  }
+
+  function renderWeeks(){
+    const weeksEl = document.getElementById('weeks');
+    const byWeek = {};
+    sessions.forEach(s => {
+      if (!byWeek[s.semana]) byWeek[s.semana] = [];
+      byWeek[s.semana].push(s);
+    });
+
+    let html = '';
+    const today = todayMidnight();
+    Object.keys(byWeek).sort((a,b)=>+a-+b).forEach(week => {
+      const ws = byWeek[week];
+      const firstDate = parseISO(ws[0].fecha);
+      const lastDate = parseISO(ws[ws.length-1].fecha);
+      const diffFirst = daysBetween(firstDate, today);
+      const diffLast = daysBetween(lastDate, today);
+
+      let weekTag = '';
+      if (diffLast < 0) weekTag = 'Concluida';
+      else if (diffFirst <= 0 && diffLast >= 0) weekTag = 'En curso';
+      else if (diffFirst > 0 && diffFirst <= 7) weekTag = 'Próxima semana';
+
+      html += `
+        <div class="week reveal">
+          <div class="week-head">
+            <span class="week-num">${week.toString().padStart(2,'0')}</span>
+            <span class="week-label">Semana ${week} · ${monthsLong[firstDate.getMonth()]} ${firstDate.getDate()}–${lastDate.getDate()}</span>
+            ${weekTag ? `<span class="week-tag">${weekTag}</span>` : ''}
+          </div>
+          <div class="sessions-grid">
+            ${ws.map(renderSession).join('')}
+          </div>
+        </div>
+      `;
+    });
+    weeksEl.innerHTML = html;
+  }
+
+  function renderProgress(){
+    const today = todayMidnight();
+    const totalSessions = sessions.length;
+    const courseStart = parseISO(sessions[0].fecha);
+    const courseEnd = parseISO(sessions[sessions.length-1].fecha);
+
+    // sesiones pasadas (incluyendo el día actual)
+    const past = sessions.filter(s => {
+      const f = parseISO(s.fecha);
+      return daysBetween(f, today) < 0;
+    });
+    const todaysSession = sessions.find(s => daysBetween(parseISO(s.fecha), today) === 0);
+    const completedCount = past.length + (todaysSession ? 1 : 0);
+
+    // próxima sesión
+    const futureSessions = sessions.filter(s => daysBetween(parseISO(s.fecha), today) > 0);
+    const next = futureSessions[0];
+
+    // headline
+    const headlineEl = document.getElementById('progress-headline');
+    if (daysBetween(courseStart, today) > 0){
+      const dd = daysBetween(courseStart, today);
+      headlineEl.innerHTML = `El curso <em>empieza en ${dd} día${dd===1?'':'s'}</em>.`;
+    } else if (daysBetween(courseEnd, today) < 0){
+      headlineEl.innerHTML = `El curso <span class="ochre">concluyó</span>. Buen viaje.`;
+    } else if (todaysSession){
+      headlineEl.innerHTML = `Hoy es la <em>sesión ${todaysSession.num.toString().padStart(2,'0')}</em>.`;
+    } else {
+      headlineEl.innerHTML = `Vas en la <em>semana ${past[past.length-1]?.semana || 1}</em>.`;
+    }
+
+    // stats
+    document.getElementById('progress-count').textContent = completedCount;
+    document.getElementById('progress-suffix').textContent = `de ${totalSessions} sesiones`;
+
+    // fill bar
+    const pct = Math.round((completedCount / totalSessions) * 100);
+    document.getElementById('progress-fill').style.width = `${pct}%`;
+
+    // next session marker
+    const nextEl = document.getElementById('progress-next');
+    if (next){
+      const f = parseISO(next.fecha);
+      const dd = daysBetween(f, today);
+      nextEl.textContent = `Próxima: ${next.dia} ${f.getDate().toString().padStart(2,'0')} ${monthsShort[f.getMonth()]} · sesión ${next.num.toString().padStart(2,'0')}${dd>0?` (en ${dd}d)`:''}`;
+    } else {
+      nextEl.textContent = '—';
+    }
+  }
+
+  function renderToday(){
+    const d = new Date();
+    document.getElementById('today-date').textContent = fmtDateLong(d);
+  }
+
+  // INIT
+  renderToday();
+  renderWeeks();
+  renderProgress();
+
+  // reveal
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: .08 });
+  els.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>

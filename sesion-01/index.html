@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 01 · Encuadre · Los peripatéticos del código</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2;
+    --paper-deep: #e6dbc2;
+    --ink: #2a1d14;
+    --ink-soft: #4a3a2c;
+    --blood: #a02418;
+    --blood-dark: #6e1810;
+    --ochre: #b5852a;
+    --olive: #5d6638;
+    --line: rgba(42,29,20,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px),
+      radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px;
+    background-position: 0 0, 11px 11px;
+  }
+  /* paper grain overlay */
+  body::before{
+    content:"";
+    position: fixed; inset:0;
+    pointer-events:none;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+    opacity:.55;
+    z-index: 1;
+  }
+  main{
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  /* Reusable typography */
+  .display{
+    font-family: "Fraunces", "Times New Roman", serif;
+    font-optical-sizing: auto;
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    letter-spacing: -.015em;
+    line-height: 1;
+  }
+  .italic{ font-style: italic; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .blood{ color: var(--blood); }
+  .ochre{ color: var(--ochre); }
+  .small-caps{
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    font-size: .72rem;
+    font-weight: 600;
+  }
+  .underline-hand{
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23a02418' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% .35em;
+    padding-bottom: .15em;
+  }
+  .strike-hand{
+    position: relative;
+    color: var(--ink-soft);
+  }
+  .strike-hand::after{
+    content:"";
+    position:absolute; left:-2%; right:-2%; top: 55%;
+    height: 3px;
+    background: var(--blood);
+    transform: rotate(-2deg);
+    border-radius:2px;
+  }
+
+  /* TOP BAR */
+  .top{
+    display:flex; justify-content: space-between; align-items: center;
+    padding: 22px 0 16px;
+    border-bottom: 1.5px solid var(--ink);
+    margin-bottom: 60px;
+  }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.7rem;
+    color: var(--blood);
+  }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{
+    position: relative;
+    padding: 30px 0 80px;
+  }
+  .hero .session-no{
+    position: absolute;
+    top: -40px; right: -10px;
+    font-family: "Fraunces", serif;
+    font-weight: 900;
+    font-size: clamp(180px, 28vw, 360px);
+    line-height: .85;
+    color: var(--paper-deep);
+    z-index: 0;
+    user-select: none;
+    letter-spacing: -.05em;
+  }
+  .hero .kicker{
+    position: relative; z-index: 2;
+    font-size: .9rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--blood);
+    margin-bottom: 30px;
+    display:flex; align-items:center; gap: 16px;
+  }
+  .hero .kicker::before{
+    content:""; display:inline-block; width: 50px; height: 2px; background: var(--blood);
+  }
+  .hero h1{
+    position: relative; z-index: 2;
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(56px, 9vw, 130px);
+    line-height: .95;
+    margin: 0 0 36px;
+    letter-spacing: -.02em;
+  }
+  .hero h1 .em{
+    font-style: italic;
+    font-weight: 600;
+    color: var(--blood);
+  }
+  .hero .lede{
+    position: relative; z-index: 2;
+    max-width: 720px;
+    font-size: 1.25rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .hero .lede em{
+    color: var(--ink);
+    font-style: italic;
+  }
+  .hero .who{
+    position: relative; z-index: 2;
+    margin-top: 60px;
+    display: flex;
+    gap: 36px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .who-block{
+    border-left: 2px solid var(--ink);
+    padding: 4px 0 4px 16px;
+  }
+  .who-block .label{
+    display:block;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .who-block .value{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  /* MANIFIESTO */
+  .manifiesto{
+    margin: 70px 0;
+    padding: 60px 40px;
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+    position: relative;
+  }
+  .manifiesto .tag{
+    position: absolute;
+    top:-12px; left: 32px;
+    background: var(--paper);
+    padding: 0 14px;
+    font-size: .75rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--blood);
+  }
+  .manifiesto blockquote{
+    margin: 0;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(28px, 4.5vw, 56px);
+    line-height: 1.15;
+    color: var(--ink);
+    letter-spacing: -.01em;
+  }
+  .manifiesto blockquote .accent{
+    color: var(--blood);
+    font-weight: 600;
+  }
+  .manifiesto cite{
+    display:block;
+    margin-top: 28px;
+    font-size: 1rem;
+    font-style: normal;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* PERIPATÉTICOS */
+  .peripa{
+    margin: 90px 0;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  @media (max-width: 820px){ .peripa{ grid-template-columns: 1fr; gap: 36px; } }
+  .peripa .col-text h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(40px, 5.5vw, 72px);
+    line-height: 1;
+    margin: 0 0 28px;
+    letter-spacing: -.01em;
+  }
+  .peripa .col-text h2 em{
+    font-style: italic;
+    color: var(--blood);
+    font-weight: 600;
+  }
+  .peripa .col-text p{
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+  .peripa .col-text .punch{
+    display: inline-block;
+    margin-top: 12px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--ink);
+    border-left: 3px solid var(--blood);
+    padding: 4px 0 4px 16px;
+  }
+  .peripa .col-visual{
+    position: relative;
+    aspect-ratio: 1 / 1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .peripa .col-visual svg{
+    width: 100%; height: 100%;
+  }
+  /* annotation */
+  .annot{
+    position: absolute;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    color: var(--blood);
+    font-size: 1rem;
+    transform: rotate(-4deg);
+    line-height: 1.2;
+  }
+
+  /* IPO DIAGRAM */
+  .ipo-section{
+    margin: 100px 0;
+  }
+  .ipo-section .head{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: end;
+    margin-bottom: 50px;
+  }
+  .ipo-section .head .n{
+    font-family: "Fraunces", serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: clamp(80px, 12vw, 160px);
+    line-height: .85;
+    color: var(--blood);
+  }
+  .ipo-section .head h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1;
+    margin: 0 0 18px;
+    letter-spacing: -.01em;
+  }
+  .ipo-section .head h2 em{ font-style: italic; color: var(--blood); font-weight: 600;}
+  .ipo-section .head p{
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    max-width: 640px;
+  }
+  .ipo-grid{
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+    margin-top: 30px;
+  }
+  @media (max-width: 820px){ .ipo-grid{ grid-template-columns: 1fr; } .ipo-grid .arrow{ display:none; } }
+  .ipo-box{
+    background: var(--paper-deep);
+    border: 1.5px solid var(--ink);
+    padding: 28px 24px;
+    position: relative;
+    min-height: 200px;
+  }
+  .ipo-box .num{
+    position: absolute;
+    top: 14px; right: 18px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    color: var(--blood);
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  .ipo-box h3{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+  .ipo-box .desc{
+    font-size: .98rem;
+    color: var(--ink-soft);
+    margin: 0 0 14px;
+  }
+  .ipo-box .ex{
+    border-top: 1px dashed var(--line);
+    padding-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .82rem;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .ipo-box .ex .lbl{
+    display:block;
+    font-family: "Newsreader", serif;
+    font-style: italic;
+    font-size: .78rem;
+    color: var(--ink-soft);
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 4px;
+  }
+  .arrow{
+    display:flex; align-items:center; justify-content:center;
+    color: var(--blood);
+    font-family: "Fraunces", serif;
+    font-weight: 900;
+    font-size: 2.4rem;
+  }
+  .ipo-example{
+    margin-top: 38px;
+    padding: 26px 30px;
+    background: var(--paper);
+    border: 1.5px dashed var(--blood);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 30px;
+    align-items: center;
+  }
+  .ipo-example .marg{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 2.4rem;
+    color: var(--blood);
+    line-height: 1;
+  }
+  .ipo-example .body{
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+  .ipo-example .body strong{ color: var(--blood); font-weight: 600;}
+
+  /* ARSENAL */
+  .arsenal{
+    margin: 110px 0 90px;
+  }
+  .arsenal .head{
+    margin-bottom: 50px;
+  }
+  .arsenal .head h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 84px);
+    line-height: 1;
+    margin: 0 0 12px;
+    letter-spacing: -.01em;
+  }
+  .arsenal .head h2 em{
+    font-style: italic;
+    color: var(--blood);
+    font-weight: 600;
+  }
+  .arsenal .head p{
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0;
+  }
+  .tools{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 40px;
+  }
+  @media (max-width: 980px){ .tools{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 540px){ .tools{ grid-template-columns: 1fr; } }
+  .tool{
+    background: var(--paper-deep);
+    padding: 26px 22px 30px;
+    border: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: transform .25s ease;
+  }
+  .tool:hover{ transform: translateY(-4px); }
+  .tool .icon{
+    width: 44px; height: 44px;
+    color: var(--blood);
+    margin-bottom: 18px;
+  }
+  .tool h3{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 0 0 4px;
+  }
+  .tool .role{
+    font-family: "Newsreader", serif;
+    font-style: italic;
+    color: var(--blood);
+    font-size: .95rem;
+    margin: 0 0 14px;
+  }
+  .tool p{
+    font-size: .92rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .tool .corner{
+    position: absolute;
+    bottom: 0; right: 0;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 5rem;
+    color: rgba(160,36,24,.06);
+    line-height: 1;
+    padding: 0 8px 6px 0;
+    user-select: none;
+  }
+
+  /* REGLAS */
+  .reglas{
+    margin: 110px 0;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 80px 50px 90px;
+    margin-left: -28px;
+    margin-right: -28px;
+    position: relative;
+  }
+  @media (min-width: 1256px){
+    .reglas{ margin-left: calc(-50vw + 600px); margin-right: calc(-50vw + 600px); padding-left: calc(50vw - 600px + 50px); padding-right: calc(50vw - 600px + 50px); }
+  }
+  .reglas::before{
+    content:"";
+    position: absolute; inset: 0;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9   0 0 0 0 0.85   0 0 0 0 0.7   0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: screen;
+    opacity: .4;
+    pointer-events: none;
+  }
+  .reglas-inner{ position: relative; z-index: 1; max-width: 1100px; margin: 0 auto;}
+  .reglas .small-caps{ color: #efb9a8; }
+  .reglas h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(40px, 6.5vw, 96px);
+    line-height: 1;
+    margin: 16px 0 60px;
+    color: var(--paper);
+    letter-spacing: -.015em;
+  }
+  .reglas h2 em{
+    font-style: italic;
+    color: #efb9a8;
+    font-weight: 600;
+  }
+  .regla{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px;
+    align-items: baseline;
+    padding: 36px 0;
+    border-top: 1px solid rgba(239,230,210,.18);
+  }
+  .regla:last-child{ border-bottom: 1px solid rgba(239,230,210,.18); }
+  .regla .n{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(70px, 9vw, 130px);
+    line-height: .85;
+    color: #efb9a8;
+  }
+  .regla .copy h3{
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(28px, 3.6vw, 44px);
+    line-height: 1.1;
+    margin: 0 0 14px;
+    color: var(--paper);
+  }
+  .regla .copy p{
+    font-size: 1.05rem;
+    margin: 0;
+    color: rgba(239,230,210,.78);
+    max-width: 740px;
+  }
+  .regla .copy .mono-note{
+    margin-top: 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .82rem;
+    color: #f0c8a0;
+    display: inline-block;
+  }
+
+  /* MISIÓN */
+  .mision{
+    margin: 100px 0;
+  }
+  .mision .head{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    align-items: end;
+    margin-bottom: 40px;
+  }
+  .mision .head .stamp{
+    border: 2.5px solid var(--blood);
+    color: var(--blood);
+    padding: 8px 18px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.4rem;
+    transform: rotate(-3deg);
+    letter-spacing: .05em;
+  }
+  .mision h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 64px);
+    margin: 0 0 12px;
+    line-height: 1;
+    letter-spacing: -.01em;
+  }
+  .mision h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .mision p.intro{
+    font-size: 1.08rem;
+    color: var(--ink-soft);
+    margin: 0 0 30px;
+    max-width: 760px;
+  }
+  .checklist{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+  }
+  @media (max-width: 720px){ .checklist{ grid-template-columns: 1fr; } }
+  .check{
+    background: var(--paper-deep);
+    padding: 24px 26px;
+    border-left: 4px solid var(--blood);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .check .box{
+    width: 28px; height: 28px;
+    border: 2px solid var(--ink);
+    flex-shrink: 0;
+    margin-top: 2px;
+    background: var(--paper);
+  }
+  .check h4{
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin: 0 0 6px;
+  }
+  .check p{
+    margin: 0;
+    font-size: .96rem;
+    color: var(--ink-soft);
+  }
+  .check .deadline{
+    margin-top: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .8rem;
+    color: var(--blood);
+  }
+
+  /* CIERRE */
+  .cierre{
+    margin: 120px 0 80px;
+    padding: 70px 40px;
+    text-align: center;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+  .cierre::before, .cierre::after{
+    content:"";
+    position: absolute; left: 50%;
+    width: 60px; height: 12px;
+    transform: translateX(-50%);
+    background: var(--paper);
+  }
+  .cierre::before{ top: -7px; }
+  .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(30px, 4.5vw, 56px);
+    line-height: 1.15;
+    margin: 24px 0 20px;
+    color: var(--ink);
+    letter-spacing: -.01em;
+    max-width: 880px;
+    margin-left: auto; margin-right: auto;
+  }
+  .cierre .quote .em{
+    color: var(--blood);
+    font-weight: 600;
+  }
+  .cierre .sig{
+    margin-top: 40px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--ink);
+  }
+  .cierre .sig::before{
+    content:"—  ";
+    color: var(--blood);
+  }
+  .cierre .sig small{
+    display: block;
+    font-style: normal;
+    font-weight: 400;
+    font-size: .78rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  /* FOOTER */
+  footer{
+    text-align: center;
+    padding: 36px 0 50px;
+    font-size: .78rem;
+    color: var(--ink-soft);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+
+  /* Reveal animation */
+  .reveal{
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .9s ease, transform .9s ease;
+  }
+  .reveal.in{
+    opacity: 1; transform: none;
+  }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 01 · Encuadre</span>
+    </div>
+    <div class="right">
+      Lunes 18.05.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Aula por confirmar</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">01</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      Los <span class="em">peripatéticos</span><br/>
+      del código.
+    </h1>
+    <p class="lede">
+      Aristóteles enseñaba <em>caminando</em>. Sus alumnos lo seguían por las galerías del Liceo
+      y discutían la verdad mientras los pies se movían. Pensar, decía, no era una postura: era un
+      <em>movimiento</em>. <br/><br/>
+      Esto es una clase de programación. Pero antes que nada — y conviene que lo sepas desde hoy —
+      esto es una clase de <span class="underline-hand">pensar con precisión</span>.
+    </p>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Materia</span>
+        <span class="value">Fundamentos de Programación · TL0315</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Lenguaje</span>
+        <span class="value">Python · 3.12+</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Duración</span>
+        <span class="value">14 semanas · 56 horas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFIESTO -->
+  <section class="manifiesto reveal">
+    <span class="tag">Manifiesto de bienvenida</span>
+    <blockquote class="display">
+      Programar no es escribir código.<br/>
+      Es <span class="accent italic">pensar con tanta claridad</span><br/>
+      que una máquina —que no entiende nada—<br/>
+      pueda al fin <span class="italic">obedecerte</span>.
+    </blockquote>
+    <cite>— La primera regla del curso</cite>
+  </section>
+
+  <!-- PERIPATÉTICOS -->
+  <section class="peripa reveal">
+    <div class="col-text">
+      <h2 class="display">¿Quién es <em>peripatético</em><br/> en este salón?</h2>
+      <p>
+        El alumno que llega, se sienta, copia el código de la pizarra y se va — ese
+        <span class="strike-hand">no es peripatético</span>. Ese es un escriba.
+      </p>
+      <p>
+        El peripatético <em>se mueve</em>: pregunta, rompe el ejemplo a propósito, lo arregla,
+        lo refactoriza, lo entiende. Sale del salón con menos certezas que con las que entró,
+        pero con más herramientas para construir las suyas.
+      </p>
+      <div class="punch">
+        Aquí no vamos a memorizar Python.<br/>
+        Vamos a aprender a <strong>pensar como un programador</strong>.
+      </div>
+    </div>
+
+    <div class="col-visual">
+      <!-- Filósofo caminando con código -->
+      <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--ink)">
+        <!-- circle frame -->
+        <circle cx="200" cy="200" r="170" stroke="var(--blood)" stroke-width="2" stroke-dasharray="3 5" fill="none"/>
+        <circle cx="200" cy="200" r="155" stroke="var(--ink)" stroke-width="0.6" fill="none"/>
+        <!-- columns suggestion -->
+        <g stroke="var(--ink-soft)" stroke-width="0.8" opacity=".5">
+          <line x1="80" y1="80" x2="80" y2="320"/>
+          <line x1="320" y1="80" x2="320" y2="320"/>
+          <line x1="60" y1="80" x2="340" y2="80"/>
+          <line x1="60" y1="320" x2="340" y2="320"/>
+        </g>
+        <!-- walker -->
+        <g stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+          <!-- head -->
+          <circle cx="200" cy="135" r="22" fill="var(--paper)"/>
+          <!-- toga -->
+          <path d="M178 158 C 165 200, 160 250, 175 280 L 220 280 C 235 250, 235 200, 222 158 Z" fill="var(--paper-deep)"/>
+          <!-- folds -->
+          <path d="M188 170 C 184 210, 184 245, 190 275" opacity=".5"/>
+          <path d="M210 170 C 214 210, 214 245, 208 275" opacity=".5"/>
+          <!-- legs walking -->
+          <line x1="185" y1="280" x2="172" y2="330"/>
+          <line x1="210" y1="280" x2="225" y2="335"/>
+          <!-- feet -->
+          <line x1="166" y1="333" x2="178" y2="333"/>
+          <line x1="220" y1="338" x2="232" y2="338"/>
+          <!-- arm holding scroll/code -->
+          <line x1="220" y1="190" x2="265" y2="175"/>
+          <rect x="258" y="155" width="34" height="46" fill="var(--paper)" rx="2"/>
+          <!-- code lines on tablet -->
+          <line x1="263" y1="165" x2="285" y2="165" stroke="var(--blood)" stroke-width="1.2"/>
+          <line x1="263" y1="173" x2="280" y2="173" stroke="var(--ink)" stroke-width="1.2"/>
+          <line x1="265" y1="181" x2="287" y2="181" stroke="var(--ink)" stroke-width="1.2"/>
+          <line x1="263" y1="189" x2="278" y2="189" stroke="var(--ink)" stroke-width="1.2"/>
+          <!-- other arm -->
+          <line x1="180" y1="195" x2="160" y2="225"/>
+          <!-- beard -->
+          <path d="M188 152 C 190 165, 198 172, 200 178 C 202 172, 210 165, 212 152" stroke="var(--ink)" fill="none"/>
+        </g>
+        <!-- floating code symbols -->
+        <text x="90" y="170" font-family="JetBrains Mono" font-size="14" fill="var(--blood)" opacity=".7">if</text>
+        <text x="310" y="240" font-family="JetBrains Mono" font-size="14" fill="var(--blood)" opacity=".7">while</text>
+        <text x="100" y="280" font-family="JetBrains Mono" font-size="14" fill="var(--ochre)" opacity=".7">def</text>
+        <text x="305" y="120" font-family="JetBrains Mono" font-size="14" fill="var(--ochre)" opacity=".7">{ }</text>
+        <text x="65" y="220" font-family="JetBrains Mono" font-size="11" fill="var(--ink-soft)" opacity=".6">print()</text>
+      </svg>
+      <div class="annot" style="top: 6%; right: 6%;">«thinking on foot»</div>
+    </div>
+  </section>
+
+  <!-- IPO -->
+  <section class="ipo-section reveal">
+    <div class="head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">Todo programa, todo problema,<br/> es <em>la misma cosa</em>.</h2>
+        <p>
+          Antes de hablar de Python — antes de variables, ciclos, decisiones — solo hay tres palabras
+          que importan. Si las dominas, dominas el oficio. Si no, ningún tutorial te va a salvar.
+        </p>
+      </div>
+    </div>
+
+    <div class="ipo-grid">
+      <div class="ipo-box">
+        <span class="num">i</span>
+        <h3>Entradas</h3>
+        <p class="desc">Lo que el programa <em>recibe</em> del mundo. Datos, decisiones, sensores, gritos del usuario.</p>
+        <div class="ex">
+          <span class="lbl">Ejemplo</span>
+          peso = 72.5<br/>
+          estatura = 1.75
+        </div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="ipo-box">
+        <span class="num">ii</span>
+        <h3>Proceso</h3>
+        <p class="desc">La lógica. Lo que <em>haces</em> con esos datos. Aquí vive el programador. Aquí piensas.</p>
+        <div class="ex">
+          <span class="lbl">Ejemplo</span>
+          imc = peso /<br/>
+          (estatura ** 2)
+        </div>
+      </div>
+
+      <div class="arrow">→</div>
+
+      <div class="ipo-box">
+        <span class="num">iii</span>
+        <h3>Salidas</h3>
+        <p class="desc">Lo que el programa <em>devuelve</em> al mundo. Un número, una decisión, una pantalla, una alegría.</p>
+        <div class="ex">
+          <span class="lbl">Ejemplo</span>
+          print(f"IMC:<br/>
+          &nbsp;&nbsp;{imc:.2f}")
+        </div>
+      </div>
+    </div>
+
+    <div class="ipo-example">
+      <div class="marg">✦</div>
+      <div class="body">
+        <strong>Caso de hoy:</strong> calcular cuánto dejas de propina en un restaurante.<br/>
+        <em>Entradas:</em> total de la cuenta y porcentaje. <em>Proceso:</em> multiplicar y dividir.
+        <em>Salidas:</em> el monto, redondeado, con dos decimales y un poco de dignidad.
+      </div>
+    </div>
+  </section>
+
+  <!-- ARSENAL -->
+  <section class="arsenal reveal">
+    <div class="head">
+      <h2 class="display">Tu <em>arsenal</em> peripatético.</h2>
+      <p>Cuatro herramientas. Cuatro razones. Ninguna negociable. Te las instalas hoy o no entras a la sesión 2.</p>
+    </div>
+
+    <div class="tools">
+      <div class="tool">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2c-3 0-5 1.5-5 4v2h5v1H5C3 9 2 11 2 13.5S3 18 5 18h2v-2c0-2 1.5-3 3.5-3h3c2 0 3.5-1 3.5-3V6c0-2.5-2-4-5-4z"/><path d="M12 22c3 0 5-1.5 5-4v-2h-5v-1h7c2 0 3-2 3-4.5S20.5 6 19 6h-2v2c0 2-1.5 3-3.5 3h-3c-2 0-3.5 1-3.5 3v4c0 2.5 2 4 5 4z"/><circle cx="9" cy="6" r=".7" fill="currentColor"/><circle cx="15" cy="18" r=".7" fill="currentColor"/></svg>
+        <h3>Python</h3>
+        <div class="role">el lenguaje</div>
+        <p>El más amable de los lenguajes serios. No te va a perdonar la lógica, pero sí la sintaxis. Ideal para empezar a pensar como programador sin pelearte con punto y coma.</p>
+        <div class="corner display">π</div>
+      </div>
+
+      <div class="tool">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 3 7 8v8l10 5 4-2V5l-4-2z"/><path d="M7 8l10 8M7 16l10-8"/></svg>
+        <h3>VS Code</h3>
+        <div class="role">el taller</div>
+        <p>Donde escribes, pruebas y depuras. Aprenderás a usar el <em>debugger</em> como un cirujano usa el bisturí: para abrir, mirar y entender — no para improvisar.</p>
+        <div class="corner display">{ }</div>
+      </div>
+
+      <div class="tool">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M6 8v8"/><path d="M18 8c0 4-6 4-6 8"/><path d="M12 16v2"/></svg>
+        <h3>GitHub</h3>
+        <div class="role">tu legado</div>
+        <p>Cada commit es una huella. Al final del curso vas a tener un repositorio que cuenta tu historia como programador. Cuando salgas a buscar trabajo, esto pesa más que tu kárdex.</p>
+        <div class="corner display">⎇</div>
+      </div>
+
+      <div class="tool">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>
+        <h3>IA · Claude/ChatGPT</h3>
+        <div class="role">copiloto, no piloto</div>
+        <p>Sí, se permite. <em>Más aún</em>: se fomenta. Pero úsala para <strong>entender</strong>, no para <strong>entregar</strong>. La diferencia te la explico abajo, en las tres reglas.</p>
+        <div class="corner display">∞</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGLAS -->
+  <section class="reglas reveal">
+    <div class="reglas-inner">
+      <div class="small-caps">Las reglas no se discuten · se firman</div>
+      <h2 class="display">Tres reglas. <em>Solo</em> tres.</h2>
+
+      <div class="regla">
+        <div class="n display">01</div>
+        <div class="copy">
+          <h3>La IA explica. No resuelve por ti.</h3>
+          <p>Está permitido pedirle a Claude o ChatGPT que te explique un concepto, que te ayude a entender por qué un bug ocurre o que te sugiera cómo mejorar tu código. <em>No</em> está permitido copiar y pegar la solución sin entenderla. La pregunta que te hago en cada entrega es simple: si te llamo al pizarrón a explicarlo, ¿puedes?</p>
+          <span class="mono-note"># si tu respuesta es "no" → no lo entregues</span>
+        </div>
+      </div>
+
+      <div class="regla">
+        <div class="n display">02</div>
+        <div class="copy">
+          <h3>Si no lo entiendes, no lo entregas.</h3>
+          <p>Es preferible un programa sencillo que sí dominas a uno espectacular que no puedes defender. La calificación no premia complejidad: premia comprensión. Una entrega que no puedas explicar línea por línea cuenta como cero — y peor: como falta a la integridad académica.</p>
+          <span class="mono-note"># entender &gt; aparentar</span>
+        </div>
+      </div>
+
+      <div class="regla">
+        <div class="n display">03</div>
+        <div class="copy">
+          <h3>Todo entrega va por Git.</h3>
+          <p>Nada se entrega por correo. Nada por mensaje. Nada por USB. Todo vive en tu repositorio personal de GitHub, con commits descriptivos y fechas reales. Vas a aprender Git la primera semana — no porque sea bonito, sino porque <em>es el idioma de tu profesión</em>.</p>
+          <span class="mono-note">$ git commit -m "primer commit"</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISIÓN -->
+  <section class="mision reveal">
+    <div class="head">
+      <div class="stamp">Misión</div>
+      <div>
+        <h2 class="display">Tu primer <em>movimiento</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Entregable antes de la próxima sesión (jueves 21/05). No tiene calificación numérica, pero
+      sin esto no entras a programar la próxima clase.
+    </p>
+
+    <div class="checklist">
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>1. Crea tu cuenta de GitHub</h4>
+          <p>Usa tu correo institucional. Sube una foto decente. Tu usuario va a ser tu firma profesional los próximos años — elige con cuidado.</p>
+          <div class="deadline">deadline: jue 21/05 · 17:59 h</div>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>2. Crea el repo de la materia</h4>
+          <p>Nómbralo <span class="mono">fundamentos-programacion-26-3</span>. Súbele un README con tu nombre, tu correo y una línea sobre por qué estudias sistemas.</p>
+          <div class="deadline">deadline: jue 21/05 · 17:59 h</div>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>3. Instala Python + VS Code</h4>
+          <p>Python 3.12 o superior. VS Code con la extensión oficial de Python. Si no tienes equipo, usa Google Colab — también vale, pero te toca aprender los dos.</p>
+          <div class="deadline">deadline: jue 21/05 · 17:59 h</div>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>4. Análisis del primer caso</h4>
+          <p>Toma un problema cotidiano (lavar tu ropa, calcular tu IMC, decidir qué comer). Escribe en un .md: <em>entradas, proceso, salidas, restricciones</em>. Eso va al repo.</p>
+          <div class="deadline">deadline: jue 21/05 · 17:59 h</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «Sócrates decía que <span class="em">solo sabía que no sabía nada</span>.<br/>
+      Buena noticia: eso es exactamente lo que necesitas para empezar a programar.»
+    </div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 01 <span class="dot">·</span> Encuadre <span class="dot">·</span> Fundamentos de Programación <span class="dot">·</span> 26-3
+  </footer>
+
+</main>
+
+<script>
+  // Reveal on scroll
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: .12 });
+  els.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
