@@ -564,14 +564,14 @@
     display: inline-block;
   }
 
-  /* GIT FLOW */
-  .gitflow{
+  /* PYTHON INTRO — variables + print() */
+  .pyintro{
     margin: 110px 0;
   }
-  .gitflow .head{
+  .pyintro .head{
     margin-bottom: 50px;
   }
-  .gitflow .head h2{
+  .pyintro .head h2{
     font-family: "Fraunces", serif;
     font-weight: 300;
     font-size: clamp(40px, 6vw, 84px);
@@ -579,142 +579,281 @@
     margin: 0 0 12px;
     letter-spacing: -.01em;
   }
-  .gitflow .head h2 em{
+  .pyintro .head h2 em{
     font-style: italic;
     color: var(--blood);
     font-weight: 600;
   }
-  .gitflow .head p{
+  .pyintro .head p{
     color: var(--ink-soft);
     font-size: 1.1rem;
-    max-width: 700px;
+    max-width: 720px;
     margin: 0;
   }
-  .git-commands{
+
+  .py-concept{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border: 1.5px solid var(--ink);
-    margin-top: 40px;
+    gap: 60px;
+    align-items: center;
+    margin: 70px 0;
   }
-  @media (max-width: 720px){ .git-commands{ grid-template-columns: 1fr; } }
-  .git-cmd{
-    padding: 32px 30px;
-    border: 1px solid var(--line);
-    position: relative;
-    background: var(--paper);
-    transition: background .2s ease;
+  .py-concept.reverse .py-concept-visual{ order: -1; }
+  @media (max-width: 880px){
+    .py-concept, .py-concept.reverse{
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .py-concept.reverse .py-concept-visual{ order: 0; }
   }
-  .git-cmd:hover{ background: var(--paper-deep); }
-  .git-cmd .step{
+  .py-concept-text .py-num{
     display: inline-block;
     font-family: "Fraunces", serif;
     font-style: italic;
     font-weight: 900;
-    font-size: 1rem;
+    font-size: 3rem;
     color: var(--blood);
-    letter-spacing: .05em;
-    margin-bottom: 14px;
+    line-height: 1;
+    margin-bottom: 8px;
   }
-  .git-cmd .cmd-line{
-    font-family: "JetBrains Mono", monospace;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--ink);
-    background: var(--paper-deep);
-    border-left: 3px solid var(--blood);
-    padding: 10px 14px;
-    margin: 0 0 14px;
-    display: block;
+  .py-concept-text h3{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(28px, 3.6vw, 44px);
+    line-height: 1.1;
+    margin: 0 0 22px;
     letter-spacing: -.01em;
   }
-  .git-cmd .cmd-line .prompt{
-    color: var(--ochre);
-    user-select: none;
-  }
-  .git-cmd h4{
-    font-family: "Fraunces", serif;
-    font-weight: 600;
+  .py-concept-text h3 em{
     font-style: italic;
-    font-size: 1.25rem;
-    margin: 0 0 8px;
-    color: var(--ink);
+    color: var(--blood);
+    font-weight: 600;
   }
-  .git-cmd p{
-    font-size: .95rem;
+  .py-concept-text p{
+    font-size: 1.05rem;
     color: var(--ink-soft);
-    margin: 0;
-    line-height: 1.55;
+    margin: 0 0 14px;
+    line-height: 1.6;
   }
-  .git-cmd .sub-cmd{
-    margin-top: 12px;
+  .py-concept-text p em{ color: var(--ink); font-style: italic; }
+  .py-concept-text code{
     font-family: "JetBrains Mono", monospace;
-    font-size: .8rem;
-    color: var(--ink-soft);
-    background: none;
-    border-left: none;
-    padding: 0;
-    display: block;
+    font-size: .9em;
+    color: var(--ochre);
+    font-weight: 700;
   }
-  .git-cmd .sub-cmd .prompt{ color: var(--ochre); }
-  .git-flow-diagram{
-    margin-top: 38px;
-    padding: 28px 32px;
-    background: var(--ink);
-    border: none;
+  .py-punch{
+    display: inline-block;
+    margin-top: 18px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .98rem;
+    color: var(--ink);
+    border-left: 3px solid var(--blood);
+    padding: 10px 0 10px 18px;
+    line-height: 1.7;
+  }
+
+  /* === Variables animation === */
+  .vars-stage{
+    position: relative;
+    padding: 36px 24px 30px;
+    background: var(--paper);
+    border: 1.5px dashed var(--ink);
+  }
+  .vars-stage::before{
+    content: "memoria · objetos vivos";
+    position: absolute;
+    top: -11px; left: 22px;
+    background: var(--paper);
+    padding: 0 12px;
+    font-size: .68rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .var-card{
+    position: relative;
+    background: var(--paper-deep);
+    border: 1.5px solid var(--ink);
+    padding: 14px 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0;
-    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-family: "JetBrains Mono", monospace;
+    animation: var-card-in .9s ease-out backwards;
+    animation-delay: var(--d);
+  }
+  .var-card:last-of-type{ margin-bottom: 0; }
+  .var-card::before{
+    content: "";
+    position: absolute;
+    top: -7px; left: 16px;
+    width: 30px; height: 14px;
+    background: var(--blood);
+    opacity: .85;
+    transform: rotate(-5deg);
+  }
+  .var-label{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--blood);
+    min-width: 100px;
+  }
+  .var-eq{
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
+  .var-slot{
     position: relative;
+    display: inline-block;
+    min-width: 110px;
+    height: 1.5em;
+    flex: 1;
+  }
+  .var-val{
+    position: absolute;
+    top: 0; left: 0;
+    font-weight: 700;
+    color: var(--ink);
+    opacity: 0;
+    animation: var-cycle 6s ease-in-out infinite;
+  }
+  .var-val.v2{ animation-delay: 2s; }
+  .var-val.v3{ animation-delay: 4s; }
+  .var-type{
+    font-family: "Newsreader", serif;
+    font-style: italic;
+    font-size: .78rem;
+    color: var(--ink-soft);
+    padding: 2px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+  }
+  .vars-note{
+    margin-top: 18px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    color: var(--blood);
+    font-size: .95rem;
+    text-align: right;
+  }
+
+  @keyframes var-card-in{
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes var-cycle{
+    0%, 2%   { opacity: 0; transform: translateY(-8px); }
+    8%, 30%  { opacity: 1; transform: translateY(0); }
+    36%, 100%{ opacity: 0; transform: translateY(8px); }
+  }
+
+  /* === print() animation: editor + terminal === */
+  .terminal-stage{
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 14px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .editor-pane, .terminal-pane{
+    border: 1.5px solid var(--ink);
     overflow: hidden;
   }
-  .git-flow-diagram::before{
-    content:"";
-    position: absolute; inset: 0;
-    background-image:
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9   0 0 0 0 0.85   0 0 0 0 0.7   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    mix-blend-mode: screen;
-    opacity: .3;
-    pointer-events: none;
+  .pane-bar{
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--line);
   }
-  .flow-node{
-    position: relative; z-index: 1;
-    text-align: center;
-    padding: 16px 20px;
+  .pane-bar.dark{
+    background: #1a120b;
+    border-color: rgba(239,230,210,.15);
   }
-  .flow-node .label{
-    font-family: "JetBrains Mono", monospace;
-    font-size: .78rem;
-    color: rgba(239,230,210,.5);
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    display: block;
-    margin-bottom: 6px;
+  .pane-bar .dot{
+    width: 10px; height: 10px; border-radius: 50%;
+    display: inline-block;
+    background: var(--ink-soft);
   }
-  .flow-node .name{
-    font-family: "Fraunces", serif;
+  .pane-bar .dot.r{ background: #c54f3f; }
+  .pane-bar .dot.y{ background: #d4a534; }
+  .pane-bar .dot.g{ background: #6a8a3b; }
+  .pane-bar .pane-title{
+    margin-left: 8px;
+    font-family: "Newsreader", serif;
     font-style: italic;
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #efb9a8;
+    font-size: .85rem;
+    color: var(--ink-soft);
   }
-  .flow-arrow{
-    position: relative; z-index: 1;
-    font-family: "JetBrains Mono", monospace;
-    font-size: .72rem;
-    color: rgba(239,230,210,.4);
-    text-align: center;
-    padding: 0 8px;
+  .pane-bar.dark .pane-title{ color: rgba(239,230,210,.6); }
+
+  .code-body{
+    background: var(--paper);
+    padding: 14px 0;
+    font-size: .94rem;
+  }
+  .code-body .line{
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 2px;
+    padding: 5px 18px 5px 14px;
+    gap: 14px;
+    border-left: 3px solid transparent;
+    animation: line-pulse 9s linear infinite;
   }
-  .flow-arrow .git-c{
-    color: #f0c8a0;
-    font-size: .7rem;
+  .code-body .line.l2{ animation-delay: 3s; }
+  .code-body .line.l3{ animation-delay: 6s; }
+  .code-body .line .ln{
+    color: rgba(42,29,20,.35);
+    font-size: .82rem;
+    min-width: 16px;
+    text-align: right;
+  }
+  .code-body .kw{ color: var(--blood); }
+  .code-body .str{ color: var(--olive); }
+  .code-body .fn{ color: var(--ochre); font-weight: 700; }
+  .code-body .punct{ color: var(--ink-soft); }
+
+  @keyframes line-pulse{
+    0%, 1% { background: transparent; border-color: transparent; }
+    2%, 8% { background: rgba(160,36,24,.10); border-color: var(--blood); }
+    20%, 100% { background: transparent; border-color: transparent; }
+  }
+
+  .terminal-body{
+    background: #1a120b;
+    color: #efe6d2;
+    padding: 18px 20px;
+    min-height: 96px;
+    font-size: .92rem;
+    position: relative;
+  }
+  .terminal-body .out{
+    display: block;
+    opacity: 0;
+    color: #efb9a8;
+    margin-bottom: 4px;
+  }
+  .terminal-body .out.o1{ animation: term-out 9s linear infinite; animation-delay: 3s; }
+  .terminal-body .out.o2{ animation: term-out 9s linear infinite; animation-delay: 6s; }
+  .terminal-body .prompt-blink{
+    display: inline-block;
+    margin-top: 4px;
+    color: #b5852a;
+    animation: blink 1s steps(2) infinite;
+  }
+
+  @keyframes term-out{
+    0% { opacity: 0; transform: translateY(-3px); }
+    5% { opacity: 1; transform: translateY(0); }
+    66% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @keyframes blink{
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
   }
 
   /* MISIÓN */
@@ -1147,80 +1286,127 @@
     </div>
   </section>
 
-  <!-- GIT FLOW -->
-  <section class="gitflow reveal">
+  <!-- PYTHON INTRO — variables + print() -->
+  <section class="pyintro reveal">
     <div class="head">
-      <div class="small-caps" style="color:var(--blood);margin-bottom:16px;">Semana 1 · Herramienta obligatoria</div>
-      <h2 class="display">Los cuatro comandos <em>que van a salvar tu vida</em>.</h2>
+      <div class="small-caps" style="color:var(--blood);margin-bottom:16px;">Tu primer alfabeto en Python</div>
+      <h2 class="display">Variables y <em>print()</em><br/>— los dos gestos.</h2>
       <p>
-        No memorices Git de golpe. Memoriza el flujo. Estos cuatro pasos son el ciclo que vas a
-        repetir cada vez que trabajes: clonar una vez, agregar, guardar, subir — siempre.
+        Antes de ciclos, antes de funciones, antes de cualquier programa serio: hay dos verbos.
+        <em>Guardar</em> con variables. <em>Mostrar</em> con print(). Todo lo demás se construye
+        sobre estos dos.
       </p>
     </div>
 
-    <div class="git-commands">
-      <div class="git-cmd">
-        <span class="step">Paso 0 — una sola vez</span>
-        <code class="cmd-line"><span class="prompt">$ </span>git clone &lt;url-del-repo&gt;</code>
-        <h4>Clonar el repositorio</h4>
-        <p>Descarga todo el historial y los archivos del repo a tu máquina. Lo haces <em>una sola vez</em> por proyecto. La URL la encuentras en el botón verde de GitHub.</p>
-        <code class="sub-cmd"><span class="prompt">$ </span>git clone https://github.com/tu-usuario/fundamentos-programacion-26-3.git</code>
+    <!-- I. Variables -->
+    <div class="py-concept">
+      <div class="py-concept-text">
+        <span class="py-num">i.</span>
+        <h3>Una <em>variable</em> es una caja con etiqueta.</h3>
+        <p>
+          Le pones un nombre — la etiqueta — y guardas algo dentro. A partir de ese momento
+          puedes pedir el contenido por su nombre cada vez que lo necesites. Python no te exige
+          declarar el tipo: lo <em>infiere</em> de lo que metiste adentro.
+        </p>
+        <p>
+          Lo que está dentro puede cambiar mil veces; la etiqueta sigue siendo la misma. Por eso
+          se llama <em>variable</em>: porque <em>varía</em>.
+        </p>
+        <div class="py-punch">
+nombre = "Sócrates"<br/>
+edad = 70<br/>
+aprobado = True
+        </div>
       </div>
-
-      <div class="git-cmd">
-        <span class="step">Paso 1 — cada vez que cambias algo</span>
-        <code class="cmd-line"><span class="prompt">$ </span>git add .</code>
-        <h4>Agregar cambios al área de espera</h4>
-        <p>Le dices a Git "quiero guardar <em>estos</em> archivos". El punto <code style="font-family:JetBrains Mono,monospace;font-size:.9em">&nbsp;.&nbsp;</code> significa "todo lo que cambié". También puedes nombrar archivos específicos.</p>
-        <code class="sub-cmd"><span class="prompt">$ </span>git add mi_script.py &nbsp;&nbsp;<span style="color:var(--ink-soft);font-style:italic"># solo ese archivo</span></code>
-      </div>
-
-      <div class="git-cmd">
-        <span class="step">Paso 2 — después del add</span>
-        <code class="cmd-line"><span class="prompt">$ </span>git commit -m "mensaje"</code>
-        <h4>Guardar una versión con descripción</h4>
-        <p>Toma una foto del estado actual y le pone un nombre. El mensaje describe <em>qué hiciste</em> — escríbelo en presente, en español o inglés, y que tenga sentido dentro de 3 meses.</p>
-        <code class="sub-cmd"><span class="prompt">$ </span>git commit -m "agrego cálculo de propina con validación"</code>
-      </div>
-
-      <div class="git-cmd">
-        <span class="step">Paso 3 — para compartir / entregar</span>
-        <code class="cmd-line"><span class="prompt">$ </span>git push</code>
-        <h4>Subir los cambios a GitHub</h4>
-        <p>Envía tus commits locales al repositorio en la nube. Sin este paso, tus cambios solo existen en tu máquina — y <em>eso no cuenta como entrega</em>.</p>
-        <code class="sub-cmd"><span class="prompt">$ </span>git push origin main &nbsp;&nbsp;<span style="color:var(--ink-soft);font-style:italic"># la primera vez</span></code>
+      <div class="py-concept-visual">
+        <div class="vars-stage">
+          <div class="var-card" style="--d:0s;">
+            <span class="var-label">nombre</span>
+            <span class="var-eq">=</span>
+            <span class="var-slot">
+              <span class="var-val v1">"Daniel"</span>
+              <span class="var-val v2">"María"</span>
+              <span class="var-val v3">"Sócrates"</span>
+            </span>
+            <span class="var-type">str</span>
+          </div>
+          <div class="var-card" style="--d:.3s;">
+            <span class="var-label">edad</span>
+            <span class="var-eq">=</span>
+            <span class="var-slot">
+              <span class="var-val v1">21</span>
+              <span class="var-val v2">38</span>
+              <span class="var-val v3">70</span>
+            </span>
+            <span class="var-type">int</span>
+          </div>
+          <div class="var-card" style="--d:.6s;">
+            <span class="var-label">aprobado</span>
+            <span class="var-eq">=</span>
+            <span class="var-slot">
+              <span class="var-val v1">True</span>
+              <span class="var-val v2">False</span>
+              <span class="var-val v3">True</span>
+            </span>
+            <span class="var-type">bool</span>
+          </div>
+          <div class="vars-note">la etiqueta no cambia · el contenido sí ↗</div>
+        </div>
       </div>
     </div>
 
-    <!-- flujo visual -->
-    <div class="git-flow-diagram">
-      <div class="flow-node">
-        <span class="label">tu compu</span>
-        <span class="name">Working Directory</span>
+    <!-- II. print() -->
+    <div class="py-concept reverse">
+      <div class="py-concept-text">
+        <span class="py-num">ii.</span>
+        <h3><em>print()</em> es la <em>voz</em> del programa.</h3>
+        <p>
+          Las variables viven dentro de la memoria de la computadora — son <em>invisibles</em>.
+          Si no le pides a Python que las muestre, nadie las ve, ni siquiera tú.
+        </p>
+        <p>
+          La función <code>print()</code> toma lo que tienes guardado y lo escupe en la pantalla.
+          Es la frontera entre tu programa y el mundo: todo lo que está dentro de los paréntesis
+          <em>se hace público</em>.
+        </p>
+        <div class="py-punch">
+print(nombre)<br/>
+<span style="color:var(--ink-soft);">→ Sócrates</span>
+        </div>
       </div>
-      <div class="flow-arrow">
-        <span class="git-c">git add</span>
-        <span>──────→</span>
-      </div>
-      <div class="flow-node">
-        <span class="label">área de espera</span>
-        <span class="name">Staging Area</span>
-      </div>
-      <div class="flow-arrow">
-        <span class="git-c">git commit</span>
-        <span>──────→</span>
-      </div>
-      <div class="flow-node">
-        <span class="label">historial local</span>
-        <span class="name">Local Repo</span>
-      </div>
-      <div class="flow-arrow">
-        <span class="git-c">git push</span>
-        <span>──────→</span>
-      </div>
-      <div class="flow-node">
-        <span class="label">la nube</span>
-        <span class="name">GitHub</span>
+      <div class="py-concept-visual">
+        <div class="terminal-stage">
+          <div class="editor-pane">
+            <div class="pane-bar">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="pane-title">saludo.py</span>
+            </div>
+            <div class="code-body">
+              <div class="line l1">
+                <span class="ln">1</span>
+                <span><span class="kw">nombre</span> <span class="punct">=</span> <span class="str">"Sócrates"</span></span>
+              </div>
+              <div class="line l2">
+                <span class="ln">2</span>
+                <span><span class="fn">print</span><span class="punct">(</span><span class="str">"Hola,"</span><span class="punct">,</span> <span class="kw">nombre</span><span class="punct">)</span></span>
+              </div>
+              <div class="line l3">
+                <span class="ln">3</span>
+                <span><span class="fn">print</span><span class="punct">(</span><span class="kw">nombre</span><span class="punct">,</span> <span class="str">"camina y piensa."</span><span class="punct">)</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="terminal-pane">
+            <div class="pane-bar dark">
+              <span class="pane-title">› python3 saludo.py</span>
+            </div>
+            <div class="terminal-body">
+              <span class="out o1">Hola, Sócrates</span>
+              <span class="out o2">Sócrates camina y piensa.</span>
+              <span class="prompt-blink">▌</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
