@@ -1,0 +1,1778 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 02 · Algoritmos · El método del persa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2;
+    --paper-deep: #e6dbc2;
+    --paper-darker: #d9ccb0;
+    --ink: #2a1d14;
+    --ink-soft: #4a3a2c;
+    --ink-faint: #8a7a6a;
+    --blood: #a02418;
+    --blood-dark: #6e1810;
+    --ochre: #b5852a;
+    --ochre-deep: #8a6320;
+    --olive: #5d6638;
+    --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px),
+      radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px;
+    background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .italic{ font-style: italic; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .blood{ color: var(--blood); }
+  .ochre{ color: var(--ochre); }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+
+  /* HAND-DRAWN underline that animates on reveal */
+  .underline-hand, .underline-ochre, .underline-olive{
+    position: relative;
+    padding-bottom: .15em;
+  }
+  .underline-hand::after, .underline-ochre::after, .underline-olive::after{
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: .35em;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% .35em;
+    transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s;
+  }
+  .underline-hand::after{ background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23a02418' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .underline-ochre::after{ background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .underline-olive::after{ background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%235d6638' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in .underline-hand::after, .in .underline-ochre::after, .in .underline-olive::after,
+  .in.underline-hand::after, .in.underline-ochre::after, .in.underline-olive::after{
+    background-size: 100% .35em;
+  }
+  .strike-hand{ position: relative; color: var(--ink-soft); }
+  .strike-hand::after{ content:""; position:absolute; left:-2%; right:-2%; top: 55%; height: 3px; background: var(--blood); transform: rotate(-2deg); border-radius:2px; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); animation: pulse-seal 4s ease-in-out infinite; }
+  @keyframes pulse-seal{ 0%, 100%{ transform: scale(1); } 50%{ transform: scale(1.08); } }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO with entrance animation */
+  .hero{ position: relative; padding: 30px 0 80px; }
+  .hero .session-no{
+    position: absolute; top: -40px; right: -10px;
+    font-family: "Fraunces", serif; font-weight: 900;
+    font-size: clamp(180px, 28vw, 360px);
+    line-height: .85; color: var(--paper-deep);
+    z-index: 0; user-select: none; letter-spacing: -.05em;
+    animation: floatNum 6s ease-in-out infinite;
+  }
+  @keyframes floatNum{ 0%,100%{ transform: translateY(0) rotate(0); } 50%{ transform: translateY(-10px) rotate(-1deg); } }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 30px; display:flex; align-items:center; gap: 16px; opacity: 0; animation: slideInLeft .8s ease-out .2s forwards; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  @keyframes slideInLeft{ from{ opacity: 0; transform: translateX(-30px); } to{ opacity: 1; transform: translateX(0); } }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(56px, 9vw, 130px); line-height: .95; margin: 0 0 36px; letter-spacing: -.02em; }
+  .hero h1 .line1, .hero h1 .line2{ display: block; opacity: 0; transform: translateY(20px); animation: heroLine .8s ease-out forwards; }
+  .hero h1 .line1{ animation-delay: .4s; }
+  .hero h1 .line2{ animation-delay: .65s; }
+  @keyframes heroLine{ to{ opacity: 1; transform: translateY(0); } }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 720px; font-size: 1.25rem; line-height: 1.55; color: var(--ink-soft); opacity: 0; transform: translateY(15px); animation: heroLine .8s ease-out .95s forwards; }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 60px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; opacity: 0; transform: translateY(15px); animation: heroLine .8s ease-out 1.15s forwards; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* MANIFIESTO */
+  .manifiesto{ margin: 70px 0; padding: 60px 40px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); position: relative; }
+  .manifiesto .tag{ position: absolute; top:-12px; left: 32px; background: var(--paper); padding: 0 14px; font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); }
+  .manifiesto blockquote{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-weight: 300; font-size: clamp(28px, 4.5vw, 56px); line-height: 1.15; color: var(--ink); letter-spacing: -.01em; }
+  .manifiesto blockquote .accent{ color: var(--blood); font-weight: 600; }
+  .manifiesto blockquote .accent-ochre{ color: var(--ochre); font-weight: 600; }
+  .manifiesto cite{ display:block; margin-top: 28px; font-size: 1rem; font-style: normal; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* DECOMPOSITION ANIMATION === Star section */
+  .decompose{ margin: 110px 0; }
+  .decompose .head{ display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: end; margin-bottom: 50px; }
+  @media (max-width: 760px){ .decompose .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .decompose .head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(80px, 12vw, 160px); line-height: .85; color: var(--blood); }
+  .decompose .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5vw, 64px); line-height: 1; margin: 0 0 18px; letter-spacing: -.01em; }
+  .decompose .head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .decompose .head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 640px; }
+
+  .decompose-stage{
+    background: var(--paper-deep);
+    border: 1.5px solid var(--ink);
+    padding: 50px 40px 60px;
+    position: relative;
+    overflow: hidden;
+    min-height: 540px;
+  }
+  .decompose-stage .stage-label{
+    position: absolute;
+    top: -14px; left: 30px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 14px;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+  .stage-problem{
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .stage-problem .label{
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .stage-problem h3{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(20px, 3vw, 32px);
+    margin: 0;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .stage-problem h3 em{ color: var(--blood); }
+
+  .big-circle-wrap{
+    position: relative;
+    width: 100%;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Big circle (problem) */
+  .big-circle{
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: var(--blood);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 20px;
+    position: absolute;
+    box-shadow: 0 8px 0 var(--blood-dark);
+    transition: all 1.2s cubic-bezier(.6,0,.2,1);
+    z-index: 5;
+  }
+  .big-circle.decomposed{
+    width: 70px;
+    height: 70px;
+    font-size: 0;
+    opacity: 0;
+    transform: scale(.5);
+  }
+  /* Small circles (steps) */
+  .small-circle{
+    position: absolute;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: var(--ochre);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 5px 0 var(--ochre-deep);
+    opacity: 0;
+    transform: scale(.3);
+    transition: all 1s cubic-bezier(.6,0,.2,1);
+  }
+  .small-circle .num{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.4rem;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .small-circle .lbl{
+    font-family: "Newsreader", serif;
+    font-size: .82rem;
+    font-style: italic;
+    line-height: 1.15;
+  }
+  .small-circle.shown{
+    opacity: 1;
+    transform: scale(1);
+  }
+  /* Positions for the small circles (around center) */
+  .small-circle.sc-1{ left: calc(50% - 280px); top: 40px; transition-delay: 0s; }
+  .small-circle.sc-2{ left: calc(50% - 90px); top: 0px; transition-delay: .1s; }
+  .small-circle.sc-3{ left: calc(50% + 100px); top: 40px; transition-delay: .2s; }
+  .small-circle.sc-4{ left: calc(50% - 280px); top: 220px; transition-delay: .3s; }
+  .small-circle.sc-5{ left: calc(50% - 90px); top: 250px; transition-delay: .4s; }
+  .small-circle.sc-6{ left: calc(50% + 100px); top: 220px; transition-delay: .5s; }
+  @media (max-width: 760px){
+    .small-circle{ width: 90px; height: 90px; padding: 6px; }
+    .small-circle .num{ font-size: 1rem; }
+    .small-circle .lbl{ font-size: .68rem; }
+    .small-circle.sc-1{ left: calc(50% - 170px); top: 20px; }
+    .small-circle.sc-2{ left: calc(50% - 50px); top: -10px; }
+    .small-circle.sc-3{ left: calc(50% + 70px); top: 20px; }
+    .small-circle.sc-4{ left: calc(50% - 170px); top: 200px; }
+    .small-circle.sc-5{ left: calc(50% - 50px); top: 240px; }
+    .small-circle.sc-6{ left: calc(50% + 70px); top: 200px; }
+  }
+  /* Lines connecting (SVG overlay) */
+  .lines-svg{
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .lines-svg line{
+    stroke: var(--blood);
+    stroke-width: 2;
+    stroke-dasharray: 5 4;
+    opacity: 0;
+    transition: opacity .6s ease;
+  }
+  .lines-svg.shown line{ opacity: .35; }
+
+  .decompose-cta{
+    margin-top: 30px;
+    text-align: center;
+  }
+  .replay-btn{
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 12px 24px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all .3s ease;
+    letter-spacing: .02em;
+  }
+  .replay-btn:hover{
+    background: var(--blood);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 var(--blood-dark);
+  }
+
+  /* KHWA */
+  .khwa{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1.05fr; gap: 60px; align-items: center; }
+  @media (max-width: 820px){ .khwa{ grid-template-columns: 1fr; gap: 36px; } }
+  .khwa .col-visual{ position: relative; aspect-ratio: 1 / 1; display:flex; align-items:center; justify-content:center; }
+  .khwa .col-visual svg{ width: 100%; height: 100%; }
+  /* The geometric star rotates slowly */
+  .khwa .col-visual .rotating-star{ transform-origin: 200px 200px; animation: starRotate 60s linear infinite; }
+  @keyframes starRotate{ from{ transform: rotate(0deg); } to{ transform: rotate(360deg); } }
+  .khwa .col-text h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(40px, 5.5vw, 72px); line-height: 1; margin: 0 0 28px; letter-spacing: -.01em; }
+  .khwa .col-text h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .khwa .col-text p{ font-size: 1.1rem; color: var(--ink-soft); margin: 0 0 16px; }
+  .khwa .col-text strong{ color: var(--ink); font-weight: 600; }
+  .etymology{ margin-top: 26px; padding: 22px 24px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; }
+  .etymology .row{ display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 6px 0; opacity: 0; transform: translateX(-10px); transition: all .6s ease; }
+  .etymology .row.shown{ opacity: 1; transform: translateX(0); }
+  .etymology .row:nth-child(1){ transition-delay: .1s; }
+  .etymology .row:nth-child(2){ transition-delay: .35s; }
+  .etymology .row:nth-child(3){ transition-delay: .6s; }
+  .etymology .word{ font-style: italic; font-size: 1.15rem; color: var(--ink); }
+  .etymology .lang{ font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-soft); font-family: "Newsreader", serif; font-style: normal; }
+  .etymology .ar{ font-size: 1.4rem; color: var(--ochre-deep); }
+  .etymology .arrow{ color: var(--blood); font-weight: 900; font-size: 1.2rem; }
+
+  /* TIMELINE */
+  .timeline-section{ margin: 100px 0; padding: 50px 0; border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line); }
+  .timeline-section .head{ margin-bottom: 40px; }
+  .timeline-section .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(32px, 4.5vw, 56px); line-height: 1.05; margin: 0 0 12px; letter-spacing: -.01em; }
+  .timeline-section .head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .timeline-section .head p{ margin: 0; color: var(--ink-soft); max-width: 700px; font-size: 1.05rem; }
+  .timeline{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
+  @media (max-width: 800px){ .timeline{ grid-template-columns: 1fr; } }
+  .tlcard{ padding: 24px 22px 26px; background: var(--paper-deep); border: 1px solid var(--line); position: relative; transition: transform .3s ease, box-shadow .3s ease; }
+  .tlcard:hover{ transform: translateY(-5px) rotate(-.5deg); box-shadow: 4px 6px 0 var(--ink); }
+  .tlcard .year{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 2.4rem; color: var(--ochre); line-height: 1; margin-bottom: 6px; }
+  .tlcard .place{ font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 16px; }
+  .tlcard h4{ font-family: "Fraunces", serif; font-weight: 600; font-style: italic; font-size: 1.3rem; margin: 0 0 10px; }
+  .tlcard p{ margin: 0; font-size: .92rem; color: var(--ink-soft); }
+
+  /* DESCARTES */
+  .descartes{ margin: 110px 0; }
+  .descartes .head{ display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: end; margin-bottom: 50px; }
+  @media (max-width: 760px){ .descartes .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .descartes .head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(80px, 12vw, 160px); line-height: .85; color: var(--blood); }
+  .descartes .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5vw, 64px); line-height: 1; margin: 0 0 18px; letter-spacing: -.01em; }
+  .descartes .head h2 em{ font-style: italic; color: var(--blood); font-weight: 600;}
+  .descartes .head p{ margin: 0; color: var(--ink-soft); font-size: 1.08rem; max-width: 720px; }
+  .rules-grid{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+  @media (max-width: 980px){ .rules-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 540px){ .rules-grid{ grid-template-columns: 1fr; } }
+  .rule-card{ padding: 26px 22px 30px; background: var(--paper); border: 1.5px solid var(--ink); position: relative; min-height: 240px; transition: all .4s ease; }
+  .rule-card:hover{ transform: translateY(-5px); box-shadow: 5px 6px 0 var(--blood); background: var(--paper-deep); }
+  .rule-card .num{ position: absolute; top: -16px; left: 20px; background: var(--blood); color: var(--paper); padding: 4px 14px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: .85rem; letter-spacing: .1em; }
+  .rule-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 16px 0 12px; color: var(--ink); line-height: 1.15; }
+  .rule-card .original{ font-family: "Newsreader", serif; font-style: italic; font-size: .82rem; color: var(--ink-soft); margin: 0 0 14px; border-left: 2px solid var(--ochre); padding-left: 10px; }
+  .rule-card .applied{ font-size: .95rem; color: var(--ink); }
+  .rule-card .applied strong{ color: var(--blood); }
+
+  /* PLAN DE HOY (sesión adaptada) */
+  .plan-hoy{
+    margin: 70px 0;
+    padding: 40px 38px 44px;
+    background: var(--paper-deep);
+    border-left: 6px solid var(--ochre);
+    position: relative;
+  }
+  .plan-hoy::before{
+    content: "CAMBIO DE PLAN";
+    position: absolute;
+    top: -14px; left: 30px;
+    background: var(--ochre);
+    color: var(--paper);
+    padding: 5px 14px;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    font-weight: 700;
+  }
+  .plan-hoy h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+    margin: 6px 0 18px;
+    letter-spacing: -.01em;
+  }
+  .plan-hoy h2 em{ font-style: italic; color: var(--ochre-deep); font-weight: 600; }
+  .plan-hoy p{
+    margin: 0 0 14px;
+    font-size: 1.05rem;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .plan-hoy p:last-of-type{ margin-bottom: 0; }
+  .plan-hoy p em{ font-style: italic; color: var(--ochre-deep); }
+  .plan-hoy p strong{ color: var(--blood); font-weight: 600; }
+
+  /* FCC SECTION */
+  .fcc{ margin: 110px 0; }
+  .fcc .head{ display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: end; margin-bottom: 40px; }
+  @media (max-width: 760px){ .fcc .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .fcc .head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(80px, 12vw, 160px); line-height: .85; color: var(--blood); }
+  .fcc .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5vw, 64px); line-height: 1; margin: 0 0 18px; letter-spacing: -.01em; }
+  .fcc .head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .fcc .head p{ margin: 0; color: var(--ink-soft); font-size: 1.08rem; max-width: 720px; }
+
+  .fcc-cta{
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 40px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .fcc-cta::before{
+    content:""; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9   0 0 0 0 0.85   0 0 0 0 0.7   0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: screen; opacity: .4; pointer-events: none;
+  }
+  .fcc-cta .inner{ position: relative; z-index: 1; }
+  .fcc-cta .pre{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: rgba(239,230,210,.7);
+    margin-bottom: 14px;
+  }
+  .fcc-cta h3{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(32px, 5vw, 56px);
+    margin: 0 0 24px;
+    color: var(--paper);
+    line-height: 1.05;
+    letter-spacing: -.01em;
+  }
+  .fcc-cta h3 em{ font-style: italic; color: #f0c8a0; font-weight: 600; }
+  .fcc-button{
+    display: inline-block;
+    background: var(--blood);
+    color: var(--paper);
+    padding: 18px 38px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: all .3s ease;
+    margin: 8px 0 20px;
+    border: 2px solid var(--blood);
+  }
+  .fcc-button:hover{
+    background: var(--paper);
+    color: var(--blood);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 var(--blood-dark);
+  }
+  .fcc-cta .url{
+    display: block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .82rem;
+    color: rgba(239,230,210,.55);
+    word-break: break-all;
+  }
+
+  .fcc-steps{
+    margin: 50px 0 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 900px){ .fcc-steps{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px){ .fcc-steps{ grid-template-columns: 1fr; } }
+  .fcc-step{
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 22px 20px 24px;
+    position: relative;
+    transition: all .3s ease;
+  }
+  .fcc-step:hover{
+    transform: translateY(-5px);
+    box-shadow: 4px 5px 0 var(--blood);
+  }
+  .fcc-step .step-circle{
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--blood);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+  }
+  .fcc-step h4{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin: 0 0 8px;
+    line-height: 1.2;
+  }
+  .fcc-step p{
+    margin: 0;
+    font-size: .92rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .fcc-step p strong{ color: var(--ink); }
+  .fcc-step p code{
+    font-family: "JetBrains Mono", monospace;
+    background: var(--paper-deep);
+    padding: 1px 6px;
+    font-size: .85em;
+    border: 1px solid var(--line);
+  }
+
+  .fcc-noise{
+    margin-top: 40px;
+    padding: 24px 30px;
+    background: var(--paper-deep);
+    border: 1.5px dashed var(--ochre);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 22px;
+    align-items: center;
+  }
+  @media (max-width: 600px){ .fcc-noise{ grid-template-columns: 1fr; gap: 12px; } }
+  .fcc-noise .ic{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 2.6rem;
+    color: var(--ochre);
+    line-height: 1;
+  }
+  .fcc-noise p{
+    margin: 0;
+    font-size: 1rem;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .fcc-noise p strong{ color: var(--ochre-deep); }
+  .fcc-noise p em{ font-style: italic; color: var(--ochre-deep); }
+
+  /* TYPES SECTION */
+  .types-section{ margin: 110px 0; }
+  .types-section .head{ display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: end; margin-bottom: 40px; }
+  @media (max-width: 760px){ .types-section .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .types-section .head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(80px, 12vw, 160px); line-height: .85; color: var(--ochre); }
+  .types-section .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5vw, 64px); line-height: 1; margin: 0 0 18px; letter-spacing: -.01em; }
+  .types-section .head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .types-section .head p{ margin: 0; color: var(--ink-soft); font-size: 1.08rem; max-width: 720px; }
+  .types-grid{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+  @media (max-width: 980px){ .types-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 540px){ .types-grid{ grid-template-columns: 1fr; } }
+  .type-card{
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 24px 22px 28px;
+    position: relative;
+    transition: all .35s ease;
+    min-height: 290px;
+  }
+  .type-card:hover{ transform: translateY(-6px); box-shadow: 5px 6px 0 var(--ochre); }
+  .type-card.future{
+    background: repeating-linear-gradient(45deg, var(--paper), var(--paper) 10px, var(--paper-deep) 10px, var(--paper-deep) 20px);
+    opacity: .85;
+  }
+  .type-card.future::after{
+    content: "→ Sesión 07";
+    position: absolute; bottom: 14px; left: 22px; right: 22px;
+    text-align: center; background: var(--ink); color: var(--paper);
+    padding: 5px 10px; font-size: .68rem; letter-spacing: .18em; font-weight: 700;
+  }
+  .type-card .type-name{ font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.3rem; color: var(--blood); margin-bottom: 4px; }
+  .type-card .type-label{ font-family: "Fraunces", serif; font-style: italic; font-size: 1rem; color: var(--ink-soft); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .type-card .examples{ font-family: "JetBrains Mono", monospace; font-size: .85rem; color: var(--ink); margin-bottom: 14px; line-height: 1.9; }
+  .type-card .examples .ex{ display: inline-block; background: var(--paper-deep); padding: 2px 8px; margin: 0 4px 4px 0; color: var(--ochre-deep); font-weight: 700; border: 1px solid var(--line); }
+  .type-card .for-what{ font-size: .88rem; color: var(--ink-soft); line-height: 1.5; }
+  .type-card .for-what strong{ color: var(--blood); }
+
+  .types-tip{
+    margin-top: 30px; padding: 24px 30px;
+    background: var(--ink); color: var(--paper);
+    display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center;
+  }
+  @media (max-width: 600px){ .types-tip{ grid-template-columns: 1fr; gap: 12px; } }
+  .types-tip .icn{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 3rem; color: #f0c8a0; line-height: 1; }
+  .types-tip p{ margin: 0; font-size: 1.02rem; color: rgba(239,230,210,.95); line-height: 1.55; }
+  .types-tip p strong{ color: #f0c8a0; font-weight: 600; }
+  .types-tip p em{ font-style: italic; color: var(--paper); }
+
+  /* ===== ALGORITMO EJECUTANDO ===== */
+  .algo-exec{ margin: 110px 0; }
+  .algo-exec .head{ margin-bottom: 40px; }
+  .algo-exec .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(40px, 5.5vw, 72px); line-height: 1; margin: 0 0 14px; letter-spacing: -.01em; }
+  .algo-exec .head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .algo-exec .head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 700px; }
+
+  .exec-stage{
+    background: var(--ink);
+    color: var(--paper);
+    padding: 50px 40px;
+    margin-top: 30px;
+    position: relative;
+    border-radius: 0;
+  }
+  .exec-stage::before{
+    content:"";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9   0 0 0 0 0.85   0 0 0 0 0.7   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: screen; opacity: .3; pointer-events: none;
+  }
+  .exec-inner{ position: relative; z-index: 2; }
+  .exec-stage .label-top{
+    position: absolute;
+    top: -14px; left: 30px;
+    background: var(--blood);
+    color: var(--paper);
+    padding: 4px 14px;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .exec-input-row{
+    display: flex; gap: 30px; flex-wrap: wrap;
+    padding: 20px 0;
+    border-bottom: 1px dashed rgba(239,230,210,.25);
+    margin-bottom: 30px;
+  }
+  .exec-input{
+    font-family: "JetBrains Mono", monospace;
+    font-size: .95rem;
+  }
+  .exec-input .var{
+    color: #f0c8a0;
+    font-weight: 700;
+  }
+  .exec-input .val{
+    color: var(--paper);
+    background: rgba(239,230,210,.1);
+    padding: 4px 10px;
+    margin-left: 8px;
+    font-weight: 700;
+  }
+  .exec-step{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px dashed rgba(239,230,210,.18);
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all .5s ease;
+  }
+  .exec-step.shown{
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .exec-step .num{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: #f0c8a0;
+    width: 40px;
+    text-align: center;
+  }
+  .exec-step .desc{
+    font-family: "Newsreader", serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: rgba(239,230,210,.9);
+  }
+  .exec-step .desc code{
+    font-family: "JetBrains Mono", monospace;
+    font-style: normal;
+    background: rgba(239,230,210,.1);
+    padding: 2px 8px;
+    margin: 0 2px;
+    color: #f0c8a0;
+    font-size: .9rem;
+  }
+  .exec-step .result{
+    font-family: "JetBrains Mono", monospace;
+    font-size: .9rem;
+    color: #d4e5a0;
+    background: rgba(212,229,160,.08);
+    padding: 6px 14px;
+    border: 1px solid rgba(212,229,160,.3);
+    white-space: nowrap;
+  }
+  .exec-final{
+    margin-top: 30px;
+    padding: 24px 30px;
+    background: var(--blood);
+    text-align: center;
+    opacity: 0;
+    transform: scale(.9);
+    transition: all .6s ease;
+  }
+  .exec-final.shown{
+    opacity: 1;
+    transform: scale(1);
+  }
+  .exec-final .label{
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(239,230,210,.7);
+    margin-bottom: 10px;
+  }
+  .exec-final .out{
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1.4rem;
+    color: var(--paper);
+    font-weight: 700;
+  }
+  .exec-controls{
+    display: flex; gap: 14px; justify-content: center; align-items: center;
+    margin-top: 30px;
+  }
+  .exec-controls button{
+    background: rgba(239,230,210,.1);
+    color: var(--paper);
+    border: 1.5px solid rgba(239,230,210,.4);
+    padding: 12px 22px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: all .25s ease;
+  }
+  .exec-controls button:hover{
+    background: rgba(239,230,210,.2);
+    border-color: var(--paper);
+  }
+  .exec-controls button.primary{
+    background: var(--blood);
+    border-color: var(--blood);
+  }
+  .exec-controls button.primary:hover{
+    background: var(--blood-dark);
+  }
+  .exec-controls .progress-text{
+    font-family: "JetBrains Mono", monospace;
+    font-size: .82rem;
+    color: rgba(239,230,210,.6);
+  }
+
+  /* DESK TABLE */
+  .desk-table-wrap{ margin: 60px 0 0; }
+  .desk-table-wrap h3{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 0 0 6px;
+  }
+  .desk-table-wrap .sub{
+    margin: 0 0 20px;
+    color: var(--ink-soft);
+    font-size: 1rem;
+  }
+  .desk-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .88rem;
+  }
+  .desk-table thead th{
+    background: var(--ink);
+    color: var(--paper);
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 700;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  .desk-table tbody tr{
+    opacity: 0;
+    transform: translateX(-15px);
+    transition: all .4s ease;
+  }
+  .desk-table tbody tr.shown{
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .desk-table tbody td{
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .desk-table tbody tr:nth-child(even) td{ background: var(--paper-deep); }
+  .desk-table td .ok{ color: var(--olive-deep); font-weight: 700; }
+  .desk-table td .bad{ color: var(--blood); font-weight: 700; }
+  .desk-table td.numeric{ color: var(--ochre-deep); font-weight: 700; }
+  .desk-table-cta{
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  /* ====== ACTIVIDAD EN CLASE ====== */
+  .actividad{ margin: 130px 0; }
+  .actividad .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .actividad .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .actividad .head .stamp{
+    border: 2.5px solid var(--olive);
+    color: var(--olive-deep);
+    padding: 10px 22px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.4rem;
+    transform: rotate(-3deg);
+    letter-spacing: .05em;
+  }
+  .actividad h2{
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: clamp(38px, 5.5vw, 72px);
+    line-height: 1;
+    margin: 0 0 14px;
+    letter-spacing: -.015em;
+  }
+  .actividad h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .actividad .intro{
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+    max-width: 760px;
+    margin: 0 0 30px;
+  }
+  .activity-card{
+    background: var(--paper-deep);
+    border: 2.5px dashed var(--olive);
+    padding: 40px 38px 44px;
+    position: relative;
+  }
+  .activity-card::before{
+    content: "ACTIVIDAD";
+    position: absolute;
+    top: -14px; left: 30px;
+    background: var(--olive);
+    color: var(--paper);
+    padding: 4px 14px;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    font-weight: 700;
+  }
+  .activity-card .problem{
+    margin-bottom: 30px;
+  }
+  .activity-card .problem h3{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 0 0 14px;
+    color: var(--olive-deep);
+  }
+  .activity-card .problem p{
+    margin: 0;
+    font-size: 1.08rem;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .activity-card .problem p em{ color: var(--olive-deep); font-style: italic; font-weight: 600; }
+
+  .activity-prompts{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 30px 0;
+  }
+  @media (max-width: 760px){ .activity-prompts{ grid-template-columns: 1fr; } }
+  .prompt-box{
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    padding: 20px 22px;
+  }
+  .prompt-box .pb-label{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: var(--olive);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .prompt-box .pb-title{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+  }
+  .prompt-box .pb-q{
+    font-size: .95rem;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .reveal-area{
+    margin-top: 30px;
+  }
+  .reveal-toggle{
+    background: var(--olive);
+    color: var(--paper);
+    border: none;
+    padding: 14px 28px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: all .3s ease;
+    width: 100%;
+  }
+  .reveal-toggle:hover{
+    background: var(--olive-deep);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 var(--olive-deep);
+  }
+  .solution{
+    margin-top: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all .8s cubic-bezier(.4,0,.2,1);
+  }
+  .solution.shown{
+    margin-top: 24px;
+    max-height: 1600px;
+    opacity: 1;
+  }
+  .solution-block{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: 28px 30px;
+  }
+  .solution-block h4{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin: 0 0 18px;
+    color: var(--olive-deep);
+  }
+  .solution-block .label-step{
+    display: inline-block;
+    background: var(--olive);
+    color: var(--paper);
+    padding: 3px 10px;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: "Newsreader", serif;
+    margin: 18px 0 10px;
+  }
+  .solution-block ol.alg-steps{
+    margin: 0;
+    padding-left: 24px;
+    list-style: none;
+    counter-reset: solstep;
+  }
+  .solution-block ol.alg-steps li{
+    counter-increment: solstep;
+    position: relative;
+    padding: 8px 0 8px 36px;
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--ink);
+    border-bottom: 1px dashed rgba(42,29,20,.1);
+  }
+  .solution-block ol.alg-steps li:last-child{ border-bottom: none; }
+  .solution-block ol.alg-steps li::before{
+    content: counter(solstep);
+    position: absolute;
+    left: 0; top: 7px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    color: var(--blood);
+    font-size: 1.2rem;
+  }
+  .solution-block ol.alg-steps li em{ color: var(--blood-dark); font-style: italic; font-weight: 600; }
+  .solution-block .test-table{
+    width: 100%;
+    margin-top: 14px;
+    border-collapse: collapse;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .82rem;
+  }
+  .solution-block .test-table th{
+    background: var(--ink);
+    color: var(--paper);
+    text-align: left;
+    padding: 8px 12px;
+    font-size: .7rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .solution-block .test-table td{
+    padding: 8px 12px;
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--line);
+  }
+  .solution-block .test-table td.numeric{ color: var(--ochre-deep); font-weight: 700; }
+  .solution-block .reflection{
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: var(--paper-deep);
+    border-left: 3px solid var(--olive);
+    font-size: .92rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .solution-block .reflection strong{ color: var(--olive-deep); }
+
+  /* PROPIEDADES */
+  .props{ margin: 110px 0; background: var(--ink); color: var(--paper); padding: 80px 50px 90px; margin-left: -28px; margin-right: -28px; position: relative; }
+  @media (min-width: 1256px){ .props{ margin-left: calc(-50vw + 600px); margin-right: calc(-50vw + 600px); padding-left: calc(50vw - 600px + 50px); padding-right: calc(50vw - 600px + 50px); } }
+  .props::before{ content:""; position: absolute; inset: 0; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9   0 0 0 0 0.85   0 0 0 0 0.7   0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); mix-blend-mode: screen; opacity: .4; pointer-events: none; }
+  .props-inner{ position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+  .props .small-caps{ color: #f0c8a0; }
+  .props h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(40px, 6vw, 88px); line-height: 1; margin: 16px 0 12px; color: var(--paper); letter-spacing: -.015em; }
+  .props h2 em{ font-style: italic; color: #f0c8a0; font-weight: 600; }
+  .props .sub{ font-size: 1.1rem; color: rgba(239,230,210,.7); margin: 0 0 50px; max-width: 720px; }
+  .props-grid{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+  @media (max-width: 980px){ .props-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 540px){ .props-grid{ grid-template-columns: 1fr; } }
+  .prop{ padding: 22px 18px 24px; background: rgba(239,230,210,.05); border: 1px solid rgba(239,230,210,.18); transition: transform .3s ease; }
+  .prop:hover{ transform: translateY(-5px); background: rgba(239,230,210,.1); }
+  .prop .letter{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 3rem; color: #f0c8a0; line-height: 1; margin-bottom: 14px; }
+  .prop h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.2rem; margin: 0 0 8px; color: var(--paper); }
+  .prop p{ margin: 0; font-size: .88rem; color: rgba(239,230,210,.75); line-height: 1.5; }
+
+  /* PUNCHLINE */
+  .punchline{ margin: 90px 0; padding: 60px 40px; text-align: center; border-top: 1.5px dashed var(--blood); border-bottom: 1.5px dashed var(--blood); }
+  .punchline blockquote{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-weight: 300; font-size: clamp(28px, 4vw, 48px); line-height: 1.2; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin: 0 auto; }
+  .punchline blockquote .blood{ font-weight: 600; color: var(--blood); }
+
+  /* TAREA - MISIÓN ENHANCED */
+  .tarea{ margin: 110px 0 80px; }
+  .tarea .head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 40px; }
+  @media (max-width: 700px){ .tarea .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .tarea .head .stamp{ border: 2.5px solid var(--blood); color: var(--blood); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .tarea h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5vw, 64px); margin: 0 0 12px; line-height: 1; letter-spacing: -.01em; }
+  .tarea h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .tarea .intro{ font-size: 1.08rem; color: var(--ink-soft); margin: 0 0 30px; max-width: 760px; }
+  .tarea .deadline-banner{
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 24px;
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 600px){ .tarea .deadline-banner{ grid-template-columns: 1fr; gap: 8px; text-align: center; } }
+  .tarea .deadline-banner .icon{
+    width: 36px; height: 36px;
+    background: var(--blood); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .tarea .deadline-banner .icon svg{ width: 20px; height: 20px; color: var(--paper); }
+  .tarea .deadline-banner .text{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.1rem; }
+  .tarea .deadline-banner .text strong{ color: #f0c8a0; }
+  .tarea .deadline-banner .countdown-num{
+    font-family: "Fraunces", serif; font-style: italic; font-weight: 900;
+    color: #f0c8a0; font-size: 1.3rem;
+  }
+
+  .checklist{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 720px){ .checklist{ grid-template-columns: 1fr; } }
+  .check{
+    background: var(--paper-deep);
+    padding: 26px 28px;
+    border-left: 4px solid var(--blood);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    align-items: start;
+    transition: all .3s ease;
+  }
+  .check:hover{
+    transform: translateX(4px);
+    box-shadow: -4px 4px 0 var(--blood);
+  }
+  .check .box{ width: 28px; height: 28px; border: 2px solid var(--ink); flex-shrink: 0; margin-top: 2px; background: var(--paper); }
+  .check h4{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.2rem; margin: 0 0 6px; }
+  .check p{ margin: 0; font-size: .96rem; color: var(--ink-soft); }
+  .check .deadline{ margin-top: 10px; font-family: "JetBrains Mono", monospace; font-size: .8rem; color: var(--blood); }
+  .check .deadline.ochre{ color: var(--ochre-deep);}
+
+  .rubrica{
+    margin-top: 40px;
+    padding: 26px 30px;
+    background: var(--paper-deep);
+    border: 1px solid var(--line);
+  }
+  .rubrica h4{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin: 0 0 16px;
+    color: var(--ink);
+  }
+  .rubrica-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 720px){ .rubrica-grid{ grid-template-columns: 1fr 1fr; } }
+  .rub-item{
+    background: var(--paper);
+    border-top: 3px solid var(--blood);
+    padding: 14px 16px;
+  }
+  .rub-item .pct{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: var(--blood);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .rub-item h5{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: .95rem;
+    margin: 0 0 4px;
+  }
+  .rub-item p{
+    margin: 0;
+    font-size: .8rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  /* CIERRE */
+  .cierre{ margin: 120px 0 80px; padding: 70px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; }
+  .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(30px, 4.5vw, 56px); line-height: 1.15; margin: 24px 0 20px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .sig{ margin-top: 40px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  /* FOOTER */
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  /* SCROLL REVEAL base */
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+
+  /* Reduce motion preference */
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: .01ms !important;
+      transition-duration: .01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 02 · Algoritmos</span>
+    </div>
+    <div class="right">
+      Jueves 21.05.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">Sesión de trabajo autónomo · prof. en recuperación</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">02</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      <span class="line1">El <span class="em-ochre">método</span></span>
+      <span class="line2"><span style="font-style:italic">del</span> <span class="em">persa.</span></span>
+    </h1>
+    <p class="lede">
+      En el año <strong>820 d.C.</strong>, en Bagdad, un matemático persa llamado
+      <em>Muḥammad ibn Mūsā al-Khwārizmī</em> escribió un libro que cambiaría
+      cómo el mundo resuelve problemas. Más de mil años después, su nombre —latinizado
+      a <em>«Algorithmi»</em>— quedó pegado para siempre a la palabra que define tu profesión.<br/><br/>
+      Hoy aprendes el método. <span class="underline-ochre">El que no ha cambiado en doce siglos</span>.
+    </p>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">Algoritmos y Prueba de Escritorio</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Modalidad de hoy</span>
+        <span class="value">Trabajo autónomo · freeCodeCamp</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Entrega</span>
+        <span class="value">Captura del progreso completo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFIESTO -->
+  <section class="manifiesto reveal">
+    <span class="tag">Definición del día</span>
+    <blockquote class="display">
+      Un algoritmo no es un programa.<br/>
+      Es <span class="accent-ochre italic">un programa</span><br/>
+      <span class="accent italic">antes</span> de ser programa.
+    </blockquote>
+    <cite>— La definición que vamos a defender hoy</cite>
+  </section>
+
+  <!-- PLAN DE HOY -->
+  <section class="plan-hoy reveal">
+    <h2 class="display">Hoy <em>cambiamos</em> el plan original.</h2>
+    <p>
+      Estaba enfermo y la voz no me da para explicarles en vivo lo que tenía preparado para hoy.
+      Pero <strong>la sesión no se cancela</strong> — la convertimos en algo igual de valioso, pero
+      autónomo. Voy a estar en el aula presente, en silencio, atendiendo dudas <em>una a una</em>.
+    </p>
+    <p>
+      En lugar de mi explicación oral, hoy van a trabajar de manera <em>autodirigida</em> con un
+      curso interactivo de <strong>freeCodeCamp</strong>. La buena noticia: es exactamente el contenido
+      que necesitan para seguir el ritmo del curso, y aprenderlo programando en vivo es mucho más
+      efectivo que escucharme. Aprovechen.
+    </p>
+    <p>
+      El resto de esta página la dejo como <em>material de referencia</em>: la historia de la palabra
+      «algoritmo», los tipos de datos en Python, las propiedades de un buen algoritmo. <strong>Léanla
+      en sus pausas</strong> entre módulos del curso.
+    </p>
+  </section>
+
+  <!-- FCC SECTION -->
+  <section class="fcc reveal">
+    <div class="head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">Tu <em>misión</em> de hoy.</h2>
+        <p>
+          Completar los <strong>módulos de fundamentos</strong> de la <em>Certificación de Python (v9)</em>
+          de freeCodeCamp. Son retos interactivos en español, en el navegador, sin instalación. Diseñados
+          para que aprendas haciendo, no escuchando.
+        </p>
+      </div>
+    </div>
+
+    <div class="fcc-cta">
+      <div class="inner">
+        <div class="pre">freeCodeCamp — gratis, en español, sin instalación</div>
+        <h3 class="display">Certificación de Python <em>(v9)</em></h3>
+        <a href="https://www.freecodecamp.org/espanol/learn/python-v9/" class="fcc-button" target="_blank" rel="noopener">
+          Abrir el curso →
+        </a>
+        <span class="url">https://www.freecodecamp.org/espanol/learn/python-v9/</span>
+      </div>
+    </div>
+
+    <div class="fcc-steps">
+      <div class="fcc-step">
+        <div class="step-circle">1</div>
+        <h4>Crea tu cuenta</h4>
+        <p>Si no tienes una, regístrate con tu correo. Es <strong>gratis</strong> y queda guardado tu progreso.</p>
+      </div>
+      <div class="fcc-step">
+        <div class="step-circle">2</div>
+        <h4>Abre el curso</h4>
+        <p>Da clic en el botón rojo de arriba. Te lleva directo a la <strong>ruta de Python v9</strong> en español.</p>
+      </div>
+      <div class="fcc-step">
+        <div class="step-circle">3</div>
+        <h4>Empieza por fundamentos</h4>
+        <p>Trabaja secuencialmente desde el primer módulo. <strong>No te brinques nada</strong>: cada reto suma al anterior.</p>
+      </div>
+      <div class="fcc-step">
+        <div class="step-circle">4</div>
+        <h4>Avanza a tu ritmo</h4>
+        <p>El objetivo: <strong>terminar todos los módulos de fundamentos</strong> antes de la próxima sesión.</p>
+      </div>
+    </div>
+
+    <div class="fcc-noise">
+      <div class="ic">!</div>
+      <p>
+        <strong>Mientras trabajamos en silencio:</strong> traigan audífonos si los necesitan, hablen
+        bajito si surge una duda con un compañero. Yo voy a estar en mi lugar atendiendo dudas
+        <em>en privado</em>. Si necesitan algo, levanten la mano y voy a su mesa — pero no me hagan
+        gritar al frente del salón. <em>Gracias por la consideración</em>.
+      </p>
+    </div>
+  </section>
+
+  <!-- AL-KHWARIZMI -->
+  <section class="khwa reveal">
+    <div class="col-visual">
+      <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="50" y="40" width="300" height="320" fill="var(--paper)" stroke="var(--ochre)" stroke-width="2"/>
+        <rect x="62" y="52" width="276" height="296" fill="none" stroke="var(--ochre)" stroke-width=".8" stroke-dasharray="4 3"/>
+
+        <g class="rotating-star" stroke="var(--ochre-deep)" stroke-width="1.4" fill="none" opacity=".9">
+          <polygon points="200,150 214,186 250,200 214,214 200,250 186,214 150,200 186,186"/>
+          <polygon points="200,150 214,186 250,200 214,214 200,250 186,214 150,200 186,186" transform="rotate(22.5 200 200)"/>
+          <circle cx="200" cy="200" r="6" fill="var(--blood)" stroke="none"/>
+        </g>
+
+        <path d="M 100 90 Q 200 50 300 90" fill="none" stroke="var(--ochre-deep)" stroke-width="1.5"/>
+        <path d="M 110 95 Q 200 65 290 95" fill="none" stroke="var(--ochre-deep)" stroke-width=".8"/>
+
+        <g stroke="var(--ochre-deep)" stroke-width=".8" fill="none">
+          <path d="M 70 70 Q 80 60 90 70 Q 80 80 70 70"/>
+          <path d="M 330 70 Q 320 60 310 70 Q 320 80 330 70"/>
+          <path d="M 70 330 Q 80 320 90 330 Q 80 340 70 330"/>
+          <path d="M 330 330 Q 320 320 310 330 Q 320 340 330 330"/>
+        </g>
+
+        <g stroke="var(--ink)" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".8">
+          <path d="M 90 280 Q 110 270, 130 280 T 170 280"/>
+          <path d="M 180 280 Q 200 268, 220 280 T 260 282"/>
+          <path d="M 270 282 Q 285 274, 300 282"/>
+          <path d="M 90 310 Q 115 300, 140 308 T 180 310 T 220 308 T 260 312 T 295 308"/>
+        </g>
+
+        <g transform="translate(310, 350)">
+          <circle r="28" fill="var(--blood)"/>
+          <text x="0" y="-2" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="900" font-size="14" fill="var(--paper)">820</text>
+          <text x="0" y="11" text-anchor="middle" font-family="Newsreader" font-size="8" fill="var(--paper)" letter-spacing=".15em">D.C.</text>
+        </g>
+
+        <text x="200" y="135" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="600" font-size="22" fill="var(--ochre-deep)">الخوارزمي</text>
+      </svg>
+    </div>
+
+    <div class="col-text">
+      <h2 class="display">El <em>persa</em><br/>que nombró el oficio.</h2>
+      <p>
+        Al-Khwārizmī fue uno de los grandes sabios de la <strong>Casa de la Sabiduría</strong> en
+        Bagdad, durante la edad de oro del Islam. Matemático, astrónomo y geógrafo, escribió
+        un tratado sobre cómo resolver ecuaciones <em>paso por paso</em>, de forma sistemática,
+        para que cualquier persona —con o sin talento— pudiera llegar a la solución.
+      </p>
+      <p>
+        Ese libro tenía un título muy largo en árabe, pero la palabra clave era <strong>al-jabr</strong>
+        — «la restauración». De ahí salió <em>«álgebra»</em>. Y de su nombre traducido al latín,
+        <em>«Algorithmi»</em>, salió toda nuestra profesión.
+      </p>
+
+      <div class="etymology" id="etymology">
+        <div class="row">
+          <span class="ar">الخوارزمي</span>
+          <span class="arrow">→</span>
+          <span class="word">Al-Khwārizmī</span>
+          <span class="lang">árabe, s. IX</span>
+        </div>
+        <div class="row">
+          <span class="word">Algorithmi</span>
+          <span class="arrow">→</span>
+          <span class="lang">latín medieval</span>
+        </div>
+        <div class="row">
+          <span class="word">Algoritmo</span>
+          <span class="arrow">→</span>
+          <span class="lang">español · tu profesión</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="timeline-section reveal">
+    <div class="head">
+      <h2 class="display">Los algoritmos <em>existen</em><br/>desde antes que las computadoras.</h2>
+      <p>
+        Conviene aceptarlo desde hoy: el algoritmo no nació con las máquinas. Nació
+        con los seres humanos que necesitaban resolver problemas. La máquina solo los
+        ejecuta más rápido. <strong style="color:var(--blood)">La inteligencia sigue siendo tuya</strong>.
+      </p>
+    </div>
+
+    <div class="timeline">
+      <div class="tlcard">
+        <div class="year">300 a.C.</div>
+        <div class="place">Alejandría · Grecia</div>
+        <h4>Algoritmo de Euclides</h4>
+        <p>Para encontrar el Máximo Común Divisor de dos números. Sigue siendo, 2,300 años después, el método que usa tu computadora.</p>
+      </div>
+      <div class="tlcard">
+        <div class="year">240 a.C.</div>
+        <div class="place">Cirene · Norte de África</div>
+        <h4>Criba de Eratóstenes</h4>
+        <p>Para encontrar todos los números primos hasta cierto límite. Lo que aprendes en una semana, él lo inventó con un palo y arena.</p>
+      </div>
+      <div class="tlcard">
+        <div class="year">820 d.C.</div>
+        <div class="place">Bagdad · Califato Abasí</div>
+        <h4>Métodos de Al-Khwārizmī</h4>
+        <p>Resolución sistemática de ecuaciones de primer y segundo grado. Le dio nombre a toda tu profesión sin saber qué era un transistor.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESCARTES -->
+  <section class="descartes reveal">
+    <div class="head">
+      <div class="n display">ii.</div>
+      <div>
+        <h2 class="display">800 años después,<br/>llegó <em>el método</em>.</h2>
+        <p>
+          En 1637, un francés llamado René Descartes publicó el <em>Discurso del método</em>.
+          Cuatro reglas para resolver cualquier problema con claridad mental. Cualquiera.
+          Cuatrocientos años después, son las cuatro reglas para escribir un algoritmo. <strong>Léelas dos veces.</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <span class="num">REGLA 01</span>
+        <h3>Solo lo evidente</h3>
+        <p class="original">«No admitir como verdadera cosa alguna que no supiese con evidencia que lo era.»</p>
+        <p class="applied">Si no entiendes el problema, <strong>no escribas algoritmo</strong>. Lee, pregunta, replantea. La prisa es la madre de los bugs.</p>
+      </div>
+      <div class="rule-card">
+        <span class="num">REGLA 02</span>
+        <h3>Divide para vencer</h3>
+        <p class="original">«Dividir cada una de las dificultades en tantas partes como fuera posible.»</p>
+        <p class="applied">Ningún paso del algoritmo debe ser <strong>«hacer la magia»</strong>. Si un paso no es ejecutable por una persona común, divídelo.</p>
+      </div>
+      <div class="rule-card">
+        <span class="num">REGLA 03</span>
+        <h3>De lo simple a lo complejo</h3>
+        <p class="original">«Conducir mis pensamientos por orden, comenzando por los más sencillos.»</p>
+        <p class="applied">Empieza por lo que <strong>sí sabes hacer</strong>. Las decisiones y los ciclos vienen después. Primero camina, después corre.</p>
+      </div>
+      <div class="rule-card">
+        <span class="num">REGLA 04</span>
+        <h3>Revisión completa</h3>
+        <p class="original">«Hacer enumeraciones tan completas y revisiones tan generales que no omita nada.»</p>
+        <p class="applied">Antes de programar, <strong>ejecuta el algoritmo tú</strong> con papel y lápiz. A esto le llamamos <em>prueba de escritorio</em>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPOS DE DATOS -->
+  <section class="types-section reveal">
+    <div class="head">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">Antes de calcular,<br/><em>nombrar bien</em>.</h2>
+        <p>
+          Cuando un algoritmo pide datos al usuario, no recibe «cosas» genéricas. Recibe <strong>tipos</strong>
+          muy específicos: enteros, decimales, texto. Si te equivocas de tipo, todo el cálculo se rompe.
+          <em>3 + 4</em> da siete. <em>"3" + "4"</em> da treinta y cuatro. Esa diferencia es la diferencia
+          entre un programa que funciona y uno que no.
+        </p>
+      </div>
+    </div>
+
+    <div class="types-grid">
+      <div class="type-card">
+        <div class="type-name">int</div>
+        <div class="type-label">entero</div>
+        <div class="examples">
+          <span class="ex">5</span>
+          <span class="ex">-3</span>
+          <span class="ex">100</span>
+          <span class="ex">0</span>
+          <span class="ex">42</span>
+        </div>
+        <div class="for-what">
+          Números <strong>sin decimales</strong>. Sirven para contar cosas que no se pueden partir: personas, materias, días, intentos.
+        </div>
+      </div>
+
+      <div class="type-card">
+        <div class="type-name">float</div>
+        <div class="type-label">decimal</div>
+        <div class="examples">
+          <span class="ex">3.14</span>
+          <span class="ex">-0.5</span>
+          <span class="ex">96.75</span>
+          <span class="ex">0.16</span>
+        </div>
+        <div class="for-what">
+          Números <strong>con decimales</strong>. Para medir, calcular dinero, porcentajes, promedios, temperaturas.
+        </div>
+      </div>
+
+      <div class="type-card">
+        <div class="type-name">str</div>
+        <div class="type-label">cadena de texto</div>
+        <div class="examples">
+          <span class="ex">"Hola"</span>
+          <span class="ex">"Carlos"</span>
+          <span class="ex">"08:05"</span>
+          <span class="ex">"$96"</span>
+        </div>
+        <div class="for-what">
+          <strong>Texto</strong>. Siempre entre comillas. Para nombres, mensajes, fechas formateadas. <em>"5" no es 5</em>.
+        </div>
+      </div>
+
+      <div class="type-card future">
+        <div class="type-name">bool</div>
+        <div class="type-label">booleano</div>
+        <div class="examples">
+          <span class="ex">True</span>
+          <span class="ex">False</span>
+        </div>
+        <div class="for-what">
+          Solo dos valores posibles. Para representar <strong>sí/no</strong>, verdadero/falso. Sirven para tomar decisiones.
+        </div>
+      </div>
+    </div>
+
+    <div class="types-tip">
+      <div class="icn">!</div>
+      <p>
+        <strong>El error más caro de la programación es mezclar tipos.</strong> Si el usuario te dice
+        <em>"480"</em> pensaste que era un número, pero la función <em>input()</em> de Python siempre
+        te lo entrega como <em>texto</em>. Si lo sumas a <em>0.16</em>, el programa truena. Por eso
+        en el siguiente bloque verás cómo <em>convertimos</em> los datos antes de operar con ellos.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- PROPS -->
+  <section class="props reveal">
+    <div class="props-inner">
+      <div class="small-caps">Anatomía de un buen algoritmo</div>
+      <h2 class="display">Cinco cosas que <em>siempre</em><br/>tiene que cumplir.</h2>
+      <p class="sub">
+        Si a tu algoritmo le falta una de estas cinco, técnicamente no es un algoritmo.
+        Es otra cosa. Quizás un poema, quizás una intención, quizás un deseo. Pero no algoritmo.
+      </p>
+
+      <div class="props-grid">
+        <div class="prop">
+          <div class="letter">F</div>
+          <h4>Finito</h4>
+          <p>Tiene que terminar. Un algoritmo que corre para siempre se llama <em>bug</em>.</p>
+        </div>
+        <div class="prop">
+          <div class="letter">D</div>
+          <h4>Definido</h4>
+          <p>Cada paso es preciso. Sin ambigüedades. Sin «más o menos».</p>
+        </div>
+        <div class="prop">
+          <div class="letter">E</div>
+          <h4>Con entradas</h4>
+          <p>Recibe cero o más datos del exterior. Sabe qué espera.</p>
+        </div>
+        <div class="prop">
+          <div class="letter">S</div>
+          <h4>Con salidas</h4>
+          <p>Produce al menos un resultado. Si no, ¿para qué corrió?</p>
+        </div>
+        <div class="prop">
+          <div class="letter">E</div>
+          <h4>Eficaz</h4>
+          <p>Cada operación es realizable en tiempo finito y con recursos finitos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUNCHLINE -->
+  <section class="punchline reveal">
+    <blockquote class="display">
+      Si tu algoritmo <span class="blood">no termina</span>,<br/>
+      no es algoritmo. Es un poema.
+    </blockquote>
+  </section>
+
+  <!-- TAREA -->
+  <section class="tarea reveal">
+    <div class="head">
+      <div class="stamp">Tarea</div>
+      <div>
+        <h2 class="display">Termina los <em>fundamentos</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Lo que no alcances a terminar en clase, lo terminas en casa. La entrega es simple: cuando
+      completes <strong>todo el módulo de Fundamentos</strong>, tomas una <em>captura de pantalla</em>
+      y compartes tu <em>usuario de freeCodeCamp</em>. Todo se entrega por <strong>Blackboard</strong> —
+      esta vez no usamos GitHub.
+    </p>
+
+    <div class="deadline-banner">
+      <div class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      </div>
+      <div class="text">
+        <strong>Deadline:</strong> Lunes 1 de junio · 23:59 h
+      </div>
+      <div class="countdown-num">11 días</div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:1.4rem;margin:0 0 18px;color:var(--ink);">Qué tienes que entregar</h3>
+
+    <div class="checklist">
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>1. Captura del módulo completado</h4>
+          <p>Cuando termines <strong>todos los retos del módulo de Fundamentos</strong>, toma una captura de pantalla donde se vea que el módulo está marcado como completado. Que tu nombre de usuario sea visible en la captura.</p>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>2. Tu usuario de freeCodeCamp</h4>
+          <p>Escribe tu nombre de usuario de freeCodeCamp en un <strong>archivo de texto</strong> (o en el cuerpo de la entrega, o como prefieras). Sirve para verificar tu progreso en la plataforma si hace falta.</p>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>3. Entrega por Blackboard</h4>
+          <p>Sube la captura y tu usuario a la <strong>actividad correspondiente en Blackboard</strong>. Puede ser un archivo de imagen + un archivo de texto, o todo junto — el medio es lo de menos, lo importante es que llegue.</p>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>4. Antes del deadline</h4>
+          <p>Recuerda: lunes 1 de junio, 23:59 h. Después de esa hora la actividad se cierra en Blackboard. <strong>No lo dejes para el último minuto</strong> — la plataforma de freeCodeCamp a veces tarda en guardar el progreso.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;padding:24px 28px;background:var(--paper-deep);border-left:4px solid var(--ochre);">
+      <h4 style="font-family:'Fraunces',serif;font-style:italic;font-weight:600;font-size:1.1rem;margin:0 0 12px;color:var(--ochre-deep);">📸 Cómo tomar la captura</h4>
+      <ul style="margin:0;padding-left:22px;font-size:.96rem;color:var(--ink-soft);line-height:1.7;">
+        <li><strong>Windows:</strong> Tecla Windows + Shift + S → selecciona la zona → se copia al portapapeles. Pégala en Paint y guárdala, o pégala directo en tu entrega.</li>
+        <li><strong>Mac:</strong> Cmd + Shift + 4 → arrastra para seleccionar la zona → se guarda en el escritorio como imagen.</li>
+        <li><strong>Asegúrate</strong> de que se vea tu usuario de freeCodeCamp y que el módulo de Fundamentos aparezca como completado.</li>
+      </ul>
+    </div>
+
+    <div class="rubrica">
+      <h4>Cómo se evalúa esta entrega</h4>
+      <div class="rubrica-grid">
+        <div class="rub-item">
+          <div class="pct">80%</div>
+          <h5>Módulo completado</h5>
+          <p>Que la captura demuestre el módulo de Fundamentos terminado, con tu usuario visible.</p>
+        </div>
+        <div class="rub-item">
+          <div class="pct">20%</div>
+          <h5>Usuario compartido</h5>
+          <p>Que incluyas tu nombre de usuario de freeCodeCamp para poder verificar.</p>
+        </div>
+        <div class="rub-item">
+          <div class="pct">+5%</div>
+          <h5>Extra opcional</h5>
+          <p>Si avanzaste a los siguientes módulos del curso, suma puntos extra al bimestre.</p>
+        </div>
+        <div class="rub-item">
+          <div class="pct">⏰</div>
+          <h5>A tiempo</h5>
+          <p>Entregado en Blackboard antes del lunes 1 de junio a las 23:59 h.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «Las mejores clases <span class="em-ochre">no son las que el maestro habla más</span>.<br/>
+      Son las que el alumno <span class="em">trabaja más</span>.<br/>
+      Hoy fue una de esas.»
+    </div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+    <p style="margin-top:24px;font-style:italic;color:var(--ink-soft);font-size:.95rem;">
+      Gracias por la paciencia y por aprovechar la sesión. Nos vemos el lunes recuperado y con todo.
+    </p>
+  </section>
+
+  <footer>
+    Sesión 02 <span class="dot">·</span> Algoritmos y Prueba de Escritorio <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-01/index.html">Sesión 01 · Los peripatéticos del código</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  /* ==== Reveal on scroll (base) ==== */
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+
+  /* ==== Decompose Animation (removida en esta versión) ==== */
+  // La animación de descomposición se eliminó porque esta sesión es de trabajo autónomo en freeCodeCamp.
+
+  /* ==== Etymology stagger ==== */
+  const etymology = document.getElementById('etymology');
+  if (etymology){
+    const etyIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.row').forEach(r => r.classList.add('shown'));
+          etyIO.unobserve(e.target);
+        }
+      });
+    }, { threshold: .3 });
+    etyIO.observe(etymology);
+  }
+
+  /* Otras animaciones (ejecución paso a paso, tabla, actividad) se removieron en esta versión
+     adaptada a sesión autónoma en freeCodeCamp. */
+</script>
+
+</body>
+</html>
