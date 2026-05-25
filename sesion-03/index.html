@@ -1,0 +1,1252 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 03 · La gramática del pensamiento · Repaso de Fundamentos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2;
+    --paper-deep: #e6dbc2;
+    --paper-darker: #d9ccb0;
+    --ink: #2a1d14;
+    --ink-soft: #4a3a2c;
+    --ink-faint: #8a7a6a;
+    --blood: #a02418;
+    --blood-dark: #6e1810;
+    --ochre: #b5852a;
+    --ochre-deep: #8a6320;
+    --olive: #5d6638;
+    --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    /* code colors (on dark) */
+    --c-kw: #f0c8a0;
+    --c-str: #c8dd96;
+    --c-num: #f5b08c;
+    --c-com: rgba(239,230,210,.45);
+    --c-fn: #f0d8b0;
+    --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Newsreader", Georgia, serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px;
+    background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .italic{ font-style: italic; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .blood{ color: var(--blood); }
+  .ochre{ color: var(--ochre); }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 70px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; animation: floatNum 6s ease-in-out infinite; }
+  @keyframes floatNum{ 0%,100%{ transform: translateY(0) rotate(0); } 50%{ transform: translateY(-10px) rotate(-1deg); } }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 30px; display:flex; align-items:center; gap: 16px; opacity: 0; animation: slideInLeft .8s ease-out .2s forwards; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  @keyframes slideInLeft{ from{ opacity: 0; transform: translateX(-30px); } to{ opacity: 1; transform: translateX(0); } }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(52px, 8.5vw, 120px); line-height: .95; margin: 0 0 36px; letter-spacing: -.02em; }
+  .hero h1 .line1, .hero h1 .line2{ display: block; opacity: 0; transform: translateY(20px); animation: heroLine .8s ease-out forwards; }
+  .hero h1 .line1{ animation-delay: .4s; }
+  .hero h1 .line2{ animation-delay: .65s; }
+  @keyframes heroLine{ to{ opacity: 1; transform: translateY(0); } }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 720px; font-size: 1.25rem; line-height: 1.55; color: var(--ink-soft); opacity: 0; transform: translateY(15px); animation: heroLine .8s ease-out .95s forwards; }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 60px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; opacity: 0; transform: translateY(15px); animation: heroLine .8s ease-out 1.15s forwards; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* MANIFIESTO */
+  .manifiesto{ margin: 70px 0; padding: 60px 40px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); position: relative; }
+  .manifiesto .tag{ position: absolute; top:-12px; left: 32px; background: var(--paper); padding: 0 14px; font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); }
+  .manifiesto blockquote{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-weight: 300; font-size: clamp(28px, 4.5vw, 54px); line-height: 1.15; color: var(--ink); letter-spacing: -.01em; }
+  .manifiesto blockquote .accent{ color: var(--blood); font-weight: 600; }
+  .manifiesto blockquote .accent-ochre{ color: var(--ochre); font-weight: 600; }
+  .manifiesto cite{ display:block; margin-top: 28px; font-size: 1rem; font-style: normal; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* MODULE MAP */
+  .modmap{ margin: 110px 0; }
+  .modmap .head{ display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: end; margin-bottom: 40px; }
+  @media (max-width: 760px){ .modmap .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .modmap .head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(80px, 12vw, 160px); line-height: .85; color: var(--ochre); }
+  .modmap .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(34px, 5vw, 60px); line-height: 1; margin: 0 0 18px; letter-spacing: -.01em; }
+  .modmap .head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .modmap .head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 680px; }
+  .modmap .head p strong{ color: var(--blood); }
+  .modlist{ margin-top: 30px; border-top: 1.5px solid var(--ink); }
+  .moditem{
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: center;
+    padding: 13px 4px;
+    border-bottom: 1px solid var(--line);
+    transition: background .2s ease;
+  }
+  .moditem:hover{ background: var(--paper-deep); }
+  .moditem .mi-num{
+    font-family: "JetBrains Mono", monospace;
+    font-size: .85rem;
+    color: var(--ink-faint);
+    width: 28px;
+  }
+  .moditem .mi-name{ font-size: 1rem; color: var(--ink); }
+  .moditem .mi-name strong{ color: var(--blood); font-weight: 600; }
+  .moditem .mi-type{
+    font-size: .65rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+  .mi-type.teoria{ background: var(--ink); color: var(--paper); }
+  .mi-type.taller{ background: var(--blood); color: var(--paper); }
+  .mi-type.lab{ background: var(--olive); color: var(--paper); }
+  .mi-type.review{ background: var(--ochre); color: var(--paper); }
+  .mi-type.quiz{ background: var(--ochre-deep); color: var(--paper); }
+  .moditem.theory-row{ background: rgba(181,133,42,.07); }
+
+  .modmap-legend{
+    margin-top: 22px;
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-size: .78rem;
+    color: var(--ink-soft);
+  }
+  .modmap-legend span{ display: inline-flex; align-items: center; gap: 7px; }
+  .modmap-legend .sw{ width: 14px; height: 14px; }
+  .sw.teoria{ background: var(--ink); }
+  .sw.taller{ background: var(--blood); }
+  .sw.lab{ background: var(--olive); }
+  .sw.review{ background: var(--ochre); }
+  .sw.quiz{ background: var(--ochre-deep); }
+
+  /* CONCEPT BLOCKS */
+  .concept{ margin: 100px 0; }
+  .concept .c-head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; margin-bottom: 30px; }
+  @media (max-width: 700px){ .concept .c-head{ grid-template-columns: 1fr; gap: 10px; } }
+  .concept .c-num{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(60px, 9vw, 120px); line-height: .8; color: var(--blood); }
+  .concept .c-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(32px, 4.5vw, 56px); line-height: 1; margin: 0 0 10px; letter-spacing: -.01em; }
+  .concept .c-head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .concept .c-head .c-sub{ margin: 0; color: var(--ink-soft); font-size: 1.02rem; }
+  .concept .c-head .c-sub .mono{ background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+  .concept-body{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .concept-body{ grid-template-columns: 1fr; gap: 22px; } }
+  .concept-prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .concept-prose p em{ color: var(--blood-dark); font-style: italic; }
+  .concept-prose p strong{ color: var(--blood); font-weight: 600; }
+  .concept-prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .concept-prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .concept-prose ul li strong{ color: var(--ink); }
+  .concept-prose .keypoint{
+    margin-top: 18px;
+    padding: 16px 20px;
+    background: var(--paper-deep);
+    border-left: 4px solid var(--ochre);
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+  .concept-prose .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* CODE BLOCK */
+  .code-block{
+    background: var(--ink);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .code-block .cb-bar{
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 18px;
+    background: rgba(239,230,210,.06);
+    border-bottom: 1px solid rgba(239,230,210,.12);
+  }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; }
+  .code-block .cb-bar .dot.y{ background: var(--ochre); }
+  .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{
+    margin: 0;
+    padding: 22px 24px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .86rem;
+    line-height: 1.75;
+    color: var(--c-base);
+    overflow-x: auto;
+  }
+  .code-block .kw{ color: var(--c-kw); }
+  .code-block .str{ color: var(--c-str); }
+  .code-block .num{ color: var(--c-num); }
+  .code-block .com{ color: var(--c-com); font-style: italic; }
+  .code-block .fn{ color: var(--c-fn); }
+  .code-block .out{ color: rgba(239,230,210,.55); }
+
+  /* QUIZ - Predice la salida */
+  .quiz-section{ margin: 130px 0; }
+  .quiz-section .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .quiz-section .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .quiz-section .head .stamp{ border: 2.5px solid var(--olive); color: var(--olive-deep); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .quiz-section h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5.5vw, 68px); line-height: 1; margin: 0 0 14px; letter-spacing: -.015em; }
+  .quiz-section h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .quiz-section .intro{ color: var(--ink-soft); font-size: 1.08rem; max-width: 760px; margin: 0 0 40px; }
+  .quiz-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 820px){ .quiz-grid{ grid-template-columns: 1fr; } }
+  .quiz-card{
+    background: var(--paper-deep);
+    border: 2px solid var(--ink);
+    padding: 0;
+    overflow: hidden;
+  }
+  .quiz-card .qc-label{
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px;
+    background: var(--olive);
+    color: var(--paper);
+  }
+  .quiz-card .qc-label .qc-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.2rem; }
+  .quiz-card .qc-label .qc-tag{ font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; }
+  .quiz-card .qc-code{ background: var(--ink); }
+  .quiz-card .qc-code pre{ margin: 0; padding: 20px 22px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.7; color: var(--c-base); overflow-x: auto; }
+  .quiz-card .qc-code .kw{ color: var(--c-kw); }
+  .quiz-card .qc-code .str{ color: var(--c-str); }
+  .quiz-card .qc-code .num{ color: var(--c-num); }
+  .quiz-card .qc-code .com{ color: var(--c-com); font-style: italic; }
+  .quiz-card .qc-code .fn{ color: var(--c-fn); }
+  .quiz-card .qc-reveal{
+    width: 100%;
+    background: var(--paper);
+    border: none;
+    border-top: 1px solid var(--line);
+    padding: 14px;
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: .98rem;
+    color: var(--olive-deep);
+    cursor: pointer;
+    transition: background .2s ease;
+  }
+  .quiz-card .qc-reveal:hover{ background: var(--paper-deep); }
+  .quiz-card .qc-answer{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .5s ease, padding .5s ease;
+    padding: 0 22px;
+    background: var(--paper);
+  }
+  .quiz-card .qc-answer.shown{ max-height: 300px; padding: 18px 22px; border-top: 1px dashed var(--line); }
+  .quiz-card .qc-answer .out-label{ font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 8px; }
+  .quiz-card .qc-answer .out-val{ font-family: "JetBrains Mono", monospace; font-size: .95rem; color: var(--olive-deep); font-weight: 700; background: var(--paper-deep); padding: 8px 12px; display: inline-block; border: 1px solid var(--line); margin-bottom: 12px; }
+  .quiz-card .qc-answer .explain{ font-size: .92rem; color: var(--ink-soft); line-height: 1.55; margin: 0; }
+  .quiz-card .qc-answer .explain strong{ color: var(--ink); }
+
+  /* ERRORS */
+  .errors{ margin: 110px 0; background: var(--ink); color: var(--paper); padding: 70px 50px 80px; margin-left: -28px; margin-right: -28px; position: relative; }
+  @media (min-width: 1256px){ .errors{ margin-left: calc(-50vw + 600px); margin-right: calc(-50vw + 600px); padding-left: calc(50vw - 600px + 50px); padding-right: calc(50vw - 600px + 50px); } }
+  .errors::before{ content:""; position: absolute; inset: 0; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9   0 0 0 0 0.85   0 0 0 0 0.7   0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); mix-blend-mode: screen; opacity: .4; pointer-events: none; }
+  .errors-inner{ position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+  .errors .small-caps{ color: #f0c8a0; }
+  .errors h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(38px, 5.5vw, 76px); line-height: 1; margin: 16px 0 12px; color: var(--paper); letter-spacing: -.015em; }
+  .errors h2 em{ font-style: italic; color: #f0c8a0; font-weight: 600; }
+  .errors .sub{ font-size: 1.08rem; color: rgba(239,230,210,.7); margin: 0 0 44px; max-width: 700px; }
+  .err-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 760px){ .err-grid{ grid-template-columns: 1fr; } }
+  .err-item{ padding: 24px 24px 26px; background: rgba(239,230,210,.05); border: 1px solid rgba(239,230,210,.18); border-left: 4px solid #c0563d; }
+  .err-item h4{ font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: .95rem; color: #f0a890; margin: 0 0 12px; }
+  .err-item .wrong, .err-item .right{ font-family: "JetBrains Mono", monospace; font-size: .82rem; padding: 8px 12px; margin-bottom: 8px; line-height: 1.5; }
+  .err-item .wrong{ background: rgba(192,86,61,.18); color: #f0b8a8; }
+  .err-item .wrong::before{ content: "✗ "; font-weight: 700; }
+  .err-item .right{ background: rgba(93,102,56,.25); color: #c8dd96; }
+  .err-item .right::before{ content: "✓ "; font-weight: 700; }
+  .err-item p{ margin: 10px 0 0; font-size: .9rem; color: rgba(239,230,210,.75); line-height: 1.5; }
+
+  /* CTA back to fcc */
+  .fcc-reminder{ margin: 100px 0; padding: 40px 40px 44px; background: var(--paper-deep); border: 2px dashed var(--ochre); text-align: center; }
+  .fcc-reminder h3{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 40px); margin: 0 0 16px; color: var(--ink); }
+  .fcc-reminder h3 em{ color: var(--ochre-deep); font-weight: 600; }
+  .fcc-reminder p{ margin: 0 auto 22px; max-width: 600px; color: var(--ink-soft); font-size: 1.02rem; }
+  .fcc-reminder .btn{ display: inline-block; background: var(--blood); color: var(--paper); padding: 14px 30px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.1rem; text-decoration: none; transition: all .3s ease; border: 2px solid var(--blood); }
+  .fcc-reminder .btn:hover{ background: var(--paper); color: var(--blood); transform: translateY(-3px); box-shadow: 0 5px 0 var(--blood-dark); }
+  .fcc-reminder .deadline{ margin-top: 16px; font-family: "JetBrains Mono", monospace; font-size: .82rem; color: var(--blood); }
+
+  /* FLOWCHART SECTION */
+  .flow{ margin: 110px 0; }
+  .flow .f-head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; margin-bottom: 36px; }
+  @media (max-width: 700px){ .flow .f-head{ grid-template-columns: 1fr; gap: 10px; } }
+  .flow .f-num{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(60px, 9vw, 120px); line-height: .8; color: var(--blood); }
+  .flow .f-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(32px, 4.5vw, 56px); line-height: 1; margin: 0 0 10px; letter-spacing: -.01em; }
+  .flow .f-head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .flow .f-head .f-sub{ margin: 0; color: var(--ink-soft); font-size: 1.02rem; }
+
+  .flow-intro{ font-size: 1.08rem; color: var(--ink); line-height: 1.6; max-width: 820px; margin: 0 0 36px; }
+  .flow-intro strong{ color: var(--blood); font-weight: 600; }
+  .flow-intro em{ font-style: italic; color: var(--blood-dark); }
+
+  .bob-box{
+    background: var(--paper-deep);
+    border: 2px solid var(--ink);
+    padding: 30px 34px 34px;
+    margin-bottom: 50px;
+    position: relative;
+  }
+  .bob-box::before{
+    content: "EL PROBLEMA";
+    position: absolute; top: -13px; left: 28px;
+    background: var(--ink); color: var(--paper);
+    padding: 4px 14px; font-size: .7rem; letter-spacing: .22em; font-weight: 700;
+  }
+  .bob-box h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 14px; color: var(--ink); }
+  .bob-box p{ margin: 0 0 12px; font-size: 1.02rem; color: var(--ink); line-height: 1.6; }
+  .bob-box p:last-child{ margin-bottom: 0; }
+  .bob-box .params{ display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 18px 0; }
+  @media (max-width: 640px){ .bob-box .params{ grid-template-columns: 1fr; } }
+  .bob-box .param{ background: var(--paper); border: 1px solid var(--line); padding: 14px 16px; }
+  .bob-box .param .pname{ font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--blood); font-size: 1rem; margin-bottom: 4px; }
+  .bob-box .param .pdesc{ font-size: .88rem; color: var(--ink-soft); line-height: 1.45; }
+  .bob-box .examples{ margin-top: 16px; padding: 16px 18px; background: var(--ink); font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.8; color: var(--c-base); }
+  .bob-box .examples .num{ color: var(--c-num); }
+  .bob-box .examples .com{ color: var(--c-com); font-style: italic; }
+  .bob-box .examples .arrow{ color: var(--c-kw); }
+
+  /* Flow steps: symbol + explanation + code */
+  .flow-step{
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+    align-items: stretch;
+    padding: 30px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .flow-step:first-of-type{ border-top: 1.5px solid var(--ink); }
+  @media (max-width: 820px){ .flow-step{ grid-template-columns: 1fr; gap: 18px; } }
+  .symbol-card{
+    background: var(--paper-deep);
+    border: 1.5px solid var(--ink);
+    padding: 24px 22px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .symbol-card .sym-svg{ width: 130px; height: 80px; margin-bottom: 16px; }
+  .symbol-card .sym-name{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.2rem; color: var(--ink); margin-bottom: 6px; }
+  .symbol-card .sym-alt{ font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 12px; }
+  .symbol-card .sym-use{ font-size: .9rem; color: var(--ink-soft); line-height: 1.5; }
+  .symbol-card .sym-use strong{ color: var(--blood); }
+
+  .flow-explain{ display: flex; flex-direction: column; gap: 16px; }
+  .flow-explain .fe-prose{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0; }
+  .flow-explain .fe-prose strong{ color: var(--blood); font-weight: 600; }
+  .flow-explain .fe-prose em{ font-style: italic; color: var(--blood-dark); }
+  .flow-explain .fe-code{ background: var(--ink); margin: 0; }
+  .flow-explain .fe-code pre{ margin: 0; padding: 16px 20px; font-family: "JetBrains Mono", monospace; font-size: .84rem; line-height: 1.7; color: var(--c-base); overflow-x: auto; }
+  .flow-explain .fe-code .kw{ color: var(--c-kw); }
+  .flow-explain .fe-code .str{ color: var(--c-str); }
+  .flow-explain .fe-code .num{ color: var(--c-num); }
+  .flow-explain .fe-code .com{ color: var(--c-com); font-style: italic; }
+  .flow-explain .fe-code .fn{ color: var(--c-fn); }
+  .flow-explain .fe-code .out{ color: rgba(239,230,210,.55); }
+
+  /* Complete flowchart */
+  .flow-complete{ margin-top: 60px; }
+  .flow-complete h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(28px, 4vw, 46px); margin: 0 0 8px; text-align: center; }
+  .flow-complete h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .flow-complete .fc-sub{ text-align: center; color: var(--ink-soft); margin: 0 0 36px; font-size: 1rem; }
+  .flow-complete-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .flow-complete-grid{ grid-template-columns: 1fr; } }
+  .fc-diagram{ background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 30px 20px; }
+  .fc-diagram svg{ width: 100%; height: auto; display: block; }
+  .fc-codepanel{ background: var(--ink); padding: 0; align-self: stretch; }
+  .fc-codepanel .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .fc-codepanel .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .fc-codepanel .cb-bar .dot.r{ background: #c0563d; } .fc-codepanel .cb-bar .dot.y{ background: var(--ochre); } .fc-codepanel .cb-bar .dot.g{ background: var(--olive); }
+  .fc-codepanel .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .fc-codepanel pre{ margin: 0; padding: 22px 24px; font-family: "JetBrains Mono", monospace; font-size: .86rem; line-height: 1.8; color: var(--c-base); overflow-x: auto; }
+  .fc-codepanel .kw{ color: var(--c-kw); } .fc-codepanel .str{ color: var(--c-str); } .fc-codepanel .num{ color: var(--c-num); } .fc-codepanel .com{ color: var(--c-com); font-style: italic; } .fc-codepanel .fn{ color: var(--c-fn); } .fc-codepanel .out{ color: rgba(239,230,210,.55); }
+  .fc-codepanel .verify{ padding: 0 24px 22px; }
+  .fc-codepanel .verify .vrow{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--c-str); padding: 4px 0; border-top: 1px dashed rgba(239,230,210,.15); }
+
+  /* SVG flowchart shared shape styles */
+  .fchart .shape{ fill: var(--paper); stroke: var(--ink); stroke-width: 2; }
+  .fchart .shape.start{ fill: var(--olive); }
+  .fchart .shape.io{ fill: var(--ochre); }
+  .fchart .shape.proc{ fill: var(--paper); }
+  .fchart .shape.dec{ fill: var(--blood); }
+  .fchart .lbl{ font-family: "JetBrains Mono", monospace; font-size: 12px; fill: var(--ink); }
+  .fchart .lbl-sm{ font-size: 10px; }
+  .fchart .lbl-light{ fill: var(--paper); }
+  .fchart .edge{ stroke: var(--ink); stroke-width: 2; fill: none; marker-end: url(#arrow); }
+  .fchart .elabel{ font-family: "Fraunces", serif; font-style: italic; font-size: 13px; fill: var(--blood-dark); font-weight: 600; }
+
+  /* ACTIVITY (elevador) */
+  .activity-flow{ margin: 130px 0; }
+  .activity-flow .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .activity-flow .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .activity-flow .head .stamp{ border: 2.5px solid var(--olive); color: var(--olive-deep); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .activity-flow h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5.5vw, 68px); line-height: 1; margin: 0 0 14px; letter-spacing: -.015em; }
+  .activity-flow h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .activity-flow .intro{ color: var(--ink-soft); font-size: 1.08rem; max-width: 780px; margin: 0 0 30px; }
+  .act-card{ background: var(--paper-deep); border: 2.5px dashed var(--olive); padding: 36px 36px 40px; position: relative; }
+  .act-card::before{ content: "ACTIVIDAD DE LA CLASE"; position: absolute; top: -14px; left: 30px; background: var(--olive); color: var(--paper); padding: 4px 14px; font-size: .72rem; letter-spacing: .22em; font-weight: 700; }
+  .act-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 14px; color: var(--olive-deep); }
+  .act-card .story{ font-size: 1.05rem; color: var(--ink); line-height: 1.6; margin: 0 0 16px; }
+  .act-card .story em{ color: var(--olive-deep); font-style: italic; font-weight: 600; }
+  .act-card .params{ display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 18px 0; }
+  @media (max-width: 640px){ .act-card .params{ grid-template-columns: 1fr; } }
+  .act-card .param{ background: var(--paper); border: 1px solid var(--line); padding: 14px 16px; }
+  .act-card .param .pname{ font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--olive-deep); font-size: 1rem; margin-bottom: 4px; }
+  .act-card .param .pdesc{ font-size: .88rem; color: var(--ink-soft); line-height: 1.45; }
+  .act-card .examples{ margin-top: 8px; padding: 16px 18px; background: var(--ink); font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.8; color: var(--c-base); }
+  .act-card .examples .num{ color: var(--c-num); } .act-card .examples .com{ color: var(--c-com); font-style: italic; } .act-card .examples .arrow{ color: var(--c-kw); }
+  .act-card .task-list{ margin: 22px 0 0; padding: 0; list-style: none; }
+  .act-card .task-list li{ padding: 10px 0 10px 32px; position: relative; font-size: 1rem; color: var(--ink); border-bottom: 1px dashed rgba(42,29,20,.12); }
+  .act-card .task-list li:last-child{ border-bottom: none; }
+  .act-card .task-list li::before{ content: "→"; position: absolute; left: 0; color: var(--olive); font-weight: 900; font-size: 1.1rem; }
+  .act-card .task-list li strong{ color: var(--olive-deep); }
+
+  .act-reveal-btn{ margin-top: 26px; width: 100%; background: var(--olive); color: var(--paper); border: none; padding: 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.08rem; cursor: pointer; transition: all .3s ease; }
+  .act-reveal-btn:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
+  .act-solution{ max-height: 0; overflow: hidden; opacity: 0; transition: all .8s cubic-bezier(.4,0,.2,1); }
+  .act-solution.shown{ max-height: 3000px; opacity: 1; margin-top: 24px; }
+  .act-sol-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 880px){ .act-sol-grid{ grid-template-columns: 1fr; } }
+  .act-sol-grid .sol-label{ display: inline-block; background: var(--olive); color: var(--paper); padding: 4px 12px; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; font-family: "Newsreader", serif; }
+
+  /* CIERRE */
+  .cierre{ margin: 120px 0 80px; padding: 70px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; }
+  .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(30px, 4.5vw, 54px); line-height: 1.15; margin: 24px 0 20px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .sig{ margin-top: 40px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  /* FOOTER */
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 03 · Repaso de Fundamentos</span>
+    </div>
+    <div class="right">
+      Lunes 25.05.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Repaso presencial</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">03</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      <span class="line1">La <span class="em-ochre">gramática</span></span>
+      <span class="line2">del <span class="em">pensamiento.</span></span>
+    </h1>
+    <p class="lede">
+      Estos días han estado aprendiendo Python en freeCodeCamp — variables, cadenas, números,
+      condiciones, funciones. Cada reto que completaron fue una <em>palabra nueva</em> en un idioma
+      que apenas empiezan a hablar. Hoy hacemos una pausa para <strong>ordenar ese vocabulario</strong>:
+      repasamos juntos los fundamentos, aclaramos dudas y conectamos los puntos.<br/><br/>
+      Porque aprender un idioma no es memorizar palabras sueltas. <span class="underline-ochre">Es entender cómo se combinan</span>.
+    </p>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">Repaso de Fundamentos de Python</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Apoya tu</span>
+        <span class="value">Módulo de freeCodeCamp</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Recordatorio</span>
+        <span class="value">Fundamentos · deadline 1 jun</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFIESTO -->
+  <section class="manifiesto reveal">
+    <span class="tag">La idea de hoy</span>
+    <blockquote class="display">
+      Aprender a programar es como<br/>
+      <span class="accent-ochre italic">aprender un idioma</span>:<br/>
+      primero las palabras, luego la <span class="accent italic">gramática</span>,<br/>
+      al final, las ideas propias.
+    </blockquote>
+    <cite>— Por qué hoy repasamos antes de avanzar</cite>
+  </section>
+
+  <!-- MODULE MAP -->
+  <section class="modmap reveal">
+    <div class="head">
+      <div class="n display">0.</div>
+      <div>
+        <h2 class="display">Dónde <em>estás parado</em>.</h2>
+        <p>
+          Este es el módulo de <strong>Fundamentos de Python</strong> que están completando en freeCodeCamp.
+          Son 16 lecciones: <strong>teoría</strong> que explica, <strong>talleres</strong> guiados,
+          <strong>laboratorios</strong> donde construyes solo, y al final una <strong>revisión y un quiz</strong>.
+          Las filas resaltadas son los 5 bloques de teoría — el corazón de lo que repasamos hoy.
+        </p>
+      </div>
+    </div>
+
+    <div class="modlist">
+      <div class="moditem theory-row"><span class="mi-num">01</span><span class="mi-name"><strong>Introducción a Python</strong></span><span class="mi-type teoria">Teoría</span></div>
+      <div class="moditem theory-row"><span class="mi-num">02</span><span class="mi-name"><strong>Variables y Tipos de Datos</strong></span><span class="mi-type teoria">Teoría</span></div>
+      <div class="moditem"><span class="mi-num">03</span><span class="mi-name">Impresora de boletas de calificaciones</span><span class="mi-type taller">Taller</span></div>
+      <div class="moditem theory-row"><span class="mi-num">04</span><span class="mi-name"><strong>Introducción a Cadenas</strong></span><span class="mi-type teoria">Teoría</span></div>
+      <div class="moditem"><span class="mi-num">05</span><span class="mi-name">Generador de perfiles de empleados</span><span class="mi-type taller">Taller</span></div>
+      <div class="moditem theory-row"><span class="mi-num">06</span><span class="mi-name"><strong>Números y Operaciones Matemáticas</strong></span><span class="mi-type teoria">Teoría</span></div>
+      <div class="moditem"><span class="mi-num">07</span><span class="mi-name">Bill Splitter (repartir cuenta)</span><span class="mi-type taller">Taller</span></div>
+      <div class="moditem theory-row"><span class="mi-num">08</span><span class="mi-name"><strong>Booleanos y Condicionales</strong></span><span class="mi-type teoria">Teoría</span></div>
+      <div class="moditem"><span class="mi-num">09</span><span class="mi-name">Calculador para reservar entradas de cine</span><span class="mi-type taller">Taller</span></div>
+      <div class="moditem"><span class="mi-num">10</span><span class="mi-name">Planificador de clima para viajes</span><span class="mi-type lab">Laboratorio</span></div>
+      <div class="moditem theory-row"><span class="mi-num">11</span><span class="mi-name"><strong>Funciones y Ámbito</strong></span><span class="mi-type teoria">Teoría</span></div>
+      <div class="moditem"><span class="mi-num">12</span><span class="mi-name">Apply Discount Function</span><span class="mi-type lab">Laboratorio</span></div>
+      <div class="moditem"><span class="mi-num">13</span><span class="mi-name">Cifrado César</span><span class="mi-type taller">Taller</span></div>
+      <div class="moditem"><span class="mi-num">14</span><span class="mi-name">Personaje de RPG</span><span class="mi-type lab">Laboratorio</span></div>
+      <div class="moditem"><span class="mi-num">15</span><span class="mi-name">Revisión de Fundamentos de Python</span><span class="mi-type review">Revisión</span></div>
+      <div class="moditem"><span class="mi-num">16</span><span class="mi-name">Cuestionario de Fundamentos de Python</span><span class="mi-type quiz">Prueba</span></div>
+    </div>
+
+    <div class="modmap-legend">
+      <span><span class="sw teoria"></span> Teoría (explica)</span>
+      <span><span class="sw taller"></span> Taller (guiado)</span>
+      <span><span class="sw lab"></span> Laboratorio (solo)</span>
+      <span><span class="sw review"></span> Revisión</span>
+      <span><span class="sw quiz"></span> Quiz</span>
+    </div>
+  </section>
+
+  <!-- CONCEPT 1: Variables y tipos -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">i</div>
+      <div>
+        <h2 class="display">Variables y <em>tipos</em>.</h2>
+        <p class="c-sub">Una variable es un nombre que guarda un valor. Su <span class="mono">tipo</span> define qué puede hacer.</p>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-prose">
+        <p>Imagina una caja con etiqueta. La etiqueta es el <strong>nombre</strong> de la variable; lo que metes dentro es el <strong>valor</strong>. En Python no declaras el tipo: él lo <em>deduce</em> según lo que guardes.</p>
+        <ul>
+          <li><strong>int</strong> — números enteros: <span class="mono">25</span>, <span class="mono">-3</span></li>
+          <li><strong>float</strong> — decimales: <span class="mono">1.75</span>, <span class="mono">0.16</span></li>
+          <li><strong>str</strong> — texto, entre comillas: <span class="mono">"Carlos"</span></li>
+          <li><strong>bool</strong> — verdadero o falso: <span class="mono">True</span>, <span class="mono">False</span></li>
+        </ul>
+        <div class="keypoint"><strong>Clave:</strong> usa <span class="mono">type(variable)</span> para preguntarle a Python de qué tipo es algo. Lo vas a necesitar mucho.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">variables.py</span></div>
+        <pre><span class="com"># cada variable guarda un valor de cierto tipo</span>
+nombre  = <span class="str">"Carlos"</span>      <span class="com"># str</span>
+edad    = <span class="num">25</span>            <span class="com"># int</span>
+altura  = <span class="num">1.75</span>          <span class="com"># float</span>
+activo  = <span class="kw">True</span>          <span class="com"># bool</span>
+
+<span class="fn">print</span>(<span class="fn">type</span>(edad))     <span class="out"># &lt;class 'int'&gt;</span>
+<span class="fn">print</span>(<span class="fn">type</span>(altura))   <span class="out"># &lt;class 'float'&gt;</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT 2: Cadenas -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">ii</div>
+      <div>
+        <h2 class="display">Cadenas <em>(strings)</em>.</h2>
+        <p class="c-sub">Texto entre comillas. Se pueden unir, medir, indexar y transformar.</p>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-prose">
+        <p>Una cadena es una <strong>secuencia de caracteres</strong>. Cada carácter tiene una posición (empezando en <em>cero</em>, no en uno). Puedes unirlas con <span class="mono">+</span>, contar su longitud con <span class="mono">len()</span> y aplicarles <em>métodos</em> como <span class="mono">.upper()</span>.</p>
+        <ul>
+          <li><strong>Concatenar:</strong> <span class="mono">"Hola" + " " + nombre</span></li>
+          <li><strong>Longitud:</strong> <span class="mono">len("Carlos")</span> → 6</li>
+          <li><strong>Indexar:</strong> <span class="mono">nombre[0]</span> → primer carácter</li>
+          <li><strong>f-strings:</strong> <span class="mono">f"Hola {nombre}"</span> — la forma moderna</li>
+        </ul>
+        <div class="keypoint"><strong>Cuidado:</strong> <span class="mono">"5"</span> no es <span class="mono">5</span>. El texto no se suma como número — se concatena.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cadenas.py</span></div>
+        <pre>nombre = <span class="str">"Carlos"</span>
+
+<span class="com"># concatenación e interpolación</span>
+saludo = <span class="str">"Hola, "</span> + nombre
+moderno = <span class="kw">f</span><span class="str">"Hola, {nombre}!"</span>
+
+<span class="fn">print</span>(<span class="fn">len</span>(nombre))     <span class="out"># 6</span>
+<span class="fn">print</span>(nombre[<span class="num">0</span>])      <span class="out"># C</span>
+<span class="fn">print</span>(nombre.<span class="fn">upper</span>())  <span class="out"># CARLOS</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT 3: Números y operaciones -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">iii</div>
+      <div>
+        <h2 class="display">Números y <em>operaciones</em>.</h2>
+        <p class="c-sub">Suma, resta, multiplicación, división... y dos que confunden: <span class="mono">//</span> y <span class="mono">%</span>.</p>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-prose">
+        <p>Los operadores aritméticos hacen lo que esperas, con una <strong>jerarquía</strong>: primero potencias, luego multiplicación y división, al final suma y resta. Igual que en matemáticas. Los paréntesis mandan.</p>
+        <ul>
+          <li><span class="mono">/</span> — división normal (da float): <span class="mono">10 / 3</span> → 3.33…</li>
+          <li><span class="mono">//</span> — división <strong>entera</strong>: <span class="mono">10 // 3</span> → 3</li>
+          <li><span class="mono">%</span> — <strong>residuo</strong> (lo que sobra): <span class="mono">10 % 3</span> → 1</li>
+          <li><span class="mono">**</span> — potencia: <span class="mono">2 ** 3</span> → 8</li>
+        </ul>
+        <div class="keypoint"><strong>El truco del %:</strong> <span class="mono">numero % 2 == 0</span> te dice si un número es par. Lo vas a usar más de lo que crees.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">numeros.py</span></div>
+        <pre>a = <span class="num">10</span>
+b = <span class="num">3</span>
+
+<span class="fn">print</span>(a + b)    <span class="out"># 13</span>
+<span class="fn">print</span>(a / b)    <span class="out"># 3.333...</span>
+<span class="fn">print</span>(a // b)   <span class="out"># 3   (división entera)</span>
+<span class="fn">print</span>(a % b)    <span class="out"># 1   (residuo)</span>
+<span class="fn">print</span>(a ** b)   <span class="out"># 1000 (potencia)</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT 4: Booleanos y condicionales -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">iv</div>
+      <div>
+        <h2 class="display">Booleanos y <em>condicionales</em>.</h2>
+        <p class="c-sub">Aquí el programa empieza a <span class="mono">decidir</span>. La primera bifurcación del camino.</p>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-prose">
+        <p>Un <strong>booleano</strong> solo tiene dos valores: <span class="mono">True</span> o <span class="mono">False</span>. Surgen de <em>comparar</em> cosas. Y con un <span class="mono">if</span>, el programa elige qué hacer según el resultado.</p>
+        <ul>
+          <li><strong>Comparar:</strong> <span class="mono">==</span> (igual), <span class="mono">!=</span> (distinto), <span class="mono">&lt;</span>, <span class="mono">&gt;</span>, <span class="mono">&lt;=</span>, <span class="mono">&gt;=</span></li>
+          <li><strong>Combinar:</strong> <span class="mono">and</span>, <span class="mono">or</span>, <span class="mono">not</span></li>
+          <li><strong>Decidir:</strong> <span class="mono">if</span> / <span class="mono">elif</span> / <span class="mono">else</span></li>
+        </ul>
+        <div class="keypoint"><strong>Ojo:</strong> <span class="mono">=</span> asigna un valor; <span class="mono">==</span> compara. Confundirlos es el error #1 de todo principiante.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">condicionales.py</span></div>
+        <pre>edad = <span class="num">18</span>
+
+<span class="kw">if</span> edad &gt;= <span class="num">18</span>:
+    <span class="fn">print</span>(<span class="str">"Mayor de edad"</span>)
+<span class="kw">elif</span> edad &gt;= <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"Adolescente"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Niño"</span>)
+
+<span class="out"># imprime: Mayor de edad</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT 5: Funciones -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">v</div>
+      <div>
+        <h2 class="display">Funciones y <em>ámbito</em>.</h2>
+        <p class="c-sub">Empaquetar lógica con nombre, para reutilizarla. <span class="mono">divide y vencerás</span>.</p>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-prose">
+        <p>Una <strong>función</strong> es un bloque de código con nombre que hace una tarea. Recibe <em>parámetros</em>, hace algo, y puede <em>devolver</em> un resultado con <span class="mono">return</span>. Sirve para no repetir código.</p>
+        <ul>
+          <li><strong>Definir:</strong> <span class="mono">def nombre(parametros):</span></li>
+          <li><strong>Devolver:</strong> <span class="mono">return</span> entrega el resultado</li>
+          <li><strong>Ámbito:</strong> las variables creadas dentro <em>solo viven dentro</em></li>
+        </ul>
+        <div class="keypoint"><strong>print vs return:</strong> <span class="mono">print</span> muestra en pantalla; <span class="mono">return</span> entrega un valor para seguir usándolo. No son lo mismo.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">funciones.py</span></div>
+        <pre><span class="kw">def</span> <span class="fn">calcular_iva</span>(precio):
+    iva = precio * <span class="num">0.16</span>
+    <span class="kw">return</span> precio + iva
+
+total = <span class="fn">calcular_iva</span>(<span class="num">480</span>)
+<span class="fn">print</span>(total)   <span class="out"># 556.8</span>
+
+<span class="com"># 'iva' no existe aquí afuera: era local</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ: Predice la salida -->
+  <section class="quiz-section reveal">
+    <div class="head">
+      <div class="stamp">En clase</div>
+      <div>
+        <h2 class="display">Predice la <em>salida</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Sin ejecutar el código, <strong>predice qué imprime cada fragmento</strong>. Escribe tu respuesta
+      en el cuaderno, discútelo con quien tengas al lado, y luego dale clic a «Ver respuesta» para comprobar.
+      Si fallas, no pasa nada — fallar aquí es <em>gratis</em>, fallar en el examen no.
+    </p>
+
+    <div class="quiz-grid">
+      <div class="quiz-card">
+        <div class="qc-label"><span class="qc-n">01</span><span class="qc-tag">tipos</span></div>
+        <div class="qc-code">
+          <pre>a = <span class="str">"5"</span>
+b = <span class="str">"3"</span>
+<span class="fn">print</span>(a + b)</pre>
+        </div>
+        <button class="qc-reveal">Ver respuesta →</button>
+        <div class="qc-answer">
+          <div class="out-label">Salida</div>
+          <div class="out-val">53</div>
+          <p class="explain"><strong>¿Por qué?</strong> Son cadenas (comillas), no números. El <span class="mono">+</span> las <em>concatena</em>: "5" pegado a "3" da "53", no 8.</p>
+        </div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="qc-label"><span class="qc-n">02</span><span class="qc-tag">operadores</span></div>
+        <div class="qc-code">
+          <pre><span class="fn">print</span>(<span class="num">17</span> // <span class="num">5</span>)
+<span class="fn">print</span>(<span class="num">17</span> % <span class="num">5</span>)</pre>
+        </div>
+        <button class="qc-reveal">Ver respuesta →</button>
+        <div class="qc-answer">
+          <div class="out-label">Salida</div>
+          <div class="out-val">3<br/>2</div>
+          <p class="explain"><strong>¿Por qué?</strong> <span class="mono">//</span> es división entera: 17 entre 5 cabe 3 veces. <span class="mono">%</span> es el residuo: sobran 2.</p>
+        </div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="qc-label"><span class="qc-n">03</span><span class="qc-tag">condicional</span></div>
+        <div class="qc-code">
+          <pre>x = <span class="num">7</span>
+<span class="kw">if</span> x % <span class="num">2</span> == <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">"par"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"impar"</span>)</pre>
+        </div>
+        <button class="qc-reveal">Ver respuesta →</button>
+        <div class="qc-answer">
+          <div class="out-label">Salida</div>
+          <div class="out-val">impar</div>
+          <p class="explain"><strong>¿Por qué?</strong> 7 % 2 da 1 (sobra 1), que no es igual a 0. La condición es falsa, así que entra al <span class="mono">else</span>.</p>
+        </div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="qc-label"><span class="qc-n">04</span><span class="qc-tag">funciones</span></div>
+        <div class="qc-code">
+          <pre><span class="kw">def</span> <span class="fn">doble</span>(n):
+    <span class="kw">return</span> n * <span class="num">2</span>
+
+<span class="fn">print</span>(<span class="fn">doble</span>(<span class="fn">doble</span>(<span class="num">3</span>)))</pre>
+        </div>
+        <button class="qc-reveal">Ver respuesta →</button>
+        <div class="qc-answer">
+          <div class="out-label">Salida</div>
+          <div class="out-val">12</div>
+          <p class="explain"><strong>¿Por qué?</strong> Primero se evalúa el de adentro: <span class="mono">doble(3)</span> = 6. Luego el de afuera: <span class="mono">doble(6)</span> = 12.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOWCHART SECTION -->
+  <section class="flow reveal">
+    <div class="f-head">
+      <div class="f-num display">vi</div>
+      <div>
+        <h2 class="display">Dibujar el <em>pensamiento</em>.</h2>
+        <p class="f-sub">El diagrama de flujo: el plano antes de construir. Cada figura tiene un significado.</p>
+      </div>
+    </div>
+
+    <p class="flow-intro">
+      Antes de escribir código, los programadores <strong>dibujan</strong> la lógica. Un diagrama de flujo
+      es un mapa visual de cómo «fluye» un programa: por dónde entra, qué calcula, qué decide y por dónde
+      sale. Cada figura significa algo distinto, y aprenderlas es como aprender las señales de tránsito:
+      una vez que las conoces, lees cualquier diagrama del mundo. <em>Vamos a aprenderlas resolviendo un
+      problema real, paso a paso.</em>
+    </p>
+
+    <div class="bob-box">
+      <h3>El autobús de Bob</h3>
+      <p>
+        Bob es conductor de autobús y se volvió <em>tan popular</em> que a veces no le queda espacio
+        para tantos pasajeros. Quiere un programa que le diga si podrá acomodar a todos los que esperan.
+        Escribiremos una función que recibe <strong>tres datos</strong>:
+      </p>
+      <div class="params">
+        <div class="param"><div class="pname">cap</div><div class="pdesc">Capacidad del autobús (sin contar al conductor).</div></div>
+        <div class="param"><div class="pname">on</div><div class="pdesc">Pasajeros que ya van a bordo.</div></div>
+        <div class="param"><div class="pname">wait</div><div class="pdesc">Personas esperando para subir.</div></div>
+      </div>
+      <p>
+        Si hay espacio para todos, la función devuelve <strong>0</strong>. Si no, devuelve <strong>cuántas
+        personas se quedan</strong> sin poder subir.
+      </p>
+      <div class="examples">
+        <span class="com"># ejemplos de uso</span><br/>
+        cap=<span class="num">10</span>,  on=<span class="num">5</span>,  wait=<span class="num">5</span>  <span class="arrow">--&gt;</span> <span class="num">0</span>   <span class="com"># caben los 5</span><br/>
+        cap=<span class="num">100</span>, on=<span class="num">60</span>, wait=<span class="num">50</span> <span class="arrow">--&gt;</span> <span class="num">10</span>  <span class="com"># 10 de los 50 no caben</span>
+      </div>
+    </div>
+
+    <!-- STEP: óvalo -->
+    <div class="flow-step">
+      <div class="symbol-card">
+        <svg class="sym-svg fchart" viewBox="0 0 130 80"><ellipse class="shape start" cx="65" cy="40" rx="55" ry="28"/><text class="lbl lbl-light" x="65" y="45" text-anchor="middle">INICIO</text></svg>
+        <div class="sym-name">Óvalo</div>
+        <div class="sym-alt">Terminal</div>
+        <div class="sym-use">Marca el <strong>inicio</strong> y el <strong>fin</strong> del programa. Todo diagrama empieza y termina con uno.</div>
+      </div>
+      <div class="flow-explain">
+        <p class="fe-prose">Todo diagrama arranca con un óvalo de <strong>inicio</strong>. En el código, este es el momento en que <em>definimos la función</em> y recibimos los tres datos que Bob nos da. Los parámetros entre paréntesis son nuestra «entrada».</p>
+        <div class="fe-code"><pre><span class="kw">def</span> <span class="fn">espacio_autobus</span>(cap, on, wait):
+    <span class="com"># aquí empieza nuestra lógica</span></pre></div>
+      </div>
+    </div>
+
+    <!-- STEP: rectángulo (proceso) -->
+    <div class="flow-step">
+      <div class="symbol-card">
+        <svg class="sym-svg fchart" viewBox="0 0 130 80"><rect class="shape proc" x="12" y="18" width="106" height="44"/><text class="lbl" x="65" y="44" text-anchor="middle">total = on+wait</text></svg>
+        <div class="sym-name">Rectángulo</div>
+        <div class="sym-alt">Proceso</div>
+        <div class="sym-use">Representa una <strong>acción o cálculo</strong>: una asignación, una operación matemática.</div>
+      </div>
+      <div class="flow-explain">
+        <p class="fe-prose">El rectángulo es para <strong>hacer algo</strong>. Aquí calculamos cuántas personas habría en total si todos subieran: las que ya van más las que esperan. Una suma simple guardada en una variable.</p>
+        <div class="fe-code"><pre>    total = on + wait
+    <span class="com"># total de personas si todas suben</span></pre></div>
+      </div>
+    </div>
+
+    <!-- STEP: rombo (decisión) -->
+    <div class="flow-step">
+      <div class="symbol-card">
+        <svg class="sym-svg fchart" viewBox="0 0 130 80"><polygon class="shape dec" points="65,8 122,40 65,72 8,40"/><text class="lbl lbl-light" x="65" y="44" text-anchor="middle">total &lt;= cap?</text></svg>
+        <div class="sym-name">Rombo</div>
+        <div class="sym-alt">Decisión</div>
+        <div class="sym-use">Hace una <strong>pregunta de sí/no</strong>. De él salen <strong>dos caminos</strong>: uno si es verdadero, otro si es falso.</div>
+      </div>
+      <div class="flow-explain">
+        <p class="fe-prose">El rombo es donde el programa <strong>decide</strong>. Preguntamos: ¿el total de personas cabe en la capacidad? De esta pregunta salen <em>dos caminos</em>. En código, esto es exactamente un <strong>if / else</strong>.</p>
+        <div class="fe-code"><pre>    <span class="kw">if</span> total &lt;= cap:
+        <span class="com"># camino "Sí": sí caben todos</span>
+    <span class="kw">else</span>:
+        <span class="com"># camino "No": faltan lugares</span></pre></div>
+      </div>
+    </div>
+
+    <!-- STEP: paralelogramo (salida) -->
+    <div class="flow-step">
+      <div class="symbol-card">
+        <svg class="sym-svg fchart" viewBox="0 0 130 80"><polygon class="shape io" points="28,18 118,18 102,62 12,62"/><text class="lbl lbl-light" x="65" y="44" text-anchor="middle">devolver</text></svg>
+        <div class="sym-name">Paralelogramo</div>
+        <div class="sym-alt">Entrada / Salida</div>
+        <div class="sym-use">Representa <strong>entrada o salida</strong> de datos: leer del usuario, o <strong>devolver un resultado</strong>.</div>
+      </div>
+      <div class="flow-explain">
+        <p class="fe-prose">Cada camino del rombo termina en una <strong>salida</strong>. Si caben todos, devolvemos <em>0</em>. Si no, devolvemos cuántos se quedan: el total menos la capacidad. El <strong>return</strong> entrega ese resultado y termina la función.</p>
+        <div class="fe-code"><pre>    <span class="kw">if</span> total &lt;= cap:
+        <span class="kw">return</span> <span class="num">0</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> total - cap</pre></div>
+      </div>
+    </div>
+
+    <!-- COMPLETE FLOWCHART -->
+    <div class="flow-complete">
+      <h3 class="display">El diagrama <em>completo</em>.</h3>
+      <p class="fc-sub">Las piezas, ensambladas. A la izquierda el plano; a la derecha, la traducción exacta a Python.</p>
+
+      <div class="flow-complete-grid">
+        <div class="fc-diagram">
+          <svg class="fchart" viewBox="0 0 360 600" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ink)"/>
+              </marker>
+            </defs>
+
+            <!-- inicio -->
+            <ellipse class="shape start" cx="180" cy="34" rx="90" ry="26"/>
+            <text class="lbl lbl-light lbl-sm" x="180" y="38" text-anchor="middle">INICIO (cap, on, wait)</text>
+            <line class="edge" x1="180" y1="60" x2="180" y2="92"/>
+
+            <!-- proceso -->
+            <rect class="shape proc" x="92" y="92" width="176" height="46"/>
+            <text class="lbl" x="180" y="120" text-anchor="middle">total = on + wait</text>
+            <line class="edge" x1="180" y1="138" x2="180" y2="172"/>
+
+            <!-- decisión -->
+            <polygon class="shape dec" points="180,172 290,232 180,292 70,232"/>
+            <text class="lbl lbl-light" x="180" y="237" text-anchor="middle">¿total &lt;= cap?</text>
+
+            <!-- rama sí (izquierda) -->
+            <line class="edge" x1="70" y1="232" x2="34" y2="232"/>
+            <line class="edge" x1="34" y1="232" x2="34" y2="372" marker-end=""/>
+            <line class="edge" x1="34" y1="372" x2="92" y2="372"/>
+            <text class="elabel" x="36" y="222" text-anchor="middle">Sí</text>
+
+            <!-- rama no (derecha) -->
+            <line class="edge" x1="290" y1="232" x2="326" y2="232" marker-end=""/>
+            <line class="edge" x1="326" y1="232" x2="326" y2="446" marker-end=""/>
+            <line class="edge" x1="326" y1="446" x2="268" y2="446"/>
+            <text class="elabel" x="322" y="222" text-anchor="middle">No</text>
+
+            <!-- salida sí -->
+            <polygon class="shape io" points="108,350 200,350 184,394 92,394"/>
+            <text class="lbl lbl-light" x="146" y="377" text-anchor="middle">return 0</text>
+            <line class="edge" x1="146" y1="394" x2="146" y2="520"/>
+
+            <!-- salida no -->
+            <polygon class="shape io" points="158,424 302,424 286,468 142,468"/>
+            <text class="lbl lbl-light lbl-sm" x="222" y="450" text-anchor="middle">return total - cap</text>
+            <line class="edge" x1="222" y1="468" x2="222" y2="494"/>
+            <line class="edge" x1="222" y1="494" x2="180" y2="494" marker-end=""/>
+            <line class="edge" x1="180" y1="494" x2="180" y2="520" marker-end=""/>
+
+            <!-- fin -->
+            <ellipse class="shape start" cx="180" cy="552" rx="60" ry="24"/>
+            <text class="lbl lbl-light" x="180" y="557" text-anchor="middle">FIN</text>
+          </svg>
+        </div>
+
+        <div class="fc-codepanel">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">autobus_bob.py</span></div>
+          <pre><span class="kw">def</span> <span class="fn">espacio_autobus</span>(cap, on, wait):
+    <span class="com"># 1. proceso: total de personas</span>
+    total = on + wait
+
+    <span class="com"># 2. decisión: ¿caben todos?</span>
+    <span class="kw">if</span> total &lt;= cap:
+        <span class="kw">return</span> <span class="num">0</span>        <span class="com"># sí caben</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> total - cap  <span class="com"># faltan lugares</span></pre>
+          <div class="verify">
+            <div class="vrow">espacio_autobus(10, 5, 5)  → 0  ✓</div>
+            <div class="vrow">espacio_autobus(100, 60, 50) → 10 ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY (elevador) -->
+  <section class="activity-flow reveal">
+    <div class="head">
+      <div class="stamp">Tu turno</div>
+      <div>
+        <h2 class="display">El <em>elevador</em> del edificio.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Mismo molde que el autobús de Bob, distinto contexto. <strong>Tienes 15 minutos.</strong> En tu
+      cuaderno, primero dibuja el <em>diagrama de flujo</em> usando las cuatro figuras que acabamos de ver,
+      y luego escribe la <em>función en Python</em>. Cuando termines, compara con la solución.
+    </p>
+
+    <div class="act-card">
+      <h3>El problema</h3>
+      <p class="story">
+        Un elevador de oficinas tiene un <em>límite de personas</em>. Ya hay gente adentro y afuera espera
+        más gente para subir. Escribe una función que diga si <em>caben todos</em> en un solo viaje, o
+        cuántos tendrán que esperar el siguiente. Recibe tres parámetros:
+      </p>
+      <div class="params">
+        <div class="param"><div class="pname">limite</div><div class="pdesc">Personas que soporta el elevador.</div></div>
+        <div class="param"><div class="pname">dentro</div><div class="pdesc">Personas que ya están adentro.</div></div>
+        <div class="param"><div class="pname">esperando</div><div class="pdesc">Personas esperando para subir.</div></div>
+      </div>
+      <p class="story">
+        Si caben todas en un viaje, devuelve <em>0</em>. Si no, devuelve <em>cuántas</em> deben esperar el
+        siguiente.
+      </p>
+      <div class="examples">
+        <span class="com"># ejemplos de uso</span><br/>
+        limite=<span class="num">8</span>,  dentro=<span class="num">3</span>, esperando=<span class="num">4</span> <span class="arrow">--&gt;</span> <span class="num">0</span>  <span class="com"># caben los 4</span><br/>
+        limite=<span class="num">6</span>,  dentro=<span class="num">4</span>, esperando=<span class="num">5</span> <span class="arrow">--&gt;</span> <span class="num">3</span>  <span class="com"># 3 esperan el siguiente viaje</span>
+      </div>
+
+      <ul class="task-list">
+        <li><strong>Paso 1:</strong> dibuja el diagrama con óvalo de inicio, rectángulo de proceso, rombo de decisión y los paralelogramos de salida.</li>
+        <li><strong>Paso 2:</strong> traduce cada figura a su línea de Python.</li>
+        <li><strong>Paso 3:</strong> verifica tu función con los dos ejemplos de arriba.</li>
+      </ul>
+
+      <button class="act-reveal-btn" id="act-reveal">🔓  Ya lo intenté · Mostrar la solución</button>
+
+      <div class="act-solution" id="act-solution">
+        <div class="act-sol-grid">
+          <div>
+            <span class="sol-label">El diagrama</span>
+            <div class="fc-diagram">
+              <svg class="fchart" viewBox="0 0 360 600" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ink)"/>
+                  </marker>
+                </defs>
+                <ellipse class="shape start" cx="180" cy="34" rx="110" ry="26"/>
+                <text class="lbl lbl-light lbl-sm" x="180" y="38" text-anchor="middle">INICIO (limite, dentro, esperando)</text>
+                <line class="edge" x1="180" y1="60" x2="180" y2="92" marker-end="url(#arrow2)"/>
+                <rect class="shape proc" x="70" y="92" width="220" height="46"/>
+                <text class="lbl lbl-sm" x="180" y="119" text-anchor="middle">total = dentro + esperando</text>
+                <line class="edge" x1="180" y1="138" x2="180" y2="172" marker-end="url(#arrow2)"/>
+                <polygon class="shape dec" points="180,172 296,232 180,292 64,232"/>
+                <text class="lbl lbl-light" x="180" y="237" text-anchor="middle">¿total &lt;= limite?</text>
+                <line class="edge" x1="64" y1="232" x2="34" y2="232" marker-end="url(#arrow2)"/>
+                <line class="edge" x1="34" y1="232" x2="34" y2="372" marker-end=""/>
+                <line class="edge" x1="34" y1="372" x2="92" y2="372" marker-end="url(#arrow2)"/>
+                <text class="elabel" x="36" y="222" text-anchor="middle">Sí</text>
+                <line class="edge" x1="296" y1="232" x2="326" y2="232" marker-end=""/>
+                <line class="edge" x1="326" y1="232" x2="326" y2="446" marker-end=""/>
+                <line class="edge" x1="326" y1="446" x2="276" y2="446" marker-end="url(#arrow2)"/>
+                <text class="elabel" x="322" y="222" text-anchor="middle">No</text>
+                <polygon class="shape io" points="108,350 200,350 184,394 92,394"/>
+                <text class="lbl lbl-light" x="146" y="377" text-anchor="middle">return 0</text>
+                <line class="edge" x1="146" y1="394" x2="146" y2="520" marker-end="url(#arrow2)"/>
+                <polygon class="shape io" points="150,424 310,424 294,468 134,468"/>
+                <text class="lbl lbl-light lbl-sm" x="222" y="450" text-anchor="middle">return total - limite</text>
+                <line class="edge" x1="225" y1="468" x2="225" y2="494" marker-end=""/>
+                <line class="edge" x1="225" y1="494" x2="180" y2="494" marker-end=""/>
+                <line class="edge" x1="180" y1="494" x2="180" y2="520" marker-end="url(#arrow2)"/>
+                <ellipse class="shape start" cx="180" cy="552" rx="60" ry="24"/>
+                <text class="lbl lbl-light" x="180" y="557" text-anchor="middle">FIN</text>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <span class="sol-label">El código</span>
+            <div class="fc-codepanel">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">elevador.py</span></div>
+              <pre><span class="kw">def</span> <span class="fn">espacio_elevador</span>(limite, dentro, esperando):
+    <span class="com"># proceso: total de personas</span>
+    total = dentro + esperando
+
+    <span class="com"># decisión: ¿caben todas?</span>
+    <span class="kw">if</span> total &lt;= limite:
+        <span class="kw">return</span> <span class="num">0</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> total - limite</pre>
+              <div class="verify">
+                <div class="vrow">espacio_elevador(8, 3, 4)  → 0  ✓</div>
+                <div class="vrow">espacio_elevador(6, 4, 5)  → 3  ✓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ERRORS -->
+  <section class="errors reveal">
+    <div class="errors-inner">
+      <div class="small-caps">Los tropiezos de todo principiante</div>
+      <h2 class="display">Errores que <em>vas</em> a cometer.</h2>
+      <p class="sub">
+        No es «si» los cometes, es «cuándo». Todos pasamos por aquí. Reconocerlos antes te ahorra
+        horas de frustración. Si en freeCodeCamp algo no te corre, revisa primero esta lista.
+      </p>
+
+      <div class="err-grid">
+        <div class="err-item">
+          <h4>Confundir = con ==</h4>
+          <div class="wrong">if edad = 18:</div>
+          <div class="right">if edad == 18:</div>
+          <p>Uno asigna, el otro compara. Dentro de un <span class="mono">if</span> casi siempre quieres comparar.</p>
+        </div>
+
+        <div class="err-item">
+          <h4>Olvidar convertir input()</h4>
+          <div class="wrong">edad = input("Edad: ")
+total = edad + 1   # error</div>
+          <div class="right">edad = int(input("Edad: "))</div>
+          <p><span class="mono">input()</span> siempre da texto. Si vas a hacer matemáticas, convierte con <span class="mono">int()</span> o <span class="mono">float()</span>.</p>
+        </div>
+
+        <div class="err-item">
+          <h4>Indentación incorrecta</h4>
+          <div class="wrong">if x &gt; 0:
+print("positivo")</div>
+          <div class="right">if x &gt; 0:
+    print("positivo")</div>
+          <p>En Python los espacios <em>importan</em>. Lo que está dentro del <span class="mono">if</span> va indentado (4 espacios).</p>
+        </div>
+
+        <div class="err-item">
+          <h4>Olvidar los dos puntos</h4>
+          <div class="wrong">if x &gt; 0
+    print("ok")</div>
+          <div class="right">if x &gt; 0:</div>
+          <p>Todo <span class="mono">if</span>, <span class="mono">else</span>, <span class="mono">def</span> termina con dos puntos <span class="mono">:</span> antes del bloque.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FCC REMINDER -->
+  <section class="fcc-reminder reveal">
+    <h3 class="display">¿Vas al corriente con <em>freeCodeCamp</em>?</h3>
+    <p>
+      Este repaso es tu red de seguridad, pero el avance lo haces tú en la plataforma. Si te quedaste
+      atrás, hoy es buen día para retomar. Recuerda: la entrega es la captura del módulo de Fundamentos
+      completo, vía Blackboard.
+    </p>
+    <a href="https://www.freecodecamp.org/espanol/learn/python-v9/" class="btn" target="_blank" rel="noopener">Volver al curso →</a>
+    <div class="deadline">deadline: lunes 1 de junio · 23:59 h · entrega por Blackboard</div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «Nadie aprende un idioma <span class="em-ochre">memorizando el diccionario</span>.<br/>
+      Se aprende <span class="em">usándolo</span>, equivocándose, y volviéndolo a usar.»
+    </div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 03 <span class="dot">·</span> La gramática del pensamiento <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-02/index.html">Sesión 02 · Algoritmos</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  /* Reveal on scroll */
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+
+  /* Quiz reveal toggles */
+  document.querySelectorAll('.qc-reveal').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const answer = btn.nextElementSibling;
+      const isShown = answer.classList.contains('shown');
+      if (isShown) {
+        answer.classList.remove('shown');
+        btn.textContent = 'Ver respuesta →';
+      } else {
+        answer.classList.add('shown');
+        btn.textContent = 'Ocultar respuesta';
+      }
+    });
+  });
+
+  /* Activity solution toggle */
+  const actBtn = document.getElementById('act-reveal');
+  const actSol = document.getElementById('act-solution');
+  if (actBtn && actSol){
+    let shown = false;
+    actBtn.addEventListener('click', () => {
+      shown = !shown;
+      if (shown){
+        actSol.classList.add('shown');
+        actBtn.innerHTML = '🔒  Ocultar la solución';
+      } else {
+        actSol.classList.remove('shown');
+        actBtn.innerHTML = '🔓  Ya lo intenté · Mostrar la solución';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
