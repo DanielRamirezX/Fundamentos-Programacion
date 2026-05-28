@@ -149,7 +149,141 @@
   .live .intro{ color: var(--ink-soft); font-size: 1.05rem; max-width: 760px; margin: 0 0 36px; }
 
   .kata-box{ background: var(--paper-deep); border: 2px solid var(--ink); padding: 28px 32px 30px; margin-bottom: 30px; position: relative; }
-  .kata-box::before{ content: "EL KATA · 8 kyu"; position: absolute; top: -13px; left: 28px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .kata-box::before{ content: attr(data-label); position: absolute; top: -13px; left: 28px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .kata-box .preview-tag{ display: inline-block; margin-top: 12px; padding: 4px 10px; background: var(--ochre); color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .15em; font-weight: 700; text-transform: uppercase; }
+
+  /* Separador entre ejemplos */
+  .example-divider{ display: flex; align-items: center; gap: 18px; margin: 60px 0 40px; }
+  .example-divider .line{ flex: 1; height: 1px; background: var(--ink); }
+  .example-divider .label{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.1rem; color: var(--ink-soft); letter-spacing: .04em; }
+  .example-divider .label em{ color: var(--blood); font-weight: 700; }
+
+  /* ITERATION ANIMATION (sum_mul) */
+  .iter-anim{ margin-top: 30px; padding: 36px 32px 32px; background: var(--paper); border: 2px solid var(--ink); position: relative; }
+  .iter-anim::before{ content: "VISUALIZACIÓN · iteración paso a paso"; position: absolute; top: -13px; left: 28px; background: var(--ochre); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+
+  .ia-head{ margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px dashed rgba(42,29,20,.22); }
+  .ia-head h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 6px; color: var(--ink); }
+  .ia-head h4 em{ color: var(--ochre-deep); font-weight: 700; }
+  .ia-head .ia-sub{ margin: 0; font-size: .92rem; color: var(--ink-soft); line-height: 1.55; }
+  .ia-head .ia-sub code{ font-family: "JetBrains Mono", monospace; font-size: .88em; background: var(--paper-deep); padding: 1px 6px; color: var(--ink); }
+  .ia-head .ia-sub strong{ color: var(--blood); font-weight: 700; }
+
+  /* CONTROL BAR — inputs + play/reset */
+  .ia-controls-bar{ margin: 0 0 30px; padding: 24px 26px 20px; background: var(--paper-deep); border: 1.5px solid var(--ink); position: relative; }
+  .ia-controls-bar::before{ content: "AJUSTA · SIMULA"; position: absolute; top: -11px; left: 22px; background: var(--ink); color: var(--paper); padding: 3px 12px; font-size: .65rem; letter-spacing: .2em; font-weight: 700; }
+  .icb-row{ display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: center; }
+  @media (max-width: 760px){ .icb-row{ grid-template-columns: 1fr; gap: 18px; } }
+  .ia-inputs{ display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .ia-input-group{ display: inline-flex; align-items: baseline; gap: 10px; }
+  .ia-input-label{ font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; color: var(--blood); }
+  .ia-input-label::after{ content: " ="; color: var(--ink-faint); font-style: normal; font-weight: 400; }
+  .ia-input{ width: 70px; padding: 8px 10px; font-family: "JetBrains Mono", monospace; font-size: 1.1rem; font-weight: 700; text-align: center; background: var(--paper); border: 1.5px solid var(--ink); color: var(--ink); }
+  .ia-input:focus{ outline: 2px solid var(--ochre); outline-offset: 2px; }
+  .ia-input.invalid{ border-color: var(--blood); background: rgba(160,36,24,.08); }
+  .ia-controls{ display: flex; gap: 10px; flex-shrink: 0; }
+  .ia-btn{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: .92rem; padding: 9px 18px; background: var(--ink); color: var(--paper); border: 1.5px solid var(--ink); cursor: pointer; transition: background .2s ease, color .2s ease, transform .15s ease; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .ia-btn:hover{ background: var(--blood); border-color: var(--blood); transform: translateY(-2px); }
+  .ia-btn[data-action="reset"]{ background: transparent; color: var(--ink); }
+  .ia-btn[data-action="reset"]:hover{ background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .ia-btn--apply{ background: var(--ochre); border-color: var(--ochre-deep); color: var(--paper); }
+  .ia-btn--apply:hover{ background: var(--ochre-deep); border-color: var(--ochre-deep); }
+  .ia-input-hint{ margin: 14px 0 0; font-family: "Newsreader", serif; font-style: italic; font-size: .85rem; color: var(--ink-soft); line-height: 1.5; }
+  .ia-input-hint code{ font-family: "JetBrains Mono", monospace; font-style: normal; background: var(--paper); padding: 1px 5px; font-size: .9em; border: 1px solid var(--line); color: var(--ink); }
+  .ia-input-hint strong{ color: var(--ink); font-weight: 700; font-style: normal; }
+  .ia-error{ margin: 12px 0 0; padding: 8px 12px; background: rgba(160,36,24,.08); border-left: 3px solid var(--blood); color: var(--blood); font-family: "JetBrains Mono", monospace; font-size: .82rem; font-weight: 700; display: none; }
+  .ia-error.show{ display: block; }
+
+  .ia-track{ margin: 24px 0 8px; padding-top: 30px; }
+  .ia-numberline{ display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .ia-num{ width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.1rem; background: var(--paper-deep); border: 1.5px solid rgba(42,29,20,.25); color: var(--ink-soft); transition: all .35s cubic-bezier(.5,.1,.2,1); position: relative; }
+  .ia-num.current{ background: var(--ochre); color: var(--paper); border-color: var(--ochre-deep); transform: scale(1.18); box-shadow: 0 0 0 4px rgba(181,133,42,.28); z-index: 2; }
+  .ia-num.current::before{ content: "i ↓"; position: absolute; top: -28px; left: 50%; transform: translateX(-50%); font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; color: var(--ochre-deep); white-space: nowrap; animation: iaBob .8s ease-in-out infinite; }
+  @keyframes iaBob{ 0%,100%{ transform: translateX(-50%) translateY(0); } 50%{ transform: translateX(-50%) translateY(-3px); } }
+  .ia-num.visited{ background: var(--olive); color: var(--paper); border-color: var(--olive-deep); }
+  .ia-num.visited::after{ content: "✓"; position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; background: var(--paper); color: var(--olive-deep); border-radius: 50%; font-size: .72rem; line-height: 16px; text-align: center; border: 1.5px solid var(--olive-deep); font-family: "JetBrains Mono", monospace; font-weight: 700; }
+  .ia-num.excluded{ border-style: dashed; color: var(--ink-faint); background: transparent; }
+  .ia-num.excluded::before{ content: "m"; position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-family: "Fraunces", serif; font-style: italic; font-size: .82rem; color: var(--ink-faint); font-weight: 600; }
+
+  .ia-legend{ display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; margin: 20px 0 26px; font-size: .8rem; color: var(--ink-soft); font-family: "Newsreader", serif; font-style: italic; }
+  .ia-legend span{ display: inline-flex; align-items: center; gap: 7px; }
+  .ia-dot{ width: 14px; height: 14px; display: inline-block; border: 1.5px solid rgba(42,29,20,.3); }
+  .ia-dot--cur{ background: var(--ochre); border-color: var(--ochre-deep); }
+  .ia-dot--mul{ background: var(--olive); border-color: var(--olive-deep); }
+  .ia-dot--excl{ background: transparent; border-style: dashed; }
+
+  .ia-grid{ display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; margin-bottom: 22px; }
+  @media (max-width: 760px){ .ia-grid{ grid-template-columns: 1fr; } }
+
+  .ia-code-side{ background: var(--ink); padding: 20px 22px; }
+  .ia-code-side pre{ margin: 0; font-family: "JetBrains Mono", monospace; font-size: .92rem; line-height: 1.9; color: var(--c-base); }
+  .ia-code-side .ln{ display: block; padding: 4px 10px; margin: 0 -10px; transition: background .3s ease, border-left-color .3s ease; border-left: 3px solid transparent; }
+  .ia-code-side .ln.active{ background: rgba(240,200,160,.13); border-left-color: var(--c-kw); }
+  .ia-code-side .kw{ color: var(--c-kw); }
+  .ia-code-side .fn{ color: var(--c-fn); }
+  .ia-code-side .num{ color: var(--c-num); }
+  .ia-code-side .com{ color: var(--c-com); font-style: italic; }
+
+  .ia-state{ background: var(--paper-deep); padding: 18px 22px; display: flex; flex-direction: column; }
+  .ia-row{ display: grid; grid-template-columns: 80px 1fr; gap: 14px; align-items: center; padding: 9px 0; border-bottom: 1px dashed rgba(42,29,20,.18); }
+  .ia-row:last-child{ border-bottom: none; }
+  .ia-key{ font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .14em; font-weight: 700; }
+  .ia-val{ font-family: "JetBrains Mono", monospace; font-size: 1rem; color: var(--ink); font-weight: 700; padding: 5px 10px; background: var(--paper); border: 1px solid rgba(42,29,20,.12); transition: background .25s ease, color .25s ease, transform .25s ease; }
+  .ia-val.updated{ background: var(--ochre); color: var(--paper); border-color: var(--ochre-deep); transform: scale(1.04); }
+  .ia-val.ia-total{ font-size: 1.35rem; color: var(--blood); }
+  .ia-val.ia-total.updated{ color: var(--paper); background: var(--blood); border-color: var(--blood-dark); }
+
+  .ia-progress{ background: var(--paper-deep); padding: 16px 20px; min-height: 60px; }
+  .ia-progress-label{ font-family: "JetBrains Mono", monospace; font-size: .68rem; color: var(--ink-soft); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 12px; display: block; font-weight: 700; }
+  .ia-chain{ display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; font-family: "JetBrains Mono", monospace; font-size: .92rem; color: var(--ink); }
+  .ia-step{ display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; background: var(--paper); border: 1px solid rgba(42,29,20,.18); opacity: 0; transform: translateY(6px); transition: opacity .4s ease, transform .4s ease; }
+  .ia-step.in{ opacity: 1; transform: translateY(0); }
+  .ia-step.add{ color: var(--ochre-deep); font-weight: 700; border-color: var(--ochre); }
+  .ia-step.final{ background: var(--blood); color: var(--paper); border-color: var(--blood); font-weight: 700; padding: 5px 14px; }
+  .ia-arrow{ color: var(--ink-faint); font-weight: 700; opacity: 0; transition: opacity .3s ease; }
+  .ia-arrow.in{ opacity: 1; }
+
+  /* Estado pausado */
+  .iter-anim.paused .ia-num.current::before{ animation-play-state: paused; }
+  .iter-anim.paused .ia-state::after{ content: "⏸ pausado"; position: absolute; top: 8px; right: 12px; font-family: "JetBrains Mono", monospace; font-size: .68rem; color: var(--blood); letter-spacing: .15em; font-weight: 700; }
+  .iter-anim .ia-state{ position: relative; }
+
+  /* RANGE EXPLAINER */
+  .range-explain{ margin: 0 0 26px; padding: 22px 24px 24px; background: var(--paper-deep); border-left: 4px solid var(--ochre); position: relative; }
+  .re-head{ display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .re-head .re-icon{ width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; background: var(--ochre); color: var(--paper); font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.1rem; border-radius: 50%; }
+  .re-head h5{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.2rem; margin: 0; color: var(--ink); }
+  .re-head h5 code{ font-family: "JetBrains Mono", monospace; font-style: normal; background: var(--ink); color: var(--paper); padding: 2px 8px; font-size: .82em; }
+  .re-intro{ margin: 0 0 18px; font-size: .95rem; color: var(--ink-soft); line-height: 1.6; }
+  .re-intro code{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; color: var(--ink); font-size: .9em; border: 1px solid var(--line); }
+  .re-intro em{ color: var(--blood); font-style: italic; font-weight: 600; }
+
+  .re-anatomy{ background: var(--ink); padding: 24px 22px 22px; margin: 0 0 16px; position: relative; }
+  .re-call{ text-align: center; font-family: "JetBrains Mono", monospace; font-size: 1.55rem; color: var(--c-base); margin-bottom: 22px; font-weight: 700; letter-spacing: .02em; }
+  .re-tok{ display: inline-block; padding: 3px 10px; font-weight: 700; margin: 0 1px; }
+  .re-tok--start{ background: var(--olive); color: var(--paper); }
+  .re-tok--stop{ background: var(--blood); color: var(--paper); }
+  .re-tok--step{ background: var(--ochre); color: var(--paper); }
+
+  .re-args{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px){ .re-args{ grid-template-columns: 1fr; } }
+  .re-arg{ padding: 12px 14px 14px; background: rgba(239,230,210,.05); border-left: 3px solid currentColor; }
+  .re-arg--start{ border-left-color: #c8dd96; }
+  .re-arg--stop{ border-left-color: #f0a090; }
+  .re-arg--step{ border-left-color: #f0c8a0; }
+  .re-arg-name{ display: block; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: .92rem; margin-bottom: 5px; }
+  .re-arg--start .re-arg-name{ color: #c8dd96; }
+  .re-arg--stop .re-arg-name{ color: #f0a090; }
+  .re-arg--step .re-arg-name{ color: #f0c8a0; }
+  .re-arg-desc{ display: block; font-size: .85rem; line-height: 1.5; color: rgba(239,230,210,.85); font-family: "Newsreader", serif; }
+  .re-arg-desc em{ font-weight: 600; color: var(--paper); font-style: italic; }
+
+  .re-result{ display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-top: 10px; }
+  .re-result .re-arrow{ color: var(--ochre-deep); font-weight: 700; font-size: 1.1rem; }
+  .re-result-label{ font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .14em; font-weight: 700; }
+  .re-result-val{ font-family: "JetBrains Mono", monospace; font-size: 1.05rem; font-weight: 700; color: var(--blood); background: var(--paper); padding: 5px 14px; border: 1.5px solid var(--blood); }
+  .re-result-note{ font-family: "Newsreader", serif; font-style: italic; font-size: .9rem; color: var(--ink-soft); }
+  .re-result-note code{ font-family: "JetBrains Mono", monospace; font-style: normal; background: var(--paper); padding: 1px 5px; font-size: .9em; border: 1px solid var(--line); }
   .kata-box h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; margin: 6px 0 12px; }
   .kata-box .kname{ font-family: "JetBrains Mono", monospace; color: var(--blood); }
   .kata-box p{ margin: 0 0 10px; font-size: 1.02rem; color: var(--ink); line-height: 1.55; }
@@ -231,16 +365,62 @@
   .steps-mini li::before{ content: counter(sm); position: absolute; left: 0; top: 8px; width: 26px; height: 26px; background: var(--olive); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .9rem; }
   .steps-mini li strong{ color: var(--olive-deep); }
 
-  .suggest-box{ margin-top: 6px; padding: 24px 28px; background: var(--paper); border: 1px solid var(--line); }
-  .suggest-box h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; margin: 0 0 6px; color: var(--ink); }
-  .suggest-box .sb-sub{ margin: 0 0 18px; font-size: .9rem; color: var(--ink-soft); font-style: italic; }
-  .suggest-grid{ display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-  @media (max-width: 640px){ .suggest-grid{ grid-template-columns: 1fr; } }
-  .suggest-item{ display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--paper-deep); border: 1px solid var(--line); }
-  .suggest-item .kyu{ font-family: "JetBrains Mono", monospace; font-size: .7rem; font-weight: 700; background: var(--ink); color: var(--paper); padding: 3px 8px; flex-shrink: 0; }
-  .suggest-item .kname{ font-family: "JetBrains Mono", monospace; font-size: .86rem; color: var(--ink); }
-  .suggest-item .what{ font-size: .8rem; color: var(--ink-soft); margin-left: auto; font-style: italic; white-space: nowrap; }
-  @media (max-width: 520px){ .suggest-item .what{ display: none; } }
+  /* KATAS SELECTION */
+  .katas-section{ margin-top: 10px; }
+  .katas-intro{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: end; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px dashed rgba(42,29,20,.22); }
+  @media (max-width: 620px){ .katas-intro{ grid-template-columns: 1fr; gap: 10px; } }
+  .katas-intro h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0; color: var(--ink); }
+  .katas-intro h4 em{ color: var(--blood); font-weight: 700; }
+  .katas-intro .hint{ margin: 0; font-size: .88rem; color: var(--ink-soft); font-style: italic; text-align: right; }
+  @media (max-width: 620px){ .katas-intro .hint{ text-align: left; } }
+  .katas-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 920px){ .katas-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px){ .katas-grid{ grid-template-columns: 1fr; } }
+  .kata-card{ position: relative; background: var(--paper); border: 1.5px solid var(--ink); padding: 22px 22px 22px; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; text-align: left; font: inherit; color: inherit; width: 100%; display: flex; flex-direction: column; min-height: 200px; }
+  .kata-card:hover{ transform: translateY(-4px); box-shadow: 4px 5px 0 var(--olive); background: var(--paper-deep); }
+  .kata-card:focus-visible{ outline: 2px solid var(--blood); outline-offset: 3px; }
+  .kata-card .kc-top{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .kata-card .kc-kyu{ font-family: "JetBrains Mono", monospace; font-size: .7rem; font-weight: 700; background: var(--ink); color: var(--paper); padding: 4px 9px; letter-spacing: .08em; }
+  .kata-card .kc-num{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 2rem; color: var(--ochre); line-height: 1; }
+  .kata-card h5{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.2rem; margin: 0 0 8px; color: var(--ink); line-height: 1.15; }
+  .kata-card .kc-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--ink-faint); margin-bottom: 12px; }
+  .kata-card .kc-desc{ margin: 0 0 18px; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; flex: 1; }
+  .kata-card .kc-cta{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: .92rem; color: var(--blood); display: inline-flex; align-items: center; gap: 8px; margin-top: auto; }
+  .kata-card .kc-cta svg{ width: 14px; height: 14px; transition: transform .2s ease; }
+  .kata-card:hover .kc-cta svg{ transform: translateX(4px); }
+
+  /* MODAL */
+  .kata-modal{ position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+  .kata-modal.open{ opacity: 1; pointer-events: auto; }
+  .kata-modal-overlay{ position: absolute; inset: 0; background: rgba(42,29,20,.72); backdrop-filter: blur(3px); }
+  .kata-modal-content{ position: relative; background: var(--paper); border: 2px solid var(--ink); max-width: 720px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 40px 44px 44px; box-shadow: 8px 10px 0 var(--blood); transform: scale(.96) translateY(10px); transition: transform .25s ease; }
+  .kata-modal.open .kata-modal-content{ transform: scale(1) translateY(0); }
+  @media (max-width: 620px){ .kata-modal-content{ padding: 32px 24px 32px; } }
+  .kata-modal-close{ position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; background: var(--ink); color: var(--paper); border: none; font-family: "Fraunces", serif; font-size: 1.4rem; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s ease; }
+  .kata-modal-close:hover{ background: var(--blood); }
+  .km-top{ display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .km-kyu{ font-family: "JetBrains Mono", monospace; font-size: .72rem; font-weight: 700; background: var(--ink); color: var(--paper); padding: 4px 10px; letter-spacing: .1em; }
+  .km-id{ font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--ink-faint); letter-spacing: .1em; }
+  .km-title{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: clamp(28px, 4vw, 38px); line-height: 1.1; margin: 0 0 6px; color: var(--ink); }
+  .km-subtitle{ font-family: "JetBrains Mono", monospace; font-size: .85rem; color: var(--blood); margin: 0 0 24px; }
+  .km-body{ font-size: 1rem; line-height: 1.65; color: var(--ink); }
+  .km-body p{ margin: 0 0 14px; }
+  .km-body strong{ color: var(--blood); }
+  .km-body em{ color: var(--ochre-deep); font-style: italic; }
+  .km-body ul{ margin: 0 0 18px; padding-left: 22px; }
+  .km-body ul li{ margin-bottom: 8px; }
+  .km-body code{ font-family: "JetBrains Mono", monospace; font-size: .88em; background: var(--paper-deep); padding: 2px 6px; color: var(--ink); border: 1px solid var(--line); }
+  .km-body h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.1rem; margin: 22px 0 10px; color: var(--ink); padding-bottom: 4px; border-bottom: 1px dashed rgba(42,29,20,.22); }
+  .km-examples{ background: var(--ink); color: var(--c-base); padding: 16px 20px; margin: 14px 0 20px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.7; overflow-x: auto; }
+  .km-examples .arrow{ color: var(--c-kw); }
+  .km-examples .comment{ color: var(--c-com); }
+  .km-actions{ margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; padding-top: 22px; border-top: 1.5px solid var(--ink); }
+  .km-btn{ display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1rem; text-decoration: none; border: 2px solid var(--blood); background: var(--blood); color: var(--paper); transition: background .2s ease, transform .2s ease; cursor: pointer; }
+  .km-btn:hover{ background: var(--blood-dark); transform: translateY(-2px); }
+  .km-btn svg{ width: 16px; height: 16px; }
+  .km-btn-ghost{ background: transparent; color: var(--ink); border-color: var(--ink); }
+  .km-btn-ghost:hover{ background: var(--ink); color: var(--paper); }
+  body.modal-open{ overflow: hidden; }
 
   /* CIERRE */
   .cierre{ margin: 120px 0 80px; padding: 70px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
@@ -439,12 +619,13 @@
       <h2 class="display">Resolvamos uno <em>juntos</em>.</h2>
     </div>
     <p class="intro">
-      Antes de que practiques, te muestro cómo lo hago yo — en vivo, sin red. Vamos a resolver un kata
-      clásico de 8 kyu. Fíjate menos en el código final y más en <em>el orden en que pienso</em>: primero
-      entiendo, luego razono, después escribo, y al final pruebo.
+      Antes de que practiques, te muestro cómo lo hago yo — en vivo, sin red. Vamos a resolver
+      <strong>dos katas</strong> juntos. El primero refuerza lo que ya sabemos (variables, condicionales).
+      El segundo asoma la cabeza hacia la <em>próxima clase</em> con un concepto nuevo: el bucle <code class="mono">for</code>.
+      Fíjate menos en el código final y más en <em>el orden en que pienso</em>.
     </p>
 
-    <div class="kata-box">
+    <div class="kata-box" data-label="EJEMPLO 01 · 8 KYU">
       <h3>Par o impar <span class="kname">· even_or_odd</span></h3>
       <p>
         Crea una función que reciba un número entero y devuelva la palabra <span class="mono">"Even"</span>
@@ -505,6 +686,215 @@
           <div class="test-row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> even_or_odd(-1) == "Odd" <span class="passed">PASS</span></div>
           <div class="test-summary">✓ Kata completado · ganaste honor</div>
         </div>
+      </div>
+    </div>
+
+    <!-- Separador entre ejemplos -->
+    <div class="example-divider">
+      <span class="line"></span>
+      <span class="label">y ahora <em>el segundo</em></span>
+      <span class="line"></span>
+    </div>
+
+    <div class="kata-box" data-label="EJEMPLO 02 · 7 KYU · ANTICIPO">
+      <h3>Suma de múltiplos <span class="kname">· sum_mul</span></h3>
+      <p>
+        Encuentra la <strong>suma de todos los múltiplos de <span class="mono">n</span></strong> que sean
+        <strong>menores que <span class="mono">m</span></strong>. Si <span class="mono">n</span> o
+        <span class="mono">m</span> no son enteros positivos, devuelve la cadena <span class="mono">"INVALID"</span>.
+        El propio <span class="mono">m</span> queda <em>excluido</em> de la suma.
+      </p>
+      <div class="io-mini">
+        <span class="io-pill"><b>Entrada:</b> dos enteros (n, m)</span>
+        <span class="io-pill"><b>Salida:</b> int o "INVALID"</span>
+        <span class="io-pill"><b>Ej:</b> sum_mul(2, 9) → 20</span>
+        <span class="io-pill"><b>Ej:</b> sum_mul(4, -7) → "INVALID"</span>
+      </div>
+      <span class="preview-tag">⟶ incluye <code>for</code> · próxima clase a fondo</span>
+    </div>
+
+    <div class="reason-steps">
+      <div class="reason-step">
+        <div class="rn">1</div>
+        <h4>Entender</h4>
+        <p>Recibo dos números. Devuelvo la suma de los múltiplos de <span class="mono">n</span> menores que <span class="mono">m</span>.</p>
+      </div>
+      <div class="reason-step">
+        <div class="rn">2</div>
+        <h4>Validar</h4>
+        <p>Antes de calcular, verifico que ambos sean positivos. Si no, salgo con <span class="mono">"INVALID"</span>.</p>
+      </div>
+      <div class="reason-step">
+        <div class="rn">3</div>
+        <h4>Recorrer</h4>
+        <p>Los múltiplos van de <span class="mono">n</span> en <span class="mono">n</span>. Necesito visitarlos uno a uno: eso es un <span class="mono">for</span>.</p>
+      </div>
+      <div class="reason-step">
+        <div class="rn">4</div>
+        <h4>Acumular</h4>
+        <p>En cada vuelta del bucle <em>sumo</em> el múltiplo a un total que empezó en cero. Al final, devuelvo el total.</p>
+      </div>
+    </div>
+
+    <div class="live-code-grid">
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">solution.py</span></div>
+        <pre><span class="kw">def</span> <span class="fn">sum_mul</span>(n, m):
+    <span class="com"># 1) validamos: ambos deben ser positivos</span>
+    <span class="kw">if</span> n &lt;= <span class="num">0</span> <span class="kw">or</span> m &lt;= <span class="num">0</span>:
+        <span class="kw">return</span> <span class="str">"INVALID"</span>
+
+    <span class="com"># 2) acumulador, empieza en cero</span>
+    total = <span class="num">0</span>
+
+    <span class="com"># 3) recorremos múltiplos: n, 2n, 3n... &lt; m</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(n, m, n):
+        total += i
+
+    <span class="kw">return</span> total
+
+
+<span class="com"># versión corta (cuando dominemos for):</span>
+<span class="com"># return sum(range(n, m, n)) if n > 0 and m > 0 else "INVALID"</span></pre>
+      </div>
+
+      <div class="test-panel">
+        <div class="tp-bar">▶ TESTS · 4 passed</div>
+        <div class="tp-body">
+          <div class="test-row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> sum_mul(2, 9) == 20 <span class="passed">PASS</span></div>
+          <div class="test-row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> sum_mul(3, 13) == 30 <span class="passed">PASS</span></div>
+          <div class="test-row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> sum_mul(4, 123) == 1860 <span class="passed">PASS</span></div>
+          <div class="test-row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span> sum_mul(4, -7) == "INVALID" <span class="passed">PASS</span></div>
+          <div class="test-summary">✓ Kata completado · ganaste honor</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITERATION ANIMATION -->
+    <div class="iter-anim" id="iter-anim">
+      <div class="ia-head">
+        <h4>El bucle <em>en cámara lenta</em></h4>
+        <p class="ia-sub">
+          <strong>Iterar</strong> significa <em>repetir un mismo bloque de código</em>, una vez por cada
+          valor de una secuencia. Abajo puedes <strong>cambiar n y m</strong>, aplicar y observar cómo
+          el <code>for</code> recorre los múltiplos uno a uno.
+        </p>
+      </div>
+
+      <!-- Explicación de range() -->
+      <div class="range-explain">
+        <div class="re-head">
+          <span class="re-icon">?</span>
+          <h5>¿Qué hace <code>range()</code>?</h5>
+        </div>
+        <p class="re-intro">
+          <code>range()</code> es la función que <em>fabrica la secuencia de números</em> sobre la que el
+          <code>for</code> va a iterar. No imprime nada; solo entrega los valores uno a uno cuando se le piden.
+          Puede recibir hasta <strong>tres argumentos</strong>:
+        </p>
+
+        <div class="re-anatomy">
+          <div class="re-call">
+            range(<span class="re-tok re-tok--start" id="re-tok-start">2</span>, <span class="re-tok re-tok--stop" id="re-tok-stop">9</span>, <span class="re-tok re-tok--step" id="re-tok-step">2</span>)
+          </div>
+          <div class="re-args">
+            <div class="re-arg re-arg--start">
+              <span class="re-arg-name">start = <span id="re-arg-start">2</span></span>
+              <span class="re-arg-desc">desde qué número empieza · <em>se incluye</em></span>
+            </div>
+            <div class="re-arg re-arg--stop">
+              <span class="re-arg-name">stop = <span id="re-arg-stop">9</span></span>
+              <span class="re-arg-desc">hasta qué número llega · <em>NO se incluye</em></span>
+            </div>
+            <div class="re-arg re-arg--step">
+              <span class="re-arg-name">step = <span id="re-arg-step">2</span></span>
+              <span class="re-arg-desc">de cuánto en cuánto avanza · el <em>"salto"</em></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="re-result">
+          <span class="re-result-label">produce</span>
+          <span class="re-result-val" id="re-output">2, 4, 6, 8</span>
+          <span class="re-arrow">→</span>
+          <span class="re-result-note"><span id="re-count">cuatro valores</span> · el <code>for</code> dará <em><span id="re-vueltas">cuatro vueltas</span></em>.</span>
+        </div>
+      </div>
+
+      <!-- Barra de control: inputs + play/reset -->
+      <div class="ia-controls-bar">
+        <div class="icb-row">
+          <div class="ia-inputs">
+            <label class="ia-input-group">
+              <span class="ia-input-label">n</span>
+              <input type="number" class="ia-input" id="ia-input-n" value="2" min="1" max="9" step="1" inputmode="numeric" />
+            </label>
+            <label class="ia-input-group">
+              <span class="ia-input-label">m</span>
+              <input type="number" class="ia-input" id="ia-input-m" value="9" min="2" max="15" step="1" inputmode="numeric" />
+            </label>
+            <button class="ia-btn ia-btn--apply" data-action="apply" type="button">Aplicar</button>
+          </div>
+          <div class="ia-controls">
+            <button class="ia-btn" data-action="play" type="button">▶ Reproducir</button>
+            <button class="ia-btn" data-action="reset" type="button">↻ Reiniciar</button>
+          </div>
+        </div>
+        <p class="ia-input-hint">
+          Cambia los valores de <code>n</code> (múltiplo) y <code>m</code> (tope), presiona <strong>Aplicar</strong> y luego <strong>Reproducir</strong>. Recomendado: <code>n</code> entre 1–9 · <code>m</code> entre 2–15.
+        </p>
+        <div class="ia-error" id="ia-error">—</div>
+      </div>
+
+      <div class="ia-track">
+        <div class="ia-numberline">
+          <span class="ia-num" data-n="1">1</span>
+          <span class="ia-num" data-n="2">2</span>
+          <span class="ia-num" data-n="3">3</span>
+          <span class="ia-num" data-n="4">4</span>
+          <span class="ia-num" data-n="5">5</span>
+          <span class="ia-num" data-n="6">6</span>
+          <span class="ia-num" data-n="7">7</span>
+          <span class="ia-num" data-n="8">8</span>
+          <span class="ia-num excluded" data-n="9">9</span>
+        </div>
+      </div>
+
+      <div class="ia-legend">
+        <span><span class="ia-dot ia-dot--cur"></span>valor actual de <code style="font-family:inherit;font-style:italic">i</code></span>
+        <span><span class="ia-dot ia-dot--mul"></span>ya visitado (sumado)</span>
+        <span><span class="ia-dot ia-dot--excl"></span><em>m</em> excluido del rango</span>
+      </div>
+
+      <div class="ia-grid">
+        <div class="ia-code-side">
+          <pre><span class="ln" data-line="for"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num" id="ia-code-n">2</span>, <span class="num" id="ia-code-m">9</span>, <span class="num" id="ia-code-n2">2</span>):</span>
+<span class="ln" data-line="add">    total += i   <span class="com"># i = ?, total = ?</span></span></pre>
+        </div>
+
+        <div class="ia-state">
+          <div class="ia-row">
+            <span class="ia-key">iter</span>
+            <span class="ia-val" id="ia-iter">—</span>
+          </div>
+          <div class="ia-row">
+            <span class="ia-key">i</span>
+            <span class="ia-val" id="ia-i">—</span>
+          </div>
+          <div class="ia-row">
+            <span class="ia-key">cálculo</span>
+            <span class="ia-val" id="ia-calc">—</span>
+          </div>
+          <div class="ia-row">
+            <span class="ia-key">total</span>
+            <span class="ia-val ia-total" id="ia-total">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ia-progress">
+        <span class="ia-progress-label">construyendo la suma · paso a paso</span>
+        <div class="ia-chain" id="ia-chain"></div>
       </div>
     </div>
   </section>
@@ -581,32 +971,112 @@
         </div>
       </div>
 
-      <div class="live-note">
-        <p><strong>Los katas los comparto en clase.</strong> Voy a proyectar los dos enlaces de Codewars y los pegaré en el chat del grupo. Trabaja en tu propia cuenta para que tu progreso quede guardado.</p>
-      </div>
-
       <ol class="steps-mini">
         <li>Crea tu cuenta gratis en <strong>codewars.com</strong> (si aún no la tienes).</li>
-        <li>Abre el <strong>primer kata</strong> que comparta y selecciona <strong>Python</strong> como lenguaje.</li>
+        <li>Explora las <strong>cinco tarjetas</strong> de abajo y elige <strong>dos cualquiera</strong>.</li>
+        <li>Haz clic en una tarjeta para leer el problema completo en español.</li>
         <li>Aplica el método: lee dos veces, razona, escribe, prueba.</li>
         <li>Cuando pasen todos los tests, da clic en <strong>Submit</strong> y pasa al segundo kata.</li>
         <li>Si te atoras, levanta la mano — pero primero <em>inténtalo de verdad</em>.</li>
       </ol>
 
-      <div class="suggest-box">
-        <h4>Katas de respaldo (8 kyu)</h4>
-        <p class="sb-sub">Por si terminas antes o quieres practicar más en casa. Búscalos por nombre en Codewars:</p>
-        <div class="suggest-grid">
-          <div class="suggest-item"><span class="kyu">8 kyu</span><span class="kname">Opposite number</span><span class="what">cambiar de signo</span></div>
-          <div class="suggest-item"><span class="kyu">8 kyu</span><span class="kname">Convert minutes to seconds</span><span class="what">multiplicar</span></div>
-          <div class="suggest-item"><span class="kyu">8 kyu</span><span class="kname">Sum of positive</span><span class="what">sumar y filtrar</span></div>
-          <div class="suggest-item"><span class="kyu">8 kyu</span><span class="kname">Return Negative</span><span class="what">valor absoluto</span></div>
-          <div class="suggest-item"><span class="kyu">8 kyu</span><span class="kname">Is he gonna survive?</span><span class="what">comparar</span></div>
-          <div class="suggest-item"><span class="kyu">8 kyu</span><span class="kname">Century From Year</span><span class="what">división entera</span></div>
+      <div class="katas-section">
+        <div class="katas-intro">
+          <h4>Elige <em>2</em> de estos 5 katas</h4>
+          <p class="hint">Clic en una tarjeta para ver el problema completo en español.</p>
+        </div>
+
+        <div class="katas-grid" id="katas-grid">
+          <button class="kata-card" data-kata="leap-years" type="button">
+            <div class="kc-top">
+              <span class="kc-kyu">7 kyu</span>
+              <span class="kc-num">01</span>
+            </div>
+            <h5>Años bisiestos</h5>
+            <span class="kc-tag">leap_years</span>
+            <p class="kc-desc">Determina si un año dado es bisiesto siguiendo las tres reglas del calendario gregoriano.</p>
+            <span class="kc-cta">Ver problema
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </button>
+
+          <button class="kata-card" data-kata="set-alarm" type="button">
+            <div class="kc-top">
+              <span class="kc-kyu">8 kyu</span>
+              <span class="kc-num">02</span>
+            </div>
+            <h5>Poner el despertador</h5>
+            <span class="kc-tag">set_alarm</span>
+            <p class="kc-desc">Decide si debes poner el despertador en función de si estás empleado y si estás de vacaciones.</p>
+            <span class="kc-cta">Ver problema
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </button>
+
+          <button class="kata-card" data-kata="basic-assignment" type="button">
+            <div class="kc-top">
+              <span class="kc-kyu">8 kyu</span>
+              <span class="kc-num">03</span>
+            </div>
+            <h5>Asignación básica</h5>
+            <span class="kc-tag">basic variable assignment</span>
+            <p class="kc-desc">Un código que debería guardar un valor en una variable no funciona. ¿Puedes descubrir por qué y arreglarlo?</p>
+            <span class="kc-cta">Ver problema
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </button>
+
+          <button class="kata-card" data-kata="personalized-message" type="button">
+            <div class="kc-top">
+              <span class="kc-kyu">8 kyu</span>
+              <span class="kc-num">04</span>
+            </div>
+            <h5>Mensaje personalizado</h5>
+            <span class="kc-tag">grasshopper · greet</span>
+            <p class="kc-desc">Crea una función que salude distinto al jefe y al invitado, usando un condicional simple.</p>
+            <span class="kc-cta">Ver problema
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </button>
+
+          <button class="kata-card" data-kata="real-floor" type="button">
+            <div class="kc-top">
+              <span class="kc-kyu">7 kyu</span>
+              <span class="kc-num">05</span>
+            </div>
+            <h5>¿Cuál es el piso real?</h5>
+            <span class="kc-tag">get_real_floor</span>
+            <p class="kc-desc">Convierte un piso del sistema americano al europeo, lidiando con la planta baja y el inexistente piso 13.</p>
+            <span class="kc-cta">Ver problema
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </button>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- KATA MODAL -->
+  <div class="kata-modal" id="kata-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="km-title">
+    <div class="kata-modal-overlay" data-close></div>
+    <div class="kata-modal-content">
+      <button class="kata-modal-close" data-close aria-label="Cerrar">×</button>
+      <div class="km-top">
+        <span class="km-kyu" id="km-kyu">8 kyu</span>
+        <span class="km-id" id="km-id">Codewars · Python</span>
+      </div>
+      <h3 class="km-title" id="km-title">—</h3>
+      <p class="km-subtitle" id="km-subtitle">—</p>
+      <div class="km-body" id="km-body">—</div>
+      <div class="km-actions">
+        <a class="km-btn" id="km-link" href="#" target="_blank" rel="noopener noreferrer">
+          Resolver en Codewars
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+        <button class="km-btn km-btn-ghost" type="button" data-close>Cerrar</button>
+      </div>
+    </div>
+  </div>
 
   <!-- CIERRE -->
   <section class="cierre reveal">
@@ -638,6 +1108,517 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  // ====== Katas data + modal ======
+  const katas = {
+    'leap-years': {
+      kyu: '7 kyu',
+      title: 'Años bisiestos',
+      subtitle: 'leap_years(year)',
+      url: 'https://www.codewars.com/kata/526c7363236867513f0005ca',
+      body: `
+        <p>En este kata debes determinar si un año dado es <strong>bisiesto</strong> o no. Por si no recuerdas las reglas, aquí están:</p>
+        <ul>
+          <li>Los años divisibles entre <strong>4</strong> son bisiestos,</li>
+          <li>pero los años divisibles entre <strong>100</strong> <em>no</em> son bisiestos,</li>
+          <li>pero los años divisibles entre <strong>400</strong> <em>sí</em> son bisiestos.</li>
+        </ul>
+        <p>Los años que se evalúan están en el rango <code>1600 ≤ año ≤ 4000</code>.</p>
+        <h4>Pista</h4>
+        <p>La función recibe un entero y debe devolver <code>True</code> o <code>False</code>. Las tres reglas se aplican <em>en orden</em>: una excepción sobre otra excepción.</p>
+        <h4>Ejemplos</h4>
+        <div class="km-examples">
+is_leap_year(2000) <span class="arrow">=&gt;</span> True   <span class="comment"># divisible entre 400</span>
+is_leap_year(1900) <span class="arrow">=&gt;</span> False  <span class="comment"># divisible entre 100, no entre 400</span>
+is_leap_year(2024) <span class="arrow">=&gt;</span> True   <span class="comment"># divisible entre 4</span>
+is_leap_year(2023) <span class="arrow">=&gt;</span> False  <span class="comment"># no divisible entre 4</span>
+        </div>
+      `
+    },
+    'set-alarm': {
+      kyu: '8 kyu',
+      title: 'Poner el despertador',
+      subtitle: 'set_alarm(employed, vacation)',
+      url: 'https://www.codewars.com/kata/568dcc3c7f12767a62000038',
+      body: `
+        <p>Escribe una función llamada <code>set_alarm</code> que reciba dos parámetros booleanos:</p>
+        <ul>
+          <li><code>employed</code> → <code>True</code> si estás empleado.</li>
+          <li><code>vacation</code> → <code>True</code> si estás de vacaciones.</li>
+        </ul>
+        <p>La función debe devolver <code>True</code> si estás <strong>empleado y NO estás de vacaciones</strong> (porque esas son las circunstancias en las que necesitas poner el despertador). Debe devolver <code>False</code> en cualquier otro caso.</p>
+        <h4>Ejemplos</h4>
+        <div class="km-examples">
+employed | vacation
+True     | True     <span class="arrow">=&gt;</span> False
+True     | False    <span class="arrow">=&gt;</span> True
+False    | True     <span class="arrow">=&gt;</span> False
+False    | False    <span class="arrow">=&gt;</span> False
+        </div>
+        <p><em>Pista:</em> se resuelve con una sola línea usando un operador lógico.</p>
+      `
+    },
+    'basic-assignment': {
+      kyu: '8 kyu',
+      title: 'Asignación básica de variable',
+      subtitle: 'name = "codewa.rs"',
+      url: 'https://www.codewars.com/kata/50ee6b0bdeab583673000025/train/python',
+      body: `
+        <p>Este código <em>debería</em> guardar el texto <code>"codewa.rs"</code> en una variable llamada <code>name</code>, pero <strong>no está funcionando</strong>. ¿Puedes descubrir por qué y arreglarlo?</p>
+        <h4>Lo que verás al abrir el kata</h4>
+        <p>Encontrarás unas pocas líneas de Python con un error sutil. Tu tarea es <strong>identificar el error</strong> y corregirlo para que la variable <code>name</code> contenga el valor correcto.</p>
+        <h4>Pistas para pensarlo</h4>
+        <ul>
+          <li>¿Cómo se asigna realmente un valor a una variable en Python?</li>
+          <li>¿Las cadenas de texto necesitan algún símbolo especial alrededor?</li>
+          <li>¿El nombre de la variable está escrito correctamente?</li>
+        </ul>
+        <p>Este kata es un guiño a las primeras lecciones: te entrena el ojo para detectar errores de sintaxis, que serán tus enemigos durante semanas.</p>
+      `
+    },
+    'personalized-message': {
+      kyu: '8 kyu',
+      title: 'Mensaje personalizado',
+      subtitle: 'greet(name, owner)',
+      url: 'https://www.codewars.com/kata/5772da22b89313a4d50012f7/train/python',
+      body: `
+        <p>Crea una función que dé un <strong>saludo personalizado</strong>. La función recibe dos parámetros: <code>name</code> (nombre del visitante) y <code>owner</code> (nombre del dueño).</p>
+        <p>Usa un condicional para devolver el mensaje correcto:</p>
+        <h4>Reglas</h4>
+        <ul>
+          <li>Si <code>name</code> es igual a <code>owner</code> → devuelve <code>"Hello boss"</code>.</li>
+          <li>En cualquier otro caso → devuelve <code>"Hello guest"</code>.</li>
+        </ul>
+        <h4>Ejemplos</h4>
+        <div class="km-examples">
+greet("Daniel", "Daniel") <span class="arrow">=&gt;</span> "Hello boss"
+greet("Greg",   "Daniel") <span class="arrow">=&gt;</span> "Hello guest"
+greet("Ana",    "Ana")    <span class="arrow">=&gt;</span> "Hello boss"
+        </div>
+        <p><em>Cuida la ortografía exacta del mensaje</em> — los tests comparan cadena contra cadena.</p>
+      `
+    },
+    'real-floor': {
+      kyu: '7 kyu',
+      title: '¿Cuál es el piso real?',
+      subtitle: 'get_real_floor(n)',
+      url: 'https://www.codewars.com/kata/574b3b1599d8f897470018f6/train/python',
+      body: `
+        <p>Los americanos son gente curiosa: en sus edificios, el <strong>primer piso</strong> es en realidad la <strong>planta baja</strong>, y además <strong>no existe el piso 13</strong> (por superstición).</p>
+        <p>Escribe una función que, dado un piso en el sistema americano, devuelva el piso equivalente en el sistema europeo.</p>
+        <h4>Reglas</h4>
+        <ul>
+          <li>El piso <strong>1</strong> americano corresponde a la <strong>planta baja (0)</strong> en Europa.</li>
+          <li>El piso <strong>13</strong> se omite — los pisos por encima bajan un número.</li>
+          <li>A partir del piso <strong>14</strong> americano, restamos <strong>dos posiciones</strong> (porque hay dos pisos omitidos abajo: el 1 y el 13).</li>
+          <li>Los <strong>sótanos</strong> (números negativos) se mantienen <em>igual</em>.</li>
+        </ul>
+        <h4>Ejemplos</h4>
+        <div class="km-examples">
+get_real_floor(1)  <span class="arrow">=&gt;</span> 0
+get_real_floor(0)  <span class="arrow">=&gt;</span> 0
+get_real_floor(5)  <span class="arrow">=&gt;</span> 4
+get_real_floor(15) <span class="arrow">=&gt;</span> 13
+get_real_floor(-3) <span class="arrow">=&gt;</span> -3
+        </div>
+        <p><em>Pista:</em> identifica tres casos según el valor del piso americano y aplica el ajuste correspondiente.</p>
+      `
+    }
+  };
+
+  const modal = document.getElementById('kata-modal');
+  const kmTitle = document.getElementById('km-title');
+  const kmSubtitle = document.getElementById('km-subtitle');
+  const kmKyu = document.getElementById('km-kyu');
+  const kmBody = document.getElementById('km-body');
+  const kmLink = document.getElementById('km-link');
+
+  function openKata(key){
+    const k = katas[key];
+    if (!k) return;
+    kmKyu.textContent = k.kyu;
+    kmTitle.textContent = k.title;
+    kmSubtitle.textContent = k.subtitle;
+    kmBody.innerHTML = k.body;
+    kmLink.href = k.url;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+  }
+  function closeKata(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+
+  document.querySelectorAll('#katas-grid .kata-card').forEach(card => {
+    card.addEventListener('click', () => openKata(card.dataset.kata));
+  });
+  modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeKata));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeKata(); });
+
+  // ====== Iteration animation (sum_mul) — queue-based, pausable, parameterizable ======
+  (function(){
+    const anim = document.getElementById('iter-anim');
+    if (!anim) return;
+
+    const iIter = anim.querySelector('#ia-iter');
+    const iI = anim.querySelector('#ia-i');
+    const iCalc = anim.querySelector('#ia-calc');
+    const iTotal = anim.querySelector('#ia-total');
+    const chain = anim.querySelector('#ia-chain');
+    const lineFor = anim.querySelector('.ln[data-line="for"]');
+    const lineAdd = anim.querySelector('.ln[data-line="add"]');
+    const playBtn = anim.querySelector('[data-action="play"]');
+    const resetBtn = anim.querySelector('[data-action="reset"]');
+    const applyBtn = anim.querySelector('[data-action="apply"]');
+    const inputN = anim.querySelector('#ia-input-n');
+    const inputM = anim.querySelector('#ia-input-m');
+    const errorEl = anim.querySelector('#ia-error');
+    const numberline = anim.querySelector('.ia-numberline');
+
+    // refs al explicador de range()
+    const reTokStart = document.getElementById('re-tok-start');
+    const reTokStop  = document.getElementById('re-tok-stop');
+    const reTokStep  = document.getElementById('re-tok-step');
+    const reArgStart = document.getElementById('re-arg-start');
+    const reArgStop  = document.getElementById('re-arg-stop');
+    const reArgStep  = document.getElementById('re-arg-step');
+    const reOutput   = document.getElementById('re-output');
+    const reCount    = document.getElementById('re-count');
+    const reVueltas  = document.getElementById('re-vueltas');
+    const codeN  = document.getElementById('ia-code-n');
+    const codeM  = document.getElementById('ia-code-m');
+    const codeN2 = document.getElementById('ia-code-n2');
+
+    // estado dinámico
+    let currentN = 2, currentM = 9;
+    let multiples = [2, 4, 6, 8];
+    let finalTotal = 20;
+
+    // estado de animación: 'idle' | 'playing' | 'paused' | 'done'
+    let state = 'idle';
+    let queue = [];
+    let timer = null;
+    let actionStart = 0;
+    let actionDelay = 0;
+    let remaining = 0;
+    let flashTimers = [];
+
+    function getNums(){ return anim.querySelectorAll('.ia-num'); }
+    function clearFlashTimers(){ flashTimers.forEach(id => clearTimeout(id)); flashTimers = []; }
+    function flash(el){
+      el.classList.add('updated');
+      flashTimers.push(setTimeout(() => el.classList.remove('updated'), 900));
+    }
+
+    // -------- helpers de presentación dinámica --------
+    const palabras = ['cero','una','dos','tres','cuatro','cinco','seis','siete','ocho','nueve','diez','once','doce','trece','catorce','quince'];
+    function nWord(n){ return palabras[n] !== undefined ? palabras[n] : String(n); }
+
+    function calcMultiples(n, m){
+      const out = [];
+      if (n <= 0 || m <= 0) return out;
+      for (let i = n; i < m; i += n) out.push(i);
+      return out;
+    }
+
+    function buildNumberLine(){
+      numberline.innerHTML = '';
+      for (let i = 1; i < currentM; i++){
+        const sp = document.createElement('span');
+        sp.className = 'ia-num';
+        sp.dataset.n = String(i);
+        sp.textContent = String(i);
+        numberline.appendChild(sp);
+      }
+      const mSp = document.createElement('span');
+      mSp.className = 'ia-num excluded';
+      mSp.dataset.n = String(currentM);
+      mSp.textContent = String(currentM);
+      numberline.appendChild(mSp);
+    }
+
+    function updateExplainer(){
+      reTokStart.textContent = currentN;
+      reTokStop.textContent  = currentM;
+      reTokStep.textContent  = currentN;
+      reArgStart.textContent = currentN;
+      reArgStop.textContent  = currentM;
+      reArgStep.textContent  = currentN;
+      codeN.textContent  = currentN;
+      codeM.textContent  = currentM;
+      codeN2.textContent = currentN;
+
+      if (multiples.length === 0){
+        reOutput.textContent = '(secuencia vacía)';
+        reCount.textContent  = 'ningún valor';
+        reVueltas.textContent = 'no dará ninguna vuelta';
+      } else {
+        reOutput.textContent = multiples.join(', ');
+        const word = nWord(multiples.length);
+        const single = multiples.length === 1;
+        reCount.textContent   = word + ' valor' + (single ? '' : 'es');
+        reVueltas.textContent = word + ' vuelta' + (single ? '' : 's');
+      }
+    }
+
+    function recalc(){
+      multiples = calcMultiples(currentN, currentM);
+      finalTotal = multiples.reduce((a,b) => a+b, 0);
+    }
+
+    // -------- inputs --------
+    function applyValues(autoPlay){
+      const n = parseInt(inputN.value, 10);
+      const m = parseInt(inputM.value, 10);
+      const errs = [];
+      inputN.classList.remove('invalid');
+      inputM.classList.remove('invalid');
+
+      if (!Number.isInteger(n) || n < 1 || n > 9){
+        errs.push('n debe ser un entero entre 1 y 9');
+        inputN.classList.add('invalid');
+      }
+      if (!Number.isInteger(m) || m < 2 || m > 15){
+        errs.push('m debe ser un entero entre 2 y 15');
+        inputM.classList.add('invalid');
+      }
+
+      if (errs.length){
+        errorEl.textContent = '⚠ ' + errs.join(' · ');
+        errorEl.classList.add('show');
+        return false;
+      }
+      errorEl.classList.remove('show');
+      errorEl.textContent = '';
+
+      currentN = n;
+      currentM = m;
+      recalc();
+      updateExplainer();
+      buildNumberLine();
+      reset();
+      if (autoPlay) startFresh();
+      return true;
+    }
+
+    // -------- control de animación --------
+    function setButton(){
+      if (state === 'playing')      playBtn.innerHTML = '⏸ Pausar';
+      else if (state === 'paused')  playBtn.innerHTML = '▶ Continuar';
+      else if (state === 'done')    playBtn.innerHTML = '↻ Volver a ver';
+      else                          playBtn.innerHTML = '▶ Reproducir';
+      anim.classList.toggle('paused', state === 'paused');
+    }
+
+    function reset(){
+      if (timer){ clearTimeout(timer); timer = null; }
+      clearFlashTimers();
+      queue = [];
+      state = 'idle';
+      remaining = 0;
+      getNums().forEach(n => n.classList.remove('current','visited'));
+      iIter.textContent = '—';
+      iI.textContent = '—';
+      iCalc.textContent = '—';
+      iTotal.textContent = '0';
+      iTotal.classList.remove('updated');
+      iIter.classList.remove('updated');
+      iI.classList.remove('updated');
+      iCalc.classList.remove('updated');
+      lineFor.classList.remove('active');
+      lineAdd.classList.remove('active');
+      chain.innerHTML = '<span class="ia-step in">total = 0</span>';
+      setButton();
+    }
+
+    function pushChain(html, cls){
+      const arrow = document.createElement('span');
+      arrow.className = 'ia-arrow';
+      arrow.textContent = '→';
+      chain.appendChild(arrow);
+      const step = document.createElement('span');
+      step.className = 'ia-step' + (cls ? ' ' + cls : '');
+      step.innerHTML = html;
+      chain.appendChild(step);
+      flashTimers.push(setTimeout(() => { arrow.classList.add('in'); step.classList.add('in'); }, 30));
+    }
+
+    function enqueue(fn, delay){ queue.push({ fn, delay: delay || 0 }); }
+
+    function runHead(useDelay){
+      if (queue.length === 0){
+        state = 'done';
+        setButton();
+        return;
+      }
+      actionDelay = useDelay;
+      remaining = useDelay;
+      actionStart = Date.now();
+      timer = setTimeout(() => {
+        timer = null;
+        const item = queue.shift();
+        item.fn();
+        processNext();
+      }, useDelay);
+    }
+
+    function processNext(){
+      if (queue.length === 0){
+        state = 'done';
+        setButton();
+        return;
+      }
+      if (state !== 'playing') return;
+      runHead(queue[0].delay);
+    }
+
+    function pause(){
+      if (state !== 'playing') return;
+      if (timer){ clearTimeout(timer); timer = null; }
+      const elapsed = Date.now() - actionStart;
+      remaining = Math.max(0, actionDelay - elapsed);
+      state = 'paused';
+      setButton();
+    }
+
+    function resume(){
+      if (state !== 'paused') return;
+      state = 'playing';
+      setButton();
+      if (queue.length === 0){
+        state = 'done';
+        setButton();
+        return;
+      }
+      runHead(remaining);
+    }
+
+    function buildQueue(){
+      // caso especial: sin múltiplos (n >= m). El for no entra al cuerpo.
+      if (multiples.length === 0){
+        enqueue(() => {
+          lineFor.classList.add('active');
+        }, 500);
+        enqueue(() => {
+          iIter.textContent = '0';
+          iI.textContent = '—';
+          flash(iIter); flash(iI);
+        }, 1100);
+        enqueue(() => {
+          lineFor.classList.remove('active');
+          iCalc.textContent = currentN + ' ≥ ' + currentM + ' · no entra al cuerpo';
+          flash(iCalc);
+        }, 1100);
+        enqueue(() => {
+          pushChain('<strong>= 0</strong> · sin vueltas', 'final');
+          state = 'done';
+          setButton();
+        }, 1400);
+        return;
+      }
+
+      let runningTotal = 0;
+      for (let idx = 0; idx < multiples.length; idx++){
+        const val = multiples[idx];
+        const prev = runningTotal;
+        const next = prev + val;
+        const isFirst = idx === 0;
+
+        // (a) la línea del for se activa y el cursor salta al nuevo valor de i
+        enqueue(() => {
+          lineFor.classList.add('active');
+          lineAdd.classList.remove('active');
+          getNums().forEach(n => n.classList.remove('current'));
+          const target = anim.querySelector('.ia-num[data-n="' + val + '"]');
+          if (target) target.classList.add('current');
+        }, isFirst ? 500 : 900);
+
+        // (b) actualiza iter e i
+        enqueue(() => {
+          iIter.textContent = String(idx + 1);
+          iI.textContent = String(val);
+          flash(iIter); flash(iI);
+        }, 1100);
+
+        // (c) cuerpo del bucle: muestra el cálculo
+        enqueue(() => {
+          lineFor.classList.remove('active');
+          lineAdd.classList.add('active');
+          iCalc.textContent = prev + ' + ' + val + ' = ' + next;
+          flash(iCalc);
+        }, 1200);
+
+        // (d) acumulador se actualiza
+        enqueue(() => {
+          iTotal.textContent = String(next);
+          iTotal.classList.add('updated');
+        }, 1100);
+
+        // (e) número queda marcado como visitado, se empuja al rastro
+        enqueue(() => {
+          iTotal.classList.remove('updated');
+          lineAdd.classList.remove('active');
+          const target = anim.querySelector('.ia-num[data-n="' + val + '"]');
+          if (target){ target.classList.remove('current'); target.classList.add('visited'); }
+          pushChain('+ ' + val + ' <span style="color:var(--ink-faint)">→</span> <strong>' + next + '</strong>', 'add');
+        }, 1100);
+
+        runningTotal = next;
+      }
+
+      // cierre: la condición del for falla
+      const nextWouldBe = multiples[multiples.length - 1] + currentN;
+      enqueue(() => {
+        lineFor.classList.add('active');
+        lineAdd.classList.remove('active');
+        getNums().forEach(n => n.classList.remove('current'));
+      }, 1100);
+      enqueue(() => {
+        lineFor.classList.remove('active');
+        iCalc.textContent = '¿siguiente? ' + nextWouldBe + ' ≥ ' + currentM + ' · fin';
+        flash(iCalc);
+      }, 1100);
+      enqueue(() => {
+        pushChain('<strong>= ' + finalTotal + '</strong> ✓', 'final');
+        state = 'done';
+        setButton();
+      }, 1400);
+    }
+
+    function startFresh(){
+      reset();
+      flashTimers.push(setTimeout(() => {
+        state = 'playing';
+        buildQueue();
+        setButton();
+        processNext();
+      }, 200));
+    }
+
+    function onPlayBtn(){
+      if (state === 'playing') return pause();
+      if (state === 'paused')  return resume();
+      startFresh(); // 'idle' o 'done'
+    }
+
+    // -------- bind --------
+    playBtn.addEventListener('click', onPlayBtn);
+    resetBtn.addEventListener('click', reset);
+    applyBtn.addEventListener('click', () => applyValues(true));
+    [inputN, inputM].forEach(inp => {
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter'){ e.preventDefault(); applyValues(true); }
+      });
+    });
+
+    // -------- init --------
+    recalc();
+    updateExplainer();
+    buildNumberLine();
+    reset();
+  })();
 </script>
 
 </body>
