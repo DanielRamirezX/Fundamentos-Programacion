@@ -1,0 +1,1533 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 05 · Sobre hombros de gigantes · Funciones, scope y módulos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 70px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; animation: floatNum 6s ease-in-out infinite; }
+  @keyframes floatNum{ 0%,100%{ transform: translateY(0) rotate(0); } 50%{ transform: translateY(-10px) rotate(-1deg); } }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 30px; display:flex; align-items:center; gap: 16px; opacity: 0; animation: slideInLeft .8s ease-out .2s forwards; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  @keyframes slideInLeft{ from{ opacity: 0; transform: translateX(-30px); } to{ opacity: 1; transform: translateX(0); } }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 124px); line-height: .95; margin: 0 0 36px; letter-spacing: -.02em; }
+  .hero h1 .line1, .hero h1 .line2{ display: block; opacity: 0; transform: translateY(20px); animation: heroLine .8s ease-out forwards; }
+  .hero h1 .line1{ animation-delay: .4s; } .hero h1 .line2{ animation-delay: .65s; }
+  @keyframes heroLine{ to{ opacity: 1; transform: translateY(0); } }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 740px; font-size: 1.25rem; line-height: 1.55; color: var(--ink-soft); opacity: 0; transform: translateY(15px); animation: heroLine .8s ease-out .95s forwards; }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 60px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; opacity: 0; transform: translateY(15px); animation: heroLine .8s ease-out 1.15s forwards; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* DEADLINE TODAY BANNER */
+  .today-banner{ margin: 40px 0 0; padding: 20px 28px; background: var(--ink); color: var(--paper); display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: center; position: relative; z-index: 2; }
+  @media (max-width: 700px){ .today-banner{ grid-template-columns: 1fr; gap: 10px; text-align: center; } }
+  .today-banner .ic{ width: 38px; height: 38px; background: var(--blood); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .today-banner .ic svg{ width: 22px; height: 22px; color: var(--paper); }
+  .today-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: rgba(239,230,210,.95); }
+  .today-banner .txt strong{ color: #f0c8a0; font-style: normal; font-weight: 600; }
+  .today-banner .badge{ background: var(--blood); color: var(--paper); padding: 6px 14px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .85rem; letter-spacing: .1em; }
+
+  /* MANIFIESTO */
+  .manifiesto{ margin: 70px 0; padding: 60px 40px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); position: relative; }
+  .manifiesto .tag{ position: absolute; top:-12px; left: 32px; background: var(--paper); padding: 0 14px; font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); }
+  .manifiesto blockquote{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-weight: 300; font-size: clamp(28px, 4.3vw, 52px); line-height: 1.18; color: var(--ink); letter-spacing: -.01em; }
+  .manifiesto blockquote .accent{ color: var(--blood); font-weight: 600; }
+  .manifiesto blockquote .accent-ochre{ color: var(--ochre); font-weight: 600; }
+  .manifiesto cite{ display:block; margin-top: 28px; font-size: 1rem; font-style: normal; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* CONCEPT BLOCKS */
+  .concept{ margin: 110px 0; }
+  .concept .c-head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .concept .c-head{ grid-template-columns: 1fr; gap: 10px; } }
+  .concept .c-num{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(70px, 11vw, 140px); line-height: .8; color: var(--blood); }
+  .concept .c-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(34px, 5vw, 60px); line-height: 1; margin: 0 0 14px; letter-spacing: -.01em; }
+  .concept .c-head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .concept .c-head .c-sub{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 660px; }
+  .concept .c-head .c-sub .mono{ background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+
+  .concept-body{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .concept-body{ grid-template-columns: 1fr; gap: 22px; } }
+  .concept-prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .concept-prose p em{ color: var(--blood-dark); font-style: italic; }
+  .concept-prose p strong{ color: var(--blood); font-weight: 600; }
+  .concept-prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .concept-prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .concept-prose ul li strong{ color: var(--ink); }
+  .concept-prose .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .concept-prose .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* CODE BLOCK */
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 22px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* SCOPE HOUSE Visualization */
+  .scope-house{ background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 26px 22px 22px; }
+  .scope-house h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.1rem; margin: 0 0 18px; text-align: center; color: var(--ink); }
+  .scope-house svg{ width: 100%; height: auto; display: block; max-width: 500px; margin: 0 auto; }
+  .scope-house .legend{ margin-top: 18px; display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; font-size: .82rem; color: var(--ink-soft); }
+  .scope-house .legend span{ display: inline-flex; align-items: center; gap: 7px; }
+  .scope-house .legend .sw{ width: 14px; height: 14px; }
+  .legend .sw.global{ background: var(--ochre); }
+  .legend .sw.local{ background: var(--blood); }
+
+  /* SVG animations */
+  .scope-house-svg .pi-global{ animation: piPulse 2.4s ease-in-out infinite; transform-origin: 240px 146px; transform-box: fill-box; }
+  @keyframes piPulse{ 0%,100%{ opacity: 1; } 50%{ opacity: .72; } }
+  .scope-house-svg .flow-arrow{ stroke-dasharray: 7 5; animation: flowDown 1.4s linear infinite; }
+  @keyframes flowDown{ to{ stroke-dashoffset: -24; } }
+  .scope-house-svg .blocked-arrow{ stroke-dasharray: 4 3; animation: blockedPulse 1.6s ease-in-out infinite; }
+  @keyframes blockedPulse{ 0%,100%{ opacity: .35; } 50%{ opacity: 1; } }
+  .scope-house-svg .ok-label{ animation: okPulse 2.4s ease-in-out infinite; }
+  @keyframes okPulse{ 0%,100%{ opacity: .65; } 50%{ opacity: 1; } }
+
+  /* Annotated code with indentation guides */
+  .anno-code{
+    background: var(--ink);
+    padding: 20px 24px 22px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: .82rem;
+    line-height: 1.95;
+    color: var(--c-base);
+    overflow-x: auto;
+  }
+  .acl{ display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; position: relative; min-height: 1.95em; }
+  .acl.empty{ min-height: .7em; }
+  .acl .ac-line{ white-space: pre; position: relative; }
+  .acl .ac-line .kw{ color: var(--c-kw); }
+  .acl .ac-line .str{ color: var(--c-str); }
+  .acl .ac-line .num{ color: var(--c-num); }
+  .acl .ac-line .com{ color: var(--c-com); font-style: italic; }
+  .acl .ac-line .fn{ color: var(--c-fn); }
+  /* Etiquetas de alcance dentro del código: oro = GLOBAL, rojo = LOCAL */
+  .acl .ac-line .com.scope-global{ color: #e0aa46; font-style: normal; font-weight: 700; letter-spacing: .02em; }
+  .acl .ac-line .com.scope-local{ color: #e2856f; font-style: normal; font-weight: 700; letter-spacing: .02em; }
+  .acl .ac-note{
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-size: .78rem;
+    padding: 2px 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: .01em;
+  }
+  .acl .ac-note.ok{ background: rgba(93,102,56,.28); color: #c8dd96; }
+  .acl .ac-note.err{ background: rgba(160,36,24,.3); color: #f0a890; }
+  .acl .ac-note.muted{ color: rgba(239,230,210,.4); font-size: .74rem; background: transparent; padding: 2px 0; }
+
+  /* Guías de indentación — línea vertical que marca la tabulación de Python.
+     Se dibuja sobre la fila completa (.acl), no sobre el texto centrado, y se
+     ancla a una columna de caracteres (ch) para alinearse exacto con el sangrado.
+     top/bottom a 0 → las filas contiguas se unen sin sobresalir del bloque. */
+  .acl.lvl-1{ padding-left: 0; }
+  .acl.lvl-1::before{
+    content: '';
+    position: absolute;
+    left: 2ch;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(220, 90, 70, .85);
+    box-shadow: 0 0 6px rgba(220, 90, 70, .45);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform .55s ease-out;
+    pointer-events: none;
+  }
+  .reveal.in .acl.lvl-1::before{ transform: scaleY(1); }
+  /* dibujado progresivo por fila indentada (posición entre los hermanos div) */
+  .reveal.in .acl.lvl-1:nth-of-type(5)::before{ transition-delay: .25s; }
+  .reveal.in .acl.lvl-1:nth-of-type(6)::before{ transition-delay: .35s; }
+  .reveal.in .acl.lvl-1:nth-of-type(7)::before{ transition-delay: .45s; }
+  .reveal.in .acl.lvl-1:nth-of-type(10)::before{ transition-delay: .6s; }
+
+  /* LIBRARY (bookshelf) */
+  .library{ margin: 130px 0; }
+  .library .head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 36px; }
+  @media (max-width: 700px){ .library .head{ grid-template-columns: 1fr; gap: 10px; } }
+  .library .head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(70px, 11vw, 140px); line-height: .8; color: var(--ochre); }
+  .library .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(34px, 5vw, 60px); line-height: 1; margin: 0 0 14px; letter-spacing: -.01em; }
+  .library .head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .library .head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .library .head p strong{ color: var(--ochre-deep); }
+
+  .shelf{ background: var(--paper-deep); border: 2px solid var(--ink); padding: 30px 30px 36px; position: relative; }
+  .shelf .shelf-label{ position: absolute; top: -13px; left: 28px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .22em; font-weight: 700; }
+  .books{ display: flex; align-items: flex-end; gap: 4px; justify-content: center; flex-wrap: wrap; min-height: 200px; padding-top: 16px; padding-bottom: 6px; border-bottom: 8px solid var(--ochre-deep); box-shadow: 0 9px 0 var(--ink); }
+  .book{ display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 14px 10px 16px; min-width: 60px; color: var(--paper); writing-mode: vertical-rl; transform: rotate(180deg); font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .92rem; box-shadow: inset -3px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.07); transition: transform .3s ease, box-shadow .3s ease; cursor: pointer; position: relative; border: none; outline-offset: 4px; }
+  .book:hover{ transform: rotate(180deg) translateY(-6px); }
+  .book:focus-visible{ outline: 3px solid var(--ink); }
+  .book.active{ transform: rotate(180deg) translateY(-10px); box-shadow: inset -3px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.1), 0 8px 0 var(--ink), 0 0 0 3px var(--ink); }
+  .book.tall{ height: 200px; } .book.med{ height: 175px; } .book.short{ height: 155px; }
+  .book.math{ background: var(--blood); } .book.random{ background: var(--olive); } .book.datetime{ background: var(--ochre-deep); } .book.os{ background: #4a3a2c; } .book.json{ background: #6b5080; } .book.sys{ background: var(--blood-dark); } .book.statistics{ background: var(--olive-deep); } .book.csv{ background: #8a6320; } .book.time{ background: #4a6b86; }
+  .shelf .caption{ margin-top: 24px; text-align: center; font-style: italic; color: var(--ink-soft); font-size: .95rem; }
+  .shelf .caption strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* BOOK INFO PANEL (click on a book) */
+  .book-info-panel{
+    margin-top: 26px;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    min-height: 230px;
+    position: relative;
+    overflow: hidden;
+    transition: border-top-color .35s ease;
+    border-top: 6px solid var(--ink);
+  }
+  .bi-placeholder{
+    padding: 50px 30px;
+    text-align: center;
+    color: var(--ink-faint);
+    transition: opacity .35s ease;
+  }
+  .bi-placeholder svg{ width: 38px; height: 38px; margin-bottom: 12px; color: var(--ink-faint); }
+  .bi-placeholder p{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-size: 1.15rem; }
+  .bi-placeholder p strong{ color: var(--blood-dark); font-style: normal; }
+  .bi-placeholder.hidden{ display: none; }
+
+  .bi-content{ padding: 26px 30px 28px; opacity: 0; transition: opacity .35s ease; }
+  .bi-content.shown{ opacity: 1; }
+
+  .bi-header{ display: flex; align-items: center; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
+  .bi-color{ width: 16px; height: 26px; display: inline-block; background: var(--ink); transition: background .35s ease; }
+  .bi-name{ font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--ink); font-size: 1.8rem; line-height: 1; margin: 0; }
+  .bi-tag{ font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-faint); margin-left: 4px; }
+  .bi-desc{ margin: 0 0 22px; font-size: 1rem; color: var(--ink); line-height: 1.55; max-width: 760px; }
+  .bi-desc strong{ color: var(--blood); }
+  .bi-desc em{ color: var(--blood-dark); font-style: italic; }
+
+  .bi-grid{ display: grid; grid-template-columns: 1.05fr 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 820px){ .bi-grid{ grid-template-columns: 1fr; gap: 16px; } }
+  .bi-funcs h5, .bi-ex h5{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: .92rem; margin: 0 0 10px; color: var(--ink-soft); letter-spacing: .02em; }
+  .bi-funcs ul{ margin: 0; padding: 0; list-style: none; }
+  .bi-funcs ul li{ padding: 7px 0; border-bottom: 1px dashed var(--line); font-family: "Newsreader", serif; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; }
+  .bi-funcs ul li:last-child{ border-bottom: none; }
+  .bi-funcs ul li code{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 2px 8px; color: var(--ink); font-size: .82rem; border: 1px solid var(--line); white-space: nowrap; }
+  .bi-ex pre{ margin: 0; padding: 16px 18px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .8rem; line-height: 1.7; overflow-x: auto; }
+  .bi-ex pre .kw{ color: var(--c-kw); } .bi-ex pre .str{ color: var(--c-str); } .bi-ex pre .num{ color: var(--c-num); } .bi-ex pre .com{ color: var(--c-com); font-style: italic; } .bi-ex pre .fn{ color: var(--c-fn); } .bi-ex pre .out{ color: rgba(239,230,210,.55); }
+
+  /* color borders per module — applied dynamically via inline style */
+
+  .import-syntax{ margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 760px){ .import-syntax{ grid-template-columns: 1fr; } }
+  .import-card{ background: var(--paper); border: 1.5px solid var(--ink); padding: 22px 22px 24px; }
+  .import-card h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; margin: 0 0 6px; color: var(--blood); }
+  .import-card .sub-h{ font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+  .import-card pre{ margin: 0 0 12px; padding: 14px 16px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.7; }
+  .import-card pre .kw{ color: var(--c-kw); } .import-card pre .fn{ color: var(--c-fn); } .import-card pre .com{ color: var(--c-com); font-style: italic; } .import-card pre .num{ color: var(--c-num); }
+  .import-card p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.5; }
+  .import-card p strong{ color: var(--ink); }
+
+  /* LIVE CODING */
+  .live{ margin: 130px 0; }
+  .live .head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; margin-bottom: 30px; }
+  @media (max-width: 700px){ .live .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .live .head .badge{ background: var(--blood); color: var(--paper); padding: 10px 20px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.1rem; letter-spacing: .04em; display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .live .head .badge .rec{ width: 12px; height: 12px; border-radius: 50%; background: var(--paper); animation: blink 1.4s ease-in-out infinite; }
+  @keyframes blink{ 0%,100%{ opacity: 1; } 50%{ opacity: .3; } }
+  .live .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(32px, 4.5vw, 58px); line-height: 1; margin: 0; letter-spacing: -.01em; }
+  .live .head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .live .intro{ color: var(--ink-soft); font-size: 1.05rem; max-width: 760px; margin: 0 0 30px; }
+
+  .problem-box{ background: var(--paper-deep); border: 2px solid var(--ink); padding: 26px 30px 28px; margin-bottom: 30px; position: relative; }
+  .problem-box::before{ content: "EL PROBLEMA"; position: absolute; top: -13px; left: 28px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .22em; font-weight: 700; }
+  .problem-box h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; margin: 6px 0 10px; }
+  .problem-box p{ margin: 0; font-size: 1.02rem; color: var(--ink); line-height: 1.55; }
+  .problem-box p em{ font-style: italic; color: var(--blood-dark); }
+
+  .build-step{ display: grid; grid-template-columns: 220px 1fr; gap: 26px; padding: 22px 0; border-bottom: 1px dashed var(--line); align-items: start; }
+  @media (max-width: 800px){ .build-step{ grid-template-columns: 1fr; gap: 14px; } }
+  .build-step:first-of-type{ border-top: 1.5px solid var(--ink); }
+  .build-step .bs-step{ display: flex; align-items: center; gap: 14px; }
+  .build-step .bs-num{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 2.4rem; color: var(--ochre); line-height: .85; flex-shrink: 0; }
+  .build-step .bs-title{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; color: var(--ink); }
+  .build-step .bs-body p{ margin: 0 0 12px; font-size: .98rem; color: var(--ink-soft); line-height: 1.55; }
+  .build-step .bs-body p strong{ color: var(--ink); }
+  .build-step .bs-code{ background: var(--ink); margin: 0; }
+  .build-step .bs-code pre{ margin: 0; padding: 14px 18px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.7; color: var(--c-base); overflow-x: auto; }
+  .build-step .bs-code .kw{ color: var(--c-kw); } .build-step .bs-code .str{ color: var(--c-str); } .build-step .bs-code .num{ color: var(--c-num); } .build-step .bs-code .com{ color: var(--c-com); font-style: italic; } .build-step .bs-code .fn{ color: var(--c-fn); } .build-step .bs-code .out{ color: rgba(239,230,210,.55); }
+
+  .final-code{ margin-top: 36px; }
+  .final-code h3{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(24px, 3.5vw, 36px); margin: 0 0 16px; text-align: center; }
+  .final-code h3 em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .final-code .fc-grid{ display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 900px){ .final-code .fc-grid{ grid-template-columns: 1fr; } }
+  .runs-panel{ background: var(--ink); }
+  .runs-panel .bar{ padding: 12px 18px; background: rgba(93,102,56,.25); border-bottom: 1px solid rgba(239,230,210,.12); font-family: "JetBrains Mono", monospace; font-size: .75rem; color: #c8dd96; letter-spacing: .1em; }
+  .runs-panel .body{ padding: 18px 22px; font-family: "JetBrains Mono", monospace; font-size: .82rem; color: var(--c-base); line-height: 1.9; }
+  .runs-panel .body .prompt{ color: rgba(239,230,210,.45); }
+  .runs-panel .body .val{ color: #c8dd96; }
+  .runs-panel .body .out{ color: #f0c8a0; }
+
+  /* DEBUGGING SECTION */
+  .debug{ margin: 130px 0; }
+  .debug .d-head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 32px; }
+  @media (max-width: 700px){ .debug .d-head{ grid-template-columns: 1fr; gap: 10px; } }
+  .debug .d-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(70px, 11vw, 140px); line-height: .8; color: var(--blood); }
+  .debug .d-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(34px, 5vw, 60px); line-height: 1; margin: 0 0 14px; letter-spacing: -.01em; }
+  .debug .d-head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .debug .d-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .debug .d-head p strong{ color: var(--blood); }
+
+  .err-types{ display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 44px; }
+  @media (max-width: 820px){ .err-types{ grid-template-columns: 1fr; } }
+  .err-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ink); padding: 22px 22px 24px; }
+  .err-card.syntax{ border-top-color: var(--ochre); }
+  .err-card.runtime{ border-top-color: var(--blood); }
+  .err-card.logic{ border-top-color: var(--olive); }
+  .err-card .et-tag{ font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  .err-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.25rem; margin: 0 0 10px; }
+  .err-card.syntax h3{ color: var(--ochre-deep); } .err-card.runtime h3{ color: var(--blood); } .err-card.logic h3{ color: var(--olive-deep); }
+  .err-card p{ margin: 0 0 12px; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; }
+  .err-card p:last-child{ margin-bottom: 0; }
+  .err-card .ex{ font-family: "JetBrains Mono", monospace; font-size: .76rem; background: var(--ink); color: #f0a890; padding: 8px 12px; display: block; }
+  .err-card.syntax .ex{ color: #f0c8a0; } .err-card.logic .ex{ color: #c8dd96; }
+
+  /* traceback reading */
+  .traceback-explain{ display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: center; margin-bottom: 44px; }
+  @media (max-width: 860px){ .traceback-explain{ grid-template-columns: 1fr; } }
+  .tb-box{ background: var(--ink); padding: 0; }
+  .tb-box .tb-bar{ padding: 10px 16px; background: rgba(160,36,24,.25); border-bottom: 1px solid rgba(239,230,210,.12); font-family: "JetBrains Mono", monospace; font-size: .72rem; color: #f0a890; letter-spacing: .08em; }
+  .tb-box pre{ margin: 0; padding: 18px 20px; font-family: "JetBrains Mono", monospace; font-size: .78rem; line-height: 1.7; color: var(--c-base); overflow-x: auto; }
+  .tb-box pre .dim{ color: rgba(239,230,210,.45); }
+  .tb-box pre .hot{ color: #f0a890; font-weight: 700; }
+  .tb-box pre .file{ color: #f0c8a0; }
+  .tb-read{ }
+  .tb-read h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.2rem; margin: 0 0 14px; color: var(--ink); }
+  .tb-read ol{ margin: 0; padding-left: 20px; }
+  .tb-read ol li{ font-size: .96rem; color: var(--ink-soft); margin-bottom: 12px; line-height: 1.5; }
+  .tb-read ol li strong{ color: var(--blood); }
+  .tb-read ol li .mono{ background: var(--paper-deep); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+
+  /* debugger tools */
+  .dbg-tools h3{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(24px, 3.5vw, 38px); margin: 0 0 8px; text-align: center; }
+  .dbg-tools h3 em{ font-weight: 600; color: var(--blood); font-style: italic; }
+  .dbg-tools .dt-sub{ text-align: center; color: var(--ink-soft); margin: 0 0 30px; font-size: 1rem; }
+  .dbg-layout{ display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 900px){ .dbg-layout{ grid-template-columns: 1fr; } }
+  /* mock VS Code debugger panel */
+  .vscode{ background: #1e1a15; border: 1px solid rgba(239,230,210,.15); overflow: hidden; font-family: "JetBrains Mono", monospace; }
+  .vscode .vs-top{ display: flex; align-items: center; gap: 8px; padding: 9px 14px; background: rgba(239,230,210,.05); border-bottom: 1px solid rgba(239,230,210,.1); }
+  .vscode .vs-top .dot{ width: 10px; height: 10px; border-radius: 50%; } .vscode .vs-top .dot.r{ background: #c0563d; } .vscode .vs-top .dot.y{ background: var(--ochre); } .vscode .vs-top .dot.g{ background: var(--olive); }
+  .vscode .vs-top .fname{ margin-left: 8px; font-size: .72rem; color: rgba(239,230,210,.5); }
+  .vscode .vs-toolbar{ display: flex; gap: 4px; padding: 7px 12px; background: rgba(160,36,24,.12); border-bottom: 1px solid rgba(239,230,210,.08); flex-wrap: wrap; }
+  .vscode .vs-btn{ display: inline-flex; align-items: center; gap: 5px; font-size: .64rem; color: #f0c8a0; padding: 3px 8px; border: 1px solid rgba(240,200,160,.25); border-radius: 3px; letter-spacing: .04em; }
+  .vscode .vs-btn svg{ width: 11px; height: 11px; }
+  .vscode .vs-code{ padding: 14px 0; font-size: .76rem; line-height: 1.85; }
+  .vscode .vs-line{ display: grid; grid-template-columns: 38px 16px 1fr; align-items: center; padding: 0 12px 0 0; position: relative; }
+  .vscode .vs-line .ln{ text-align: right; padding-right: 12px; color: rgba(239,230,210,.3); font-size: .7rem; }
+  .vscode .vs-line .bp{ width: 9px; height: 9px; border-radius: 50%; justify-self: center; }
+  .vscode .vs-line.has-bp .bp{ background: #e0513d; }
+  .vscode .vs-line.current{ background: rgba(240,200,160,.13); }
+  .vscode .vs-line.current::after{ content: '▸'; position: absolute; left: 40px; color: #f0c8a0; }
+  .vscode .vs-line .code{ color: var(--c-base); white-space: pre; }
+  .vscode .vs-line .code .kw{ color: var(--c-kw); } .vscode .vs-line .code .num{ color: var(--c-num); } .vscode .vs-line .code .fn{ color: var(--c-fn); } .vscode .vs-line .code .com{ color: var(--c-com); font-style: italic; } .vscode .vs-line .code .str{ color: var(--c-str); }
+  .vs-vars{ background: var(--paper-deep); border: 1px solid var(--line); padding: 0; }
+  .vs-vars .vv-title{ padding: 10px 16px; background: var(--ink); color: #f0c8a0; font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .1em; }
+  .vs-vars .vv-body{ padding: 8px 0; }
+  .vs-vars .vv-row{ display: flex; justify-content: space-between; gap: 14px; padding: 8px 16px; border-bottom: 1px dashed var(--line); font-family: "JetBrains Mono", monospace; font-size: .82rem; }
+  .vs-vars .vv-row:last-child{ border-bottom: none; }
+  .vs-vars .vv-name{ color: var(--blood); } .vs-vars .vv-val{ color: var(--ink); font-weight: 700; }
+  .vs-vars .vv-type{ color: var(--ink-faint); font-size: .72rem; }
+  .dbg-note{ margin-top: 18px; padding: 18px 24px; background: var(--paper-deep); border-left: 4px solid var(--ochre); }
+  .dbg-note p{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); line-height: 1.5; }
+  .dbg-note p strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* ===== Depurador interactivo paso a paso ===== */
+  .dbg-tools .vscode{ position: relative; }
+  .dbg-tools .vscode .vs-code{ position: relative; }
+  /* barra de controles: que quepan sin cortarse (envuelven como bloques enteros) */
+  .vscode .vs-toolbar{ gap: 6px; padding: 8px 12px; }
+  .vscode .vs-toolbar .vs-btn{ cursor: pointer; background: transparent; position: relative; flex: 0 0 auto; white-space: nowrap; font-size: .66rem; padding: 5px 9px; line-height: 1.1; transition: background .15s ease, border-color .15s ease, color .15s ease, transform .08s ease; }
+  .vscode .vs-toolbar .vs-btn svg{ flex-shrink: 0; }
+  .vscode .vs-toolbar .vs-btn:hover{ background: rgba(240,200,160,.16); border-color: rgba(240,200,160,.55); }
+  .vscode .vs-toolbar .vs-btn:active{ transform: translateY(1px); }
+  .vscode .vs-toolbar .vs-btn.playing{ background: rgba(240,200,160,.24); border-color: #f0c8a0; color: #ffe8c8; box-shadow: 0 0 0 1px rgba(240,200,160,.3), 0 0 12px rgba(240,200,160,.25); }
+  .vscode .vs-toolbar .vs-btn[data-act="stop"].playing{ background: rgba(224,81,61,.28); border-color: #e0513d; color: #ffd6cc; box-shadow: 0 0 12px rgba(224,81,61,.3); }
+  /* barra de estado que explica, en vivo, qué hace cada control */
+  .vscode .vs-status{
+    display: flex; align-items: center; gap: 9px; min-height: 38px;
+    padding: 7px 14px; background: #14110d; border-bottom: 1px solid rgba(239,230,210,.08);
+    font-family: "Fraunces", serif; font-style: italic; font-size: .82rem; color: rgba(239,230,210,.6);
+    border-left: 3px solid transparent; transition: border-color .25s ease, color .25s ease;
+  }
+  .vscode .vs-status .vs-status-key{ flex-shrink: 0; font-family: "JetBrains Mono", monospace; font-style: normal; font-weight: 700; font-size: .66rem; padding: 2px 7px; border-radius: 3px; background: rgba(240,200,160,.16); color: #f0c8a0; letter-spacing: .03em; }
+  .vscode .vs-status .vs-status-text{ line-height: 1.35; }
+  .vscode.act .vs-status{ color: #f4ecdc; }
+  /* línea actual: transición suave de fondo */
+  .vscode .vs-line{ transition: background .3s ease; }
+  .vscode .vs-line.current{ background: rgba(240,200,160,.16); }
+  /* flecha-puntero que SE DESLIZA de una línea a otra para mostrar el movimiento */
+  .dbg-tools .vscode .vs-line.current::after{ display: none; }   /* ocultamos la flechita estática */
+  .vscode .dbg-runner{
+    position: absolute; left: 40px; z-index: 6; pointer-events: none;
+    font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: .9rem; line-height: 1;
+    color: #ffd27a; text-shadow: 0 0 9px rgba(255,200,120,.85);
+    opacity: 0; transform: translateY(-50%);
+    transition: top .5s cubic-bezier(.45,.05,.2,1), opacity .3s ease, color .25s ease;
+  }
+  .vscode .dbg-runner.show{ opacity: 1; }
+  .vscode .dbg-runner.up{ color: #b6e08a; text-shadow: 0 0 9px rgba(143,176,92,.9); }   /* sube: entra a la función */
+  .vscode .dbg-runner.down{ color: #ffd27a; text-shadow: 0 0 9px rgba(255,200,120,.85); }
+  /* destello verde en la línea que se acaba de ejecutar */
+  .vscode .vs-line.flash{ animation: dbg-flash 1.1s ease-out; }
+  @keyframes dbg-flash{ 0%{ box-shadow: inset 3px 0 0 #8fb05c, inset 0 0 40px rgba(143,176,92,.5); } 100%{ box-shadow: inset 3px 0 0 transparent, inset 0 0 40px transparent; } }
+  /* franja de "función ejecutada entera" (Step Over sobre una llamada) */
+  .vscode .fn-sweep{ position: absolute; left: 0; right: 0; top: 0; height: 0; pointer-events: none; opacity: 0; background: rgba(143,176,92,.14); border-left: 3px solid rgba(143,176,92,.7); transition: opacity .3s ease; }
+  .vscode .fn-sweep.show{ opacity: 1; }
+  /* etiqueta flotante para Step Into / Step Out */
+  .vscode .dbg-cue{ position: absolute; left: 64px; z-index: 5; pointer-events: none; opacity: 0; display: flex; align-items: center; gap: 5px; font-family: "JetBrains Mono", monospace; font-size: .68rem; font-weight: 700; padding: 3px 9px; border-radius: 5px; box-shadow: 0 4px 12px rgba(0,0,0,.4); }
+  .vscode .dbg-cue.into{ background: #8fb05c; color: #14110d; }
+  .vscode .dbg-cue.out{ background: #f0c8a0; color: #14110d; }
+  .vscode .dbg-cue.show{ animation: dbg-cue 1.4s ease-out; }
+  @keyframes dbg-cue{ 0%{ opacity: 0; transform: translateY(-4px) scale(.92); } 14%{ opacity: 1; transform: translateY(0) scale(1); } 86%{ opacity: 1; } 100%{ opacity: 0; } }
+  /* estado detenido (Stop) */
+  .vscode.stopped .vs-code{ filter: grayscale(.7) brightness(.55); transition: filter .4s ease; }
+  .vscode .stop-overlay{ position: absolute; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(20,17,13,.5); z-index: 7; }
+  .vscode.stopped .stop-overlay{ display: flex; animation: dbg-fade .4s ease; }
+  .vscode .stop-overlay span{ font-family: "Fraunces", serif; font-style: italic; color: #f0c8a0; font-size: 1rem; padding: 9px 20px; border-radius: 6px; border: 1px solid rgba(240,200,160,.4); background: rgba(20,17,13,.82); }
+  @keyframes dbg-fade{ from{ opacity: 0; } to{ opacity: 1; } }
+  /* invitación a interactuar */
+  .dbg-hint{ text-align: center; margin: 16px 0 0; font-family: "Fraunces", serif; font-style: italic; color: var(--ink-faint); font-size: .92rem; }
+  .dbg-hint b{ color: var(--ochre-deep); font-style: normal; }
+  @media (prefers-reduced-motion: reduce){
+    .vscode .vs-line.current::after, .vscode .vs-line.flash, .vscode .dbg-cue.show{ animation: none; }
+  }
+
+  /* DOWNLOAD EXERCISE */
+  .download-box{ margin-top: 30px; background: var(--ink); color: var(--paper); padding: 0; overflow: hidden; }
+  .download-box .db-head{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 28px 32px; border-bottom: 1px solid rgba(239,230,210,.12); }
+  @media (max-width: 640px){ .download-box .db-head{ grid-template-columns: 1fr; } }
+  .download-box .db-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 0 0 6px; color: #f0c8a0; }
+  .download-box .db-head .file-meta{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: rgba(239,230,210,.55); }
+  .dl-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--blood); color: var(--paper); text-decoration: none; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; border: none; cursor: pointer; }
+  .dl-btn:hover{ background: var(--blood-dark); transform: translateY(-2px); box-shadow: 0 4px 0 var(--blood-dark); }
+  .dl-btn svg{ width: 18px; height: 18px; }
+  .download-box .db-body{ padding: 26px 32px 30px; }
+  .download-box .db-body > p{ margin: 0 0 18px; font-size: 1rem; color: rgba(239,230,210,.85); line-height: 1.55; }
+  .download-box .db-body > p strong{ color: #f0c8a0; }
+  .bug-counter{ display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+  .bug-pill{ display: inline-flex; align-items: center; gap: 7px; background: rgba(239,230,210,.08); border: 1px solid rgba(239,230,210,.15); padding: 7px 14px; font-size: .82rem; color: rgba(239,230,210,.85); }
+  .bug-pill .cnt{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; color: #f0a890; font-size: 1.1rem; }
+  .dl-steps{ margin: 0; padding: 0; list-style: none; counter-reset: dl; }
+  .dl-steps li{ counter-increment: dl; position: relative; padding: 11px 0 11px 40px; font-size: .98rem; color: rgba(239,230,210,.85); border-bottom: 1px dashed rgba(239,230,210,.12); line-height: 1.5; }
+  .dl-steps li:last-child{ border-bottom: none; }
+  .dl-steps li::before{ content: counter(dl); position: absolute; left: 0; top: 9px; width: 26px; height: 26px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .9rem; }
+  .dl-steps li strong{ color: #f0c8a0; }
+  .dl-steps li .mono{ background: rgba(239,230,210,.1); padding: 1px 6px; font-size: .85em; font-family: "JetBrains Mono", monospace; }
+
+  /* ACTIVITY (dos opciones) */
+  .activity{ margin: 130px 0; }
+  .activity .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 26px; }
+  @media (max-width: 700px){ .activity .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .activity .head .stamp{ border: 2.5px solid var(--olive); color: var(--olive-deep); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .activity h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5.5vw, 68px); line-height: 1; margin: 0 0 14px; letter-spacing: -.015em; }
+  .activity h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .activity .intro{ color: var(--ink-soft); font-size: 1.06rem; max-width: 760px; margin: 0 0 30px; }
+  .activity .intro strong{ color: var(--olive-deep); }
+
+  .options-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 780px){ .options-grid{ grid-template-columns: 1fr; } }
+  .option-card{ background: var(--paper-deep); border: 2.5px dashed var(--olive); padding: 28px 28px 30px; position: relative; transition: all .3s ease; }
+  .option-card:hover{ background: var(--paper); transform: translateY(-4px); box-shadow: 0 6px 0 var(--olive); }
+  .option-card .opt-label{ position: absolute; top: -13px; left: 24px; background: var(--olive); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .22em; font-weight: 700; }
+  .option-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; margin: 8px 0 12px; color: var(--olive-deep); }
+  .option-card p{ margin: 0 0 14px; font-size: 1rem; color: var(--ink); line-height: 1.55; }
+  .option-card .reqs{ margin: 16px 0 0; padding: 0; list-style: none; }
+  .option-card .reqs li{ padding: 7px 0 7px 24px; position: relative; font-size: .92rem; color: var(--ink-soft); border-bottom: 1px dashed rgba(42,29,20,.12); }
+  .option-card .reqs li:last-child{ border-bottom: none; }
+  .option-card .reqs li::before{ content: "✓"; position: absolute; left: 0; color: var(--olive); font-weight: 900; }
+  .option-card .reqs li .mono{ background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  .option-card .uses{ margin-top: 14px; padding: 12px 14px; background: var(--paper); border-left: 3px solid var(--ochre); font-size: .85rem; color: var(--ink-soft); font-style: italic; }
+  .option-card .uses strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* TAREA */
+  .tarea{ margin: 110px 0 80px; }
+  .tarea .head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .tarea .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .tarea .head .stamp{ border: 2.5px solid var(--blood); color: var(--blood); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .tarea h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5vw, 64px); margin: 0 0 12px; line-height: 1; letter-spacing: -.01em; }
+  .tarea h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .tarea .intro{ font-size: 1.05rem; color: var(--ink-soft); margin: 0 0 26px; max-width: 760px; }
+  .tarea .intro strong{ color: var(--blood); }
+  .deadline-banner{ background: var(--ink); color: var(--paper); padding: 16px 24px; margin-bottom: 26px; display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center; }
+  @media (max-width: 600px){ .deadline-banner{ grid-template-columns: 1fr; gap: 8px; text-align: center; } }
+  .deadline-banner .icon{ width: 36px; height: 36px; background: var(--blood); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .deadline-banner .icon svg{ width: 20px; height: 20px; color: var(--paper); }
+  .deadline-banner .text{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.08rem; }
+  .deadline-banner .text strong{ color: #f0c8a0; }
+  .deadline-banner .countdown-num{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; color: #f0c8a0; font-size: 1.3rem; }
+  .checklist{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 720px){ .checklist{ grid-template-columns: 1fr; } }
+  .check{ background: var(--paper-deep); padding: 24px 26px; border-left: 4px solid var(--blood); display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; transition: all .3s ease; }
+  .check:hover{ transform: translateX(4px); box-shadow: -4px 4px 0 var(--blood); }
+  .check .box{ width: 26px; height: 26px; border: 2px solid var(--ink); flex-shrink: 0; margin-top: 2px; background: var(--paper); }
+  .check h4{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.15rem; margin: 0 0 6px; }
+  .check p{ margin: 0; font-size: .94rem; color: var(--ink-soft); }
+  .check .deadline{ margin-top: 8px; font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--blood); }
+
+  /* CIERRE */
+  .cierre{ margin: 120px 0 80px; padding: 70px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(28px, 4.3vw, 52px); line-height: 1.18; margin: 24px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 920px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 36px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  /* FOOTER */
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 05 · Funciones, scope y módulos</span>
+    </div>
+    <div class="right">
+      Lunes 01.06.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Hoy cierra freeCodeCamp</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">05</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      <span class="line1">Sobre <span class="em-ochre">hombros</span></span>
+      <span class="line2">de <span class="em">gigantes.</span></span>
+    </h1>
+    <p class="lede">
+      En 1675, Isaac Newton escribió: <em>«Si he visto más lejos, es porque estoy sobre hombros
+      de gigantes»</em>. Hoy aprendes a usar las <strong>bibliotecas</strong> que otros escribieron, a
+      organizar tu código en <strong>funciones</strong>, y a entender el <em>alcance</em> de las variables.
+      Y luego viene lo más útil de todo: aprender a <strong>cazar tus propios errores</strong> con el
+      depurador de VS Code.<br/><br/>
+      Programar no es escribir código que funciona a la primera. <span class="underline-ochre">Es saber arreglar el que no funciona</span>.
+    </p>
+
+    <div class="today-banner">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+      <div class="txt">
+        <strong>Hoy cierra el deadline de freeCodeCamp.</strong> Si todavía te faltan retos, dedica
+        un rato hoy mismo. La entrega se cierra a las <em>23:59 h en Blackboard</em>.
+      </div>
+      <div class="badge">HOY · 23:59</div>
+    </div>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">Funciones, módulos y debugging</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Live coding</span>
+        <span class="value">Cazar bugs con el depurador</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Reto del día</span>
+        <span class="value">Arreglar un programa roto</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFIESTO -->
+  <section class="manifiesto reveal">
+    <span class="tag">La idea de hoy</span>
+    <blockquote class="display">
+      Todo programa nace <span class="accent-ochre italic">roto</span>.<br/>
+      Programar es, sobre todo, el arte de <span class="accent italic">repararlo</span>.
+    </blockquote>
+    <cite>— Por qué hoy aprendemos a depurar</cite>
+  </section>
+
+  <!-- CONCEPT 1: Funciones (refuerzo) -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">i.</div>
+      <div>
+        <h2 class="display">La <em>función</em>, otra vez.</h2>
+        <p class="c-sub">Ya las viste en freeCodeCamp. Aquí las consolidamos: anatomía, <span class="mono">return</span> contra <span class="mono">print</span>, y por qué importan más de lo que parecen.</p>
+      </div>
+    </div>
+
+    <div class="concept-body">
+      <div class="concept-prose">
+        <p>Una <strong>función</strong> es un bloque de código con nombre. Le pasas datos (los <em>parámetros</em>), hace algo con ellos, y te entrega un resultado (el <em>return</em>). Su propósito real no es solo «ahorrar líneas» — es darle <strong>nombre</strong> a una idea para poder usarla muchas veces.</p>
+        <ul>
+          <li><strong>def</strong> define la función; el nombre va seguido de paréntesis y dos puntos.</li>
+          <li><strong>Parámetros</strong> = lo que la función recibe (variables que solo viven dentro).</li>
+          <li><strong>return</strong> = el valor que entrega al terminar. No es lo mismo que <span class="mono">print</span>.</li>
+          <li>Todo lo que va indentado <em>debajo del def</em> es el cuerpo.</li>
+        </ul>
+        <div class="keypoint"><strong>print vs return:</strong> <span class="mono">print</span> muestra algo en pantalla y se acabó. <span class="mono">return</span> te entrega un valor para seguir trabajando con él. Si la función no devuelve nada, devuelve <span class="mono">None</span>.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">funciones.py</span></div>
+        <pre><span class="kw">def</span> <span class="fn">area_circulo</span>(radio):
+    area = <span class="num">3.14159</span> * radio ** <span class="num">2</span>
+    <span class="kw">return</span> area
+
+<span class="com"># la función se llama y guardamos el resultado</span>
+resultado = <span class="fn">area_circulo</span>(<span class="num">5</span>)
+<span class="fn">print</span>(resultado)   <span class="out"># 78.53975</span>
+
+<span class="com"># versión sin return (devuelve None)</span>
+<span class="kw">def</span> <span class="fn">saludar</span>(nombre):
+    <span class="fn">print</span>(<span class="str">f"Hola, {nombre}!"</span>)
+
+x = <span class="fn">saludar</span>(<span class="str">"Carlos"</span>)
+<span class="fn">print</span>(x)            <span class="out"># None</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT 2: SCOPE -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">ii.</div>
+      <div>
+        <h2 class="display">El <em>alcance</em>.</h2>
+        <p class="c-sub">Las variables tienen <em>vecindario</em>. <strong>Lo global se ve desde cualquier función</strong> (las flechas verdes lo muestran). <strong>Lo local no sale de su cuarto</strong> (las flechas rojas chocan con la pared). Esta regla es la fuente del 30% de los bugs de un principiante.</p>
+      </div>
+    </div>
+
+    <div class="concept-body">
+      <div class="scope-house">
+        <h4>La casa con cuartos</h4>
+        <svg class="scope-house-svg" viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-ok-s" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="#5d6638"/>
+            </marker>
+            <marker id="arr-no-s" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="#a02418"/>
+            </marker>
+          </defs>
+
+          <!-- techo -->
+          <polygon points="20,90 240,20 460,90" fill="#a02418" stroke="#2a1d14" stroke-width="2"/>
+          <!-- casa -->
+          <rect x="30" y="90" width="420" height="250" fill="#e6dbc2" stroke="#2a1d14" stroke-width="2"/>
+
+          <!-- ZONA GLOBAL (pasillo) -->
+          <rect x="48" y="102" width="384" height="64" fill="#fff5d9" stroke="#b5852a" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <text x="240" y="121" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="700" font-size="13" fill="#8a6320">PASILLO · alcance global</text>
+
+          <!-- PI box (pulsing) -->
+          <g class="pi-global">
+            <rect x="186" y="134" width="108" height="26" fill="#b5852a" stroke="#6e4a18" stroke-width="1.5" rx="2"/>
+            <text x="240" y="152" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="12" fill="#fff5d9">PI = 3.14159</text>
+          </g>
+
+          <!-- Flechas verdes (PI fluye a los cuartos) -->
+          <path class="flow-arrow" d="M210 162 Q 168 184, 135 210" stroke="#5d6638" stroke-width="2.5" fill="none" marker-end="url(#arr-ok-s)"/>
+          <text class="ok-label" x="138" y="190" font-family="Fraunces" font-style="italic" font-weight="700" font-size="12" fill="#424a26">PI entra ✓</text>
+
+          <path class="flow-arrow" d="M270 162 Q 312 184, 345 210" stroke="#5d6638" stroke-width="2.5" fill="none" marker-end="url(#arr-ok-s)"/>
+          <text class="ok-label" x="296" y="190" font-family="Fraunces" font-style="italic" font-weight="700" font-size="12" fill="#424a26">PI entra ✓</text>
+
+          <!-- CUARTO 1 (local) -->
+          <rect x="50" y="210" width="170" height="115" fill="#f4efe2" stroke="#a02418" stroke-width="2.5"/>
+          <text x="135" y="229" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#a02418">def area_circulo():</text>
+          <!-- variables locales -->
+          <rect x="72" y="238" width="126" height="22" fill="#a02418"/>
+          <text x="135" y="253" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="11" fill="#fff5d9">area, radio</text>
+          <!-- flecha bloqueada -->
+          <path class="blocked-arrow" d="M135 268 L135 296 L 88 296" stroke="#a02418" stroke-width="2" fill="none" marker-end="url(#arr-no-s)"/>
+          <text x="80" y="315" font-family="Fraunces" font-style="italic" font-weight="700" font-size="11" fill="#a02418">no sale ✗</text>
+
+          <!-- CUARTO 2 (local) -->
+          <rect x="260" y="210" width="170" height="115" fill="#f4efe2" stroke="#a02418" stroke-width="2.5"/>
+          <text x="345" y="229" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#a02418">def saludar():</text>
+          <rect x="305" y="238" width="80" height="22" fill="#a02418"/>
+          <text x="345" y="253" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="11" fill="#fff5d9">nombre</text>
+          <path class="blocked-arrow" d="M345 268 L345 296 L 392 296" stroke="#a02418" stroke-width="2" fill="none" marker-end="url(#arr-no-s)"/>
+          <text x="370" y="315" font-family="Fraunces" font-style="italic" font-weight="700" font-size="11" fill="#a02418">no sale ✗</text>
+        </svg>
+        <div class="legend">
+          <span><span class="sw global"></span> Global: viaja a cualquier cuarto</span>
+          <span><span class="sw local"></span> Local: se queda encerrada</span>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">scope.py</span></div>
+        <div class="anno-code">
+          <div class="acl"><span class="ac-line"><span class="com scope-global"># ═══ GLOBAL · el pasillo (visible en todo el archivo) ═══</span></span></div>
+          <div class="acl"><span class="ac-line">PI = <span class="num">3.14159</span></span><span class="ac-note ok">↑ visible en TODO el archivo</span></div>
+          <div class="acl empty"></div>
+
+          <div class="acl"><span class="ac-line"><span class="kw">def</span> <span class="fn">area_circulo</span>(radio):</span><span class="ac-note muted">define una función</span></div>
+          <div class="acl lvl-1"><span class="ac-line">    <span class="com scope-local"># ─── LOCAL · solo existe dentro de este cuarto ───</span></span></div>
+          <div class="acl lvl-1"><span class="ac-line">    area = PI * radio ** <span class="num">2</span></span><span class="ac-note ok">PI ✓ se ve aquí adentro</span></div>
+          <div class="acl lvl-1"><span class="ac-line">    <span class="kw">return</span> area</span><span class="ac-note muted">"area" solo vive aquí</span></div>
+          <div class="acl empty"></div>
+
+          <div class="acl"><span class="ac-line"><span class="kw">def</span> <span class="fn">saludar</span>(nombre):</span></div>
+          <div class="acl lvl-1"><span class="ac-line">    <span class="fn">print</span>(<span class="str">f"Hola {nombre}, PI={PI}"</span>)</span><span class="ac-note ok">PI ✓ también aquí</span></div>
+          <div class="acl empty"></div>
+
+          <div class="acl"><span class="ac-line"><span class="com scope-global"># ═══ GLOBAL otra vez · fuera de las funciones ═══</span></span></div>
+          <div class="acl"><span class="ac-line"><span class="fn">print</span>(PI)</span><span class="ac-note ok">✓ PI sigue viva</span></div>
+          <div class="acl"><span class="ac-line"><span class="fn">print</span>(area)</span><span class="ac-note err">✗ NameError · era local</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT 3: CONSTANTES -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">iii.</div>
+      <div>
+        <h2 class="display">Las <em>constantes</em>.</h2>
+        <p class="c-sub">Variables que no deberían cambiar. Una promesa entre programadores: si la nombras <span class="mono">EN_MAYÚSCULAS</span>, <em>nadie</em> la toca.</p>
+      </div>
+    </div>
+
+    <div class="concept-body">
+      <div class="concept-prose">
+        <p>Python no tiene constantes <em>de verdad</em>. No hay una palabra reservada que impida modificar un valor. Pero existe una <strong>convención</strong> universal: si nombras una variable con <strong>MAYÚSCULAS Y GUIONES BAJOS</strong>, le estás diciendo a todo el mundo «no me toques».</p>
+        <ul>
+          <li><span class="mono">PI = 3.14159</span> — una constante</li>
+          <li><span class="mono">IVA_MEXICO = 0.16</span> — el formato es <em>SCREAMING_SNAKE_CASE</em></li>
+          <li><span class="mono">MAX_INTENTOS = 3</span> — claro a primera vista</li>
+        </ul>
+        <p>¿Para qué sirven? Para que no haya <em>números mágicos</em> sueltos por el código. Si ves <span class="mono">total * 0.16</span> nadie sabe qué es ese 0.16. Si ves <span class="mono">total * IVA_MEXICO</span>, se explica solo.</p>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> si un valor aparece dos veces en tu programa y nunca cambia, conviértelo en constante. Tu yo del futuro te lo agradecerá.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">constantes.py</span></div>
+        <pre><span class="com"># ✗ mal: números mágicos sueltos</span>
+total = <span class="num">480</span>
+iva = total * <span class="num">0.16</span>
+<span class="kw">if</span> intentos &gt; <span class="num">3</span>:
+    <span class="fn">print</span>(<span class="str">"Bloqueado"</span>)
+
+
+<span class="com"># ✓ bien: constantes con nombre claro</span>
+IVA_MEXICO   = <span class="num">0.16</span>
+MAX_INTENTOS = <span class="num">3</span>
+
+total = <span class="num">480</span>
+iva = total * IVA_MEXICO
+<span class="kw">if</span> intentos &gt; MAX_INTENTOS:
+    <span class="fn">print</span>(<span class="str">"Bloqueado"</span>)</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIBRARY (módulos) -->
+  <section class="library reveal">
+    <div class="head">
+      <div class="n display">iv.</div>
+      <div>
+        <h2 class="display">La <em>biblioteca</em>.</h2>
+        <p>Python viene con una <strong>biblioteca estándar</strong> enorme: cientos de módulos que ya están escritos, probados y listos para usar. Cada uno es un libro con funciones útiles que no tienes que rehacer. Hoy aprendes a <strong>importarlos</strong> y a usarlos. Estos son algunos de los que vas a ver mucho:</p>
+      </div>
+    </div>
+
+    <div class="shelf">
+      <span class="shelf-label">PYTHON · STANDARD LIBRARY</span>
+      <div class="books">
+        <button type="button" class="book math tall" data-mod="math">math</button>
+        <button type="button" class="book random tall" data-mod="random">random</button>
+        <button type="button" class="book datetime med" data-mod="datetime">datetime</button>
+        <button type="button" class="book os med" data-mod="os">os</button>
+        <button type="button" class="book json tall" data-mod="json">json</button>
+        <button type="button" class="book sys short" data-mod="sys">sys</button>
+        <button type="button" class="book statistics med" data-mod="statistics">statistics</button>
+        <button type="button" class="book csv short" data-mod="csv">csv</button>
+        <button type="button" class="book time short" data-mod="time">time</button>
+      </div>
+      <p class="caption"><strong>Estos son nueve.</strong> En realidad son más de 200. Y luego está PyPI: más de 500 mil librerías de terceros instalables con <span class="mono">pip</span>.</p>
+
+      <!-- INFO PANEL (click on a book) -->
+      <div class="book-info-panel" id="book-info">
+        <div class="bi-placeholder" id="bi-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 7v6l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+          <p>Toca <strong>cualquier libro</strong> para conocerlo.</p>
+        </div>
+        <div class="bi-content" id="bi-content" hidden>
+          <div class="bi-header">
+            <span class="bi-color" id="bi-color"></span>
+            <h4 class="bi-name" id="bi-name">math</h4>
+            <span class="bi-tag" id="bi-tag">módulo estándar</span>
+          </div>
+          <p class="bi-desc" id="bi-desc"></p>
+          <div class="bi-grid">
+            <div class="bi-funcs">
+              <h5>Funciones que más usarás</h5>
+              <ul id="bi-funcs"></ul>
+            </div>
+            <div class="bi-ex">
+              <h5>Cómo se ve en uso</h5>
+              <pre id="bi-example"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="import-syntax">
+      <div class="import-card">
+        <h4>Importar el módulo entero</h4>
+        <div class="sub-h">La forma recomendada</div>
+        <pre><span class="kw">import</span> math
+
+raiz = math.<span class="fn">sqrt</span>(<span class="num">16</span>)      <span class="com"># 4.0</span>
+pi   = math.pi             <span class="com"># 3.14159...</span></pre>
+        <p>Llamas a cada cosa con el <strong>nombre del módulo punto el nombre de la función</strong>. Queda claro de dónde viene cada cosa.</p>
+      </div>
+
+      <div class="import-card">
+        <h4>Importar lo que necesitas</h4>
+        <div class="sub-h">Cuando solo quieres una o dos cosas</div>
+        <pre><span class="kw">from</span> random <span class="kw">import</span> randint
+
+dado = <span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>)   <span class="com"># 1 a 6</span></pre>
+        <p>Trae solo <span class="mono">randint</span> al espacio actual. Más corto al escribir, pero pierde la referencia visible al módulo de origen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEBUGGING SECTION -->
+  <section class="debug reveal">
+    <div class="d-head">
+      <div class="n display">v.</div>
+      <div>
+        <h2 class="display">Cazar <em>bugs</em>.</h2>
+        <p>Todos los programadores escriben errores — todos, todo el tiempo. Lo que separa a un principiante de un profesional no es <em>no</em> equivocarse, sino saber <strong>encontrar el error rápido</strong>. Hoy aprendes a usar el <strong>depurador</strong> de VS Code (también lo tiene PyCharm), la herramienta que te deja ver tu programa <em>por dentro</em> mientras corre.</p>
+      </div>
+    </div>
+
+    <!-- Los 3 tipos de error -->
+    <div class="err-types">
+      <div class="err-card syntax">
+        <div class="et-tag">no corre</div>
+        <h3>Error de sintaxis</h3>
+        <p>El código no es Python válido. Falta un <span class="mono">:</span>, un paréntesis, una comilla. Python ni siquiera intenta ejecutarlo.</p>
+        <code class="ex">SyntaxError: expected ':'</code>
+      </div>
+      <div class="err-card runtime">
+        <div class="et-tag">revienta a la mitad</div>
+        <h3>Error de ejecución</h3>
+        <p>El código corre, pero explota en alguna línea: una variable que no existe, sumar texto con números, dividir entre cero.</p>
+        <code class="ex">NameError · TypeError</code>
+      </div>
+      <div class="err-card logic">
+        <div class="et-tag">el más traicionero</div>
+        <h3>Error de lógica</h3>
+        <p>El código corre <em>sin quejarse</em>... pero hace algo incorrecto. El promedio sale mal, la condición no es la que querías. No hay mensaje de error: solo un resultado equivocado.</p>
+        <code class="ex"># 0 errores, resultado mal</code>
+      </div>
+    </div>
+
+    <!-- Leer un traceback -->
+    <div class="traceback-explain">
+      <div class="tb-box">
+        <div class="tb-bar">▶ TERMINAL — el mensaje de error</div>
+        <pre><span class="dim">Traceback (most recent call last):</span>
+<span class="dim">  File </span><span class="file">"reporte.py"</span><span class="dim">, line 38, in &lt;module&gt;</span>
+<span class="dim">    promedio = calcular_promedio(calif)</span>
+<span class="dim">  File </span><span class="file">"reporte.py"</span><span class="dim">, line 22, in calcular_promedio</span>
+<span class="dim">    return Promedio</span>
+<span class="hot">NameError: name 'Promedio' is not defined.
+Did you mean: 'promedio'?</span></pre>
+      </div>
+      <div class="tb-read">
+        <h4>Cómo leer un traceback</h4>
+        <ol>
+          <li><strong>Léelo de abajo hacia arriba.</strong> La última línea te dice <span class="mono">QUÉ</span> pasó: un <span class="mono">NameError</span>.</li>
+          <li><strong>El mensaje es oro.</strong> «name 'Promedio' is not defined» — escribiste <span class="mono">Promedio</span> con mayúscula. Python hasta te sugiere la corrección.</li>
+          <li><strong>Las líneas de arriba dicen DÓNDE.</strong> Línea 22, dentro de <span class="mono">calcular_promedio</span>. Ahí está el culpable.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- El depurador -->
+    <div class="dbg-tools">
+      <h3 class="display">El <em>depurador</em>, por dentro.</h3>
+      <p class="dt-sub">En vez de llenar tu código de <span class="mono">print()</span>, pones un <strong>breakpoint</strong> y caminas por el programa línea por línea, viendo cada variable en vivo.</p>
+
+      <div class="dbg-layout">
+        <div class="vscode">
+          <div class="vs-top"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">reporte.py — Run and Debug</span></div>
+          <div class="vs-toolbar">
+            <span class="vs-btn" data-act="continue" data-tip="F5 · Corre sin frenar hasta el próximo breakpoint o el final del programa."><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Continue</span>
+            <span class="vs-btn" data-act="stepover" data-tip="F10 · Ejecuta la línea actual; si llama a una función, la corre entera SIN entrar."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h12M12 8l4 4-4 4"/><circle cx="20" cy="12" r="1.5"/></svg> Step Over</span>
+            <span class="vs-btn" data-act="stepinto" data-tip="F11 · Si la línea llama a una función, ENTRA a depurarla por dentro."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v10M8 10l4 4 4-4"/></svg> Step Into</span>
+            <span class="vs-btn" data-act="stepout" data-tip="Shift+F11 · Termina la función actual y VUELVE a quien la llamó."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M8 14l4 4 4-4"/><path d="M5 4h14" stroke-dasharray="2 2"/></svg> Step Out</span>
+            <span class="vs-btn" data-act="stop" data-tip="Shift+F5 · Detiene la sesión de depuración de inmediato."><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="1"/></svg> Stop</span>
+          </div>
+          <div class="vs-status"><span class="vs-status-key">PAUSA</span><span class="vs-status-text">Pausado en la línea 8. Haz clic en un control de arriba para ver, paso a paso, qué hace.</span></div>
+          <div class="vs-code">
+            <div class="vs-line"><span class="ln">1</span><span class="bp"></span><span class="code"><span class="kw">def</span> <span class="fn">calcular_promedio</span>(notas):</span></div>
+            <div class="vs-line"><span class="ln">2</span><span class="bp"></span><span class="code">    suma = <span class="num">0</span></span></div>
+            <div class="vs-line"><span class="ln">3</span><span class="bp"></span><span class="code">    <span class="kw">for</span> c <span class="kw">in</span> notas:</span></div>
+            <div class="vs-line"><span class="ln">4</span><span class="bp"></span><span class="code">        suma = suma + c</span></div>
+            <div class="vs-line"><span class="ln">5</span><span class="bp"></span><span class="code">    <span class="kw">return</span> suma / <span class="fn">len</span>(notas)</span></div>
+            <div class="vs-line"><span class="ln">6</span><span class="bp"></span><span class="code"></span></div>
+            <div class="vs-line"><span class="ln">7</span><span class="bp"></span><span class="code">notas = [<span class="num">90</span>, <span class="num">80</span>, <span class="num">70</span>]</span></div>
+            <div class="vs-line has-bp current"><span class="ln">8</span><span class="bp"></span><span class="code">prom = <span class="fn">calcular_promedio</span>(notas)</span></div>
+            <div class="vs-line"><span class="ln">9</span><span class="bp"></span><span class="code"><span class="fn">print</span>(prom)</span></div>
+            <div class="fn-sweep"></div>
+            <div class="dbg-cue"></div>
+            <div class="dbg-runner">▶</div>
+          </div>
+          <div class="stop-overlay"><span>■ Sesión de depuración finalizada</span></div>
+        </div>
+
+        <div class="vs-vars">
+          <div class="vv-title">VARIABLES (en este momento)</div>
+          <div class="vv-body">
+            <div class="vv-row"><span class="vv-name">notas</span><span class="vv-val" data-v="notas">[90, 80, 70]</span></div>
+            <div class="vv-row"><span class="vv-name">suma</span><span class="vv-val" data-v="suma">—</span></div>
+            <div class="vv-row"><span class="vv-name">c</span><span class="vv-val" data-v="c">—</span></div>
+            <div class="vv-row"><span class="vv-name">prom</span><span class="vv-val" data-v="prom">—</span></div>
+            <div class="vv-row"><span class="vv-type" data-v="hint">el panel muestra el valor real de cada variable en este instante</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="dbg-hint">▸ <b>Pulsa los controles</b> para avanzar paso a paso, como en el depurador real · pasa el mouse para leer qué hace cada uno.</p>
+
+      <div class="dbg-note">
+        <p><strong>Los 5 controles del depurador:</strong> <em>Continue</em> (F5) corre hasta el próximo breakpoint o el final · <em>Step Over</em> (F10) ejecuta la línea entera y avanza, sin meterse en las funciones · <em>Step Into</em> (F11) baja a ver una función por dentro · <em>Step Out</em> (Shift+F11) termina la función y vuelve a quien la llamó · <em>Stop</em> (Shift+F5) corta la sesión. El <em>breakpoint</em> (clic a la izquierda del número de línea) es donde el programa se pausa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE CODING (debugging) -->
+  <section class="live reveal">
+    <div class="head">
+      <div class="badge"><span class="rec"></span> LIVE CODING</div>
+      <h2 class="display">Debugging <em>en vivo</em>.</h2>
+    </div>
+    <p class="intro">
+      Te voy a mostrar un programa que <em>no funciona</em>. Juntos lo vamos a depurar: leer el error,
+      poner un breakpoint, caminar línea por línea, mirar las variables y corregir. Fíjate en el
+      <em>método</em>, no solo en la solución — porque en tu reto vas a hacer esto tú solo.
+    </p>
+
+    <div class="problem-box">
+      <h3>Un programa con tres errores</h3>
+      <p>Este código <em>debería</em> calcular el total de una compra con IVA, pero falla. Vamos a
+      encontrar los tres bugs uno por uno, usando el depurador.</p>
+    </div>
+
+    <div class="build-step">
+      <div class="bs-step"><span class="bs-num">1</span><span class="bs-title">Correr y leer el error</span></div>
+      <div class="bs-body">
+        <p>Corremos el programa. Python lanza <span class="mono">SyntaxError: expected ':'</span> en la línea del <span class="mono">def</span>. <strong>Bug 1:</strong> falta el dos puntos. Lo agregamos.</p>
+        <div class="bs-code"><pre><span class="com"># ✗ antes</span>
+<span class="kw">def</span> <span class="fn">calcular_total</span>(precio, cantidad)
+<span class="com"># ✓ después</span>
+<span class="kw">def</span> <span class="fn">calcular_total</span>(precio, cantidad):</pre></div>
+      </div>
+    </div>
+
+    <div class="build-step">
+      <div class="bs-step"><span class="bs-num">2</span><span class="bs-title">Breakpoint + mirar variables</span></div>
+      <div class="bs-body">
+        <p>Corre, pero el total sale rarísimo. Ponemos un breakpoint y miramos: <span class="mono">cantidad</span> vale <span class="mono">"3"</span> (texto, no número). <strong>Bug 2:</strong> faltó convertir el <span class="mono">input</span> con <span class="mono">int()</span>.</p>
+        <div class="bs-code"><pre><span class="com"># ✗ cantidad es texto "3"</span>
+cantidad = <span class="fn">input</span>(<span class="str">"¿Cuántos? "</span>)
+<span class="com"># ✓ ahora es número 3</span>
+cantidad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"¿Cuántos? "</span>))</pre></div>
+      </div>
+    </div>
+
+    <div class="build-step">
+      <div class="bs-step"><span class="bs-num">3</span><span class="bs-title">Cazar el error de lógica</span></div>
+      <div class="bs-body">
+        <p>Ya no truena, pero el IVA está mal. En el panel de variables vemos que <span class="mono">iva</span> es enorme. <strong>Bug 3:</strong> multiplicamos por <span class="mono">16</span> en vez de <span class="mono">0.16</span>. Este es el error <em>traicionero</em>: no da mensaje, solo un número equivocado.</p>
+        <div class="bs-code"><pre><span class="com"># ✗ 16 veces el precio (1600%)</span>
+iva = subtotal * <span class="num">16</span>
+<span class="com"># ✓ el 16% correcto</span>
+iva = subtotal * <span class="num">0.16</span></pre></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY (debugging exercise) -->
+  <section class="activity reveal">
+    <div class="head">
+      <div class="stamp">Tu turno</div>
+      <div>
+        <h2 class="display">Arregla el <em>programa roto</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Tienes <strong>1 hora</strong>. Vas a descargar un programa de Python que <em>no funciona</em>: un
+      sistema de reporte de calificaciones lleno de errores. Tu misión es <strong>depurarlo</strong> con
+      VS Code hasta que corra de principio a fin y dé resultados correctos. Usa todo lo de hoy: lee los
+      tracebacks, pon breakpoints, mira las variables.
+    </p>
+
+    <div class="download-box">
+      <div class="db-head">
+        <div>
+          <h3>reporte de calificaciones · roto</h3>
+          <div class="file-meta">debug_calificaciones.py · Python 3 · 7 errores escondidos</div>
+        </div>
+        <a class="dl-btn" href="debug_calificaciones.py" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+          Descargar el código
+        </a>
+      </div>
+      <div class="db-body">
+        <p>El programa <strong>debería</strong> pedir un nombre y varias calificaciones, validarlas, calcular el promedio y la mejor nota, asignar una letra (A–F) y decir si el alumno aprobó. Ahora mismo ni arranca. Dentro hay errores de <strong>sintaxis, ejecución y lógica</strong>, mezclando todo lo que ya sabes:</p>
+
+        <div class="bug-counter">
+          <span class="bug-pill"><span class="cnt">7</span> bugs en total</span>
+          <span class="bug-pill">variables</span>
+          <span class="bug-pill">validaciones</span>
+          <span class="bug-pill">funciones</span>
+          <span class="bug-pill">1 ciclo <span class="mono">for</span> (nuevo)</span>
+        </div>
+
+        <ol class="dl-steps">
+          <li><strong>Descarga</strong> el archivo y ábrelo en VS Code dentro de tu carpeta del curso.</li>
+          <li><strong>Córrelo</strong> y lee el primer error. Corrígelo. Vuelve a correr. Repite.</li>
+          <li>Cuando un resultado se vea raro (sin error), <strong>pon un breakpoint</strong> y mira las variables para cazar el bug de lógica.</li>
+          <li>El programa usa un <span class="mono">for</span> para recorrer las calificaciones — es tu primer contacto con los <strong>ciclos</strong>. Obsérvalo en el depurador: verás cómo la variable cambia en cada vuelta.</li>
+          <li>Termina cuando el reporte se imprima <strong>completo y con números correctos</strong>. Lee el ejemplo de salida que viene en los comentarios del archivo.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAREA -->
+  <section class="tarea reveal">
+    <div class="head">
+      <div class="stamp">Entrega</div>
+      <div>
+        <h2 class="display">A tu <em>repositorio</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Si no terminaste de arreglar el programa en clase, lo completas en casa. <strong>Sube el código
+      ya corregido y funcionando</strong> a tu repositorio de GitHub.
+    </p>
+
+    <div class="deadline-banner">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="text"><strong>Deadline:</strong> Jueves 4 de junio · 17:59 h (antes de la sesión 06)</div>
+      <div class="countdown-num">3 días</div>
+    </div>
+
+    <div class="checklist">
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>1. El código corregido</h4>
+          <p>El archivo <span class="mono">debug_calificaciones.py</span> con los 7 errores arreglados, corriendo de principio a fin y dando resultados correctos.</p>
+          <div class="deadline">archivo: <span class="mono">sesion-05/debug_calificaciones.py</span></div>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>2. Bitácora de bugs (README)</h4>
+          <p>Un <span class="mono">README.md</span> donde anotes, en tus palabras, <strong>qué era cada error y cómo lo corregiste</strong>. Esto vale tanto como el código: demuestra que entendiste.</p>
+          <div class="deadline">archivo: <span class="mono">sesion-05/README.md</span></div>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>3. Commit con mensaje claro</h4>
+          <p>Un solo commit con mensaje <span class="mono">"sesion-05: debugging del reporte"</span>. Sin «final», sin «cambios», sin «v2».</p>
+          <div class="deadline">tip: <span class="mono">$ git commit -m "sesion-05: ..."</span></div>
+        </div>
+      </div>
+
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>4. Push al repo del curso</h4>
+          <p>Sube todo a tu repositorio personal del curso. Si surge cualquier duda con Git, no asumas — pregunta.</p>
+          <div class="deadline">comando: <span class="mono">$ git push origin main</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «Si he visto más lejos<br/>
+      es porque <span class="em-ochre">estoy sobre hombros</span><br/>
+      <span class="em">de gigantes</span>.»
+    </div>
+    <div class="quote-author">— Isaac Newton</div>
+    <div class="quote-meta">Carta a Robert Hooke, 5 de febrero de 1675</div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 05 <span class="dot">·</span> Sobre hombros de gigantes <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-04/index.html">Sesión 04 · El dojo</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+
+  /* ===== Book info panel ===== */
+  const moduleData = {
+    math: {
+      color: '#a02418', tag: 'matemáticas avanzadas',
+      desc: 'Operaciones matemáticas: constantes, raíces, potencias, trigonometría, logaritmos. Es el módulo que llamarás cuando hagas <em>cálculos científicos o geométricos</em>.',
+      funcs: [
+        { code: 'math.pi', what: 'la constante π = 3.14159…' },
+        { code: 'math.sqrt(n)', what: 'raíz cuadrada de n' },
+        { code: 'math.pow(x, y)', what: 'x elevado a y' },
+        { code: 'math.floor(x), .ceil(x)', what: 'redondea hacia abajo / arriba' },
+      ],
+      example: `<span class="kw">import</span> math\n\narea  = math.pi * radio ** <span class="num">2</span>\nhipo  = math.<span class="fn">sqrt</span>(a**<span class="num">2</span> + b**<span class="num">2</span>)\nmitad = math.<span class="fn">floor</span>(<span class="num">7</span> / <span class="num">2</span>)   <span class="com"># 3</span>`
+    },
+    random: {
+      color: '#5d6638', tag: 'aleatoriedad',
+      desc: 'Generación de <strong>aleatoriedad</strong>: números, elecciones, mezclas. Es el módulo de los juegos, las simulaciones, las contraseñas. Cualquier cosa que necesite ser <em>impredecible</em>.',
+      funcs: [
+        { code: 'random.randint(a, b)', what: 'entero aleatorio entre a y b (incluidos)' },
+        { code: 'random.choice(lista)', what: 'elige un elemento al azar' },
+        { code: 'random.shuffle(lista)', what: 'mezcla una lista en su lugar' },
+        { code: 'random.random()', what: 'float aleatorio entre 0.0 y 1.0' },
+      ],
+      example: `<span class="kw">import</span> random\n\ndado  = random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>)\ncarta = random.<span class="fn">choice</span>([<span class="str">"♠"</span>, <span class="str">"♥"</span>, <span class="str">"♦"</span>, <span class="str">"♣"</span>])\nrandom.<span class="fn">shuffle</span>(mazo)`
+    },
+    datetime: {
+      color: '#8a6320', tag: 'fechas y horas',
+      desc: 'Manejo de <strong>fechas y horas</strong>. Sumar días, calcular edades, formatear timestamps, medir cuánto tiempo pasó entre dos eventos. Si tu programa <em>vive en el tiempo</em>, este es tu módulo.',
+      funcs: [
+        { code: 'datetime.now()', what: 'fecha y hora actuales' },
+        { code: 'timedelta(days=7)', what: 'una duración (p. ej. 7 días)' },
+        { code: 'dt.strftime("%d/%m/%Y")', what: 'convierte a texto con un formato' },
+        { code: 'date(2026, 6, 1)', what: 'crea una fecha específica' },
+      ],
+      example: `<span class="kw">from</span> datetime <span class="kw">import</span> datetime, timedelta\n\nahora    = datetime.<span class="fn">now</span>()\nproximo  = ahora + <span class="fn">timedelta</span>(days=<span class="num">7</span>)\ntexto    = ahora.<span class="fn">strftime</span>(<span class="str">"%d/%m/%Y"</span>)`
+    },
+    os: {
+      color: '#4a3a2c', tag: 'sistema operativo',
+      desc: 'Interacción con el <strong>sistema operativo</strong>: archivos, carpetas, variables de entorno, rutas. Para cuando tu programa necesita salir de su mundo y <em>tocar el computador</em>.',
+      funcs: [
+        { code: 'os.getcwd()', what: 'carpeta actual de trabajo' },
+        { code: 'os.listdir(ruta)', what: 'lista los archivos de una carpeta' },
+        { code: 'os.path.exists(x)', what: '¿existe este archivo o carpeta?' },
+        { code: 'os.makedirs(ruta)', what: 'crea una carpeta (y las que falten)' },
+      ],
+      example: `<span class="kw">import</span> os\n\narchivos = os.<span class="fn">listdir</span>(<span class="str">"."</span>)\n<span class="kw">if</span> os.path.<span class="fn">exists</span>(<span class="str">"datos.csv"</span>):\n    <span class="fn">print</span>(<span class="str">"encontrado"</span>)`
+    },
+    json: {
+      color: '#6b5080', tag: 'datos web',
+      desc: 'Lectura y escritura del formato <strong>JSON</strong>: el lenguaje universal de los datos en la web. APIs, configuraciones, intercambio entre programas. <em>Casi todo lo que se mueve por internet pasa por JSON</em>.',
+      funcs: [
+        { code: 'json.dumps(obj)', what: 'objeto Python → texto JSON' },
+        { code: 'json.loads(texto)', what: 'texto JSON → objeto Python' },
+        { code: 'json.dump(obj, f)', what: 'escribe JSON a un archivo' },
+        { code: 'json.load(f)', what: 'lee JSON desde un archivo' },
+      ],
+      example: `<span class="kw">import</span> json\n\ndatos = {<span class="str">"nombre"</span>: <span class="str">"Carlos"</span>, <span class="str">"edad"</span>: <span class="num">25</span>}\ntexto = json.<span class="fn">dumps</span>(datos)\n<span class="com"># '{"nombre": "Carlos", "edad": 25}'</span>`
+    },
+    sys: {
+      color: '#6e1810', tag: 'intérprete y CLI',
+      desc: 'Acceso al <strong>intérprete de Python</strong>: argumentos de línea de comandos, salida del programa, entrada/salida estándar. Lo usarás cuando hagas <em>scripts que reciban parámetros desde la terminal</em>.',
+      funcs: [
+        { code: 'sys.argv', what: 'lista de argumentos del script' },
+        { code: 'sys.exit(0)', what: 'termina el programa (0 = éxito)' },
+        { code: 'sys.stdin / stdout', what: 'entrada / salida estándar' },
+        { code: 'sys.version', what: 'la versión de Python en uso' },
+      ],
+      example: `<span class="kw">import</span> sys\n\n<span class="kw">if</span> <span class="fn">len</span>(sys.argv) &lt; <span class="num">2</span>:\n    <span class="fn">print</span>(<span class="str">"Falta un argumento"</span>)\n    sys.<span class="fn">exit</span>(<span class="num">1</span>)\n\nnombre = sys.argv[<span class="num">1</span>]`
+    },
+    statistics: {
+      color: '#424a26', tag: 'estadística básica',
+      desc: '<strong>Cálculos estadísticos</strong> básicos sin instalar nada extra. Promedios, medianas, desviación estándar. Lo justo para <em>análisis cotidiano</em> sin recurrir todavía a NumPy o Pandas.',
+      funcs: [
+        { code: 'statistics.mean(xs)', what: 'promedio (media aritmética)' },
+        { code: 'statistics.median(xs)', what: 'mediana' },
+        { code: 'statistics.mode(xs)', what: 'valor más frecuente' },
+        { code: 'statistics.stdev(xs)', what: 'desviación estándar' },
+      ],
+      example: `<span class="kw">import</span> statistics\n\nnotas = [<span class="num">8.5</span>, <span class="num">9.0</span>, <span class="num">7.5</span>, <span class="num">9.5</span>, <span class="num">8.0</span>]\n<span class="fn">print</span>(statistics.<span class="fn">mean</span>(notas))    <span class="com"># 8.5</span>\n<span class="fn">print</span>(statistics.<span class="fn">median</span>(notas))  <span class="com"># 8.5</span>`
+    },
+    csv: {
+      color: '#8a6320', tag: 'datos tabulares',
+      desc: 'Lectura y escritura de archivos <strong>CSV</strong> (los que abre Excel o Google Sheets). El formato más común para datos tabulares. Útil para procesar <em>listas, registros, exportaciones</em>.',
+      funcs: [
+        { code: 'csv.reader(f)', what: 'lee filas como listas' },
+        { code: 'csv.writer(f)', what: 'escribe filas a un CSV' },
+        { code: 'csv.DictReader(f)', what: 'lee filas como diccionarios' },
+        { code: 'csv.DictWriter(f, …)', what: 'escribe desde diccionarios' },
+      ],
+      example: `<span class="kw">import</span> csv\n\n<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"alumnos.csv"</span>) <span class="kw">as</span> f:\n    reader = csv.<span class="fn">reader</span>(f)\n    <span class="kw">for</span> fila <span class="kw">in</span> reader:\n        <span class="fn">print</span>(fila)`
+    },
+    time: {
+      color: '#4a6b86', tag: 'pausas y medición',
+      desc: '<strong>Pausas y mediciones de tiempo</strong>. Para hacer que tu programa espere unos segundos, medir cuánto tarda algo en ejecutarse, o trabajar con timestamps a bajo nivel.',
+      funcs: [
+        { code: 'time.sleep(seg)', what: 'pausa la ejecución n segundos' },
+        { code: 'time.time()', what: 'timestamp actual (segundos desde 1970)' },
+        { code: 'time.perf_counter()', what: 'reloj de alta precisión para medir' },
+        { code: 'time.localtime()', what: 'tiempo local en formato struct' },
+      ],
+      example: `<span class="kw">import</span> time\n\ninicio = time.<span class="fn">perf_counter</span>()\n<span class="com"># … hacer algo …</span>\ntime.<span class="fn">sleep</span>(<span class="num">2</span>)\nduracion = time.<span class="fn">perf_counter</span>() - inicio\n<span class="fn">print</span>(<span class="str">f"Tardó {duracion:.2f}s"</span>)`
+    },
+  };
+
+  const $placeholder = document.getElementById('bi-placeholder');
+  const $content = document.getElementById('bi-content');
+  const $panel = document.getElementById('book-info');
+  const $name = document.getElementById('bi-name');
+  const $tag = document.getElementById('bi-tag');
+  const $desc = document.getElementById('bi-desc');
+  const $color = document.getElementById('bi-color');
+  const $funcs = document.getElementById('bi-funcs');
+  const $example = document.getElementById('bi-example');
+
+  document.querySelectorAll('.book[data-mod]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mod = btn.dataset.mod;
+      const data = moduleData[mod];
+      if (!data) return;
+
+      // toggle active
+      document.querySelectorAll('.book.active').forEach(b => { if (b !== btn) b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      // ocultar placeholder
+      $placeholder.classList.add('hidden');
+      $content.hidden = false;
+      $content.classList.remove('shown');
+
+      // actualizar contenido
+      $name.textContent = mod;
+      $tag.textContent = data.tag;
+      $desc.innerHTML = data.desc;
+      $color.style.background = data.color;
+      $panel.style.borderTopColor = data.color;
+
+      // funciones
+      $funcs.innerHTML = '';
+      data.funcs.forEach(f => {
+        const li = document.createElement('li');
+        const code = document.createElement('code');
+        code.textContent = f.code;
+        const span = document.createElement('span');
+        span.textContent = f.what;
+        li.appendChild(code);
+        li.appendChild(span);
+        $funcs.appendChild(li);
+      });
+
+      // ejemplo
+      $example.innerHTML = data.example;
+
+      // animar entrada
+      requestAnimationFrame(() => $content.classList.add('shown'));
+
+      // scroll suave al panel si está fuera de vista (en móvil ayuda)
+      const rect = $panel.getBoundingClientRect();
+      if (rect.bottom > window.innerHeight) {
+        $panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  });
+
+  /* ===== Depurador interactivo: mini-intérprete paso a paso =====
+     Cada clic ejecuta UNA línea (como el depurador real). El usuario marca
+     el ritmo, ve la flecha saltar de línea en línea y las variables en vivo. */
+  (function(){
+    const vscode = document.querySelector('.dbg-tools .vscode');
+    if (!vscode) return;
+    const lines    = Array.from(vscode.querySelectorAll('.vs-line'));
+    const statusEl = vscode.querySelector('.vs-status');
+    const sKey     = statusEl.querySelector('.vs-status-key');
+    const sText    = statusEl.querySelector('.vs-status-text');
+    const sweep    = vscode.querySelector('.fn-sweep');
+    const cue      = vscode.querySelector('.dbg-cue');
+    const runner   = vscode.querySelector('.dbg-runner');
+    const btns     = Array.from(vscode.querySelectorAll('.vs-btn[data-act]'));
+    const layout   = vscode.closest('.dbg-layout') || document;
+    const vv = {};
+    layout.querySelectorAll('[data-v]').forEach(el => vv[el.dataset.v] = el);
+
+    const NOTAS = [90, 80, 70];
+    // índices en el array `lines`: 0:def 1:suma=0 2:for 3:suma+c 4:return 5:vacía 6:notas= 7:llamada 8:print
+    const NOTAS_LINE = 6, CALL = 7, PRINT = 8, FN_INIT = 1, FN_FOR = 2, FN_BODY = 3, FN_RET = 4;
+
+    let st, busy = false, resting = null;
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    const round2 = x => Math.round(x * 100) / 100;
+    const lineNo = idx => lines[idx].querySelector('.ln').textContent;
+
+    const DESC = {
+      continue: ['#8fb05c', 'F5',        'Continue: corre sin frenar hasta el próximo breakpoint o el final del programa.'],
+      stepover: ['#f0c8a0', 'F10',       'Step Over: ejecuta la línea actual; si llama a una función, la corre entera SIN entrar.'],
+      stepinto: ['#8fb05c', 'F11',       'Step Into: si la línea llama a una función, ENTRA a recorrerla por dentro, línea a línea.'],
+      stepout:  ['#f0c8a0', 'Shift+F11', 'Step Out: termina la función actual y te devuelve a quien la llamó.'],
+      stop:     ['#e0513d', 'Shift+F5',  'Stop: detiene la sesión de depuración de inmediato.'],
+    };
+
+    function freshState(){ return { frame:'module', pc:CALL, it:0, suma:null, c:null, prom:null, ended:false }; }
+    // Mueve la flecha-puntero a la línea idx; se desliza sola por la transición CSS.
+    function moveRunner(idx, instant){
+      if (idx == null){ runner.classList.remove('show'); return; }
+      const center = lines[idx].offsetTop + lines[idx].offsetHeight / 2;
+      const prevTop = parseFloat(runner.style.top);
+      runner.classList.toggle('up',   !isNaN(prevTop) && center < prevTop - 1);
+      runner.classList.toggle('down', isNaN(prevTop) || center > prevTop + 1);
+      if (instant){ runner.style.transition = 'none'; runner.style.top = center + 'px'; void runner.offsetWidth; runner.style.transition = ''; }
+      else { runner.style.top = center + 'px'; }
+      runner.classList.add('show');
+    }
+    function setCurrent(idx, instant){ lines.forEach(l => l.classList.remove('current')); if (idx != null) lines[idx].classList.add('current'); moveRunner(idx, instant); }
+    function flash(idx){ if (idx == null) return; const l = lines[idx]; l.classList.remove('flash'); void l.offsetWidth; l.classList.add('flash'); }
+    function applyStatus(accent, key, text){ vscode.classList.add('act'); statusEl.style.borderLeftColor = accent; sKey.textContent = key; sText.textContent = text; }
+    function setStatus(accent, key, text){ resting = [accent, key, text]; applyStatus(accent, key, text); }
+    function restore(){ if (resting) applyStatus(resting[0], resting[1], resting[2]); }
+
+    function showSweep(fromIdx, toIdx){
+      sweep.style.top = lines[fromIdx].offsetTop + 'px';
+      sweep.style.height = (lines[toIdx].offsetTop + lines[toIdx].offsetHeight - lines[fromIdx].offsetTop) + 'px';
+      sweep.classList.add('show');
+    }
+    function showCue(idx, cls, html){
+      cue.className = 'dbg-cue ' + cls; cue.innerHTML = html;
+      cue.style.top = (lines[idx].offsetTop + 2) + 'px';
+      void cue.offsetWidth; cue.classList.add('show');
+    }
+    function renderVars(){
+      if (!vv.suma) return;
+      vv.notas.textContent = '[90, 80, 70]';
+      vv.suma.textContent  = st.suma == null ? '—' : String(st.suma);
+      vv.c.textContent     = st.c == null ? '—' : String(st.c);
+      vv.prom.textContent  = st.prom == null ? '—' : String(st.prom);
+      if (vv.hint){
+        vv.hint.textContent = st.ended ? 'programa terminado'
+          : st.frame === 'func' ? 'dentro de calcular_promedio() · suma y c son LOCALES'
+          : (st.prom != null ? 'de vuelta en el nivel principal (global)' : 'nivel principal · aún no se llama a la función');
+      }
+    }
+
+    function softReset(){
+      st = freshState();
+      vscode.classList.remove('stopped');
+      sweep.classList.remove('show'); cue.classList.remove('show');
+      lines.forEach(l => l.classList.remove('flash'));
+      setCurrent(st.pc, true); renderVars();
+    }
+    function reset(){ softReset(); setStatus('#b5852a', 'PAUSA', 'Pausado en la línea ' + lineNo(CALL) + ' (breakpoint). Pulsa un control para avanzar paso a paso.'); }
+
+    // Avanza UNA instrucción en el frame actual; una llamada se ejecuta entera (semántica de Step Over).
+    function stepOverPrimitive(){
+      const pc = st.pc;
+      if (st.frame === 'module'){
+        if (pc === NOTAS_LINE){ st.pc = CALL; return { ran: NOTAS_LINE, note: 'Se crea la lista notas = [90, 80, 70].' }; }
+        if (pc === CALL){
+          st.suma = NOTAS.reduce((a, b) => a + b, 0); st.it = NOTAS.length; st.c = NOTAS[NOTAS.length - 1];
+          st.prom = round2(st.suma / NOTAS.length); st.pc = PRINT;
+          return { ran: CALL, sweep: true, note: 'Step Over ejecuta calcular_promedio() ENTERA, sin entrar. Devolvió prom = ' + st.prom + '.' };
+        }
+        if (pc === PRINT){ st.pc = null; st.ended = true; return { ran: PRINT, note: 'print(prom) imprime ' + st.prom + ' en la consola.' }; }
+        return null;
+      }
+      if (pc === FN_INIT){ st.suma = 0; st.pc = FN_FOR; return { ran: FN_INIT, note: 'suma = 0  (variable LOCAL, nace aquí dentro).' }; }
+      if (pc === FN_FOR){
+        if (st.it < NOTAS.length){ st.c = NOTAS[st.it]; st.it++; st.pc = FN_BODY; return { ran: FN_FOR, note: 'for: vuelta ' + st.it + ' de 3 · c = ' + st.c + '.' }; }
+        st.pc = FN_RET; return { ran: FN_FOR, note: 'for: ya no quedan notas → sale del ciclo.' };
+      }
+      if (pc === FN_BODY){ st.suma += st.c; st.pc = FN_FOR; return { ran: FN_BODY, note: 'suma = suma + c → suma vale ahora ' + st.suma + '.' }; }
+      if (pc === FN_RET){ st.prom = round2(st.suma / NOTAS.length); st.frame = 'module'; st.pc = PRINT; return { ran: FN_RET, ret: true, note: 'return ' + st.prom + ' → la función termina y vuelve al llamador.' }; }
+      return null;
+    }
+
+    // Un paso animado (destello en la línea que corre, luego la flecha salta a la siguiente).
+    async function animatedStep(accent, key, dwell){
+      const r = stepOverPrimitive();
+      if (!r) return null;
+      if (r.sweep) showSweep(FN_INIT, FN_RET);
+      flash(r.ran);
+      setStatus(accent, key, r.note);
+      await wait(dwell);
+      if (r.sweep){ await wait(420); sweep.classList.remove('show'); }
+      setCurrent(st.pc); renderVars();
+      if (st.ended) setStatus(accent, key, r.note + '  ·  Programa terminado: pulsa cualquier control para reiniciar.');
+      return r;
+    }
+
+    async function stepOver(){
+      if (st.ended) softReset();
+      if (st.pc == null) return;
+      await animatedStep('#f0c8a0', 'F10', 820);
+    }
+    async function stepInto(){
+      if (st.ended) softReset();
+      if (st.pc == null) return;
+      if (st.frame === 'module' && st.pc === CALL){
+        flash(CALL);
+        showCue(CALL, 'into', '↑ entra a calcular_promedio() (definida arriba)');
+        setStatus('#8fb05c', 'F11', 'Step Into ENTRA en la función para recorrerla línea por línea (la flecha sube hasta su def).');
+        await wait(950);
+        st.frame = 'func'; st.it = 0; st.suma = null; st.c = null; st.pc = FN_INIT;
+        setCurrent(st.pc); renderVars();
+        setStatus('#8fb05c', 'F11', 'Entraste a calcular_promedio(). Ahora cada paso recorre sus líneas internas.');
+      } else {
+        const r = await animatedStep('#8fb05c', 'F11', 820);
+        if (r) setStatus('#8fb05c', 'F11', 'Aquí no había función que entrar: Step Into avanzó una línea, igual que Step Over.');
+      }
+    }
+    async function stepOut(){
+      if (st.ended) softReset();
+      if (st.pc == null) return;
+      if (st.frame !== 'func'){
+        setStatus('#f0c8a0', 'Shift+F11', 'Estás en el nivel principal: no hay función de la cual salir (aquí Step Out terminaría el programa).');
+        return;
+      }
+      showCue(st.pc, 'out', '↓ vuelve al llamador (sigue tras la llamada)');
+      setStatus('#f0c8a0', 'Shift+F11', 'Step Out corre lo que falta de la función y te devuelve a quien la llamó (la flecha baja a la línea siguiente).');
+      await wait(750);
+      while (st.frame === 'func' && st.pc != null){
+        const r = stepOverPrimitive();
+        flash(r.ran); setCurrent(st.pc); renderVars();
+        await wait(520);
+      }
+      setStatus('#f0c8a0', 'Shift+F11', 'La función terminó (prom = ' + st.prom + '). Volviste a la línea ' + lineNo(st.pc) + ', en quien la llamó.');
+    }
+    async function continueRun(){
+      if (st.ended) softReset();
+      if (st.pc == null) return;
+      setStatus('#8fb05c', 'F5', 'Continue corre sin frenar hasta el próximo breakpoint… o el final del programa.');
+      await wait(450);
+      while (st.pc != null){
+        const r = stepOverPrimitive();
+        if (r.sweep) showSweep(FN_INIT, FN_RET);
+        flash(r.ran); setCurrent(st.pc); renderVars();
+        await wait(430);
+        if (r.sweep) sweep.classList.remove('show');
+      }
+      setStatus('#8fb05c', 'F5', 'Sin más breakpoints: el programa llegó al final. prom = ' + st.prom + '.');
+    }
+    function stop(){
+      setStatus('#e0513d', 'Shift+F5', 'Stop cortó la sesión de depuración. El programa se detuvo. Pulsa cualquier control para reiniciar.');
+      setCurrent(null); sweep.classList.remove('show'); cue.classList.remove('show');
+      vscode.classList.add('stopped'); st.ended = true;
+    }
+
+    const HANDLERS = { continue: continueRun, stepover: stepOver, stepinto: stepInto, stepout: stepOut };
+
+    btns.forEach(btn => {
+      const act = btn.dataset.act;
+      btn.addEventListener('click', async () => {
+        if (busy) return;
+        if (act === 'stop'){ stop(); return; }
+        const fn = HANDLERS[act];
+        if (!fn) return;
+        busy = true;
+        btns.forEach(b => b.classList.remove('playing')); btn.classList.add('playing');
+        try { await fn(); } finally { busy = false; btn.classList.remove('playing'); }
+      });
+      // al pasar el mouse, la barra de estado explica el control (sin tocar la ejecución)
+      btn.addEventListener('mouseenter', () => { if (busy || !DESC[act]) return; applyStatus(DESC[act][0], DESC[act][1], DESC[act][2]); });
+      btn.addEventListener('mouseleave', () => { if (busy) return; restore(); });
+    });
+
+    reset();
+  })();
+</script>
+
+</body>
+</html>
