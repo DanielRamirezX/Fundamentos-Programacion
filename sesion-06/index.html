@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 06 · El taller · Constantes, librerías y tu primer proyecto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --belt-blue: #4a6b86; --belt-purple: #6b5080;
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 70px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; animation: floatNum 6s ease-in-out infinite; }
+  @keyframes floatNum{ 0%,100%{ transform: translateY(0) rotate(0); } 50%{ transform: translateY(-10px) rotate(-1deg); } }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 30px; display:flex; align-items:center; gap: 16px; opacity: 0; animation: slideInLeft .8s ease-out .2s forwards; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  @keyframes slideInLeft{ from{ opacity: 0; transform: translateX(-30px); } to{ opacity: 1; transform: translateX(0); } }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(56px, 9vw, 128px); line-height: .95; margin: 0 0 36px; letter-spacing: -.02em; }
+  .hero h1 .line1, .hero h1 .line2{ display: block; opacity: 0; transform: translateY(20px); animation: heroLine .8s ease-out forwards; }
+  .hero h1 .line1{ animation-delay: .4s; } .hero h1 .line2{ animation-delay: .65s; }
+  @keyframes heroLine{ to{ opacity: 1; transform: translateY(0); } }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 740px; font-size: 1.25rem; line-height: 1.55; color: var(--ink-soft); opacity: 0; transform: translateY(15px); animation: heroLine .8s ease-out .95s forwards; }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 60px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; opacity: 0; transform: translateY(15px); animation: heroLine .8s ease-out 1.15s forwards; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* CONTINUACIÓN BANNER */
+  .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
+  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
+  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* MANIFIESTO */
+  .manifiesto{ margin: 70px 0; padding: 60px 40px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); position: relative; }
+  .manifiesto .tag{ position: absolute; top:-12px; left: 32px; background: var(--paper); padding: 0 14px; font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); }
+  .manifiesto blockquote{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-weight: 300; font-size: clamp(28px, 4.3vw, 52px); line-height: 1.18; color: var(--ink); letter-spacing: -.01em; }
+  .manifiesto blockquote .accent{ color: var(--blood); font-weight: 600; }
+  .manifiesto blockquote .accent-ochre{ color: var(--ochre); font-weight: 600; }
+  .manifiesto cite{ display:block; margin-top: 28px; font-size: 1rem; font-style: normal; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* CLOSE THE HUNT (bugs recap) */
+  .hunt{ margin: 110px 0; }
+  .hunt .h-head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 20px; }
+  @media (max-width: 700px){ .hunt .h-head{ grid-template-columns: 1fr; gap: 10px; } }
+  .hunt .h-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(60px, 9vw, 120px); line-height: .8; color: var(--blood); }
+  .hunt .h-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(32px, 4.6vw, 56px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .hunt .h-head h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .hunt .h-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 700px; }
+  .hunt .h-head p strong{ color: var(--blood); }
+
+  .bug-table{ margin-top: 22px; border: 1.5px solid var(--ink); background: var(--paper-deep); }
+  .bug-row{ display: grid; grid-template-columns: 50px 1fr 150px; gap: 16px; align-items: center; padding: 14px 20px; border-bottom: 1px dashed var(--line); }
+  .bug-row:last-child{ border-bottom: none; }
+  .bug-row.header{ background: var(--ink); color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; padding: 12px 20px; }
+  @media (max-width: 640px){ .bug-row{ grid-template-columns: 36px 1fr; } .bug-row .bug-type{ display: none; } .bug-row.header .bug-type{ display: none; } }
+  .bug-row .bug-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.5rem; color: var(--blood); }
+  .bug-row.header .bug-n{ color: var(--paper); font-size: .72rem; font-family: "JetBrains Mono", monospace; font-style: normal; font-weight: 400; }
+  .bug-row .bug-desc{ font-size: .95rem; color: var(--ink); line-height: 1.45; }
+  .bug-row .bug-desc .mono{ background: var(--paper); padding: 1px 6px; font-family: "JetBrains Mono", monospace; font-size: .82em; border: 1px solid var(--line); }
+  .bug-row .bug-desc strong{ color: var(--blood-dark); }
+  .bug-row .bug-type{ font-family: "JetBrains Mono", monospace; font-size: .72rem; text-align: right; }
+  .bug-row .bug-type .tag{ padding: 3px 9px; display: inline-block; color: var(--paper); }
+  .bug-type .tag.sx{ background: var(--ochre-deep); } .bug-type .tag.rt{ background: var(--blood); } .bug-type .tag.lg{ background: var(--olive-deep); }
+  .hunt .closing{ margin-top: 20px; padding: 16px 22px; background: var(--paper-deep); border-left: 4px solid var(--olive); font-style: italic; color: var(--ink); font-size: 1rem; }
+  .hunt .closing strong{ color: var(--olive-deep); font-style: normal; }
+
+  /* CONCEPT BLOCKS */
+  .concept{ margin: 110px 0; }
+  .concept .c-head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .concept .c-head{ grid-template-columns: 1fr; gap: 10px; } }
+  .concept .c-num{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(70px, 11vw, 140px); line-height: .8; color: var(--ochre); }
+  .concept .c-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(34px, 5vw, 60px); line-height: 1; margin: 0 0 14px; letter-spacing: -.01em; }
+  .concept .c-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .concept .c-head .c-sub{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 660px; }
+  .concept .c-head .c-sub .mono{ background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+
+  .concept-body{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .concept-body{ grid-template-columns: 1fr; gap: 22px; } }
+  .concept-prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .concept-prose p em{ color: var(--blood-dark); font-style: italic; }
+  .concept-prose p strong{ color: var(--blood); font-weight: 600; }
+  .concept-prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .concept-prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .concept-prose ul li strong{ color: var(--ink); }
+  .concept-prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .concept-prose .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .concept-prose .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 22px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* LIBRARY (bookshelf) */
+  .library{ margin: 130px 0; }
+  .library .head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 36px; }
+  @media (max-width: 700px){ .library .head{ grid-template-columns: 1fr; gap: 10px; } }
+  .library .head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(70px, 11vw, 140px); line-height: .8; color: var(--ochre); }
+  .library .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(34px, 5vw, 60px); line-height: 1; margin: 0 0 14px; letter-spacing: -.01em; }
+  .library .head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .library .head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .library .head p strong{ color: var(--ochre-deep); }
+
+  .shelf{ background: var(--paper-deep); border: 2px solid var(--ink); padding: 30px 30px 36px; position: relative; }
+  .shelf .shelf-label{ position: absolute; top: -13px; left: 28px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .22em; font-weight: 700; }
+  .books{ display: flex; align-items: flex-end; gap: 4px; justify-content: center; flex-wrap: wrap; min-height: 200px; padding-top: 16px; padding-bottom: 6px; border-bottom: 8px solid var(--ochre-deep); box-shadow: 0 9px 0 var(--ink); }
+  .book{ display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 14px 10px 16px; min-width: 60px; color: var(--paper); writing-mode: vertical-rl; transform: rotate(180deg); font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .92rem; box-shadow: inset -3px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.07); transition: transform .3s ease, box-shadow .3s ease; cursor: pointer; position: relative; border: none; outline-offset: 4px; }
+  .book:hover{ transform: rotate(180deg) translateY(-6px); }
+  .book:focus-visible{ outline: 3px solid var(--ink); }
+  .book.active{ transform: rotate(180deg) translateY(-10px); box-shadow: inset -3px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.1), 0 8px 0 var(--ink), 0 0 0 3px var(--ink); }
+  .book.tall{ height: 200px; } .book.med{ height: 175px; } .book.short{ height: 155px; }
+  .book.math{ background: var(--blood); } .book.random{ background: var(--olive); } .book.datetime{ background: var(--ochre-deep); } .book.os{ background: #4a3a2c; } .book.json{ background: #6b5080; } .book.sys{ background: var(--blood-dark); } .book.statistics{ background: var(--olive-deep); } .book.csv{ background: #8a6320; } .book.time{ background: #4a6b86; }
+  .shelf .caption{ margin-top: 24px; text-align: center; font-style: italic; color: var(--ink-soft); font-size: .95rem; }
+  .shelf .caption strong{ color: var(--ochre-deep); font-style: normal; }
+
+  .book-info-panel{ margin-top: 26px; background: var(--paper); border: 1.5px solid var(--ink); min-height: 230px; position: relative; overflow: hidden; transition: border-top-color .35s ease; border-top: 6px solid var(--ink); }
+  .bi-placeholder{ padding: 50px 30px; text-align: center; color: var(--ink-faint); transition: opacity .35s ease; }
+  .bi-placeholder svg{ width: 38px; height: 38px; margin-bottom: 12px; color: var(--ink-faint); }
+  .bi-placeholder p{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-size: 1.15rem; }
+  .bi-placeholder p strong{ color: var(--blood-dark); font-style: normal; }
+  .bi-placeholder.hidden{ display: none; }
+  .bi-content{ padding: 26px 30px 28px; opacity: 0; transition: opacity .35s ease; }
+  .bi-content.shown{ opacity: 1; }
+  .bi-header{ display: flex; align-items: center; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
+  .bi-color{ width: 16px; height: 26px; display: inline-block; background: var(--ink); transition: background .35s ease; }
+  .bi-name{ font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--ink); font-size: 1.8rem; line-height: 1; margin: 0; }
+  .bi-tag{ font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-faint); margin-left: 4px; }
+  .bi-desc{ margin: 0 0 22px; font-size: 1rem; color: var(--ink); line-height: 1.55; max-width: 760px; }
+  .bi-desc strong{ color: var(--blood); } .bi-desc em{ color: var(--blood-dark); font-style: italic; }
+  .bi-grid{ display: grid; grid-template-columns: 1.05fr 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 820px){ .bi-grid{ grid-template-columns: 1fr; gap: 16px; } }
+  .bi-funcs h5, .bi-ex h5{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: .92rem; margin: 0 0 10px; color: var(--ink-soft); letter-spacing: .02em; }
+  .bi-funcs ul{ margin: 0; padding: 0; list-style: none; }
+  .bi-funcs ul li{ padding: 7px 0; border-bottom: 1px dashed var(--line); font-family: "Newsreader", serif; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; }
+  .bi-funcs ul li:last-child{ border-bottom: none; }
+  .bi-funcs ul li code{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 2px 8px; color: var(--ink); font-size: .82rem; border: 1px solid var(--line); white-space: nowrap; }
+  .bi-ex pre{ margin: 0; padding: 16px 18px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .8rem; line-height: 1.7; overflow-x: auto; }
+  .bi-ex pre .kw{ color: var(--c-kw); } .bi-ex pre .str{ color: var(--c-str); } .bi-ex pre .num{ color: var(--c-num); } .bi-ex pre .com{ color: var(--c-com); font-style: italic; } .bi-ex pre .fn{ color: var(--c-fn); }
+
+  .import-syntax{ margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 760px){ .import-syntax{ grid-template-columns: 1fr; } }
+  .import-card{ background: var(--paper); border: 1.5px solid var(--ink); padding: 22px 22px 24px; }
+  .import-card h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; margin: 0 0 6px; color: var(--blood); }
+  .import-card .sub-h{ font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px; }
+  .import-card pre{ margin: 0 0 12px; padding: 14px 16px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.7; }
+  .import-card pre .kw{ color: var(--c-kw); } .import-card pre .fn{ color: var(--c-fn); } .import-card pre .com{ color: var(--c-com); font-style: italic; } .import-card pre .num{ color: var(--c-num); }
+  .import-card p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.5; }
+  .import-card p strong{ color: var(--ink); }
+
+  /* PROJECT (download scaffold) */
+  .project{ margin: 130px 0; }
+  .project .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 26px; }
+  @media (max-width: 700px){ .project .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .project .head .stamp{ border: 2.5px solid var(--olive); color: var(--olive-deep); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .project h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5.5vw, 68px); line-height: 1; margin: 0 0 14px; letter-spacing: -.015em; }
+  .project h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .project .intro{ color: var(--ink-soft); font-size: 1.08rem; max-width: 800px; margin: 0 0 30px; }
+  .project .intro strong{ color: var(--olive-deep); }
+
+  /* how the scaffold looks */
+  .scaffold-demo{ display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; margin-bottom: 36px; }
+  @media (max-width: 860px){ .scaffold-demo{ grid-template-columns: 1fr; } }
+  .scaffold-demo .sd-explain h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; margin: 0 0 12px; color: var(--ink); }
+  .scaffold-demo .sd-explain p{ margin: 0 0 14px; font-size: 1rem; color: var(--ink-soft); line-height: 1.55; }
+  .scaffold-demo .sd-explain p strong{ color: var(--blood); }
+  .scaffold-demo .sd-explain .arrow-note{ display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--paper-deep); border-left: 3px solid var(--olive); font-style: italic; font-size: .92rem; color: var(--ink); }
+  .code-block .placeholder-line{ display: block; border-bottom: 1px dashed rgba(239,230,210,.25); height: 1.75em; }
+  .code-block .yours{ color: var(--olive); background: rgba(93,102,56,.18); padding: 0 4px; }
+
+  .download-box{ margin-top: 6px; background: var(--ink); color: var(--paper); padding: 0; overflow: hidden; }
+  .download-box .db-head{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 28px 32px; border-bottom: 1px solid rgba(239,230,210,.12); }
+  @media (max-width: 640px){ .download-box .db-head{ grid-template-columns: 1fr; } }
+  .download-box .db-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 0 0 6px; color: #f0c8a0; }
+  .download-box .db-head .file-meta{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: rgba(239,230,210,.55); }
+  .dl-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--olive); color: var(--paper); text-decoration: none; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; border: none; cursor: pointer; }
+  .dl-btn:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
+  .dl-btn svg{ width: 18px; height: 18px; }
+  .download-box .db-body{ padding: 26px 32px 30px; }
+  .download-box .db-body > p{ margin: 0 0 18px; font-size: 1rem; color: rgba(239,230,210,.85); line-height: 1.55; }
+  .download-box .db-body > p strong{ color: #f0c8a0; }
+  .tool-pills{ display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; }
+  .tool-pill{ display: inline-flex; align-items: center; gap: 7px; background: rgba(239,230,210,.08); border: 1px solid rgba(239,230,210,.15); padding: 7px 14px; font-size: .82rem; color: rgba(239,230,210,.85); }
+  .tool-pill.nuevo{ border-color: rgba(240,200,160,.4); color: #f0c8a0; }
+  .tool-pill .mono{ font-family: "JetBrains Mono", monospace; font-size: .9em; }
+  .game-preview{ background: rgba(239,230,210,.06); border: 1px solid rgba(239,230,210,.12); padding: 18px 22px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.8; color: var(--c-base); }
+  .game-preview .gp-title{ color: #f0c8a0; font-size: .72rem; letter-spacing: .12em; margin-bottom: 10px; display: block; }
+  .game-preview .prompt{ color: rgba(239,230,210,.5); }
+  .game-preview .hint{ color: #f5b08c; } .game-preview .win{ color: #c8dd96; }
+
+  /* TAREA */
+  .tarea{ margin: 110px 0 80px; }
+  .tarea .head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .tarea .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .tarea .head .stamp{ border: 2.5px solid var(--blood); color: var(--blood); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .tarea h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5vw, 64px); margin: 0 0 12px; line-height: 1; letter-spacing: -.01em; }
+  .tarea h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .tarea .intro{ font-size: 1.05rem; color: var(--ink-soft); margin: 0 0 26px; max-width: 760px; }
+  .tarea .intro strong{ color: var(--blood); }
+  .deadline-banner{ background: var(--ink); color: var(--paper); padding: 16px 24px; margin-bottom: 26px; display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center; }
+  @media (max-width: 600px){ .deadline-banner{ grid-template-columns: 1fr; gap: 8px; text-align: center; } }
+  .deadline-banner .icon{ width: 36px; height: 36px; background: var(--blood); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .deadline-banner .icon svg{ width: 20px; height: 20px; color: var(--paper); }
+  .deadline-banner .text{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.08rem; }
+  .deadline-banner .text strong{ color: #f0c8a0; }
+  .deadline-banner .countdown-num{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; color: #f0c8a0; font-size: 1.3rem; }
+  .checklist{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 720px){ .checklist{ grid-template-columns: 1fr; } }
+  .check{ background: var(--paper-deep); padding: 24px 26px; border-left: 4px solid var(--blood); display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; transition: all .3s ease; }
+  .check:hover{ transform: translateX(4px); box-shadow: -4px 4px 0 var(--blood); }
+  .check .box{ width: 26px; height: 26px; border: 2px solid var(--ink); flex-shrink: 0; margin-top: 2px; background: var(--paper); }
+  .check h4{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.15rem; margin: 0 0 6px; }
+  .check p{ margin: 0; font-size: .94rem; color: var(--ink-soft); }
+  .check .deadline{ margin-top: 8px; font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--blood); }
+
+  /* CIERRE */
+  .cierre{ margin: 120px 0 80px; padding: 70px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(28px, 4.3vw, 52px); line-height: 1.18; margin: 24px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 920px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 36px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 06 · Constantes, librerías y tu primer proyecto</span>
+    </div>
+    <div class="right">
+      Jueves 04.06.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Continuación de la sesión 05</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">06</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      <span class="line1">El <span class="em">taller</span>.</span>
+      <span class="line2">Hoy <span class="em-ochre">construyes</span> tú.</span>
+    </h1>
+    <p class="lede">
+      La clase pasada cazamos bugs y conocimos los ciclos. Hoy cerramos esa cacería, recogemos las dos
+      herramientas que quedaron en la mesa —las <strong>constantes</strong> y las <strong>librerías</strong>—
+      y damos el paso más importante: dejas de copiar y <em>construyes tu primer programa completo</em>,
+      siguiendo un plano paso a paso.<br/><br/>
+      Ya tienes las piezas. <span class="underline-ochre">Hoy las ensamblas</span>.
+    </p>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+      <div class="txt">
+        <strong>Esta sesión continúa la 05.</strong> Si te quedaste con dudas del programa de calificaciones
+        o de algún error, hoy lo cerramos juntos antes de avanzar.
+      </div>
+    </div>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">Constantes y librerías</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Proyecto</span>
+        <span class="value">Adivina el número (guiado)</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Entrega</span>
+        <span class="value">Tu juego en GitHub</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFIESTO -->
+  <section class="manifiesto reveal">
+    <span class="tag">La idea de hoy</span>
+    <blockquote class="display">
+      Conocer la herramienta <span class="accent-ochre italic">no es saber usarla</span>.<br/>
+      Eso solo llega <span class="accent italic">construyendo</span>.
+    </blockquote>
+    <cite>— Por qué hoy te toca a ti</cite>
+  </section>
+
+  <!-- CLOSE THE HUNT -->
+  <section class="hunt reveal">
+    <div class="h-head">
+      <div class="n display">0</div>
+      <div>
+        <h2 class="display">Cerremos la <em>cacería</em>.</h2>
+        <p>Antes de avanzar: aquí están <strong>los 7 errores</strong> del reporte de calificaciones de la clase pasada, ya revelados. Compáralos con los que tú encontraste. ¿Se te escapó alguno?</p>
+      </div>
+    </div>
+
+    <div class="bug-table">
+      <div class="bug-row header">
+        <div class="bug-n">#</div>
+        <div class="bug-desc">Qué estaba mal · cómo se arregla</div>
+        <div class="bug-type">tipo</div>
+      </div>
+      <div class="bug-row">
+        <div class="bug-n">1</div>
+        <div class="bug-desc">Faltaban los dos puntos en <span class="mono">def validar_calificacion(calif)</span> → agregar <strong>:</strong> al final.</div>
+        <div class="bug-type"><span class="tag sx">sintaxis</span></div>
+      </div>
+      <div class="bug-row">
+        <div class="bug-n">2</div>
+        <div class="bug-desc">La línea <span class="mono">suma = suma + c</span> no estaba indentada dentro del <span class="mono">for</span> → meterla con sangría.</div>
+        <div class="bug-type"><span class="tag sx">indentación</span></div>
+      </div>
+      <div class="bug-row">
+        <div class="bug-n">3</div>
+        <div class="bug-desc"><span class="mono">return Promedio</span> con mayúscula → Python no la conoce. Cambiar a <span class="mono">promedio</span>.</div>
+        <div class="bug-type"><span class="tag rt">NameError</span></div>
+      </div>
+      <div class="bug-row">
+        <div class="bug-n">4</div>
+        <div class="bug-desc">El <span class="mono">input</span> de la calificación no se convertía con <span class="mono">int()</span> → comparaba texto con número.</div>
+        <div class="bug-type"><span class="tag rt">TypeError</span></div>
+      </div>
+      <div class="bug-row">
+        <div class="bug-n">5</div>
+        <div class="bug-desc">En la letra, <span class="mono">elif promedio > 60</span> dejaba fuera el 60 exacto → debía ser <strong>&gt;=</strong>.</div>
+        <div class="bug-type"><span class="tag lg">lógica</span></div>
+      </div>
+      <div class="bug-row">
+        <div class="bug-n">6</div>
+        <div class="bug-desc"><span class="mono">esta_aprobado</span> no devolvía nada si reprobaba → faltaba el <span class="mono">else / return "REPROBADO"</span>.</div>
+        <div class="bug-type"><span class="tag lg">lógica</span></div>
+      </div>
+      <div class="bug-row">
+        <div class="bug-n">7</div>
+        <div class="bug-desc"><span class="mono">"Promedio: " + promedio</span> mezclaba texto con número → envolver con <span class="mono">str(promedio)</span>.</div>
+        <div class="bug-type"><span class="tag rt">TypeError</span></div>
+      </div>
+    </div>
+
+    <p class="closing"><strong>La gran lección:</strong> los errores de sintaxis y de ejecución te avisan con un mensaje. Los de lógica (como el #5) no dicen nada — el programa corre, pero miente. Por eso el debugger y mirar las variables valen oro.</p>
+  </section>
+
+  <!-- CONCEPT i: CONSTANTES -->
+  <section class="concept reveal">
+    <div class="c-head">
+      <div class="c-num display">i.</div>
+      <div>
+        <h2 class="display">Las <em>constantes</em>.</h2>
+        <p class="c-sub">Variables que prometes no cambiar. Una convención entre programadores: si la nombras <span class="mono">EN_MAYÚSCULAS</span>, todos saben que <em>nadie la toca</em>.</p>
+      </div>
+    </div>
+
+    <div class="concept-body">
+      <div class="concept-prose">
+        <p>Python no tiene constantes «de verdad»: nada te impide cambiar un valor. Pero existe una <strong>convención</strong> universal — si nombras una variable en <strong>MAYÚSCULAS con guiones bajos</strong> (se llama <em>SCREAMING_SNAKE_CASE</em>), le avisas a todo el mundo: «esto no se modifica».</p>
+        <ul>
+          <li><span class="mono">PI = 3.14159</span></li>
+          <li><span class="mono">IVA_MEXICO = 0.16</span></li>
+          <li><span class="mono">MAX_INTENTOS = 7</span></li>
+        </ul>
+        <p>¿Para qué? Para borrar los <em>números mágicos</em>. Si ves <span class="mono">total * 0.16</span> nadie sabe qué es ese 0.16. Si ves <span class="mono">total * IVA_MEXICO</span>, el código se explica solo. Y si la tasa cambia, la corriges en <em>un solo lugar</em>.</p>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> si un valor aparece dos veces y nunca cambia, hazlo constante. Lo vas a usar muchísimo en el proyecto de hoy.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">constantes.py</span></div>
+        <pre><span class="com"># ✗ números mágicos: ¿qué son?</span>
+<span class="kw">if</span> intentos &gt; <span class="num">7</span>:
+    <span class="fn">print</span>(<span class="str">"Game over"</span>)
+premio = puntos * <span class="num">0.16</span>
+
+
+<span class="com"># ✓ constantes con nombre claro</span>
+MAX_INTENTOS = <span class="num">7</span>
+BONO = <span class="num">0.16</span>
+
+<span class="kw">if</span> intentos &gt; MAX_INTENTOS:
+    <span class="fn">print</span>(<span class="str">"Game over"</span>)
+premio = puntos * BONO</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIBRARY (módulos) -->
+  <section class="library reveal">
+    <div class="head">
+      <div class="n display">ii.</div>
+      <div>
+        <h2 class="display">Las <em>librerías</em>.</h2>
+        <p>Python trae una <strong>biblioteca estándar</strong> enorme: cientos de módulos ya escritos y probados. Cada uno es un libro con funciones listas para usar — no tienes que reinventarlas. Hoy aprendes a <strong>importarlas</strong>. <em>Toca cada libro</em> para ver para qué sirve:</p>
+      </div>
+    </div>
+
+    <div class="shelf">
+      <span class="shelf-label">PYTHON · STANDARD LIBRARY</span>
+      <div class="books">
+        <button type="button" class="book math tall" data-mod="math">math</button>
+        <button type="button" class="book random tall" data-mod="random">random</button>
+        <button type="button" class="book datetime med" data-mod="datetime">datetime</button>
+        <button type="button" class="book os med" data-mod="os">os</button>
+        <button type="button" class="book json tall" data-mod="json">json</button>
+        <button type="button" class="book sys short" data-mod="sys">sys</button>
+        <button type="button" class="book statistics med" data-mod="statistics">statistics</button>
+        <button type="button" class="book csv short" data-mod="csv">csv</button>
+        <button type="button" class="book time short" data-mod="time">time</button>
+      </div>
+      <p class="caption"><strong>Estos son nueve.</strong> En realidad son más de 200. Y luego está PyPI: más de 500 mil librerías de terceros instalables con <span class="mono">pip</span>.</p>
+
+      <div class="book-info-panel" id="book-info">
+        <div class="bi-placeholder" id="bi-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 7v6l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+          <p>Toca <strong>cualquier libro</strong> para conocerlo.</p>
+        </div>
+        <div class="bi-content" id="bi-content" hidden>
+          <div class="bi-header">
+            <span class="bi-color" id="bi-color"></span>
+            <h4 class="bi-name" id="bi-name">math</h4>
+            <span class="bi-tag" id="bi-tag">módulo estándar</span>
+          </div>
+          <p class="bi-desc" id="bi-desc"></p>
+          <div class="bi-grid">
+            <div class="bi-funcs">
+              <h5>Funciones que más usarás</h5>
+              <ul id="bi-funcs"></ul>
+            </div>
+            <div class="bi-ex">
+              <h5>Cómo se ve en uso</h5>
+              <pre id="bi-example"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="import-syntax">
+      <div class="import-card">
+        <h4>Importar el módulo entero</h4>
+        <div class="sub-h">La forma recomendada</div>
+        <pre><span class="kw">import</span> random
+
+dado = random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>)  <span class="com"># 1 a 6</span></pre>
+        <p>Llamas a cada cosa con <strong>módulo punto función</strong>. Queda claro de dónde viene. Así lo usarás hoy en el proyecto.</p>
+      </div>
+      <div class="import-card">
+        <h4>Importar solo lo que necesitas</h4>
+        <div class="sub-h">Cuando quieres una o dos cosas</div>
+        <pre><span class="kw">from</span> random <span class="kw">import</span> randint
+
+dado = <span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>)</pre>
+        <p>Trae solo <span class="mono">randint</span>. Más corto al escribir, pero pierdes la pista visible del módulo de origen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT (download scaffold) -->
+  <section class="project reveal">
+    <div class="head">
+      <div class="stamp">Tu turno</div>
+      <div>
+        <h2 class="display">Sigue el <em>plano</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Hoy no copias código de la pantalla: lo escribes tú. Vas a descargar un archivo que solo tiene
+      <strong>comentarios numerados</strong> — un plano paso a paso. Debajo de cada paso hay un espacio en
+      blanco donde escribes tu propio código. Al terminar los 12 pasos tendrás un <em>juego completo y
+      jugable</em>: «Adivina el número».
+    </p>
+
+    <div class="scaffold-demo">
+      <div class="sd-explain">
+        <h3>Cómo funciona el archivo</h3>
+        <p>Cada paso es un comentario que empieza con <span class="mono">#</span>. <strong>No los borres.</strong> Tu trabajo es leer la instrucción y escribir el código justo debajo, en el espacio vacío.</p>
+        <p>Sigue el orden. Después de cada paso, corre el programa para asegurarte de que no truena antes de continuar — exactamente el hábito de debugging de la clase pasada.</p>
+        <div class="arrow-note">El plano te dice <em>qué</em> hacer; tú decides el <em>cómo</em>.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">proyecto_adivina.py</span></div>
+        <pre><span class="com"># PASO 1: Importa la librería "random".</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com"># PASO 2: Crea tres constantes:</span>
+<span class="com">#   NUMERO_MIN, NUMERO_MAX, MAX_INTENTOS</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com"># PASO 3: Función "generar_secreto" que</span>
+<span class="com">#   devuelva un random.randint(...)</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com"># ... y así hasta el PASO 12</span></pre>
+      </div>
+    </div>
+
+    <div class="download-box">
+      <div class="db-head">
+        <div>
+          <h3>Adivina el número · plano para construir</h3>
+          <div class="file-meta">proyecto_adivina.py · 12 pasos guiados · Python 3</div>
+        </div>
+        <a class="dl-btn" href="proyecto_adivina.py" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+          Descargar el plano
+        </a>
+      </div>
+      <div class="db-body">
+        <p>La computadora elige un número secreto y el jugador trata de adivinarlo. Después de cada intento, el programa da una pista (<em>muy alto</em> / <em>muy bajo</em>) hasta que acierta o se le acaban los intentos. <strong>Usarás todo lo que ya sabes</strong>, incluidas las dos herramientas de hoy:</p>
+
+        <div class="tool-pills">
+          <span class="tool-pill nuevo"><span class="mono">import random</span> · librería</span>
+          <span class="tool-pill nuevo">constantes</span>
+          <span class="tool-pill">funciones</span>
+          <span class="tool-pill">validación</span>
+          <span class="tool-pill">ciclo <span class="mono">for</span></span>
+        </div>
+
+        <div class="game-preview">
+          <span class="gp-title">▶ ASÍ SE VERÁ TU JUEGO TERMINADO</span>
+          <span class="prompt">¡Adivina el número entre 1 y 100! Tienes 7 intentos.</span><br/>
+          Tu número: 50<br/>
+          <span class="hint">Tu número es muy alto</span><br/>
+          Tu número: 25<br/>
+          <span class="hint">Tu número es muy bajo</span><br/>
+          Tu número: 37<br/>
+          <span class="win">¡Felicidades! Adivinaste.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAREA -->
+  <section class="tarea reveal">
+    <div class="head">
+      <div class="stamp">Entrega</div>
+      <div>
+        <h2 class="display">Tu primer <em>proyecto</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Si no terminaste los 12 pasos en clase, complétalos en casa. Sube tu <strong>juego terminado y
+      funcionando</strong> a GitHub. Este es el primer programa que construyes de principio a fin: que se note.
+    </p>
+
+    <div class="deadline-banner">
+      <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="text"><strong>Deadline:</strong> Lunes 8 de junio · 17:59 h (antes de la sesión 07)</div>
+      <div class="countdown-num">4 días</div>
+    </div>
+
+    <div class="checklist">
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>1. El juego completo</h4>
+          <p>El archivo <span class="mono">proyecto_adivina.py</span> con los 12 pasos resueltos, corriendo de inicio a fin. Debe usar la librería, las constantes, las funciones y el <span class="mono">for</span>.</p>
+          <div class="deadline">archivo: <span class="mono">sesion-06/proyecto_adivina.py</span></div>
+        </div>
+      </div>
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>2. README con captura</h4>
+          <p>Un <span class="mono">README.md</span> que explique cómo se juega, y una captura (o el texto pegado) de una partida tuya ganando.</p>
+          <div class="deadline">archivo: <span class="mono">sesion-06/README.md</span></div>
+        </div>
+      </div>
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>3. Commit con mensaje claro</h4>
+          <p>Un commit con mensaje <span class="mono">"sesion-06: juego adivina el número"</span>. Sin «final», sin «v2».</p>
+          <div class="deadline">tip: <span class="mono">$ git commit -m "sesion-06: ..."</span></div>
+        </div>
+      </div>
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>4. Reto extra (opcional)</h4>
+          <p>Si quieres ir más allá: muestra en cuántos intentos ganó, valida que el número esté en rango, o pregunta si quiere volver a jugar. Vienen como pistas al final del archivo.</p>
+          <div class="deadline">suma puntos de actividad</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «Un viaje de <span class="em-ochre">mil millas</span><br/>
+      comienza con <span class="em">un solo paso</span>.»
+    </div>
+    <div class="quote-author">— Lao Tzu</div>
+    <div class="quote-meta">Tao Te Ching, capítulo 64 · siglo VI a.&nbsp;C.</div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 06 <span class="dot">·</span> El taller <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-05/index.html">Sesión 05 · Funciones, scope y debugging</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+
+  /* ===== Book info panel ===== */
+  const moduleData = {
+    math: { color: '#a02418', tag: 'matemáticas avanzadas',
+      desc: 'Operaciones matemáticas: constantes, raíces, potencias, trigonometría, logaritmos. El módulo para <em>cálculos científicos o geométricos</em>.',
+      funcs: [{code:'math.pi',what:'la constante π = 3.14159…'},{code:'math.sqrt(n)',what:'raíz cuadrada de n'},{code:'math.pow(x, y)',what:'x elevado a y'},{code:'math.floor(x), .ceil(x)',what:'redondea abajo / arriba'}],
+      example: `<span class="kw">import</span> math\n\narea = math.pi * radio ** <span class="num">2</span>\nhipo = math.<span class="fn">sqrt</span>(a**<span class="num">2</span> + b**<span class="num">2</span>)` },
+    random: { color: '#5d6638', tag: 'aleatoriedad',
+      desc: 'Generación de <strong>aleatoriedad</strong>: números, elecciones, mezclas. El módulo de los juegos y simulaciones. <em>Justo el que usarás hoy.</em>',
+      funcs: [{code:'random.randint(a, b)',what:'entero al azar entre a y b'},{code:'random.choice(lista)',what:'elige un elemento al azar'},{code:'random.shuffle(lista)',what:'mezcla una lista'},{code:'random.random()',what:'float entre 0.0 y 1.0'}],
+      example: `<span class="kw">import</span> random\n\nsecreto = random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">100</span>)\ncarta   = random.<span class="fn">choice</span>([<span class="str">"♠"</span>, <span class="str">"♥"</span>])` },
+    datetime: { color: '#8a6320', tag: 'fechas y horas',
+      desc: 'Manejo de <strong>fechas y horas</strong>: sumar días, calcular edades, medir cuánto tiempo pasó entre dos eventos.',
+      funcs: [{code:'datetime.now()',what:'fecha y hora actuales'},{code:'timedelta(days=7)',what:'una duración'},{code:'dt.strftime("%d/%m/%Y")',what:'fecha a texto'},{code:'date(2026, 6, 4)',what:'una fecha específica'}],
+      example: `<span class="kw">from</span> datetime <span class="kw">import</span> datetime, timedelta\n\nhoy     = datetime.<span class="fn">now</span>()\nproximo = hoy + <span class="fn">timedelta</span>(days=<span class="num">7</span>)` },
+    os: { color: '#4a3a2c', tag: 'sistema operativo',
+      desc: 'Interacción con el <strong>sistema operativo</strong>: archivos, carpetas, rutas. Para cuando tu programa necesita <em>tocar el computador</em>.',
+      funcs: [{code:'os.getcwd()',what:'carpeta actual'},{code:'os.listdir(ruta)',what:'lista archivos'},{code:'os.path.exists(x)',what:'¿existe el archivo?'},{code:'os.makedirs(ruta)',what:'crea una carpeta'}],
+      example: `<span class="kw">import</span> os\n\narchivos = os.<span class="fn">listdir</span>(<span class="str">"."</span>)\n<span class="kw">if</span> os.path.<span class="fn">exists</span>(<span class="str">"datos.csv"</span>):\n    <span class="fn">print</span>(<span class="str">"existe"</span>)` },
+    json: { color: '#6b5080', tag: 'datos web',
+      desc: 'Lectura y escritura de <strong>JSON</strong>: el lenguaje universal de los datos en la web. APIs, configuraciones, intercambio entre programas.',
+      funcs: [{code:'json.dumps(obj)',what:'objeto → texto JSON'},{code:'json.loads(texto)',what:'texto JSON → objeto'},{code:'json.dump(obj, f)',what:'escribe a archivo'},{code:'json.load(f)',what:'lee de archivo'}],
+      example: `<span class="kw">import</span> json\n\ndatos = {<span class="str">"nombre"</span>: <span class="str">"Ana"</span>, <span class="str">"edad"</span>: <span class="num">25</span>}\ntexto = json.<span class="fn">dumps</span>(datos)` },
+    sys: { color: '#6e1810', tag: 'intérprete y CLI',
+      desc: 'Acceso al <strong>intérprete de Python</strong>: argumentos de línea de comandos, salida del programa, entrada/salida estándar.',
+      funcs: [{code:'sys.argv',what:'argumentos del script'},{code:'sys.exit(0)',what:'termina el programa'},{code:'sys.stdin / stdout',what:'entrada / salida'},{code:'sys.version',what:'versión de Python'}],
+      example: `<span class="kw">import</span> sys\n\n<span class="kw">if</span> <span class="fn">len</span>(sys.argv) &lt; <span class="num">2</span>:\n    sys.<span class="fn">exit</span>(<span class="str">"Falta un dato"</span>)` },
+    statistics: { color: '#424a26', tag: 'estadística básica',
+      desc: '<strong>Cálculos estadísticos</strong> sin instalar nada extra: promedios, medianas, desviación. Lo justo para análisis cotidiano.',
+      funcs: [{code:'statistics.mean(xs)',what:'promedio'},{code:'statistics.median(xs)',what:'mediana'},{code:'statistics.mode(xs)',what:'valor más frecuente'},{code:'statistics.stdev(xs)',what:'desviación estándar'}],
+      example: `<span class="kw">import</span> statistics\n\nnotas = [<span class="num">8.5</span>, <span class="num">9.0</span>, <span class="num">7.5</span>]\n<span class="fn">print</span>(statistics.<span class="fn">mean</span>(notas))` },
+    csv: { color: '#8a6320', tag: 'datos tabulares',
+      desc: 'Lectura y escritura de archivos <strong>CSV</strong> (los de Excel o Sheets). El formato más común para datos en tabla.',
+      funcs: [{code:'csv.reader(f)',what:'lee filas como listas'},{code:'csv.writer(f)',what:'escribe filas'},{code:'csv.DictReader(f)',what:'lee como diccionarios'},{code:'csv.DictWriter(f)',what:'escribe diccionarios'}],
+      example: `<span class="kw">import</span> csv\n\n<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"datos.csv"</span>) <span class="kw">as</span> f:\n    <span class="kw">for</span> fila <span class="kw">in</span> csv.<span class="fn">reader</span>(f):\n        <span class="fn">print</span>(fila)` },
+    time: { color: '#4a6b86', tag: 'pausas y medición',
+      desc: '<strong>Pausas y mediciones de tiempo</strong>: esperar segundos, medir cuánto tarda algo en ejecutarse.',
+      funcs: [{code:'time.sleep(seg)',what:'pausa la ejecución'},{code:'time.time()',what:'timestamp actual'},{code:'time.perf_counter()',what:'reloj de precisión'},{code:'time.localtime()',what:'tiempo local'}],
+      example: `<span class="kw">import</span> time\n\ninicio = time.<span class="fn">perf_counter</span>()\ntime.<span class="fn">sleep</span>(<span class="num">2</span>)\ndur = time.<span class="fn">perf_counter</span>() - inicio` },
+  };
+
+  const $placeholder = document.getElementById('bi-placeholder');
+  const $content = document.getElementById('bi-content');
+  const $panel = document.getElementById('book-info');
+  const $name = document.getElementById('bi-name');
+  const $tag = document.getElementById('bi-tag');
+  const $desc = document.getElementById('bi-desc');
+  const $color = document.getElementById('bi-color');
+  const $funcs = document.getElementById('bi-funcs');
+  const $example = document.getElementById('bi-example');
+
+  document.querySelectorAll('.book[data-mod]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mod = btn.dataset.mod;
+      const data = moduleData[mod];
+      if (!data) return;
+      document.querySelectorAll('.book.active').forEach(b => { if (b !== btn) b.classList.remove('active'); });
+      btn.classList.add('active');
+      $placeholder.classList.add('hidden');
+      $content.hidden = false;
+      $content.classList.remove('shown');
+      $name.textContent = mod;
+      $tag.textContent = data.tag;
+      $desc.innerHTML = data.desc;
+      $color.style.background = data.color;
+      $panel.style.borderTopColor = data.color;
+      $funcs.innerHTML = '';
+      data.funcs.forEach(f => {
+        const li = document.createElement('li');
+        const code = document.createElement('code'); code.textContent = f.code;
+        const span = document.createElement('span'); span.textContent = f.what;
+        li.appendChild(code); li.appendChild(span); $funcs.appendChild(li);
+      });
+      $example.innerHTML = data.example;
+      requestAnimationFrame(() => $content.classList.add('shown'));
+      const rect = $panel.getBoundingClientRect();
+      if (rect.bottom > window.innerHeight) $panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  });
+</script>
+
+</body>
+</html>
