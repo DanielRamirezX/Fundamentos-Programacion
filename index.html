@@ -78,6 +78,32 @@
   .top .meta{ font-size:.78rem; letter-spacing:.05em; }
   .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
   .top .right .today{ color: var(--blood); font-weight: 600; }
+  .top .tools-link{
+    font-family: "JetBrains Mono", monospace;
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--blood);
+    text-decoration: none;
+    border: 1.5px solid var(--blood);
+    padding: 7px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .top .tools-link:hover{
+    background: var(--blood);
+    color: var(--paper);
+    transform: translateY(-1px);
+  }
+  .top .tools-link svg{ width: 13px; height: 13px; }
+  @media (max-width: 760px){
+    .top{ flex-wrap: wrap; gap: 14px; }
+    .top .tools-link{ order: 3; }
+  }
 
   /* HERO */
   .hero{
@@ -540,6 +566,10 @@
       <span class="seal">V.</span>
       <span class="meta">Cuaderno del curso · Fundamentos de Programación · 26-3</span>
     </div>
+    <a class="tools-link" href="https://danielramirezx.github.io/LinkHub/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Herramientas
+    </a>
     <div class="right">
       <span class="today" id="today-date">—</span><br/>
       <span style="color:var(--ink-soft)">UNITEC Atizapán · Lun y Jue, 18:00–20:00</span>
@@ -652,7 +682,7 @@
     { semana: 3, num: 6,  fecha: '2026-06-04', dia: 'Jue', titulo: 'Verdadero, falso, y nada en medio',      subtitulo: 'Operadores lógicos · Expresiones booleanas',            link: 'sesion-06/', tipo: 'normal' },
     // Semana 4
     { semana: 4, num: 7,  fecha: '2026-06-08', dia: 'Lun', titulo: 'El primer bivio',                        subtitulo: 'Decisión simple con if · Condiciones · Indentación',    link: 'sesion-07/', tipo: 'normal' },
-    { semana: 4, num: 8,  fecha: '2026-06-11', dia: 'Jue', titulo: 'Asueto',                                 subtitulo: 'Posible asueto · Inauguración Mundial 2026',            link: '#',          tipo: 'asueto' },
+    { semana: 4, num: 8,  fecha: '2026-06-11', dia: 'Jue', titulo: 'La encrucijada',                         subtitulo: 'El switch-case de Python · match-case · Patrones · Casos múltiples', link: 'sesion-08/', tipo: 'normal' },
     // Semana 5
     { semana: 5, num: 9,  fecha: '2026-06-15', dia: 'Lun', titulo: 'Los muchos caminos',                     subtitulo: 'if-else · if-elif-else · Decisiones anidadas · match',  link: 'sesion-09/', tipo: 'normal' },
     { semana: 5, num: 10, fecha: '2026-06-18', dia: 'Jue', titulo: 'El arte de no engañarse',                subtitulo: 'PEP 8 · Debugging · Uso responsable de IA',             link: 'sesion-10/', tipo: 'normal' },
