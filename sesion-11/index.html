@@ -241,6 +241,17 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -275,6 +286,11 @@
       veces preguntarás un dato hasta que el usuario lo teclee bien? <em>Las que hagan falta</em>. Hoy aprendes
       el ciclo que no cuenta, sino que <strong>insiste</strong>: el <strong>while</strong> —repetir
       <span class="underline-ochre">hasta que se cumpla una condición</span>.
+    </p>
+    <p class="lede" style="margin-top:18px; font-size:1.02rem;">
+      Desde la sesión 09 el código va en <strong>C++</strong> (principal) con su equivalente en <em>Python</em>
+      como apoyo —el mismo razonamiento en dos idiomas. Cada bloque trae <strong>dos pestañas</strong>: C++ activo
+      por defecto, Python a un clic.
     </p>
 
     <div class="cont-banner">
@@ -328,8 +344,45 @@
         <p>Si te falta la tercera, el ciclo nunca termina. La condición se queda eternamente verdadera y el programa gira para siempre. De eso hablamos en un momento.</p>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> usa <span class="mono">for</span> cuando sabes <em>cuántas</em> veces; usa <span class="mono">while</span> cuando solo sabes <em>cuándo parar</em>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuenta_regresiva.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuenta_regresiva.cpp</span></div>
+<pre><span class="com">// 1) Inicializar la variable a vigilar</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">int</span> segundos = <span class="num">5</span>;
+
+    <span class="com">// 2) Condicion: mientras sea verdadera, repite</span>
+    <span class="kw">while</span> (segundos &gt; <span class="num">0</span>) {
+        cout &lt;&lt; <span class="str">"Despegue en "</span> &lt;&lt; segundos &lt;&lt; <span class="str">"..."</span> &lt;&lt; endl;
+        <span class="com">// 3) Actualizar -&gt; acerca el final</span>
+        segundos = segundos - <span class="num">1</span>;
+    }
+
+    cout &lt;&lt; <span class="str">"¡Despegue! 🚀"</span> &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="com">// Salida:</span>
+<span class="out">// Despegue en 5...</span>
+<span class="out">// Despegue en 4...</span>
+<span class="out">// Despegue en 3...</span>
+<span class="out">// Despegue en 2...</span>
+<span class="out">// Despegue en 1...</span>
+<span class="out">// ¡Despegue! 🚀</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuenta_regresiva.py</span></div>
 <pre><span class="com"># 1) Inicializar la variable a vigilar</span>
 segundos = <span class="num">5</span>
 
@@ -348,6 +401,8 @@ segundos = <span class="num">5</span>
 <span class="out"># Despegue en 2...</span>
 <span class="out"># Despegue en 1...</span>
 <span class="out"># ¡Despegue! 🚀</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -412,8 +467,44 @@ segundos = <span class="num">5</span>
         <p>Así, el centinela nunca se procesa: en cuanto aparece, la condición se vuelve falsa y el ciclo se cierra con elegancia.</p>
         <div class="keypoint"><strong>Elige bien el centinela:</strong> debe ser un valor <em>imposible</em> entre los datos reales. Para sumar precios, el <span class="mono">0</span> sirve; para sumar edades, mejor un <span class="mono">-1</span>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">suma_centinela.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">suma_centinela.cpp</span></div>
+<pre><span class="com">// Suma ventas hasta que el usuario escriba 0</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">const double</span> CENTINELA = <span class="num">0</span>;   <span class="com">// señal de "ya no hay más"</span>
+    <span class="kw">double</span> total = <span class="num">0.0</span>, venta;
+
+    <span class="com">// Lectura anticipada: el primer dato</span>
+    cout &lt;&lt; <span class="str">"Venta (0 para terminar): "</span>; cin &gt;&gt; venta;
+
+    <span class="kw">while</span> (venta != CENTINELA) {
+        total = total + venta;
+        <span class="com">// Leer el SIGUIENTE dato antes de revisar</span>
+        cout &lt;&lt; <span class="str">"Venta (0 para terminar): "</span>; cin &gt;&gt; venta;
+    }
+
+    cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="num">2</span>);
+    cout &lt;&lt; <span class="str">"Total del día: $"</span> &lt;&lt; total &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="com">// El 0 nunca se suma: solo cierra el ciclo.</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">suma_centinela.py</span></div>
 <pre><span class="com"># Suma ventas hasta que el usuario escriba 0</span>
 CENTINELA = <span class="num">0</span>   <span class="com"># señal de "ya no hay más"</span>
 total = <span class="num">0.0</span>
@@ -429,6 +520,8 @@ venta = <span class="kw">float</span>(<span class="fn">input</span>(<span class=
 <span class="fn">print</span>(<span class="str">f"Total del día: ${total:.2f}"</span>)
 
 <span class="com"># El 0 nunca se suma: solo cierra el ciclo.</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -458,8 +551,50 @@ venta = <span class="kw">float</span>(<span class="fn">input</span>(<span class=
         <p>Aquí entra una herramienta nueva: el <span class="mono">try / except</span>. Si <span class="mono">int(texto)</span> no puede convertir lo que escribieron, Python lanzaría un <span class="mono">ValueError</span> y el programa moriría. Con <span class="mono">try</span> <em>atrapamos</em> ese error y, en lugar de reventar, pedimos el dato de nuevo.</p>
         <div class="keypoint"><strong>Validar es respetar:</strong> un buen programa nunca culpa al usuario por escribir mal. Lo guía, con calma, hasta que escribe bien.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">validar_edad.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">validar_edad.cpp</span></div>
+<pre><span class="com">// Pide una edad válida: entero entre 0 y 120</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;stdexcept&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">int</span> edad = <span class="num">-1</span>;   <span class="com">// -1 = "aún sin edad válida"</span>
+
+    <span class="kw">while</span> (edad == <span class="num">-1</span>) {
+        cout &lt;&lt; <span class="str">"Tu edad: "</span>;
+        <span class="kw">string</span> texto; cin &gt;&gt; texto;
+        <span class="kw">int</span> numero;
+        <span class="kw">try</span> {
+            numero = <span class="fn">stoi</span>(texto);
+        } <span class="kw">catch</span> (<span class="err">invalid_argument</span>&amp;) {
+            cout &lt;&lt; <span class="str">"Eso no es un número. Inténtalo de nuevo."</span> &lt;&lt; endl;
+            <span class="kw">continue</span>;   <span class="com">// vuelve al inicio del while</span>
+        }
+
+        <span class="kw">if</span> (numero &gt;= <span class="num">0</span> &amp;&amp; numero &lt;= <span class="num">120</span>) {
+            edad = numero;         <span class="com">// dato válido: rompe la condición</span>
+        } <span class="kw">else</span> {
+            cout &lt;&lt; <span class="str">"La edad debe estar entre 0 y 120."</span> &lt;&lt; endl;
+        }
+    }
+
+    cout &lt;&lt; <span class="str">"Edad registrada: "</span> &lt;&lt; edad &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">validar_edad.py</span></div>
 <pre><span class="com"># Pide una edad válida: entero entre 0 y 120</span>
 edad = <span class="kw">None</span>
 
@@ -477,6 +612,8 @@ edad = <span class="kw">None</span>
         <span class="fn">print</span>(<span class="str">"La edad debe estar entre 0 y 120."</span>)
 
 <span class="fn">print</span>(<span class="str">f"Edad registrada: {edad}"</span>)</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -489,25 +626,65 @@ edad = <span class="kw">None</span>
       <div class="dg-body">
         <div class="dg-col left">
           <h4>✗ Nunca termina</h4>
-          <div class="code-block" style="margin-top:6px;">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">jamas.py</span></div>
+          <div class="codeswitch" style="margin-top:6px;">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">jamas.cpp</span></div>
+<pre><span class="kw">int</span> i = <span class="num">1</span>;
+<span class="kw">while</span> (i &lt;= <span class="num">5</span>) {
+    cout &lt;&lt; i &lt;&lt; endl;
+    <span class="com">// olvidamos i++</span>
+}
+<span class="err">// i siempre vale 1 -&gt; gira por siempre</span></pre>
+              </div>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">jamas.py</span></div>
 <pre>i = <span class="num">1</span>
 <span class="kw">while</span> i &lt;= <span class="num">5</span>:
     <span class="fn">print</span>(i)
     <span class="com"># olvidamos i += 1</span>
 <span class="err"># i siempre vale 1 -&gt; gira por siempre</span></pre>
+              </div>
+            </div>
           </div>
           <p>La variable de la condición <strong>nunca cambia</strong>. Resultado: <span class="mono">1</span> impreso sin fin, la terminal se congela.</p>
         </div>
         <div class="dg-col right">
           <h4>✓ Sí termina</h4>
-          <div class="code-block" style="margin-top:6px;">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">si_termina.py</span></div>
+          <div class="codeswitch" style="margin-top:6px;">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">si_termina.cpp</span></div>
+<pre><span class="kw">int</span> i = <span class="num">1</span>;
+<span class="kw">while</span> (i &lt;= <span class="num">5</span>) {
+    cout &lt;&lt; i &lt;&lt; endl;
+    i++;   <span class="com">// la condición avanza</span>
+}
+<span class="com">// i llega a 6 -&gt; la condición es falsa</span></pre>
+              </div>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">si_termina.py</span></div>
 <pre>i = <span class="num">1</span>
 <span class="kw">while</span> i &lt;= <span class="num">5</span>:
     <span class="fn">print</span>(i)
     i += <span class="num">1</span>   <span class="com"># la condición avanza</span>
 <span class="com"># i llega a 6 -&gt; la condición es falsa</span></pre>
+              </div>
+            </div>
           </div>
           <p>Dentro del cuerpo, algo <strong>acerca el final</strong>. La condición tarde o temprano se vuelve falsa y el ciclo se cierra.</p>
         </div>
@@ -580,8 +757,70 @@ edad = <span class="kw">None</span>
       </div>
     </div>
 
-    <div class="code-block">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">adivina_while.py — referencia del profesor</span></div>
+    <div class="codeswitch">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">adivina_while.cpp — referencia del profesor</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;stdexcept&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;cstdlib&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;ctime&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// 1) Constantes del juego</span>
+    <span class="kw">const int</span> NUMERO_MIN = <span class="num">1</span>;
+    <span class="kw">const int</span> NUMERO_MAX = <span class="num">100</span>;
+
+    <span class="com">// 2) La máquina elige su secreto</span>
+    <span class="fn">srand</span>(<span class="fn">time</span>(<span class="num">0</span>));
+    <span class="kw">int</span> secreto = NUMERO_MIN + <span class="fn">rand</span>() % (NUMERO_MAX - NUMERO_MIN + <span class="num">1</span>);
+    <span class="kw">int</span> intentos = <span class="num">0</span>;
+    <span class="kw">bool</span> adivinado = <span class="kw">false</span>;
+
+    cout &lt;&lt; <span class="str">"¡Adivina el número entre "</span> &lt;&lt; NUMERO_MIN
+         &lt;&lt; <span class="str">" y "</span> &lt;&lt; NUMERO_MAX &lt;&lt; <span class="str">"!"</span> &lt;&lt; endl;
+
+    <span class="com">// 3) while: repite HASTA QUE el jugador acierte</span>
+    <span class="kw">while</span> (!adivinado) {
+        cout &lt;&lt; <span class="str">"Tu intento: "</span>;
+        <span class="kw">string</span> texto; cin &gt;&gt; texto;
+
+        <span class="com">// 4) Validación robusta: ¿es un número?</span>
+        <span class="kw">int</span> intento;
+        <span class="kw">try</span> {
+            intento = <span class="fn">stoi</span>(texto);
+        } <span class="kw">catch</span> (<span class="err">invalid_argument</span>&amp;) {
+            cout &lt;&lt; <span class="str">"Eso no es un número."</span> &lt;&lt; endl;
+            <span class="kw">continue</span>;           <span class="com">// no cuenta como intento</span>
+        }
+
+        intentos++;
+
+        <span class="com">// 5) Comparar y dar pista</span>
+        <span class="kw">if</span> (intento &lt; secreto) {
+            cout &lt;&lt; <span class="str">"Muy bajo. Inténtalo otra vez."</span> &lt;&lt; endl;
+        } <span class="kw">else if</span> (intento &gt; secreto) {
+            cout &lt;&lt; <span class="str">"Muy alto. Inténtalo otra vez."</span> &lt;&lt; endl;
+        } <span class="kw">else</span> {
+            adivinado = <span class="kw">true</span>;   <span class="com">// rompe la condición del while</span>
+            cout &lt;&lt; <span class="str">"¡Acertaste en "</span> &lt;&lt; intentos
+                 &lt;&lt; <span class="str">" intentos! 🎉"</span> &lt;&lt; endl;
+        }
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">adivina_while.py — referencia del profesor</span></div>
 <pre><span class="kw">import</span> random
 
 <span class="com"># 1) Constantes del juego</span>
@@ -616,6 +855,8 @@ adivinado = <span class="kw">False</span>
     <span class="kw">else</span>:
         adivinado = <span class="kw">True</span>   <span class="com"># rompe la condición del while</span>
         <span class="fn">print</span>(<span class="str">f"¡Acertaste en {intentos} intentos! 🎉"</span>)</pre>
+        </div>
+      </div>
     </div>
 
     <!-- CHOICE: entregable -->
@@ -699,6 +940,16 @@ adivinado = <span class="kw">False</span>
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

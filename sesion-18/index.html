@@ -248,6 +248,17 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -283,6 +294,10 @@
       elegante: <em>parte el problema en pedazos pequeños</em>, resuelve cada pedazo por separado y dale un nombre.
       Eso es una <strong>función</strong>. Hoy aprendes a <span class="underline-ochre">dividir para vencer</span>.
     </p>
+    <p class="lede" style="margin-top:18px; font-size:1.02rem; color:var(--ink-faint);">
+      <em>Nota del curso:</em> desde la sesión 09 el lenguaje principal es <strong>C++</strong> (más cercano al temario tipo C de UNITEC);
+      el código se muestra en C++ por defecto y conservas <strong>Python como apoyo</strong> en la otra pestaña. Pulsa las pestañas de cada bloque para alternar.
+    </p>
 
     <div class="cont-banner">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4 4.2 4.2M3 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4 4.2-4.2"/></svg>
@@ -297,7 +312,7 @@
       <div class="ficha-grid">
         <div class="ficha-cell wide">
           <div class="fc-label">Objetivo</div>
-          <div class="fc-value obj">Aplicar el principio de divide y vencerás mediante funciones en Python (def, parámetros, return), para estructurar programas modulares, legibles y reutilizables.</div>
+          <div class="fc-value obj">Aplicar el principio de divide y vencerás mediante funciones en C++ (y Python como apoyo) —parámetros y return—, para estructurar programas modulares, legibles y reutilizables.</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Profesor</div>
@@ -317,11 +332,11 @@
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Conceptos clave</div>
-          <div class="fc-value">def · parámetro · return</div>
+          <div class="fc-value">función · parámetro · return</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Software</div>
-          <div class="fc-value">Python 3.12 + VS Code</div>
+          <div class="fc-value">C++ (g++) · Python 3.12 + VS Code</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Regla del día</div>
@@ -417,25 +432,65 @@ imprimir_recibo()</div>
     <div class="code-grid">
       <div>
         <p class="code-cap">Definir · enseñar la receta</p>
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.py</span></div>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.cpp</span></div>
+<pre><span class="com">// PASO 1 · definimos la función</span>
+<span class="com">// (esto NO la ejecuta todavía)</span>
+<span class="kw">double</span> <span class="fn">area_circulo</span>(<span class="kw">double</span> radio) {
+    <span class="com">// recibe el radio, devuelve el área</span>
+    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio;
+}</pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.py</span></div>
 <pre><span class="com"># PASO 1 · definimos la función</span>
 <span class="com"># (esto NO la ejecuta todavía)</span>
 <span class="kw">def</span> <span class="fn">area_circulo</span>(radio):
     <span class="com"># recibe el radio, devuelve el área</span>
     <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio</pre>
+            </div>
+          </div>
         </div>
       </div>
       <div>
         <p class="code-cap">Llamar · usar la receta</p>
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.py</span></div>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.cpp</span></div>
+<pre><span class="com">// PASO 2 · la llamamos con un argumento</span>
+<span class="kw">double</span> chico  = <span class="fn">area_circulo</span>(<span class="num">2</span>);
+<span class="kw">double</span> grande = <span class="fn">area_circulo</span>(<span class="num">10</span>);
+
+cout &lt;&lt; chico  &lt;&lt; endl;   <span class="out">// 12.5664</span>
+cout &lt;&lt; grande &lt;&lt; endl;   <span class="out">// 314.16</span></pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.py</span></div>
 <pre><span class="com"># PASO 2 · la llamamos con un argumento</span>
 chico = <span class="fn">area_circulo</span>(<span class="num">2</span>)
 grande = <span class="fn">area_circulo</span>(<span class="num">10</span>)
 
 <span class="fn">print</span>(chico)   <span class="out"># 12.5664</span>
 <span class="fn">print</span>(grande)  <span class="out"># 314.16</span></pre>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -466,8 +521,37 @@ grande = <span class="fn">area_circulo</span>(<span class="num">10</span>)
       </div>
     </div>
 
-    <div class="code-block" style="margin-top:30px;">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">print_vs_return.py</span></div>
+    <div class="codeswitch" style="margin-top:30px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">print_vs_return.cpp</span></div>
+<pre><span class="com">// ──────── Versión que solo IMPRIME (void) ────────</span>
+<span class="kw">void</span> <span class="fn">cuadrado_imprime</span>(<span class="kw">int</span> numero) {
+    cout &lt;&lt; numero * numero &lt;&lt; endl;   <span class="com">// muestra en pantalla y nada más</span>
+}   <span class="com">// void: no entrega ningún valor</span>
+
+<span class="fn">cuadrado_imprime</span>(<span class="num">5</span>);   <span class="out">// imprime: 25</span>
+<span class="com">// int resultado = cuadrado_imprime(5);  →  ERROR: void no devuelve nada</span>
+
+
+<span class="com">// ──────── Versión que DEVUELVE ────────</span>
+<span class="kw">int</span> <span class="fn">cuadrado</span>(<span class="kw">int</span> numero) {
+    <span class="kw">return</span> numero * numero;   <span class="com">// entrega el valor a quien llamó</span>
+}
+
+<span class="kw">int</span> resultado = <span class="fn">cuadrado</span>(<span class="num">5</span>);   <span class="com">// resultado vale 25 de verdad</span>
+<span class="kw">int</span> total = resultado + <span class="num">1</span>;     <span class="com">// ¡ahora sí podemos seguir calculando!</span>
+cout &lt;&lt; total &lt;&lt; endl;            <span class="out">// imprime: 26</span></pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">print_vs_return.py</span></div>
 <pre><span class="com"># ──────── Versión que solo IMPRIME ────────</span>
 <span class="kw">def</span> <span class="fn">cuadrado_imprime</span>(numero):
     <span class="fn">print</span>(numero * numero)   <span class="com"># muestra en pantalla y nada más</span>
@@ -484,6 +568,8 @@ resultado = <span class="fn">cuadrado_imprime</span>(<span class="num">5</span>)
 resultado = <span class="fn">cuadrado</span>(<span class="num">5</span>)            <span class="com"># resultado vale 25 de verdad</span>
 total = resultado + <span class="num">1</span>             <span class="com"># ¡ahora sí podemos seguir calculando!</span>
 <span class="fn">print</span>(total)                     <span class="out"># imprime: 26</span></pre>
+        </div>
+      </div>
     </div>
 
     <div class="keypoint"><strong>Regla práctica:</strong> si necesitas <em>usar</em> el resultado más adelante, usa <span class="mono">return</span>. Reserva <span class="mono">print()</span> para el último momento, cuando ya solo quieres mostrarle algo a la persona. Una función bien hecha calcula con <span class="mono">return</span> y deja que <em>otra</em> parte del programa decida si imprimir.</div>
@@ -517,8 +603,50 @@ total = resultado + <span class="num">1</span>             <span class="com"># �
       </div>
     </div>
 
-    <div class="code-block" style="margin-top:30px;">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">una_responsabilidad.py</span></div>
+    <div class="codeswitch" style="margin-top:30px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">una_responsabilidad.cpp</span></div>
+<pre><span class="com">// ✗ MAL: una función que hace de todo</span>
+<span class="kw">void</span> <span class="fn">procesar</span>(<span class="kw">int</span> nota) {
+    <span class="kw">string</span> estado;
+    <span class="kw">if</span> (nota &gt;= <span class="num">60</span>) {            <span class="com">// decide</span>
+        estado = <span class="str">"APROBADO"</span>;
+    } <span class="kw">else</span> {
+        estado = <span class="str">"REPROBADO"</span>;
+    }
+    cout &lt;&lt; <span class="str">"Resultado: "</span> &lt;&lt; estado;  <span class="com">// y además imprime</span>
+    <span class="com">// hace dos cosas: decidir Y mostrar</span>
+}
+
+
+<span class="com">// ✓ BIEN: cada función, una sola tarea</span>
+<span class="kw">bool</span> <span class="fn">esta_aprobado</span>(<span class="kw">int</span> nota) {
+    <span class="com">// responsabilidad única: DECIDIR</span>
+    <span class="kw">return</span> nota &gt;= <span class="num">60</span>;
+}
+
+<span class="kw">void</span> <span class="fn">mostrar_resultado</span>(<span class="kw">bool</span> aprobado) {
+    <span class="com">// responsabilidad única: MOSTRAR</span>
+    <span class="kw">if</span> (aprobado) {
+        cout &lt;&lt; <span class="str">"Resultado: APROBADO"</span>;
+    } <span class="kw">else</span> {
+        cout &lt;&lt; <span class="str">"Resultado: REPROBADO"</span>;
+    }
+}
+
+<span class="com">// el programa principal solo coordina:</span>
+<span class="fn">mostrar_resultado</span>(<span class="fn">esta_aprobado</span>(<span class="num">75</span>));   <span class="out">// Resultado: APROBADO</span></pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">una_responsabilidad.py</span></div>
 <pre><span class="com"># ✗ MAL: una función que hace de todo</span>
 <span class="kw">def</span> <span class="fn">procesar</span>(nota):
     <span class="kw">if</span> nota &gt;= <span class="num">60</span>:           <span class="com"># decide</span>
@@ -543,6 +671,8 @@ total = resultado + <span class="num">1</span>             <span class="com"># �
 
 <span class="com"># el programa principal solo coordina:</span>
 <span class="fn">mostrar_resultado</span>(<span class="fn">esta_aprobado</span>(<span class="num">75</span>))   <span class="out"># Resultado: APROBADO</span></pre>
+        </div>
+      </div>
     </div>
 
     <div class="keypoint"><strong>Fíjate en la última línea:</strong> <span class="mono">esta_aprobado(75)</span> devuelve <span class="mono">True</span>, y ese valor entra directo a <span class="mono">mostrar_resultado</span>. Las funciones pequeñas <em>encajan unas en otras</em> como piezas. Eso es modularidad de verdad.</div>
@@ -586,12 +716,58 @@ total = resultado + <span class="num">1</span>             <span class="com"># �
       <div class="map-row">
         <div class="map-cell fn-side">mostrar_menu()</div>
         <div class="map-cell resp">Imprimir las opciones del cajero en pantalla.</div>
-        <div class="map-cell io">() → None</div>
+        <div class="map-cell io">() → void</div>
       </div>
     </div>
 
-    <div class="code-block" style="margin-top:26px;">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">atm_funciones.py</span></div>
+    <div class="codeswitch" style="margin-top:26px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">atm_funciones.cpp</span></div>
+<pre><span class="com">// Cada función vive sola y se prueba sola.</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">const int</span> PIN_CORRECTO = <span class="num">1234</span>;   <span class="com">// constante (como en la sesión 6)</span>
+
+<span class="kw">bool</span> <span class="fn">validar_pin</span>(<span class="kw">int</span> pin) {
+    <span class="com">// DECIDE: ¿el PIN es correcto? devuelve true o false</span>
+    <span class="kw">return</span> pin == PIN_CORRECTO;
+}
+
+<span class="kw">double</span> <span class="fn">retirar</span>(<span class="kw">double</span> saldo, <span class="kw">double</span> monto) {
+    <span class="com">// CALCULA y devuelve el saldo nuevo</span>
+    <span class="kw">if</span> (monto &gt; saldo) {
+        cout &lt;&lt; <span class="str">"Fondos insuficientes."</span> &lt;&lt; endl;  <span class="com">// avisa al usuario</span>
+        <span class="kw">return</span> saldo;          <span class="com">// y deja el saldo sin cambios</span>
+    }
+    <span class="kw">return</span> saldo - monto;
+}
+
+<span class="kw">double</span> <span class="fn">depositar</span>(<span class="kw">double</span> saldo, <span class="kw">double</span> monto) {
+    <span class="kw">return</span> saldo + monto;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// El programa principal solo COORDINA las piezas:</span>
+    <span class="kw">double</span> saldo = <span class="num">1500.0</span>;
+    <span class="kw">if</span> (<span class="fn">validar_pin</span>(<span class="num">1234</span>)) {
+        saldo = <span class="fn">retirar</span>(saldo, <span class="num">500.0</span>);
+        saldo = <span class="fn">depositar</span>(saldo, <span class="num">200.0</span>);
+        cout &lt;&lt; <span class="str">"Saldo final: "</span> &lt;&lt; saldo;   <span class="out">// Saldo final: 1200</span>
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">atm_funciones.py</span></div>
 <pre><span class="com"># Cada función vive sola y se prueba sola.</span>
 PIN_CORRECTO = <span class="num">1234</span>          <span class="com"># constante (como en la sesión 6)</span>
 
@@ -615,6 +791,8 @@ saldo = <span class="num">1500.0</span>
     saldo = <span class="fn">retirar</span>(saldo, <span class="num">500.0</span>)
     saldo = <span class="fn">depositar</span>(saldo, <span class="num">200.0</span>)
     <span class="fn">print</span>(<span class="str">"Saldo final:"</span>, saldo)   <span class="out"># Saldo final: 1200.0</span></pre>
+        </div>
+      </div>
     </div>
 
     <div class="ej-card" style="margin-top:30px;">
@@ -717,6 +895,16 @@ saldo = <span class="num">1500.0</span>
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

@@ -234,6 +234,17 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -280,12 +291,23 @@
       </div>
     </div>
 
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
+      <div class="txt">
+        <strong>Una nota sobre el lenguaje.</strong> Este examen cubre el bimestre que trabajaste en
+        <em>Python</em> (sesiones 01-13), así que se aplica en <strong>Python</strong>. De aquí en adelante
+        —y ya verás los ejemplos así— el código va en <strong>C++ (principal)</strong> con su equivalente
+        en Python a un clic, en la otra pestaña. <span class="underline-ochre">El mismo razonamiento, dos
+        idiomas</span>.
+      </div>
+    </div>
+
     <div class="ficha">
       <span class="f-label">FICHA DEL EXAMEN</span>
       <div class="ficha-grid">
         <div class="ficha-cell wide">
           <div class="fc-label">Objetivo</div>
-          <div class="fc-value obj">Evaluar la comprensión teórica y la capacidad práctica de resolver problemas con lógica de programación, decisiones y repetición en Python.</div>
+          <div class="fc-value obj">Evaluar la comprensión teórica y la capacidad práctica de resolver problemas con lógica de programación, decisiones y repetición en Python (el lenguaje del bimestre; C++ pasa a principal a partir de la sesión 09).</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Profesor</div>
@@ -309,7 +331,7 @@
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Lenguaje</div>
-          <div class="fc-value">Python 3.12 · VS Code</div>
+          <div class="fc-value">Python 3.12 (bimestre) · C++ desde s.09 · VS Code</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Ponderación</div>
@@ -372,10 +394,57 @@
       </div>
     </div>
 
-    <div class="keypoint"><strong>La gran idea del bimestre:</strong> casi cualquier programa útil es una mezcla de <em>pedir un dato, validarlo, decidir y repetir</em>. El examen no pregunta otra cosa: pregunta si dominas esas cuatro acciones. Así se ve, en una sola pieza:</div>
+    <div class="keypoint"><strong>La gran idea del bimestre:</strong> casi cualquier programa útil es una mezcla de <em>pedir un dato, validarlo, decidir y repetir</em>. El examen no pregunta otra cosa: pregunta si dominas esas cuatro acciones. Así se ve, en una sola pieza —en <strong>C++</strong> y, en la otra pestaña, en Python:</div>
 
-    <div class="code-block" style="margin-top:24px;">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">lo_que_se_evalua.py</span></div>
+    <div class="codeswitch" style="margin-top:24px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">lo_que_se_evalua.cpp</span></div>
+<pre><span class="com">// Una pieza pequena que toca los cuatro temas del bimestre.</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">const int</span> INTENTOS_MAX = <span class="num">3</span>;          <span class="com">// constante (sesion 05)</span>
+    <span class="kw">double</span> suma = <span class="num">0</span>;
+    <span class="kw">int</span> aprobados = <span class="num">0</span>;
+
+    <span class="kw">int</span> n;
+    cout &lt;&lt; <span class="str">"Cuantas calificaciones? "</span>;       <span class="com">// entrada + conversion</span>
+    cin &gt;&gt; n;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {              <span class="com">// repeticion conocida (for)</span>
+        <span class="kw">double</span> nota;
+        cout &lt;&lt; <span class="str">"Nota "</span> &lt;&lt; i &lt;&lt; <span class="str">": "</span>; cin &gt;&gt; nota;
+
+        <span class="kw">while</span> (nota &lt; <span class="num">0</span> || nota &gt; <span class="num">100</span>) {       <span class="com">// validacion (while + ||)</span>
+            cout &lt;&lt; <span class="str">"Invalida. Debe ir de 0 a 100."</span> &lt;&lt; endl;
+            cout &lt;&lt; <span class="str">"Nota "</span> &lt;&lt; i &lt;&lt; <span class="str">": "</span>; cin &gt;&gt; nota;
+        }
+
+        suma = suma + nota;                       <span class="com">// acumulador</span>
+        <span class="kw">if</span> (nota &gt;= <span class="num">70</span>) {                        <span class="com">// decision (if/else)</span>
+            aprobados = aprobados + <span class="num">1</span>;          <span class="com">// contador</span>
+        }
+    }
+
+    <span class="kw">double</span> promedio = suma / n;
+    cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="num">2</span>);
+    cout &lt;&lt; <span class="str">"Promedio: "</span> &lt;&lt; promedio
+         &lt;&lt; <span class="str">" - Aprobados: "</span> &lt;&lt; aprobados &lt;&lt; <span class="str">" de "</span> &lt;&lt; n &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">lo_que_se_evalua.py</span></div>
 <pre><span class="com"># Una pieza pequeña que toca los cuatro temas del bimestre.</span>
 INTENTOS_MAX = <span class="num">3</span>          <span class="com"># constante (sesión 05)</span>
 suma = <span class="num">0</span>
@@ -396,6 +465,8 @@ n = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">
 
 promedio = suma / n
 <span class="fn">print</span>(<span class="str">f"Promedio: {promedio:.2f} — Aprobados: {aprobados} de {n}"</span>)</pre>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -546,7 +617,7 @@ promedio = suma / n
       </div>
       <div class="evid-item">
         <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>Tus soluciones en Python</strong> — los problemas escritos y corriendo en VS Code, según indique cada reactivo.</span>
+        <span class="ev-txt"><strong>Tus soluciones en Python</strong> — los problemas del bimestre escritos y corriendo en VS Code, según indique cada reactivo. <em>(A partir de la sesión 09 trabajaremos en C++ como principal, con Python de apoyo.)</em></span>
       </div>
       <div class="evid-item">
         <span class="file-ic">git</span>
@@ -600,6 +671,16 @@ promedio = suma / n
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

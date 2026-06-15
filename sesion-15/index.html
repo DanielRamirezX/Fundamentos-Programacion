@@ -229,6 +229,17 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -271,6 +282,15 @@
         <strong>Esta sesión sigue al Examen Bimestral (Sesión 14).</strong> Primero cerramos ese capítulo
         —errores comunes, soluciones alternativas— y solo entonces avanzamos. Mirar atrás bien hecho es la
         mejor manera de avanzar.
+      </div>
+    </div>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
+      <div class="txt">
+        <strong>Desde la Sesión 09, C++ va al frente.</strong> Cada bloque de código trae <strong>dos pestañas</strong>:
+        C++ activo por defecto —el lenguaje <em>principal</em> del curso— y su equivalente en Python a un clic, como
+        puente con lo que ya dominas. El mismo razonamiento, dos idiomas.
       </div>
     </div>
 
@@ -395,14 +415,42 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> usa nombres distintos para cada variable de control —<span class="mono">i</span> afuera, <span class="mono">j</span> adentro— para no perderte. Y cuida la indentación: cada nivel es un mundo más adentro.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">anidado.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">anidado.cpp</span></div>
+<pre><span class="com">// Por cada hora (afuera)...</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">for</span> (<span class="kw">int</span> hora = <span class="num">1</span>; hora &lt; <span class="num">4</span>; hora++) {
+        <span class="com">// ...el minutero da su vuelta (adentro)</span>
+        <span class="kw">for</span> (<span class="kw">int</span> minuto = <span class="num">0</span>; minuto &lt; <span class="num">3</span>; minuto++) {
+            cout &lt;&lt; <span class="str">"Hora "</span> &lt;&lt; hora &lt;&lt; <span class="str">", minuto "</span> &lt;&lt; minuto &lt;&lt; endl;
+        }
+        cout &lt;&lt; <span class="str">"---- pasó una hora ----"</span> &lt;&lt; endl;
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">anidado.py</span></div>
 <pre><span class="com"># Por cada hora (afuera)...</span>
 <span class="kw">for</span> hora <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):
     <span class="com"># ...el minutero da su vuelta (adentro)</span>
     <span class="kw">for</span> minuto <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="num">3</span>):
         <span class="fn">print</span>(<span class="str">f"Hora {hora}, minuto {minuto}"</span>)
     <span class="fn">print</span>(<span class="str">"---- pasó una hora ----"</span>)</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -437,8 +485,38 @@
         <p>El truco está en leer la tabla de <strong>arriba hacia abajo</strong>: para cada valor de <span class="mono">i</span>, agotamos todos los valores de <span class="mono">j</span> antes de subir <span class="mono">i</span>. Cuando <span class="mono">j</span> termina su rango, el <span class="mono">print()</span> vacío baja de línea y empieza el siguiente renglón.</p>
         <div class="keypoint"><strong>Por qué importa:</strong> si la cuenta de la tabla coincide con lo que sale en pantalla, tu lógica es correcta <em>antes</em> de depurar. Si no coincide, ya sabes en qué fila buscar el bug.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">triangulo.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">triangulo.cpp</span></div>
+<pre><span class="com">// Triángulo creciente de asteriscos</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; <span class="num">4</span>; i++) {       <span class="com">// i = 1, 2, 3</span>
+        <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; i; j++) {  <span class="com">// j repite i veces</span>
+            cout &lt;&lt; <span class="str">"*"</span>;
+        }
+        cout &lt;&lt; endl;                  <span class="com">// baja de renglón</span>
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="com">// Salida:</span>
+<span class="out">*</span>
+<span class="out">**</span>
+<span class="out">***</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">triangulo.py</span></div>
 <pre><span class="com"># Triángulo creciente de asteriscos</span>
 <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):       <span class="com"># i = 1, 2, 3</span>
     <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(i):     <span class="com"># j repite i veces</span>
@@ -449,6 +527,8 @@
 <span class="out">*</span>
 <span class="out">**</span>
 <span class="out">***</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -526,14 +606,49 @@
           <li>El cuerpo interno se ejecuta <strong>100 veces</strong> en total.</li>
         </ul>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tablas.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tablas.cpp</span></div>
+<pre><span class="com">// Tablas de multiplicar del 1 al 10</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">for</span> (<span class="kw">int</span> n = <span class="num">1</span>; n &lt;= <span class="num">10</span>; n++) {        <span class="com">// tabla n</span>
+        cout &lt;&lt; <span class="str">"--- Tabla del "</span> &lt;&lt; n &lt;&lt; <span class="str">" ---"</span> &lt;&lt; endl;
+        <span class="kw">for</span> (<span class="kw">int</span> m = <span class="num">1</span>; m &lt;= <span class="num">10</span>; m++) {    <span class="com">// n por m</span>
+            <span class="kw">int</span> producto = n * m;
+            cout &lt;&lt; n &lt;&lt; <span class="str">" x "</span> &lt;&lt; setw(<span class="num">2</span>) &lt;&lt; m
+                 &lt;&lt; <span class="str">" = "</span> &lt;&lt; setw(<span class="num">3</span>) &lt;&lt; producto &lt;&lt; endl;
+        }
+        cout &lt;&lt; endl;                  <span class="com">// línea en blanco entre tablas</span>
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="com">// Inicio de la salida:</span>
+<span class="out">--- Tabla del 1 ---</span>
+<span class="out">1 x  1 =   1</span>
+<span class="out">1 x  2 =   2</span>
+<span class="out">...</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tablas.py</span></div>
 <pre><span class="com"># Tablas de multiplicar del 1 al 10</span>
 <span class="kw">for</span> n <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):        <span class="com"># tabla n</span>
     <span class="fn">print</span>(<span class="str">f"--- Tabla del {n} ---"</span>)
     <span class="kw">for</span> m <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):    <span class="com"># n por m</span>
         producto = n * m
-        <span class="fn">print</span>(<span class="str">f"{n} x {m:>2} = {producto:>3}"</span>)
+        <span class="fn">print</span>(<span class="str">f"{n} x {m:&gt;2} = {producto:&gt;3}"</span>)
     <span class="fn">print</span>()                  <span class="com"># línea en blanco entre tablas</span>
 
 <span class="com"># Inicio de la salida:</span>
@@ -541,6 +656,8 @@
 <span class="out">1 x  1 =   1</span>
 <span class="out">1 x  2 =   2</span>
 <span class="out">...</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -603,8 +720,8 @@
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>tablas.py</strong> — la tabla de multiplicar del 1 al 10 resuelta con doble ciclo <span class="mono">for</span>.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>tablas.cpp</strong> en C++ (y, si quieres, su <span class="mono">tablas.py</span> como apoyo) — la tabla de multiplicar del 1 al 10 resuelta con doble ciclo <span class="mono">for</span>.</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">.md</span>
@@ -652,6 +769,16 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

@@ -243,6 +243,16 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -279,6 +289,12 @@
       archivos</strong> —<span class="mono">.txt</span> y <span class="mono">.csv</span>— para que los datos
       <span class="underline-ochre">sobrevivan al reinicio</span>.
     </p>
+    <p class="lede" style="margin-top:18px; font-size:1.02rem; color:var(--ink-faint);">
+      <em>Nota del cuaderno:</em> desde la sesión 09 el código va en <strong>C++</strong> (lenguaje principal) con su
+      equivalente en <strong>Python</strong> a un clic, como puente. Aquí el <span class="mono">&lt;fstream&gt;</span>
+      de C++ y el <span class="mono">open()</span> de Python abren la misma puerta al disco —escribir y leer archivos—
+      contado en dos idiomas.
+    </p>
 
     <div class="cont-banner">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
@@ -294,7 +310,7 @@
       <div class="ficha-grid">
         <div class="ficha-cell wide">
           <div class="fc-label">Objetivo</div>
-          <div class="fc-value obj">Implementar lectura y escritura de archivos de texto y CSV en Python, para persistir datos entre ejecuciones del programa.</div>
+          <div class="fc-value obj">Implementar lectura y escritura de archivos de texto y CSV en C++ (y Python como apoyo), para persistir datos entre ejecuciones del programa.</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Profesor</div>
@@ -322,7 +338,7 @@
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Software</div>
-          <div class="fc-value">Python 3.12 · VS Code · Colab</div>
+          <div class="fc-value">C++ (g++) · Python 3.12 · VS Code</div>
         </div>
       </div>
     </div>
@@ -376,8 +392,43 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> nunca uses <span class="mono">open()</span> a solas. Escríbelo siempre como <span class="mono">with open(...) as f:</span> y deja que Python cierre la puerta por ti.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primer_archivo.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primer_archivo.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;fstream&gt;</span>   <span class="com">// ifstream / ofstream</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// ESCRIBIR: ofstream crea o reemplaza el archivo</span>
+    <span class="kw">ofstream</span> salida(<span class="str">"notas.txt"</span>);
+    salida &lt;&lt; <span class="str">"Estudiar para el examen"</span> &lt;&lt; endl;
+    salida &lt;&lt; <span class="str">"Subir la practica a GitHub"</span> &lt;&lt; endl;
+    salida.<span class="fn">close</span>();   <span class="com">// cerramos la puerta</span>
+
+    <span class="com">// LEER: ifstream recorre el archivo renglon a renglon</span>
+    <span class="kw">ifstream</span> entrada(<span class="str">"notas.txt"</span>);
+    <span class="kw">string</span> linea;
+    <span class="kw">while</span> (<span class="fn">getline</span>(entrada, linea)) {
+        cout &lt;&lt; linea &lt;&lt; endl;
+    }
+    entrada.<span class="fn">close</span>();
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="out">// Estudiar para el examen</span>
+<span class="out">// Subir la practica a GitHub</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primer_archivo.py</span></div>
 <pre><span class="com"># ESCRIBIR: el modo "w" crea o reemplaza</span>
 <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notas.txt"</span>, <span class="str">"w"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
     f.<span class="fn">write</span>(<span class="str">"Estudiar para el examen\n"</span>)
@@ -391,6 +442,8 @@
 <span class="fn">print</span>(contenido)
 <span class="out"># Estudiar para el examen</span>
 <span class="out"># Subir la práctica a GitHub</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -441,8 +494,47 @@
         </ul>
         <div class="keypoint"><strong>Conecta con la 24:</strong> cada línea del archivo puede volver a convertirse en un <em>diccionario</em>. Texto en el disco; diccionario en la memoria. Ida y vuelta.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cargar_tareas.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cargar_tareas.cpp</span></div>
+<pre><span class="com">// Cargar las tareas de un .txt a un vector</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;fstream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; tareas;
+    <span class="kw">ifstream</span> f(<span class="str">"tareas.txt"</span>);
+    <span class="kw">string</span> linea;
+    <span class="kw">while</span> (<span class="fn">getline</span>(f, linea)) {   <span class="com">// getline ya quita el \n</span>
+        <span class="kw">if</span> (linea != <span class="str">""</span>) {          <span class="com">// ignora vacias</span>
+            tareas.<span class="fn">push_back</span>(linea);
+        }
+    }
+    f.<span class="fn">close</span>();
+
+    cout &lt;&lt; <span class="str">"Cargue "</span> &lt;&lt; tareas.<span class="fn">size</span>() &lt;&lt; <span class="str">" tareas."</span> &lt;&lt; endl;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; tareas.<span class="fn">size</span>(); i++) {
+        cout &lt;&lt; i + <span class="num">1</span> &lt;&lt; <span class="str">". "</span> &lt;&lt; tareas[i] &lt;&lt; endl;
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="out">// Cargue 2 tareas.</span>
+<span class="out">// 1. Estudiar para el examen</span>
+<span class="out">// 2. Subir la practica a GitHub</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cargar_tareas.py</span></div>
 <pre><span class="com"># Cargar las tareas de un .txt a una lista</span>
 tareas = []
 
@@ -459,6 +551,8 @@ tareas = []
 <span class="out"># Cargué 2 tareas.</span>
 <span class="out"># 1. Estudiar para el examen</span>
 <span class="out"># 2. Subir la práctica a GitHub</span></pre>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -501,8 +595,45 @@ tareas = []
         <p>Mi favorito es <span class="mono">csv.DictReader</span>: lee cada fila y te la entrega como un <strong>diccionario</strong>, usando los encabezados como claves. Justo la estructura que dominaste la clase pasada.</p>
         <div class="keypoint"><strong>Detalle fino:</strong> al abrir un CSV se usa <span class="mono">newline=""</span> en <span class="mono">open()</span>. Es la convención que evita renglones en blanco de más al escribir. Cópialo tal cual.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">leer_csv.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">leer_csv.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;fstream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;sstream&gt;</span>   <span class="com">// stringstream para partir por comas</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">ifstream</span> f(<span class="str">"tareas.csv"</span>);
+    <span class="kw">string</span> linea;
+    <span class="fn">getline</span>(f, linea);   <span class="com">// saltamos los encabezados</span>
+
+    <span class="kw">while</span> (<span class="fn">getline</span>(f, linea)) {
+        <span class="kw">stringstream</span> ss(linea);
+        <span class="kw">string</span> nombre, prio, hecha;
+        <span class="fn">getline</span>(ss, nombre, <span class="str">','</span>);   <span class="com">// hasta la 1a coma</span>
+        <span class="fn">getline</span>(ss, prio, <span class="str">','</span>);     <span class="com">// hasta la 2a coma</span>
+        <span class="fn">getline</span>(ss, hecha, <span class="str">','</span>);
+        cout &lt;&lt; nombre &lt;&lt; <span class="str">" -&gt; "</span> &lt;&lt; prio &lt;&lt; endl;
+    }
+    f.<span class="fn">close</span>();
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="out">// Estudiar -&gt; alta</span>
+<span class="out">// Comprar cafe -&gt; baja</span>
+<span class="out">// Llamar a mama -&gt; media</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">leer_csv.py</span></div>
 <pre><span class="kw">import</span> csv
 
 <span class="com"># Cada fila llega como un diccionario</span>
@@ -517,13 +648,51 @@ tareas = []
 <span class="out"># Estudiar → alta</span>
 <span class="out"># Comprar café → baja</span>
 <span class="out"># Llamar a mamá → media</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- escribir csv -->
     <div class="twocol" style="margin-top:30px">
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">escribir_csv.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">escribir_csv.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;fstream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">struct</span> Tarea { <span class="kw">string</span> nombre; <span class="kw">string</span> prioridad; };
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">vector</span>&lt;Tarea&gt; tareas = {
+        { <span class="str">"Estudiar"</span>,     <span class="str">"alta"</span> },
+        { <span class="str">"Comprar cafe"</span>, <span class="str">"baja"</span> },
+    };
+
+    <span class="kw">ofstream</span> f(<span class="str">"tareas.csv"</span>);
+    f &lt;&lt; <span class="str">"tarea,prioridad"</span> &lt;&lt; endl;   <span class="com">// los encabezados</span>
+    <span class="kw">for</span> (Tarea t : tareas) {           <span class="com">// todas las filas</span>
+        f &lt;&lt; t.nombre &lt;&lt; <span class="str">","</span> &lt;&lt; t.prioridad &lt;&lt; endl;
+    }
+    f.<span class="fn">close</span>();
+
+    cout &lt;&lt; <span class="str">"Guardado en tareas.csv"</span> &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">escribir_csv.py</span></div>
 <pre><span class="kw">import</span> csv
 
 tareas = [
@@ -539,6 +708,8 @@ columnas = [<span class="str">"tarea"</span>, <span class="str">"prioridad"</spa
     escritor.<span class="fn">writerows</span>(tareas)   <span class="com"># todas las filas</span>
 
 <span class="fn">print</span>(<span class="str">"Guardado en tareas.csv"</span>)</pre>
+          </div>
+        </div>
       </div>
       <div class="prose">
         <p>Para escribir, su gemelo: <span class="mono">csv.DictWriter</span>. Le dices qué <strong>columnas</strong> quieres (<span class="mono">fieldnames</span>), llamas a <span class="mono">writeheader()</span> para la primera línea, y luego <span class="mono">writerows()</span> vacía toda tu lista de diccionarios de un solo trago.</p>
@@ -568,6 +739,42 @@ columnas = [<span class="str">"tarea"</span>, <span class="str">"prioridad"</spa
         <p>Es exactamente la mentalidad del <em>debugging</em> de la sesión 05, pero al revés: en vez de cazar el error después, lo <strong>prevemos antes</strong>. La primera ejecución ya no truena: simplemente empieza limpia.</p>
       </div>
       <div class="exc-code">
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cargar_tareas.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;fstream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; <span class="fn">cargar_tareas</span>() {
+    <span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; tareas;
+    <span class="kw">ifstream</span> f(<span class="str">"tareas.txt"</span>);
+    <span class="kw">if</span> (!f.<span class="fn">is_open</span>()) {   <span class="com">// primera vez: aun no hay archivo</span>
+        cout &lt;&lt; <span class="str">"No hay tareas guardadas todavia."</span> &lt;&lt; endl;
+        <span class="kw">return</span> tareas;     <span class="com">// arranca con la lista vacia</span>
+    }
+    <span class="kw">string</span> linea;
+    <span class="kw">while</span> (<span class="fn">getline</span>(f, linea)) {
+        <span class="kw">if</span> (linea != <span class="str">""</span>) {
+            tareas.<span class="fn">push_back</span>(linea);
+        }
+    }
+    f.<span class="fn">close</span>();
+    <span class="kw">return</span> tareas;
+}</pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cargar_tareas.py</span></div>
 <pre><span class="kw">def</span> <span class="fn">cargar_tareas</span>():
     tareas = []
     <span class="kw">try</span>:
@@ -581,6 +788,9 @@ columnas = [<span class="str">"tarea"</span>, <span class="str">"prioridad"</spa
         <span class="com"># primera vez: aún no hay archivo</span>
         <span class="fn">print</span>(<span class="str">"No hay tareas guardadas todavía."</span>)
     <span class="kw">return</span> tareas</pre>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -607,8 +817,49 @@ columnas = [<span class="str">"tarea"</span>, <span class="str">"prioridad"</spa
         <p>Corre el programa después de cada paso y haz la <em>prueba de la persistencia</em>: agrega una tarea, cierra, vuelve a abrir. Si sigue ahí, ganaste.</p>
         <div class="arrow-note">El archivo es la libreta; tú decides cuándo anotar en ella.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">gestor_tareas.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">gestor_tareas.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;fstream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="com">// PASO 1: una constante con el nombre</span>
+<span class="kw">const string</span> ARCHIVO = <span class="str">"tareas.txt"</span>;
+
+<span class="com">// PASO 2: cargar() lee el archivo si existe</span>
+<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; <span class="fn">cargar</span>() {
+    <span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; tareas;
+    <span class="kw">ifstream</span> f(ARCHIVO);
+    <span class="kw">if</span> (!f.<span class="fn">is_open</span>()) {
+        <span class="kw">return</span> tareas;   <span class="com">// primera vez: lista vacia</span>
+    }
+    <span class="kw">string</span> linea;
+    <span class="kw">while</span> (<span class="fn">getline</span>(f, linea)) {
+        <span class="kw">if</span> (linea != <span class="str">""</span>) {
+            tareas.<span class="fn">push_back</span>(linea);
+        }
+    }
+    f.<span class="fn">close</span>();
+    <span class="kw">return</span> tareas;
+}
+
+<span class="com">// PASO 3: guardar() escribe TODA la lista (ofstream)</span>
+<span class="com">// PASO 4: llamar cargar() al iniciar</span>
+<span class="com">// PASO 5: llamar guardar() tras agregar o borrar</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">gestor_tareas.py</span></div>
 <pre><span class="com"># PASO 1: una constante con el nombre</span>
 ARCHIVO = <span class="str">"tareas.txt"</span>
 
@@ -627,6 +878,8 @@ ARCHIVO = <span class="str">"tareas.txt"</span>
 <span class="com"># PASO 3: guardar() escribe TODA la lista ("w")</span>
 <span class="com"># PASO 4: llamar cargar() al iniciar</span>
 <span class="com"># PASO 5: llamar guardar() tras agregar o borrar</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -641,13 +894,13 @@ ARCHIVO = <span class="str">"tareas.txt"</span>
 
     <div class="game-preview">
       <span class="gp-title">▶ LA PRUEBA DE LA PERSISTENCIA</span>
-      <span class="prompt">$ python gestor_tareas.py</span><br/>
+      <span class="prompt">$ g++ gestor_tareas.cpp -o gestor && ./gestor</span><br/>
       No hay tareas guardadas todavía.<br/>
       Opción: 1  →  Agregar: "Estudiar para el final"<br/>
       <span class="win">Tarea guardada en disco.</span><br/>
       Opción: 4  →  Salir<br/>
       <br/>
-      <span class="prompt">$ python gestor_tareas.py</span>   <span class="hint"># lo abres de nuevo</span><br/>
+      <span class="prompt">$ ./gestor</span>   <span class="hint"># lo abres de nuevo</span><br/>
       Tienes 1 tarea pendiente:<br/>
       <span class="win">1. Estudiar para el final</span>   <span class="hint"># ¡sobrevivió!</span>
     </div>
@@ -660,7 +913,7 @@ ARCHIVO = <span class="str">"tareas.txt"</span>
       <ol class="crit-list">
         <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el gestor corre completo, incluso en su primera ejecución (cuando aún no existe el archivo).</li>
         <li><strong>Lógica correcta</strong> — las tareas realmente persisten: agregar, cerrar y reabrir conserva los datos.</li>
-        <li><strong>Funcionamiento óptimo</strong> — usa <span class="mono">with open()</span>, guarda al modificar y maneja el <span class="mono">FileNotFoundError</span>.</li>
+        <li><strong>Funcionamiento óptimo</strong> — en C++ usa <span class="mono">&lt;fstream&gt;</span> (ifstream/ofstream) y comprueba <span class="mono">is_open()</span>; en Python, <span class="mono">with open()</span> y atrapa el <span class="mono">FileNotFoundError</span>. Guarda al modificar.</li>
         <li><strong>Autenticidad</strong> — código escrito por ti, partiendo de tu propio gestor de la sesión 24.</li>
       </ol>
     </div>
@@ -668,8 +921,8 @@ ARCHIVO = <span class="str">"tareas.txt"</span>
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>gestor_tareas.py</strong> — el gestor con las funciones <span class="mono">cargar()</span> y <span class="mono">guardar()</span> integradas.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>gestor_tareas.cpp</strong> — el gestor en C++ (y, si quieres, su <span class="mono">gestor_tareas.py</span> como apoyo) con las funciones <span class="mono">cargar()</span> y <span class="mono">guardar()</span> integradas.</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">.txt</span>
@@ -717,6 +970,16 @@ ARCHIVO = <span class="str">"tareas.txt"</span>
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

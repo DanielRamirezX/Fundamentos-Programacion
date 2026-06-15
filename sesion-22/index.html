@@ -232,6 +232,26 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+  /* switch dentro de tarjetas claras (decl-card / trap-card): pestañas sobre el papel */
+  .codeswitch.in-card{ margin: 0 0 12px; }
+  .codeswitch.in-card .cs-tabs{ background:transparent; border:none; border-bottom:1px solid var(--line); gap:4px; }
+  .codeswitch.in-card .cs-tab{ color:var(--ink-faint); padding:6px 12px; font-size:.68rem; }
+  .codeswitch.in-card .cs-tab:hover{ color:var(--ink); }
+  .codeswitch.in-card .cs-tab.active{ color:var(--blood); border-bottom-color:var(--blood); background:transparent; }
+  .codeswitch.in-card .cs-flag{ color:var(--ink-faint); padding-right:4px; }
+  .codeswitch.in-card .cs-pane{ margin-top:10px; }
+  .codeswitch.in-card .cs-pane pre{ margin:0; }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -266,6 +286,11 @@
       esa fila. Pero el mundo no siempre es una línea. Un tablero, una hoja de cálculo, una imagen, un mapa
       —todo eso vive en <strong>filas y columnas</strong>. Hoy la lista aprende a doblarse sobre sí misma y
       nace la <strong>matriz</strong>: una lista <em>de listas</em>. <span class="underline-ochre">Hoy le damos profundidad a los datos</span>.
+    </p>
+    <p class="lede" style="margin-top:18px; font-size:1.02rem;">
+      <em>Nota del cuaderno:</em> desde la sesión 09 el código va en <strong>C++</strong> (principal, la pestaña activa)
+      con su equivalente en <em>Python</em> como apoyo en la otra pestaña. La matriz que aquí es lista de listas se
+      vuelve, en C++, un <span class="mono" style="font-family:'JetBrains Mono',monospace; background:var(--paper-deep); padding:1px 6px; font-size:.85em;">vector&lt;vector&lt;T&gt;&gt;</span>: la idea es la misma, cambia el dialecto.
     </p>
 
     <div class="cont-banner">
@@ -318,8 +343,41 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> el primer corchete elige la <em>fila</em>; el segundo, la <em>columna</em>. Léelo siempre como <span class="mono">matriz[fila][columna]</span>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primera_matriz.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primera_matriz.cpp</span></div>
+<pre><span class="com">// Una matriz de 3 filas y 3 columnas</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; matriz = {
+        {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>},   <span class="com">// fila 0</span>
+        {<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>},   <span class="com">// fila 1</span>
+        {<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>},   <span class="com">// fila 2</span>
+    };
+
+    <span class="com">// Dos indices -> una sola casilla</span>
+    cout &lt;&lt; matriz[<span class="num">0</span>][<span class="num">2</span>] &lt;&lt; endl;   <span class="out">// 3</span>
+    cout &lt;&lt; matriz[<span class="num">2</span>][<span class="num">0</span>] &lt;&lt; endl;   <span class="out">// 7</span>
+
+    <span class="com">// Cuantas filas y cuantas columnas hay</span>
+    cout &lt;&lt; matriz.<span class="fn">size</span>() &lt;&lt; endl;      <span class="out">// 3  (filas)</span>
+    cout &lt;&lt; matriz[<span class="num">0</span>].<span class="fn">size</span>() &lt;&lt; endl;   <span class="out">// 3  (columnas)</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primera_matriz.py</span></div>
 <pre><span class="com"># Una matriz de 3 filas y 3 columnas</span>
 matriz = [
     [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>],   <span class="com"># fila 0</span>
@@ -337,6 +395,8 @@ matriz = [
 <span class="com"># Cuantas filas y cuantas columnas hay</span>
 <span class="fn">print</span>(<span class="fn">len</span>(matriz))       <span class="out"># 3  (filas)</span>
 <span class="fn">print</span>(<span class="fn">len</span>(matriz[<span class="num">0</span>]))    <span class="out"># 3  (columnas)</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -413,27 +473,73 @@ matriz = [
     <div class="decl-grid">
       <div class="decl-card">
         <h3>1 · Con valores fijos</h3>
-        <pre><span class="com"># los escribes a mano</span>
+        <div class="codeswitch in-card">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// los escribes a mano</span>
+vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; tabla = {
+    {<span class="num">8</span>, <span class="num">6</span>, <span class="num">9</span>},
+    {<span class="num">7</span>, <span class="num">5</span>, <span class="num">4</span>},
+};</pre>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+<pre><span class="com"># los escribes a mano</span>
 tabla = [
     [<span class="num">8</span>, <span class="num">6</span>, <span class="num">9</span>],
     [<span class="num">7</span>, <span class="num">5</span>, <span class="num">4</span>],
 ]</pre>
+          </div>
+        </div>
         <p>La más directa. Sirve cuando ya <strong>conoces los datos</strong>: un mapa fijo, un calendario, una matriz de ejemplo.</p>
       </div>
       <div class="decl-card two">
         <h3>2 · Vacía con un patrón</h3>
-        <pre><span class="com"># 3 filas de 3 ceros, bien hecha</span>
+        <div class="codeswitch in-card">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// 3 filas de 3 ceros, bien hecha</span>
+vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; tablero(
+    <span class="num">3</span>, vector&lt;<span class="kw">int</span>&gt;(<span class="num">3</span>, <span class="num">0</span>));</pre>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+<pre><span class="com"># 3 filas de 3 ceros, bien hecha</span>
 tablero = [[<span class="num">0</span>] * <span class="num">3</span>
            <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)]</pre>
-        <p>Para reservar el espacio antes de saber el contenido. La <em>comprehension</em> de la sesión 21 crea <strong>una fila nueva por vuelta</strong>.</p>
+          </div>
+        </div>
+        <p>Para reservar el espacio antes de saber el contenido. El constructor de <span class="mono">vector</span> (o la <em>comprehension</em> en Python) crea <strong>una fila nueva por vuelta</strong>.</p>
       </div>
       <div class="decl-card three">
         <h3>3 · Llenada por entrada</h3>
-        <pre><span class="com"># el usuario dicta cada valor</span>
+        <div class="codeswitch in-card">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// el usuario dicta cada valor</span>
+vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; datos(<span class="num">2</span>, vector&lt;<span class="kw">int</span>&gt;(<span class="num">3</span>));
+<span class="kw">for</span> (<span class="kw">int</span> f = <span class="num">0</span>; f &lt; <span class="num">2</span>; f++)
+    <span class="kw">for</span> (<span class="kw">int</span> c = <span class="num">0</span>; c &lt; <span class="num">3</span>; c++)
+        cin &gt;&gt; datos[f][c];</pre>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+<pre><span class="com"># el usuario dicta cada valor</span>
 fila1 = <span class="fn">input</span>(<span class="str">"Fila 1: "</span>).<span class="fn">split</span>()
 fila2 = <span class="fn">input</span>(<span class="str">"Fila 2: "</span>).<span class="fn">split</span>()
 datos = [fila1, fila2]</pre>
-        <p>Cuando los datos llegan en tiempo de ejecución. Cada <span class="mono">input</span> trae <strong>una fila completa</strong> que apilas en la lista.</p>
+          </div>
+        </div>
+        <p>Cuando los datos llegan en tiempo de ejecución. Lees <strong>una fila completa</strong> y la apilas en la matriz.</p>
       </div>
     </div>
 
@@ -441,6 +547,22 @@ datos = [fila1, fila2]</pre>
     <div class="trap">
       <div class="trap-card bad">
         <div class="trap-head">✗ La trampa más famosa</div>
+        <div class="codeswitch in-card">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// Parece bien... pero NO lo hagas</span>
+vector&lt;<span class="kw">int</span>&gt; fila(<span class="num">3</span>, <span class="num">0</span>);
+vector&lt;vector&lt;<span class="kw">int</span>&gt;*&gt; tablero = {&amp;fila, &amp;fila, &amp;fila};
+
+(*tablero[<span class="num">0</span>])[<span class="num">0</span>] = <span class="num">1</span>;
+<span class="err">// fila 0,1,2 -> 1 0 0  (las TRES)</span>
+<span class="com">// ¡los 3 punteros miran la MISMA fila!</span></pre>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
 <pre><span class="com"># Parece bien... pero NO lo hagas</span>
 tablero = [[<span class="num">0</span>] * <span class="num">3</span>] * <span class="num">3</span>
 
@@ -448,10 +570,27 @@ tablero[<span class="num">0</span>][<span class="num">0</span>] = <span class="n
 <span class="fn">print</span>(tablero)
 <span class="err"># [[1, 0, 0], [1, 0, 0], [1, 0, 0]]</span>
 <span class="com"># ¡cambiaste UNA y se movieron las TRES!</span></pre>
-        <div class="trap-foot"><strong>¿Por qué?</strong> El <span class="mono">* 3</span> no crea tres filas: crea <em>tres referencias a la misma fila</em>. Tocar una es tocarlas todas.</div>
+          </div>
+        </div>
+        <div class="trap-foot"><strong>¿Por qué?</strong> En Python el <span class="mono">* 3</span> no copia: deja <em>tres referencias a la misma fila</em>. En C++ el equivalente es guardar tres <em>punteros</em> al mismo objeto. Tocar una es tocarlas todas.</div>
       </div>
       <div class="trap-card good">
         <div class="trap-head">✓ La forma correcta</div>
+        <div class="codeswitch in-card">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// una fila NUEVA e independiente por vuelta</span>
+vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; tablero(<span class="num">3</span>, vector&lt;<span class="kw">int</span>&gt;(<span class="num">3</span>, <span class="num">0</span>));
+
+tablero[<span class="num">0</span>][<span class="num">0</span>] = <span class="num">1</span>;
+<span class="out">// fila 0 -> 1 0 0 ; filas 1 y 2 -> 0 0 0</span>
+<span class="com">// solo se movio la casilla correcta</span></pre>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
 <pre><span class="com"># una fila NUEVA por cada vuelta</span>
 tablero = [[<span class="num">0</span>] * <span class="num">3</span> <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)]
 
@@ -459,7 +598,9 @@ tablero[<span class="num">0</span>][<span class="num">0</span>] = <span class="n
 <span class="fn">print</span>(tablero)
 <span class="out"># [[1, 0, 0], [0, 0, 0], [0, 0, 0]]</span>
 <span class="com"># solo se movio la casilla correcta</span></pre>
-        <div class="trap-foot"><strong>La diferencia:</strong> la <span class="mono">comprehension</span> construye una lista <em>independiente</em> en cada iteración. Tres filas, tres objetos distintos.</div>
+          </div>
+        </div>
+        <div class="trap-foot"><strong>La diferencia:</strong> el constructor de <span class="mono">vector</span> (y la <span class="mono">comprehension</span> de Python) construyen una fila <em>independiente</em> en cada iteración. Tres filas, tres objetos distintos.</div>
       </div>
     </div>
   </section>
@@ -505,8 +646,57 @@ tablero[<span class="num">0</span>][<span class="num">0</span>] = <span class="n
       </div>
     </div>
 
-    <div class="code-block">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tablero_gato.py · punto de partida</span></div>
+    <div class="codeswitch">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tablero_gato.cpp · punto de partida</span></div>
+<pre><span class="com">// =====================================================</span>
+<span class="com">// Sesion 22 - Tablero de gato vacio (3x3)</span>
+<span class="com">// Fundamentos de Programacion - UNITEC Atizapan 26-3</span>
+<span class="com">// =====================================================</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">const int</span> FILAS = <span class="num">3</span>;
+<span class="kw">const int</span> COLUMNAS = <span class="num">3</span>;
+<span class="kw">const</span> <span class="kw">string</span> VACIO = <span class="str">" "</span>;
+
+<span class="com">// 2) La dibujamos fila por fila.</span>
+<span class="kw">void</span> <span class="fn">dibujar</span>(<span class="kw">const</span> vector&lt;vector&lt;<span class="kw">string</span>&gt;&gt;&amp; tab) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; (<span class="kw">int</span>)tab.<span class="fn">size</span>(); i++) {
+        <span class="kw">const</span> <span class="kw">auto</span>&amp; fila = tab[i];
+        <span class="com">// " X | O |   " -> unimos las 3 casillas con barras</span>
+        cout &lt;&lt; <span class="str">" "</span> &lt;&lt; fila[<span class="num">0</span>] &lt;&lt; <span class="str">" | "</span> &lt;&lt; fila[<span class="num">1</span>]
+             &lt;&lt; <span class="str">" | "</span> &lt;&lt; fila[<span class="num">2</span>] &lt;&lt; <span class="str">" "</span> &lt;&lt; endl;
+        <span class="com">// linea separadora entre renglones (no tras el ultimo)</span>
+        <span class="kw">if</span> (i &lt; (<span class="kw">int</span>)tab.<span class="fn">size</span>() - <span class="num">1</span>)
+            cout &lt;&lt; <span class="str">"---+---+---"</span> &lt;&lt; endl;
+    }
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// 1) Declaramos la matriz con la forma CORRECTA:</span>
+    <span class="com">//    aqui cada fila ya nace independiente.</span>
+    vector&lt;vector&lt;<span class="kw">string</span>&gt;&gt; tablero(FILAS, vector&lt;<span class="kw">string</span>&gt;(COLUMNAS, VACIO));
+
+    <span class="fn">dibujar</span>(tablero);
+
+    <span class="com">// RETO: ¿como dibujarias un tablero NxN sin escribir</span>
+    <span class="com">// fila[0], fila[1], fila[2] a mano? Pista: otro for interno.</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tablero_gato.py · punto de partida</span></div>
 <pre><span class="com"># =====================================================</span>
 <span class="com"># Sesion 22 - Tablero de gato vacio (3x3)</span>
 <span class="com"># Fundamentos de Programacion - UNITEC Atizapan 26-3</span>
@@ -534,6 +724,8 @@ tablero = [[VACIO] * COLUMNAS <span class="kw">for</span> _ <span class="kw">in<
 
 <span class="com"># RETO: ¿como dibujarias un tablero NxN sin escribir</span>
 <span class="com"># fila[0], fila[1], fila[2] a mano? Pista: " | ".join(...)</span></pre>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -601,6 +793,16 @@ tablero = [[VACIO] * COLUMNAS <span class="kw">for</span> _ <span class="kw">in<
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

@@ -224,6 +224,16 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -265,7 +275,8 @@
       <div class="txt">
         <strong>Esta sesión continúa la 22.</strong> Allí viste qué <em>es</em> un arreglo bidimensional; hoy lo
         <strong>indexas y lo recorres</strong>. El secreto es uno solo: un <em>for</em> para las filas y, adentro,
-        otro <em>for</em> para las columnas.
+        otro <em>for</em> para las columnas. Desde la sesión 09 el código va en <strong>C++</strong> como lenguaje
+        principal, con su equivalente en <em>Python</em> a un clic en la otra pestaña —el puente que ya conoces.
       </div>
     </div>
 
@@ -310,8 +321,48 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> di siempre <em>fila, columna</em> —en ese orden— y nunca te equivocarás de casilla. La fila es el «¿en qué renglón?»; la columna, el «¿en qué lugar de ese renglón?».</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexar.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexar.cpp</span></div>
+<pre><span class="com">// Una matriz 3x3: tres filas, cada una con tres columnas</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;vector&lt;<span class="kw">string</span>&gt;&gt; tablero = {
+        {<span class="str">"X"</span>, <span class="str">"O"</span>, <span class="str">" "</span>},   <span class="com">// fila 0</span>
+        {<span class="str">" "</span>, <span class="str">"X"</span>, <span class="str">"O"</span>},   <span class="com">// fila 1</span>
+        {<span class="str">" "</span>, <span class="str">" "</span>, <span class="str">"X"</span>},   <span class="com">// fila 2</span>
+    };
+
+    <span class="com">// Un solo corchete: la fila entera (es un vector)</span>
+    <span class="kw">for</span> (<span class="kw">string</span> celda : tablero[<span class="num">0</span>])
+        cout &lt;&lt; <span class="str">"'"</span> &lt;&lt; celda &lt;&lt; <span class="str">"' "</span>;   <span class="out">// 'X' 'O' ' '</span>
+    cout &lt;&lt; endl;
+
+    <span class="com">// Dos corchetes: una sola casilla</span>
+    cout &lt;&lt; tablero[<span class="num">0</span>][<span class="num">2</span>] &lt;&lt; endl;     <span class="out">// (espacio)</span>
+    cout &lt;&lt; tablero[<span class="num">2</span>][<span class="num">2</span>] &lt;&lt; endl;     <span class="out">// X</span>
+
+    <span class="com">// Asignar es igual: fila 1, columna 0</span>
+    tablero[<span class="num">1</span>][<span class="num">0</span>] = <span class="str">"O"</span>;
+    <span class="kw">for</span> (<span class="kw">string</span> celda : tablero[<span class="num">1</span>])
+        cout &lt;&lt; <span class="str">"'"</span> &lt;&lt; celda &lt;&lt; <span class="str">"' "</span>;   <span class="out">// 'O' 'X' 'O'</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexar.py</span></div>
 <pre><span class="com"># Una matriz 3x3: tres filas, cada una con tres columnas</span>
 tablero = [
     [<span class="str">"X"</span>, <span class="str">"O"</span>, <span class="str">" "</span>],   <span class="com"># fila 0</span>
@@ -329,6 +380,8 @@ tablero = [
 <span class="com"># Asignar es igual: fila 1, columna 0</span>
 tablero[<span class="num">1</span>][<span class="num">0</span>] = <span class="str">"O"</span>
 <span class="fn">print</span>(tablero[<span class="num">1</span>])        <span class="out"># ['O', 'X', 'O']</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -380,8 +433,46 @@ tablero[<span class="num">1</span>][<span class="num">0</span>] = <span class="s
         <p>El <span class="mono">for</span> exterior toma el número de fila; el interior, el de columna. Con esos dos números entras a cada celda exacta: <span class="mono">tablero[fila][columna]</span>. Nueve casillas, recorridas en orden, con apenas seis líneas.</p>
         <div class="keypoint"><strong>Cuida la sangría:</strong> el <span class="mono">for</span> de columnas vive <em>dentro</em> del de filas. Si lo sacas un nivel, recorrerás mal el tablero —ese es el error de lógica más típico de hoy.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrer.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrer.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; tablero = {
+        {<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>},
+        {<span class="num">6</span>, <span class="num">5</span>, <span class="num">4</span>},
+        {<span class="num">3</span>, <span class="num">2</span>, <span class="num">1</span>},
+    };
+
+    <span class="com">// for de afuera: una fila a la vez</span>
+    <span class="kw">for</span> (<span class="kw">int</span> fila = <span class="num">0</span>; fila &lt; <span class="num">3</span>; fila++) {
+        <span class="com">// for de adentro: cada columna de esa fila</span>
+        <span class="kw">for</span> (<span class="kw">int</span> columna = <span class="num">0</span>; columna &lt; <span class="num">3</span>; columna++) {
+            <span class="kw">int</span> valor = tablero[fila][columna];
+            cout &lt;&lt; <span class="str">"["</span> &lt;&lt; fila &lt;&lt; <span class="str">"]["</span> &lt;&lt; columna
+                 &lt;&lt; <span class="str">"] = "</span> &lt;&lt; valor &lt;&lt; endl;
+        }
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="out">// [0][0] = 7   [0][1] = 8   [0][2] = 9</span>
+<span class="out">// [1][0] = 6   [1][1] = 5   [1][2] = 4</span>
+<span class="out">// [2][0] = 3   [2][1] = 2   [2][2] = 1</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrer.py</span></div>
 <pre>tablero = [
     [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>],
     [<span class="num">6</span>, <span class="num">5</span>, <span class="num">4</span>],
@@ -398,6 +489,8 @@ tablero[<span class="num">1</span>][<span class="num">0</span>] = <span class="s
 <span class="out"># [0][0] = 7   [0][1] = 8   [0][2] = 9</span>
 <span class="out"># [1][0] = 6   [1][1] = 5   [1][2] = 4</span>
 <span class="out"># [2][0] = 3   [2][1] = 2   [2][2] = 1</span></pre>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -422,8 +515,48 @@ tablero[<span class="num">1</span>][<span class="num">0</span>] = <span class="s
           <li><strong>Total:</strong> un acumulador único para <em>todas</em> las celdas.</li>
         </ul>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">calificaciones.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">calificaciones.cpp</span></div>
+<pre><span class="com">// filas = alumnos · columnas = materias</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; notas = {
+        {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>},    <span class="com">// Ana</span>
+        {<span class="num">6</span>, <span class="num">10</span>, <span class="num">8</span>},   <span class="com">// Beto</span>
+        {<span class="num">9</span>, <span class="num">7</span>, <span class="num">9</span>},    <span class="com">// Caro</span>
+    };
+    vector&lt;<span class="kw">string</span>&gt; nombres = {<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <span class="str">"Caro"</span>};
+
+    cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="num">1</span>);
+    <span class="com">// Promedio por alumno (recorre las columnas de su fila)</span>
+    <span class="kw">for</span> (<span class="kw">int</span> fila = <span class="num">0</span>; fila &lt; <span class="num">3</span>; fila++) {
+        <span class="kw">int</span> suma = <span class="num">0</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> columna = <span class="num">0</span>; columna &lt; <span class="num">3</span>; columna++)
+            suma += notas[fila][columna];
+        <span class="kw">double</span> promedio = suma / <span class="num">3.0</span>;
+        cout &lt;&lt; nombres[fila] &lt;&lt; <span class="str">": "</span> &lt;&lt; promedio &lt;&lt; endl;
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="out">// Ana: 8.0   Beto: 8.0   Caro: 8.3</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">calificaciones.py</span></div>
 <pre><span class="com"># filas = alumnos · columnas = materias</span>
 notas = [
     [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>],   <span class="com"># Ana</span>
@@ -441,6 +574,8 @@ nombres = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <spa
     <span class="fn">print</span>(<span class="str">f"{nombres[fila]}: {promedio:.1f}"</span>)
 
 <span class="out"># Ana: 8.0   Beto: 8.0   Caro: 8.3</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -449,29 +584,79 @@ nombres = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <spa
       <div class="sum-card">
         <h3>Suma por fila</h3>
         <p class="sc-rule">Acumulador que se reinicia <em>en cada fila</em>; recorre sus columnas.</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+<pre><span class="kw">for</span> (<span class="kw">int</span> f = <span class="num">0</span>; f &lt; <span class="num">3</span>; f++) {
+    <span class="kw">int</span> suma = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> c = <span class="num">0</span>; c &lt; <span class="num">3</span>; c++)
+        suma += m[f][c];
+    cout &lt;&lt; suma &lt;&lt; endl;
+}</pre>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
 <pre><span class="kw">for</span> f <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
     suma = <span class="num">0</span>
     <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
         suma += m[f][c]
     <span class="fn">print</span>(suma)</pre>
+          </div>
+        </div>
       </div>
       <div class="sum-card col-c">
         <h3>Suma por columna</h3>
         <p class="sc-rule">Fija la columna afuera; baja por <em>todas las filas</em>.</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+<pre><span class="kw">for</span> (<span class="kw">int</span> c = <span class="num">0</span>; c &lt; <span class="num">3</span>; c++) {
+    <span class="kw">int</span> suma = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> f = <span class="num">0</span>; f &lt; <span class="num">3</span>; f++)
+        suma += m[f][c];
+    cout &lt;&lt; suma &lt;&lt; endl;
+}</pre>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
 <pre><span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
     suma = <span class="num">0</span>
     <span class="kw">for</span> f <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
         suma += m[f][c]
     <span class="fn">print</span>(suma)</pre>
+          </div>
+        </div>
       </div>
       <div class="sum-card tot-c">
         <h3>Suma total</h3>
         <p class="sc-rule">Un solo acumulador <em>antes</em> de los dos ciclos: cae cada celda.</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+<pre><span class="kw">int</span> total = <span class="num">0</span>;
+<span class="kw">for</span> (<span class="kw">int</span> f = <span class="num">0</span>; f &lt; <span class="num">3</span>; f++)
+    <span class="kw">for</span> (<span class="kw">int</span> c = <span class="num">0</span>; c &lt; <span class="num">3</span>; c++)
+        total += m[f][c];
+cout &lt;&lt; total &lt;&lt; endl;</pre>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
 <pre>total = <span class="num">0</span>
 <span class="kw">for</span> f <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
     <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
         total += m[f][c]
 <span class="fn">print</span>(total)</pre>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -522,19 +707,50 @@ nombres = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <spa
       Hora de jugar —y de programar. Vas a construir un <strong>tres en raya para 2 jugadores</strong> sobre una
       matriz <strong>3×3</strong>. El plano ya trae lo aburrido resuelto: <span class="mono">crear_tablero()</span> y
       <span class="mono">mostrar_tablero()</span> están hechas, y el bucle principal ya alterna a X y O. Tu reto son
-      las <strong>tres funciones clave</strong>, todas marcadas con <span class="mono"># TODO</span>: validar la
+      las <strong>tres funciones clave</strong>, todas marcadas con <span class="mono">// TODO</span>: validar la
       jugada, pedirla y —el corazón de la sesión— <strong>detectar al ganador con doble for</strong>.
     </p>
 
     <div class="scaffold-demo">
       <div class="sd-explain">
         <h3>Cómo funciona el archivo</h3>
-        <p>Cada función pendiente trae un comentario <span class="mono"># PASO N</span> que explica exactamente qué debe hacer. <strong>No borres lo ya hecho.</strong> Escribe tu código donde dice <span class="mono"># TODO</span>.</p>
+        <p>Cada función pendiente trae un comentario <span class="mono">// PASO N</span> que explica exactamente qué debe hacer. <strong>No borres lo ya hecho.</strong> Escribe tu código donde dice <span class="mono">// TODO</span>.</p>
         <p>Sigue el orden de los pasos y corre el programa después de cada uno para asegurarte de que no truena antes de seguir —el hábito de <em>debugging</em> de la sesión 05.</p>
         <div class="arrow-note">El plano te dice <em>qué</em> hacer; tú decides el <em>cómo</em>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">juego_gato.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">juego_gato.cpp</span></div>
+<pre><span class="com">// PASO 1: validar_celda(tablero, fila, columna)</span>
+<span class="com">//   true si fila y columna estan en rango Y la celda</span>
+<span class="com">//   esta VACIA. Si no, false.</span>
+<span class="kw">bool</span> <span class="fn">validar_celda</span>(Tablero&amp; tablero, <span class="kw">int</span> fila, <span class="kw">int</span> columna) {
+<span class="yours">    // ← aquí escribes tu código</span>
+}
+
+<span class="com">// PASO 2: pedir_jugada(tablero, simbolo)</span>
+<span class="com">//   Pide fila y columna hasta que la celda sea valida,</span>
+<span class="com">//   luego escribe: tablero[fila][columna] = simbolo</span>
+<span class="kw">void</span> <span class="fn">pedir_jugada</span>(Tablero&amp; tablero, <span class="kw">string</span> simbolo) {
+<span class="yours">    // ← aquí escribes tu código</span>
+}
+
+<span class="com">// PASO 3: hay_ganador(tablero, simbolo)</span>
+<span class="com">//   Revisa filas, columnas y las 2 diagonales (doble for)</span>
+<span class="kw">bool</span> <span class="fn">hay_ganador</span>(Tablero&amp; tablero, <span class="kw">string</span> simbolo) {
+<span class="yours">    // ← aquí escribes tu código</span>
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">juego_gato.py</span></div>
 <pre><span class="com"># PASO 1: validar_celda(tablero, fila, columna)</span>
 <span class="com">#   True si fila y columna estan en rango Y la celda</span>
 <span class="com">#   esta VACIA. Si no, False.</span>
@@ -551,6 +767,8 @@ nombres = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <spa
 <span class="com">#   Revisa filas, columnas y las 2 diagonales (doble for)</span>
 <span class="kw">def</span> <span class="fn">hay_ganador</span>(tablero, simbolo):
 <span class="yours">    ← aquí escribes tu código</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -558,12 +776,17 @@ nombres = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <spa
       <div class="db-head">
         <div>
           <h3>Juego del gato · plano para construir</h3>
-          <div class="file-meta">juego_gato.py · 3 funciones · matriz 3×3 · Python 3.12</div>
+          <div class="file-meta">juego_gato.cpp · 3 funciones · matriz 3×3 · C++ (Python como apoyo)</div>
         </div>
-        <a class="dl-btn" href="juego_gato.py" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
-          Descargar el plano
-        </a>
+        <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
+          <a class="dl-btn" href="juego_gato.cpp" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+            Descargar el plano (C++)
+          </a>
+          <a href="juego_gato.py" download style="font-family:'JetBrains Mono',monospace; font-size:.78rem; color:rgba(239,230,210,.6); text-decoration:none; border-bottom:1px solid rgba(239,230,210,.3); padding-bottom:1px;">
+            ↓ versión en Python
+          </a>
+        </div>
       </div>
       <div class="db-body">
         <p>Dos jugadores se turnan marcando casillas con X y O. El programa valida cada jugada (que la celda esté libre y dentro del tablero) y, tras cada turno, revisa con <strong>doble for</strong> si alguien completó una línea de tres —en fila, columna o diagonal. Si se llenan las nueve casillas sin ganador, es <strong>empate</strong>. Usarás todo lo de hoy:</p>
@@ -606,8 +829,8 @@ nombres = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <spa
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>juego_gato.py</strong> — las tres funciones <span class="mono"># TODO</span> resueltas: <span class="mono">validar_celda</span>, <span class="mono">pedir_jugada</span> y <span class="mono">hay_ganador</span> con doble for.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>juego_gato.cpp</strong> en C++ (y Python como apoyo) — las tres funciones <span class="mono">// TODO</span> resueltas: <span class="mono">validar_celda</span>, <span class="mono">pedir_jugada</span> y <span class="mono">hay_ganador</span> con doble for.</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">.md</span>
@@ -656,6 +879,16 @@ nombres = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <spa
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

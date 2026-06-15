@@ -254,6 +254,16 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -289,7 +299,11 @@
       <span class="mono">for</span>. Hoy no hay tema nuevo: hoy todo se junta.<br/><br/>
       Es la <strong>víspera</strong>. El jueves llega el Examen Bimestral, y esta clase es nuestro
       <span class="underline-ochre">ensayo general</span> — tres problemas tipo examen, con el reloj corriendo,
-      para que el día del juicio no te tome desprevenido.
+      para que el día del juicio no te tome desprevenido.<br/><br/>
+      <em>Una nota sobre el lenguaje:</em> desde la sesión 09 el código se muestra en <strong>C++</strong>
+      (principal, la pestaña activa) con su equivalente en <em>Python</em> a un clic de distancia —el puente
+      que ya dominas. Aquí lo verás igual: cada solución vive en ambas pestañas, y <strong>el simulacro se
+      entrega en C++</strong>, con Python opcional como apoyo.
     </p>
 
     <div class="cont-banner">
@@ -424,8 +438,27 @@
 
     <div class="relampago">
       <div class="rel-card">
-        <div class="rc-head"><span class="tag">decisión</span><h3>if · elif · else</h3></div>
+        <div class="rc-head"><span class="tag">decisión</span><h3>if · else if · else</h3></div>
         <div class="rc-body">
+          <div class="codeswitch">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// elige UN camino entre varios</span>
+<span class="kw">int</span> edad;
+cout &lt;&lt; <span class="str">"Tu edad: "</span>; cin &gt;&gt; edad;
+
+<span class="kw">if</span> (edad &lt; <span class="num">13</span>)
+    cout &lt;&lt; <span class="str">"Nino"</span>;
+<span class="kw">else if</span> (edad &lt; <span class="num">18</span>)
+    cout &lt;&lt; <span class="str">"Adolescente"</span>;
+<span class="kw">else</span>
+    cout &lt;&lt; <span class="str">"Adulto"</span>;</pre>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
 <pre><span class="com"># elige UN camino entre varios</span>
 edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Tu edad: "</span>))
 
@@ -435,26 +468,63 @@ edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st
     <span class="fn">print</span>(<span class="str">"Adolescente"</span>)
 <span class="kw">else</span>:
     <span class="fn">print</span>(<span class="str">"Adulto"</span>)</pre>
+            </div>
+          </div>
         </div>
-        <div class="rc-note">El <strong>orden importa</strong>: Python prueba de arriba hacia abajo y se queda con la <em>primera</em> condición verdadera.</div>
+        <div class="rc-note">El <strong>orden importa</strong>: tanto C++ como Python prueban de arriba hacia abajo y se quedan con la <em>primera</em> condición verdadera.</div>
       </div>
 
       <div class="rel-card">
-        <div class="rc-head"><span class="tag">repetición · cuenta</span><h3>for · range()</h3></div>
+        <div class="rc-head"><span class="tag">repetición · cuenta</span><h3>for · conteo</h3></div>
         <div class="rc-body">
+          <div class="codeswitch">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// repite un número CONOCIDO de veces</span>
+<span class="kw">int</span> suma = <span class="num">0</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">5</span>; i++)   <span class="com">// 1,2,3,4,5</span>
+    suma = suma + i;
+
+cout &lt;&lt; <span class="str">"Suma: "</span> &lt;&lt; suma;   <span class="out">// Suma: 15</span></pre>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
 <pre><span class="com"># repite un número CONOCIDO de veces</span>
 suma = <span class="num">0</span>
 <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">6</span>):   <span class="com"># 1,2,3,4,5</span>
     suma = suma + i
 
 <span class="fn">print</span>(<span class="str">"Suma:"</span>, suma)   <span class="out"># Suma: 15</span></pre>
+            </div>
+          </div>
         </div>
-        <div class="rc-note"><strong>range(a, b)</strong> llega hasta <span class="mono">b - 1</span>, nunca incluye el tope. La <em>variable acumuladora</em> se inicia antes del ciclo.</div>
+        <div class="rc-note">En C++ el <strong>for</strong> declara el contador, su condición y su paso; en Python <strong>range(a, b)</strong> llega hasta <span class="mono">b - 1</span>. La <em>variable acumuladora</em> se inicia antes del ciclo.</div>
       </div>
 
       <div class="rel-card">
         <div class="rc-head"><span class="tag">repetición · condición</span><h3>while + validación</h3></div>
         <div class="rc-body">
+          <div class="codeswitch">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// repite MIENTRAS algo siga siendo cierto</span>
+<span class="kw">int</span> edad;
+cout &lt;&lt; <span class="str">"Edad (1-120): "</span>; cin &gt;&gt; edad;
+
+<span class="kw">while</span> (edad &lt; <span class="num">1</span> || edad &gt; <span class="num">120</span>) {
+    cout &lt;&lt; <span class="str">"Dato invalido."</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Edad (1-120): "</span>; cin &gt;&gt; edad;
+}
+cout &lt;&lt; <span class="str">"Gracias."</span>;</pre>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
 <pre><span class="com"># repite MIENTRAS algo siga siendo cierto</span>
 edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Edad (1-120): "</span>))
 
@@ -463,13 +533,37 @@ edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st
     edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Edad (1-120): "</span>))
 
 <span class="fn">print</span>(<span class="str">"Gracias."</span>)</pre>
+            </div>
+          </div>
         </div>
-        <div class="rc-note">El patrón de <strong>validación robusta</strong> de la sesión 11: vuelve a pedir el dato <em>hasta</em> que sea válido. Cuida no caer en un ciclo infinito.</div>
+        <div class="rc-note">El patrón de <strong>validación robusta</strong> de la sesión 11: vuelve a pedir el dato <em>hasta</em> que sea válido. En C++ el «o» se escribe <span class="mono">||</span>. Cuida no caer en un ciclo infinito.</div>
       </div>
 
       <div class="rel-card">
-        <div class="rc-head"><span class="tag">decisión · casos</span><h3>match · case</h3></div>
+        <div class="rc-head"><span class="tag">decisión · casos</span><h3>switch · case</h3></div>
         <div class="rc-body">
+          <div class="codeswitch">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+<pre><span class="com">// un valor contra varios casos exactos</span>
+<span class="kw">char</span> opcion;
+cout &lt;&lt; <span class="str">"Opcion (a/b/c): "</span>; cin &gt;&gt; opcion;
+
+<span class="kw">switch</span> (opcion) {
+    <span class="kw">case</span> <span class="str">'a'</span>:
+        cout &lt;&lt; <span class="str">"Elegiste A"</span>; <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'b'</span>:
+    <span class="kw">case</span> <span class="str">'c'</span>:
+        cout &lt;&lt; <span class="str">"B o C"</span>; <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        cout &lt;&lt; <span class="str">"Opcion invalida"</span>;
+}</pre>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
 <pre><span class="com"># un valor contra varios casos exactos</span>
 opcion = <span class="fn">input</span>(<span class="str">"Opción (a/b/c): "</span>)
 
@@ -480,8 +574,10 @@ opcion = <span class="fn">input</span>(<span class="str">"Opción (a/b/c): "</sp
         <span class="fn">print</span>(<span class="str">"B o C"</span>)
     <span class="kw">case</span> _:
         <span class="fn">print</span>(<span class="str">"Opción inválida"</span>)</pre>
+            </div>
+          </div>
         </div>
-        <div class="rc-note">El <span class="mono">case _</span> es el <strong>comodín</strong>: atrapa todo lo que no encajó arriba, como el <em>else</em> de un menú.</div>
+        <div class="rc-note">El <span class="mono">default</span> de C++ (como el <span class="mono">case _</span> de Python) es el <strong>comodín</strong>: atrapa todo lo que no encajó arriba. En C++ cada <span class="mono">case</span> necesita su <span class="mono">break</span>.</div>
       </div>
     </div>
 
@@ -494,7 +590,7 @@ opcion = <span class="fn">input</span>(<span class="str">"Opción (a/b/c): "</sp
       <div class="n blood display">ii.</div>
       <div>
         <h2 class="display">El <em class="blood">simulacro</em>.</h2>
-        <p>Tres problemas tipo examen. Resuélvelos <strong>con tiempo medido</strong>: 15 minutos cada uno, sin ayuda y sin internet, como el jueves. Si te atoras, abre la pista — pero solo después de intentarlo de verdad. Al final revisamos juntos una solución de referencia.</p>
+        <p>Tres problemas tipo examen. Resuélvelos <strong>con tiempo medido</strong>: 15 minutos cada uno, sin ayuda y sin internet, como el jueves. Entrégalos <strong>en C++</strong> (Python opcional como apoyo). Si te atoras, abre la pista — pero solo después de intentarlo de verdad. Al final revisamos juntos una solución de referencia.</p>
       </div>
     </div>
 
@@ -639,8 +735,57 @@ opcion = <span class="fn">input</span>(<span class="str">"Opción (a/b/c): "</sp
       </div>
     </div>
 
-    <div class="code-block">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">problema3_referencia.py</span></div>
+    <div class="codeswitch">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">problema3_referencia.cpp</span></div>
+<pre><span class="com">// Problema 3 — El cajero del menú</span>
+<span class="com">// Integra: while, if/else if, módulo (%), for y break.</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">string</span> opcion;
+    <span class="kw">while</span> (<span class="kw">true</span>) {
+        cout &lt;&lt; <span class="str">"\n--- MENU ---"</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="str">"1 saludar · 2 par/impar · 3 contar · 4 salir"</span> &lt;&lt; endl;
+        cout &lt;&lt; <span class="str">"Opcion: "</span>; cin &gt;&gt; opcion;
+
+        <span class="kw">if</span> (opcion == <span class="str">"1"</span>) {
+            cout &lt;&lt; <span class="str">"¡Hola! Que gusto verte."</span> &lt;&lt; endl;
+        } <span class="kw">else if</span> (opcion == <span class="str">"2"</span>) {
+            <span class="kw">int</span> numero;
+            cout &lt;&lt; <span class="str">"Numero: "</span>; cin &gt;&gt; numero;
+            <span class="kw">if</span> (numero % <span class="num">2</span> == <span class="num">0</span>)
+                cout &lt;&lt; numero &lt;&lt; <span class="str">" es par"</span> &lt;&lt; endl;
+            <span class="kw">else</span>
+                cout &lt;&lt; numero &lt;&lt; <span class="str">" es impar"</span> &lt;&lt; endl;
+        } <span class="kw">else if</span> (opcion == <span class="str">"3"</span>) {
+            <span class="kw">int</span> tope;
+            cout &lt;&lt; <span class="str">"¿Hasta que numero? "</span>; cin &gt;&gt; tope;
+            <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= tope; i++)
+                cout &lt;&lt; i &lt;&lt; <span class="str">" "</span>;
+            cout &lt;&lt; endl;            <span class="com">// salto de línea final</span>
+        } <span class="kw">else if</span> (opcion == <span class="str">"4"</span>) {
+            cout &lt;&lt; <span class="str">"¡Hasta luego!"</span> &lt;&lt; endl;
+            <span class="kw">break</span>;                  <span class="com">// corta el while(true)</span>
+        } <span class="kw">else</span> {
+            cout &lt;&lt; <span class="str">"Opcion invalida, intenta de nuevo."</span> &lt;&lt; endl;
+        }
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">problema3_referencia.py</span></div>
 <pre><span class="com"># Problema 3 — El cajero del menú</span>
 <span class="com"># Integra: while, match, módulo (%), for y break.</span>
 
@@ -672,8 +817,10 @@ opcion = <span class="fn">input</span>(<span class="str">"Opción (a/b/c): "</sp
 
         <span class="kw">case</span> _:
             <span class="fn">print</span>(<span class="str">"Opción inválida, intenta de nuevo."</span>)</pre>
+        </div>
+      </div>
     </div>
-    <div class="keypoint" style="margin-top:24px;"><strong>Alternativa válida:</strong> si todavía no te sientes con el <em>match</em>, lo mismo se logra con <span class="mono">if opcion == "1": … elif opcion == "2": …</span>. El examen acepta ambos caminos: lo que se evalúa es que <em>funcione y esté bien razonado</em>.</div>
+    <div class="keypoint" style="margin-top:24px;"><strong>Alternativa válida:</strong> en C++ el menú se arma con <span class="mono">if · else if</span> (o un <span class="mono">switch</span>); en Python lo mismo se logra con <span class="mono">match</span> o con <span class="mono">if / elif / else</span>. El examen acepta cualquiera de esos caminos: lo que se evalúa es que <em>funcione y esté bien razonado</em>.</div>
   </section>
 
   <!-- CONSEJOS DE EXAMEN -->
@@ -775,16 +922,16 @@ opcion = <span class="fn">input</span>(<span class="str">"Opción (a/b/c): "</sp
     <div class="panel">
       <h3 class="display">Qué <em>entregas</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>problema1.py</strong> — el boleto del cine, con el precio en constante.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>problema1.cpp</strong> — el boleto del cine, con el precio en constante <em>(Python opcional como apoyo)</em>.</span>
       </div>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>problema2.py</strong> — el promedio del grupo, con acumulador y validación.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>problema2.cpp</strong> — el promedio del grupo, con acumulador y validación <em>(Python opcional como apoyo)</em>.</span>
       </div>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>problema3.py</strong> — el cajero del menú, integrando ciclo y decisión.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>problema3.cpp</strong> — el cajero del menú, integrando ciclo y decisión <em>(Python opcional como apoyo)</em>.</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">git</span>
@@ -836,6 +983,16 @@ opcion = <span class="fn">input</span>(<span class="str">"Opción (a/b/c): "</sp
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

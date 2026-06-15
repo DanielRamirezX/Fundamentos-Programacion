@@ -268,6 +268,16 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -303,6 +313,11 @@
       funciones escritas y probadas: <strong>math</strong>, <strong>random</strong>, <strong>datetime</strong>,
       <strong>statistics</strong>. Al final harás lo más bonito de todo:
       <span class="underline-ochre">guardar tus propias funciones en un módulo</span> y volver a usarlas.
+    </p>
+    <p class="lede" style="margin-top:18px; font-size:1.02rem;">
+      <em>Nota del cuaderno:</em> desde la sesión 09 el código va en <strong>C++</strong> (principal) con su
+      equivalente en <strong>Python</strong> a un clic, como apoyo. Cada bloque trae <em>dos pestañas</em>:
+      C++ activo por defecto y, debajo, el mismo razonamiento en Python que ya conoces.
     </p>
 
     <div class="cont-banner">
@@ -355,8 +370,40 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> los parámetros con valor por defecto van <em>al final</em> de la lista. Primero los obligatorios, después los opcionales. Python lo exige.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">precios.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">precios.cpp</span></div>
+<pre><span class="com">// iva y descuento tienen valor por defecto: son opcionales</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">double</span> <span class="fn">precio_final</span>(<span class="kw">double</span> monto, <span class="kw">double</span> iva = <span class="num">0.16</span>, <span class="kw">double</span> descuento = <span class="num">0.0</span>) {
+    <span class="kw">double</span> subtotal = monto * (<span class="num">1</span> - descuento);
+    <span class="kw">return</span> subtotal * (<span class="num">1</span> + iva);
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// 1) por posicion: solo el monto, iva y descuento por defecto</span>
+    cout &lt;&lt; <span class="fn">precio_final</span>(<span class="num">100</span>) &lt;&lt; endl;            <span class="out">// 116</span>
+
+    <span class="com">// 2) en C++ los opcionales van por posicion, en orden</span>
+    cout &lt;&lt; <span class="fn">precio_final</span>(<span class="num">100</span>, <span class="num">0.08</span>) &lt;&lt; endl;      <span class="out">// 108</span>
+
+    <span class="com">// 3) los tres datos, con descuento del 10%</span>
+    cout &lt;&lt; <span class="fn">precio_final</span>(<span class="num">100</span>, <span class="num">0.16</span>, <span class="num">0.10</span>) &lt;&lt; endl; <span class="out">// 104.4</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">precios.py</span></div>
 <pre><span class="com"># iva tiene valor por defecto: es opcional</span>
 <span class="kw">def</span> <span class="fn">precio_final</span>(monto, iva=<span class="num">0.16</span>, descuento=<span class="num">0.0</span>):
     subtotal = monto * (<span class="num">1</span> - descuento)
@@ -370,6 +417,8 @@
 
 <span class="com"># 3) los tres datos, con descuento</span>
 <span class="fn">print</span>(<span class="fn">precio_final</span>(<span class="num">100</span>, <span class="num">0.16</span>, descuento=<span class="num">0.10</span>))  <span class="out"># 104.4</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -415,8 +464,38 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> los datos <em>entran</em> por los parámetros y <em>salen</em> por el <span class="mono">return</span>. Esa es la puerta. Lo demás, déjalo dentro de la habitación.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">alcance.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">alcance.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">double</span> <span class="fn">area_circulo</span>(<span class="kw">double</span> radio) {
+    <span class="com">// 'resultado' es LOCAL: solo vive aqui</span>
+    <span class="kw">double</span> resultado = <span class="num">3.1416</span> * radio * radio;
+    <span class="kw">return</span> resultado;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">double</span> a = <span class="fn">area_circulo</span>(<span class="num">5</span>);
+    cout &lt;&lt; a &lt;&lt; endl;       <span class="out">// 78.54</span>
+
+    <span class="com">// intentar usar la local afuera NI SIQUIERA compila:</span>
+    cout &lt;&lt; resultado &lt;&lt; endl;
+    <span class="err">// error: 'resultado' was not declared in this scope</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">alcance.py</span></div>
 <pre><span class="kw">def</span> <span class="fn">area_circulo</span>(radio):
     <span class="com"># 'resultado' es LOCAL: solo vive aqui</span>
     resultado = <span class="num">3.1416</span> * radio ** <span class="num">2</span>
@@ -428,6 +507,8 @@ a = <span class="fn">area_circulo</span>(<span class="num">5</span>)
 <span class="com"># intentar usar la local afuera revienta:</span>
 <span class="fn">print</span>(resultado)
 <span class="err"># NameError: name 'resultado' is not defined</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -519,8 +600,44 @@ a = <span class="fn">area_circulo</span>(<span class="num">5</span>)
             <li>Devuelve la edad con <span class="mono">return</span> (no la imprimas dentro).</li>
           </ul>
         </div>
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">calcular_edad.py</span></div>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">calcular_edad.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;ctime&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="com">// recibe la fecha de nacimiento en tres parametros</span>
+<span class="kw">int</span> <span class="fn">calcular_edad</span>(<span class="kw">int</span> anio, <span class="kw">int</span> mes, <span class="kw">int</span> dia) {
+    time_t t = <span class="fn">time</span>(<span class="num">0</span>);
+    tm* hoy = <span class="fn">localtime</span>(&amp;t);
+    <span class="kw">int</span> h_anio = hoy-&gt;tm_year + <span class="num">1900</span>;
+    <span class="kw">int</span> h_mes  = hoy-&gt;tm_mon + <span class="num">1</span>;
+    <span class="kw">int</span> h_dia  = hoy-&gt;tm_mday;
+
+    <span class="kw">int</span> edad = h_anio - anio;
+    <span class="com">// ¿aun no llega el cumpleanos este anio?</span>
+    <span class="kw">if</span> (h_mes &lt; mes || (h_mes == mes &amp;&amp; h_dia &lt; dia)) {
+        edad -= <span class="num">1</span>;
+    }
+    <span class="kw">return</span> edad;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    cout &lt;&lt; <span class="fn">calcular_edad</span>(<span class="num">2005</span>, <span class="num">11</span>, <span class="num">3</span>) &lt;&lt; endl;  <span class="out">// 20</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">calcular_edad.py</span></div>
 <pre><span class="kw">from</span> datetime <span class="kw">import</span> date
 
 <span class="kw">def</span> <span class="fn">calcular_edad</span>(fecha_nacimiento):
@@ -535,6 +652,8 @@ a = <span class="fn">area_circulo</span>(<span class="num">5</span>)
 
 nacimiento = <span class="fn">date</span>(<span class="num">2005</span>, <span class="num">11</span>, <span class="num">3</span>)
 <span class="fn">print</span>(<span class="fn">calcular_edad</span>(nacimiento))  <span class="out"># 20</span></pre>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -574,8 +693,56 @@ nacimiento = <span class="fn">date</span>(<span class="num">2005</span>, <span c
     </div>
 
     <div class="filepair">
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mi_estadistica.py · el módulo</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mi_estadistica.h · el módulo</span></div>
+<pre><span class="com">// Mi biblioteca de estadistica basica (un header)</span>
+<span class="kw">#ifndef</span> MI_ESTADISTICA_H
+<span class="kw">#define</span> MI_ESTADISTICA_H
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">double</span> <span class="fn">promedio</span>(<span class="kw">vector</span>&lt;<span class="kw">double</span>&gt; datos) {
+    <span class="kw">double</span> suma = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">double</span> n : datos) suma += n;
+    <span class="kw">return</span> suma / datos.<span class="fn">size</span>();
+}
+
+<span class="kw">double</span> <span class="fn">maximo</span>(<span class="kw">vector</span>&lt;<span class="kw">double</span>&gt; datos) {
+    <span class="kw">double</span> m = datos[<span class="num">0</span>];
+    <span class="kw">for</span> (<span class="kw">double</span> n : datos) <span class="kw">if</span> (n &gt; m) m = n;
+    <span class="kw">return</span> m;
+}
+
+<span class="kw">double</span> <span class="fn">minimo</span>(<span class="kw">vector</span>&lt;<span class="kw">double</span>&gt; datos) {
+    <span class="kw">double</span> m = datos[<span class="num">0</span>];
+    <span class="kw">for</span> (<span class="kw">double</span> n : datos) <span class="kw">if</span> (n &lt; m) m = n;
+    <span class="kw">return</span> m;
+}
+
+<span class="kw">double</span> <span class="fn">rango</span>(<span class="kw">vector</span>&lt;<span class="kw">double</span>&gt; datos) {
+    <span class="kw">return</span> <span class="fn">maximo</span>(datos) - <span class="fn">minimo</span>(datos);
+}
+
+<span class="com">// parametro por defecto: nota minima para aprobar = 6.0</span>
+<span class="kw">int</span> <span class="fn">aprobados</span>(<span class="kw">vector</span>&lt;<span class="kw">double</span>&gt; datos, <span class="kw">double</span> minimo_aprob = <span class="num">6.0</span>) {
+    <span class="kw">int</span> total = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">double</span> n : datos) <span class="kw">if</span> (n &gt;= minimo_aprob) total++;
+    <span class="kw">return</span> total;
+}
+
+<span class="kw">#endif</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mi_estadistica.py · el módulo</span></div>
 <pre><span class="com"># Mi biblioteca de estadistica basica</span>
 <span class="kw">def</span> <span class="fn">promedio</span>(datos):
     <span class="kw">return</span> <span class="fn">sum</span>(datos) / <span class="fn">len</span>(datos)
@@ -596,9 +763,53 @@ nacimiento = <span class="fn">date</span>(<span class="num">2005</span>, <span c
 <span class="com"># prueba SOLO si corres este archivo</span>
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="fn">print</span>(<span class="fn">promedio</span>([<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>]))  <span class="out"># 8.0</span></pre>
+          </div>
+        </div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">reporte.py · el programa que lo usa</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">reporte.cpp · el programa que lo usa</span></div>
+<pre><span class="com">// Incluyo MI propia biblioteca</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">"mi_estadistica.h"</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">vector</span>&lt;<span class="kw">double</span>&gt; notas = {<span class="num">8.5</span>, <span class="num">9.0</span>, <span class="num">5.5</span>, <span class="num">7.0</span>, <span class="num">10.0</span>};
+
+    cout &lt;&lt; <span class="str">"=== Reporte del grupo ==="</span> &lt;&lt; endl;
+    cout &lt;&lt; fixed &lt;&lt; <span class="fn">setprecision</span>(<span class="num">2</span>);
+    cout &lt;&lt; <span class="str">"Promedio: "</span> &lt;&lt; <span class="fn">promedio</span>(notas) &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Mayor:    "</span> &lt;&lt; <span class="fn">maximo</span>(notas)   &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Menor:    "</span> &lt;&lt; <span class="fn">minimo</span>(notas)   &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Rango:    "</span> &lt;&lt; <span class="fn">rango</span>(notas)    &lt;&lt; endl;
+
+    <span class="com">// uso el parametro por defecto y luego uno propio</span>
+    cout &lt;&lt; <span class="str">"Aprobados (6.0): "</span> &lt;&lt; <span class="fn">aprobados</span>(notas)        &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Aprobados (8.0): "</span> &lt;&lt; <span class="fn">aprobados</span>(notas, <span class="num">8.0</span>)   &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="out">// === Reporte del grupo ===</span>
+<span class="out">// Promedio: 8.00</span>
+<span class="out">// Mayor:    10.00</span>
+<span class="out">// Menor:    5.50</span>
+<span class="out">// Rango:    4.50</span>
+<span class="out">// Aprobados (6.0): 4</span>
+<span class="out">// Aprobados (8.0): 3</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">reporte.py · el programa que lo usa</span></div>
 <pre><span class="com"># Importo MI propia biblioteca</span>
 <span class="kw">import</span> mi_estadistica <span class="kw">as</span> est
 
@@ -621,6 +832,8 @@ notas = [<span class="num">8.5</span>, <span class="num">9.0</span>, <span class
 <span class="out"># Rango:    4.5</span>
 <span class="out"># Aprobados (6.0): 4</span>
 <span class="out"># Aprobados (8.0): 3</span></pre>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -747,6 +960,16 @@ notas = [<span class="num">8.5</span>, <span class="num">9.0</span>, <span class
       const rect = $panel.getBoundingClientRect();
       if (rect.bottom > window.innerHeight) $panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
+  });
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
   });
 </script>
 

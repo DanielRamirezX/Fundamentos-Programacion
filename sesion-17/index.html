@@ -250,6 +250,17 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -292,6 +303,16 @@
       <div class="txt">
         <strong>Tema extra del temario UNITEC.</strong> No estaba en la ruta original, pero ningún
         programador serio se va sin él: es la diferencia entre un juguete y una herramienta de confianza.
+      </div>
+    </div>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
+      <div class="txt">
+        <strong>C++ va al frente desde la sesión 09.</strong> El código se muestra en <strong>C++</strong>
+        (nuestro lenguaje <em>principal</em>) con su equivalente en <em>Python</em> a un clic —el puente que
+        ya dominas. Cada bloque trae <strong>dos pestañas</strong>: C++ activo por defecto, Python al lado.
+        <span class="underline-ochre">El mismo razonamiento, dos idiomas</span>.
       </div>
     </div>
 
@@ -365,9 +386,37 @@
         <p>Una <strong>excepción</strong> es Python avisándote, en pleno vuelo, que algo se rompió: «no puedo convertir <span class="mono">'abc'</span> a entero». Sin red, ese aviso detona y derriba el programa. Con <span class="mono">try/except</span>, lo <em>atrapas</em> y decides tú qué hacer.</p>
         <div class="keypoint"><strong>No confundas:</strong> validar es revisar antes; manejar excepciones es estar listo para cuando, aún revisando, algo falle. Las dos juntas hacen un programa de verdad robusto.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">red_de_seguridad.py</span></div>
-        <pre><span class="com"># Sin red: una entrada mala lo derriba</span>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">red_de_seguridad.cpp</span></div>
+<pre><span class="com">// Sin red: una entrada mala deja basura</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">int</span> edad;
+    cout &lt;&lt; <span class="str">"¿Cuántos años? "</span>;
+
+    <span class="com">// Con red: lo intenta y, si falla, responde</span>
+    <span class="kw">if</span> (cin &gt;&gt; edad) {
+        cout &lt;&lt; <span class="str">"¡Perfecto, "</span> &lt;&lt; edad &lt;&lt; <span class="str">" años!"</span> &lt;&lt; endl;
+    } <span class="kw">else</span> {
+        cout &lt;&lt; <span class="str">"Eso no parece un número."</span> &lt;&lt; endl;
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">red_de_seguridad.py</span></div>
+<pre><span class="com"># Sin red: una entrada mala lo derriba</span>
 edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"¿Cuántos años? "</span>))
 
 <span class="com"># Con red: lo intenta y, si falla, responde</span>
@@ -377,6 +426,8 @@ edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st
     <span class="fn">print</span>(<span class="str">"Eso no parece un número."</span>)
 <span class="kw">else</span>:
     <span class="fn">print</span>(<span class="str">f"¡Perfecto, {edad} años!"</span>)</pre>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -418,9 +469,54 @@ edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st
       </div>
     </div>
 
-    <div class="code-block" style="margin-top:28px;">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">anatomia.py</span></div>
-      <pre><span class="kw">def</span> <span class="fn">pedir_division</span>():
+    <div class="codeswitch" style="margin-top:28px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">anatomia.cpp</span></div>
+<pre><span class="com">// C++ tiene try/catch. El "else" se emula con</span>
+<span class="com">// una bandera; el "finally" con código tras el bloque.</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;stdexcept&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">void</span> <span class="fn">pedir_division</span>() {
+    <span class="kw">int</span> a, b;
+    <span class="kw">bool</span> ok = <span class="kw">true</span>;
+    <span class="kw">try</span> {
+        cout &lt;&lt; <span class="str">"Dividendo: "</span>;
+        <span class="kw">if</span> (!(cin &gt;&gt; a)) <span class="kw">throw</span> invalid_argument(<span class="str">"texto"</span>);  <span class="com">// como ValueError</span>
+        cout &lt;&lt; <span class="str">"Divisor: "</span>;
+        <span class="kw">if</span> (!(cin &gt;&gt; b)) <span class="kw">throw</span> invalid_argument(<span class="str">"texto"</span>);
+        <span class="kw">if</span> (b == <span class="num">0</span>)   <span class="kw">throw</span> overflow_error(<span class="str">"cero"</span>);     <span class="com">// como ZeroDivisionError</span>
+        cout &lt;&lt; <span class="str">"El resultado es "</span> &lt;&lt; (<span class="kw">double</span>)a / b &lt;&lt; endl; <span class="com">// solo si NO hubo error</span>
+    } <span class="kw">catch</span> (invalid_argument&amp; e) {
+        ok = <span class="kw">false</span>;
+        cout &lt;&lt; <span class="str">"Escribe números enteros, por favor."</span> &lt;&lt; endl;
+    } <span class="kw">catch</span> (overflow_error&amp; e) {
+        ok = <span class="kw">false</span>;
+        cout &lt;&lt; <span class="str">"No se puede dividir entre cero."</span> &lt;&lt; endl;
+    }
+    cout &lt;&lt; <span class="str">"— operación finalizada —"</span> &lt;&lt; endl;     <span class="com">// SIEMPRE (rol de finally)</span>
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">pedir_division</span>();
+    <span class="com">// Entrada 8 y 2  -&gt;  "El resultado es 4" + "— operación finalizada —"</span>
+    <span class="com">// Entrada 8 y 0  -&gt;  "No se puede dividir entre cero." + "— operación finalizada —"</span>
+    <span class="com">// Entrada "x"    -&gt;  "Escribe números enteros..." + "— operación finalizada —"</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">anatomia.py</span></div>
+<pre><span class="kw">def</span> <span class="fn">pedir_division</span>():
     <span class="kw">try</span>:
         a = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Dividendo: "</span>))      <span class="com"># puede lanzar ValueError</span>
         b = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Divisor: "</span>))
@@ -436,9 +532,11 @@ edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st
 
 
 <span class="fn">pedir_division</span>()
-<span class="com"># Entrada 8 y 2  ->  "El resultado es 4.0" + "— operación finalizada —"</span>
-<span class="com"># Entrada 8 y 0  ->  "No se puede dividir entre cero." + "— operación finalizada —"</span>
-<span class="com"># Entrada "x"    ->  "Escribe números enteros..." + "— operación finalizada —"</span></pre>
+<span class="com"># Entrada 8 y 2  -&gt;  "El resultado es 4.0" + "— operación finalizada —"</span>
+<span class="com"># Entrada 8 y 0  -&gt;  "No se puede dividir entre cero." + "— operación finalizada —"</span>
+<span class="com"># Entrada "x"    -&gt;  "Escribe números enteros..." + "— operación finalizada —"</span></pre>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -480,9 +578,51 @@ edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st
       </div>
     </div>
 
-    <div class="code-block" style="margin-top:26px;">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">sospechosos.py</span></div>
-      <pre><span class="com"># Cada error tiene su propio except, con su propio mensaje</span>
+    <div class="codeswitch" style="margin-top:26px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">sospechosos.cpp</span></div>
+<pre><span class="com">// Cada error tiene su propio catch, con su propio mensaje</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;map&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;stdexcept&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    map&lt;string, <span class="kw">double</span>&gt; cuentas = {{<span class="str">"1001"</span>, <span class="num">2500.0</span>}, {<span class="str">"1002"</span>, <span class="num">800.0</span>}};
+    <span class="kw">try</span> {
+        <span class="kw">string</span> numero, sMonto, sVeces;
+        cout &lt;&lt; <span class="str">"Cuenta: "</span>;        cin &gt;&gt; numero;
+        <span class="kw">double</span> saldo = cuentas.<span class="fn">at</span>(numero);     <span class="com">// out_of_range (como KeyError)</span>
+        cout &lt;&lt; <span class="str">"Retiro: $"</span>;      cin &gt;&gt; sMonto;
+        <span class="kw">double</span> monto = <span class="fn">stod</span>(sMonto);          <span class="com">// invalid_argument (como ValueError)</span>
+        cout &lt;&lt; <span class="str">"Mensualidades: "</span>; cin &gt;&gt; sVeces;
+        <span class="kw">int</span> veces = <span class="fn">stoi</span>(sVeces);
+        <span class="kw">if</span> (veces == <span class="num">0</span>) <span class="kw">throw</span> overflow_error(<span class="str">"cero"</span>);  <span class="com">// como ZeroDivisionError</span>
+        cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="num">2</span>)
+             &lt;&lt; <span class="str">"Cuota mensual: $"</span> &lt;&lt; monto / veces &lt;&lt; endl;
+    } <span class="kw">catch</span> (out_of_range&amp; e) {
+        cout &lt;&lt; <span class="str">"Esa cuenta no existe."</span> &lt;&lt; endl;
+    } <span class="kw">catch</span> (invalid_argument&amp; e) {
+        cout &lt;&lt; <span class="str">"El monto debe ser un número."</span> &lt;&lt; endl;
+    } <span class="kw">catch</span> (overflow_error&amp; e) {
+        cout &lt;&lt; <span class="str">"El número de mensualidades no puede ser cero."</span> &lt;&lt; endl;
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">sospechosos.py</span></div>
+<pre><span class="com"># Cada error tiene su propio except, con su propio mensaje</span>
 cuentas = {<span class="str">"1001"</span>: <span class="num">2500.0</span>, <span class="str">"1002"</span>: <span class="num">800.0</span>}
 
 <span class="kw">try</span>:
@@ -499,6 +639,8 @@ cuentas = {<span class="str">"1001"</span>: <span class="num">2500.0</span>, <sp
     <span class="fn">print</span>(<span class="str">"El número de mensualidades no puede ser cero."</span>)
 <span class="kw">else</span>:
     <span class="fn">print</span>(<span class="str">f"Cuota mensual: ${cuota:.2f}"</span>)</pre>
+        </div>
+      </div>
     </div>
 
     <!-- DISCUSIÓN -->
@@ -535,7 +677,7 @@ cuentas = {<span class="str">"1001"</span>: <span class="num">2500.0</span>, <sp
     <p class="intro">
       Volvemos al <strong>cajero ATM de la sesión 09</strong> («Los muchos caminos»). Funciona de maravilla…
       hasta que un humano lo toca. Hoy lo tomamos en vivo y lo <strong>refactorizamos</strong>: cada punto
-      marcado con <span class="mono"># FRÁGIL</span> se envuelve con <span class="mono">try/except/else/finally</span>
+      marcado con <span class="mono">FRÁGIL</span> se envuelve con <span class="mono">try/catch</span> en C++ (o <span class="mono">try/except/else/finally</span> en Python)
       hasta que sea <em>imposible</em> hacerlo tronar. Naces con la versión frágil; entregas la versión 2.0,
       a prueba de fallos.
     </p>
@@ -543,13 +685,39 @@ cuentas = {<span class="str">"1001"</span>: <span class="num">2500.0</span>, <sp
     <div class="scaffold-demo">
       <div class="sd-explain">
         <h3>Cómo viene marcado el archivo</h3>
-        <p>Abre el archivo y busca cada comentario <span class="mono"># FRÁGIL</span>: ahí vive un punto que hoy revienta el programa. Junto a él, un <span class="mono"># PASO</span> te dice exactamente qué endurecer.</p>
-        <p><strong>No borres las marcas.</strong> Lee el peligro, envuelve la línea con tu red <span class="mono">try/except</span> y vuelve a correr probando justo la entrada que antes lo rompía.</p>
+        <p>Abre el archivo y busca cada comentario <span class="mono">FRÁGIL</span> (<span class="mono">//</span> en C++, <span class="mono">#</span> en Python): ahí vive un punto que hoy revienta el programa. Junto a él, un <span class="mono">PASO</span> te dice exactamente qué endurecer.</p>
+        <p><strong>No borres las marcas.</strong> Lee el peligro, envuelve la línea con tu red <span class="mono">try/catch</span> (o <span class="mono">try/except</span> en Python) y vuelve a correr probando justo la entrada que antes lo rompía.</p>
         <div class="arrow-note">El plano te señala la grieta; tú decides cómo sellarla.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cajero_atm_robusto.py</span></div>
-        <pre><span class="com"># FRÁGIL 2: input() devuelve TEXTO. Si</span>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cajero_atm_robusto.cpp</span></div>
+<pre><span class="com">// FRÁGIL 2: stod() convierte TEXTO a número. Si</span>
+<span class="com">//   el usuario escribe "abc", stod("abc") lanza</span>
+<span class="com">//   invalid_argument y el cajero truena.</span>
+<span class="com">// PASO 2: envuelve esto en try/catch.</span>
+<span class="kw">double</span> monto = <span class="fn">stod</span>(linea);
+<span class="fragil">    ← esta línea hoy lo rompe</span>
+
+<span class="com">// Tu versión 2.0 debería verse así:</span>
+<span class="kw">try</span> {
+    monto = <span class="fn">stod</span>(linea);
+} <span class="kw">catch</span> (invalid_argument&amp; e) {
+    cout &lt;&lt; <span class="str">"Monto inválido."</span> &lt;&lt; endl;
+}
+<span class="yours">    ← aquí endureces tú</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cajero_atm_robusto.py</span></div>
+<pre><span class="com"># FRÁGIL 2: input() devuelve TEXTO. Si</span>
 <span class="com">#   el usuario escribe "abc", float("abc")</span>
 <span class="com">#   lanza ValueError y el cajero truena.</span>
 <span class="com"># PASO 2: envuelve esto en try/except.</span>
@@ -562,6 +730,8 @@ monto = <span class="fn">float</span>(<span class="fn">input</span>(<span class=
 <span class="kw">except</span> ValueError:
     <span class="fn">print</span>(<span class="str">"Monto inválido."</span>)
 <span class="yours">    ← aquí endureces tú</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -569,12 +739,17 @@ monto = <span class="fn">float</span>(<span class="fn">input</span>(<span class=
       <div class="db-head">
         <div>
           <h3>Cajero ATM · versión frágil para endurecer</h3>
-          <div class="file-meta">cajero_atm_robusto.py · 6 puntos FRÁGIL · Python 3.12</div>
+          <div class="file-meta">cajero_atm_robusto.cpp · 6 puntos FRÁGIL · C++ (principal) &middot; Python de apoyo</div>
         </div>
-        <a class="dl-btn" href="cajero_atm_robusto.py" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
-          Descargar el cajero frágil
-        </a>
+        <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
+          <a class="dl-btn" href="cajero_atm_robusto.cpp" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+            Descargar el plano (C++)
+          </a>
+          <a href="cajero_atm_robusto.py" download style="font-family:'JetBrains Mono',monospace; font-size:.78rem; letter-spacing:.04em; color:#f0c8a0; text-decoration:none; border-bottom:1px solid rgba(240,200,160,.4);">
+            ↓ versión en Python (puente)
+          </a>
+        </div>
       </div>
       <div class="db-body">
         <p>Un cajero que consulta saldos, retira efectivo y reparte montos entre N personas. <strong>Funciona, pero crashea</strong> con texto donde espera números, retiros mayores al saldo, división entre cero y opciones de menú que no existen. Tu misión: que sobreviva a todo.</p>
@@ -608,7 +783,7 @@ monto = <span class="fn">float</span>(<span class="fn">input</span>(<span class=
       <h3 class="display">Criterios de <em>evaluación</em></h3>
       <ol class="crit-list">
         <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el cajero corre completo y no muestra un solo traceback ante ninguna de las entradas malas.</li>
-        <li><strong>Lógica correcta</strong> — cada <span style="font-style:italic">except</span> atrapa el error correcto y por su nombre; nada de <span class="mono">except:</span> pelón que silencie todo.</li>
+        <li><strong>Lógica correcta</strong> — cada <span style="font-style:italic">catch</span> (o <span style="font-style:italic">except</span> en Python) atrapa el error correcto y por su tipo; nada de <span class="mono">catch(...)</span> ni <span class="mono">except:</span> pelón que silencie todo.</li>
         <li><strong>Funcionamiento óptimo</strong> — los seis puntos frágiles endurecidos, validación de saldo y monto, opción de menú inexistente manejada con cortesía.</li>
         <li><strong>Autenticidad</strong> — código tuyo, no copiado; con tag de versión <span class="mono">v2.0</span> en tu repositorio.</li>
       </ol>
@@ -617,8 +792,8 @@ monto = <span class="fn">float</span>(<span class="fn">input</span>(<span class=
     <div class="panel">
       <h3 class="display">Entregable a <em>GitHub</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>cajero_atm_robusto.py</strong> — versión 2.0 con manejo completo de excepciones en cada punto frágil.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>cajero_atm_robusto.cpp</strong> — versión 2.0 en C++ (y Python como apoyo) con manejo completo de excepciones en cada punto frágil.</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">tag</span>
@@ -666,6 +841,16 @@ monto = <span class="fn">float</span>(<span class="fn">input</span>(<span class=
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

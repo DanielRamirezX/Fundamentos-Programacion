@@ -209,6 +209,10 @@
   .dl-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--olive); color: var(--paper); text-decoration: none; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; border: none; cursor: pointer; }
   .dl-btn:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
   .dl-btn svg{ width: 18px; height: 18px; }
+  .dl-col{ display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  @media (max-width: 640px){ .dl-col{ align-items: flex-start; } }
+  .dl-alt{ font-family: "JetBrains Mono", monospace; font-size: .76rem; color: rgba(239,230,210,.6); text-decoration: none; border-bottom: 1px dashed rgba(239,230,210,.3); transition: color .25s ease, border-color .25s ease; }
+  .dl-alt:hover{ color: #f0c8a0; border-bottom-color: #f0c8a0; }
   .download-box .db-body{ padding: 26px 32px 30px; }
   .download-box .db-body > p{ margin: 0 0 18px; font-size: 1rem; color: rgba(239,230,210,.85); line-height: 1.55; }
   .download-box .db-body > p strong{ color: #f0c8a0; }
@@ -261,6 +265,17 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -302,7 +317,8 @@
       <div class="txt">
         <strong>Esta sesión continúa la 11.</strong> Allí el ciclo no sabía dónde paraba; aquí el ciclo nace ya
         con su final escrito. Aprenderás <em>cuándo</em> conviene cada uno —y por qué un <em>for</em> mal usado
-        puede ser un <em>while</em> disfrazado.
+        puede ser un <em>while</em> disfrazado. Desde la sesión 09 el código va en <strong>C++</strong> (principal);
+        cada bloque guarda su equivalente en <em>Python</em> en la otra pestaña, como puente.
       </div>
     </div>
 
@@ -347,8 +363,44 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> si sabes <em>cuántas</em> veces repetir, usa <span class="mono">for</span>. Si solo sabes <em>hasta cuándo</em>, usa <span class="mono">while</span> (la sesión 11).</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primeros_pasos.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primeros_pasos.cpp</span></div>
+<pre><span class="com">// Repetir un numero FINITO de veces</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">5</span>; i++) {
+        cout &lt;&lt; <span class="str">"Vuelta numero "</span> &lt;&lt; i &lt;&lt; endl;
+    }
+
+    <span class="com">// Salida:</span>
+    <span class="out">// Vuelta numero 0</span>
+    <span class="out">// Vuelta numero 1</span>
+    <span class="out">// Vuelta numero 2</span>
+    <span class="out">// Vuelta numero 3</span>
+    <span class="out">// Vuelta numero 4</span>
+
+    <span class="com">// Tambien se recorre un texto, letra a letra</span>
+    <span class="kw">string</span> palabra = <span class="str">"sol"</span>;
+    <span class="kw">for</span> (<span class="kw">char</span> letra : palabra) {
+        cout &lt;&lt; letra &lt;&lt; endl;   <span class="out">// s, luego o, luego l</span>
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primeros_pasos.py</span></div>
 <pre><span class="com"># Repetir un numero FINITO de veces</span>
 <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
     <span class="fn">print</span>(<span class="str">"Vuelta numero"</span>, i)
@@ -363,6 +415,8 @@
 <span class="com"># Tambien se recorre un texto, letra a letra</span>
 <span class="kw">for</span> letra <span class="kw">in</span> <span class="str">"sol"</span>:
     <span class="fn">print</span>(letra)   <span class="out"># s, luego o, luego l</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -443,8 +497,42 @@
         <p>Un <em>contador</em> es un acumulador que crece de uno en uno: cuenta cuántas veces ocurrió algo. Un <em>factorial</em> es un acumulador de multiplicación. La tabla de multiplicar, la suma de los pares… todo es la misma melodía con distinta letra.</p>
         <div class="keypoint"><strong>El error clásico:</strong> inicializar el acumulador <em>dentro</em> del ciclo. Entonces se reinicia en cada vuelta y lo olvida todo. Va <em>antes</em>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">acumuladores.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">acumuladores.cpp</span></div>
+<pre><span class="com">// Suma de los primeros N pares</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">int</span> n    = <span class="num">5</span>;
+    <span class="kw">int</span> suma = <span class="num">0</span>;            <span class="com">// acumulador: ANTES del for</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= n; i++) {
+        <span class="kw">int</span> par = i * <span class="num">2</span>;
+        suma = suma + par;       <span class="com">// actualiza en cada vuelta</span>
+    }
+    cout &lt;&lt; <span class="str">"Suma de pares: "</span> &lt;&lt; suma &lt;&lt; endl;   <span class="out">// 30</span>
+
+    <span class="com">// Factorial: acumulador de MULTIPLICACION</span>
+    <span class="kw">int</span> numero    = <span class="num">5</span>;
+    <span class="kw">long long</span> factorial = <span class="num">1</span>;    <span class="com">// empieza en 1, no en 0</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= numero; i++) {
+        factorial = factorial * i;
+    }
+    cout &lt;&lt; numero &lt;&lt; <span class="str">"! = "</span> &lt;&lt; factorial &lt;&lt; endl;  <span class="out">// 120</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">acumuladores.py</span></div>
 <pre><span class="com"># Suma de los primeros N pares</span>
 n    = <span class="num">5</span>
 suma = <span class="num">0</span>            <span class="com"># acumulador: ANTES del for</span>
@@ -459,13 +547,45 @@ factorial = <span class="num">1</span>       <span class="com"># empieza en 1, n
 <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, numero + <span class="num">1</span>):
     factorial = factorial * i
 <span class="fn">print</span>(<span class="str">f"{numero}! ="</span>, factorial)  <span class="out"># 120</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- TABLA DE MULTIPLICAR (live coding) -->
     <div class="twocol" style="margin-top:30px;">
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tabla.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tabla.cpp</span></div>
+<pre><span class="com">// Tabla de multiplicar del 7 (live coding)</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">int</span> base = <span class="num">7</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt;= <span class="num">10</span>; i++) {
+        <span class="kw">int</span> resultado = base * i;
+        cout &lt;&lt; base &lt;&lt; <span class="str">" x "</span> &lt;&lt; i &lt;&lt; <span class="str">" = "</span> &lt;&lt; resultado &lt;&lt; endl;
+    }
+
+    <span class="com">// Salida:</span>
+    <span class="out">// 7 x 1 = 7</span>
+    <span class="out">// 7 x 2 = 14</span>
+    <span class="out">// ...      hasta</span>
+    <span class="out">// 7 x 10 = 70</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tabla.py</span></div>
 <pre><span class="com"># Tabla de multiplicar del 7 (live coding)</span>
 base = <span class="num">7</span>
 <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">11</span>):
@@ -477,6 +597,8 @@ base = <span class="num">7</span>
 <span class="out"># 7 x 2 = 14</span>
 <span class="out"># ...      hasta</span>
 <span class="out"># 7 x 10 = 70</span></pre>
+          </div>
+        </div>
       </div>
       <div class="prose">
         <p>Aquí está la primera demostración en vivo. Diez vueltas, un <span class="mono">f-string</span> que arma cada renglón y un <span class="mono">range(1, 11)</span> que —recuerda— llega hasta el <strong>10</strong>, no hasta el 11.</p>
@@ -525,8 +647,41 @@ base = <span class="num">7</span>
         <p>A la derecha, el patrón: un diccionario hace de seis contadores a la vez, y el ciclo lo alimenta vuelta a vuelta. Más abajo puedes <strong>correr la simulación tú mismo</strong>.</p>
         <div class="keypoint"><strong>Nota:</strong> <span class="mono">conteos[cara] += 1</span> es la forma corta de <span class="mono">conteos[cara] = conteos[cara] + 1</span>. Un contador dentro de un ciclo, ni más ni menos.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">simula_dado.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">simula_dado.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;map&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;cstdlib&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;ctime&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">srand</span>(<span class="fn">time</span>(<span class="num">0</span>));        <span class="com">// semilla del azar</span>
+    <span class="kw">int</span> n = <span class="num">10000</span>;
+    map&lt;<span class="kw">int</span>, <span class="kw">int</span>&gt; conteos;     <span class="com">// seis contadores: 1..6</span>
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) {        <span class="com">// N lanzamientos</span>
+        <span class="kw">int</span> cara = <span class="fn">rand</span>() % <span class="num">6</span> + <span class="num">1</span>;
+        conteos[cara] = conteos[cara] + <span class="num">1</span>;
+    }
+
+    <span class="kw">for</span> (<span class="kw">int</span> cara = <span class="num">1</span>; cara &lt;= <span class="num">6</span>; cara++) {  <span class="com">// mostrar el conteo</span>
+        cout &lt;&lt; cara &lt;&lt; <span class="str">" -> "</span> &lt;&lt; conteos[cara] &lt;&lt; endl;
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">simula_dado.py</span></div>
 <pre><span class="kw">import</span> random
 
 n       = <span class="num">10000</span>
@@ -538,6 +693,8 @@ conteos = {<span class="num">1</span>:<span class="num">0</span>, <span class="n
 
 <span class="kw">for</span> cara <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">7</span>):     <span class="com"># mostrar el conteo</span>
     <span class="fn">print</span>(cara, <span class="str">"->"</span>, conteos[cara])</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -619,8 +776,33 @@ conteos = {<span class="num">1</span>:<span class="num">0</span>, <span class="n
         <p>Sigue el orden. Corre el programa después de cada paso para asegurarte de que no truena antes de continuar —el hábito de <em>debugging</em> de la sesión 05.</p>
         <div class="arrow-note">El plano te dice <em>qué</em> hacer; tú decides el <em>cómo</em>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">generador_contrasenas.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">generador_contrasenas.cpp</span></div>
+<pre><span class="com">// PASO 2: CONSTANTES con los conjuntos de</span>
+<span class="com">//   caracteres (minus, mayus, digitos, simbolos)</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com">// PASO 5: arma el "alfabeto" segun los</span>
+<span class="com">//   parametros (acumulador de texto con if)</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com">// PASO 7: el for que construye la contrasena</span>
+<span class="com">//   alfabeto[rand() % alfabeto.size()] dentro de for (i = 0; i &lt; longitud; i++)</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com">// ... y así hasta el PASO 8</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">generador_contrasenas.py</span></div>
 <pre><span class="com"># PASO 2: CONSTANTES con los conjuntos de</span>
 <span class="com">#   caracteres (minus, mayus, digitos, simbolos)</span>
 <span class="yours">    ← aquí escribes tu código</span>
@@ -634,6 +816,8 @@ conteos = {<span class="num">1</span>:<span class="num">0</span>, <span class="n
 <span class="yours">    ← aquí escribes tu código</span>
 
 <span class="com"># ... y así hasta el PASO 8</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -641,12 +825,15 @@ conteos = {<span class="num">1</span>:<span class="num">0</span>, <span class="n
       <div class="db-head">
         <div>
           <h3>Generador de contraseñas · plano para construir</h3>
-          <div class="file-meta">generador_contrasenas.py · 8 pasos guiados · Python 3.12</div>
+          <div class="file-meta">generador_contrasenas.cpp · 8 pasos guiados · C++ (y Python como apoyo)</div>
         </div>
-        <a class="dl-btn" href="generador_contrasenas.py" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
-          Descargar el plano
-        </a>
+        <div class="dl-col">
+          <a class="dl-btn" href="generador_contrasenas.cpp" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+            Descargar el plano (C++)
+          </a>
+          <a class="dl-alt" href="generador_contrasenas.py" download>↓ versión en Python</a>
+        </div>
       </div>
       <div class="db-body">
         <p>El generador junta solo los conjuntos de caracteres que pidas, valida que la longitud tenga sentido y, dentro de un <strong>for</strong> de <strong>longitud</strong> vueltas, elige un carácter al azar en cada paso y lo pega al acumulador. <strong>Usarás todo lo de hoy</strong>:</p>
@@ -655,17 +842,17 @@ conteos = {<span class="num">1</span>:<span class="num">0</span>, <span class="n
           <span class="tool-pill nuevo">ciclo <span class="mono">for</span></span>
           <span class="tool-pill nuevo"><span class="mono">range(longitud)</span></span>
           <span class="tool-pill nuevo">acumulador de texto</span>
-          <span class="tool-pill"><span class="mono">import random</span></span>
+          <span class="tool-pill"><span class="mono">rand()</span> / random</span>
           <span class="tool-pill">constantes</span>
           <span class="tool-pill">validación</span>
         </div>
 
         <div class="game-preview">
           <span class="gp-title">▶ ASÍ SE VERÁ TU GENERADOR TERMINADO</span>
-          <span class="prompt">$ python generador_contrasenas.py</span><br/>
+          <span class="prompt">$ ./generador_contrasenas</span><br/>
           Tu contraseña es: <span class="win">gT7#mQ2x!pLa</span><br/>
           Longitud: 12<br/><br/>
-          <span class="prompt">$ python generador_contrasenas.py</span> <span class="hint">(simbolos = False)</span><br/>
+          <span class="prompt">$ ./generador_contrasenas</span> <span class="hint">(simbolos = false)</span><br/>
           Tu contraseña es: <span class="win">gT7mQ2xpLaUe</span><br/>
           Longitud: 12
         </div>
@@ -680,7 +867,7 @@ conteos = {<span class="num">1</span>:<span class="num">0</span>, <span class="n
       <ol class="crit-list">
         <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el generador corre completo y entrega una contraseña.</li>
         <li><strong>Lógica correcta</strong> — la longitud y las opciones (mayúsculas, dígitos, símbolos) cambian de verdad el resultado.</li>
-        <li><strong>Funcionamiento óptimo</strong> — usa un <span class="mono">for</span> con <span class="mono">range()</span>, un acumulador y validación; nada de atajos a medias.</li>
+        <li><strong>Funcionamiento óptimo</strong> — usa un <span class="mono">for</span>, un acumulador y validación, en <strong>C++</strong> (y Python como apoyo); nada de atajos a medias.</li>
         <li><strong>Autenticidad</strong> — código escrito por ti, no copiado de un compañero.</li>
       </ol>
     </div>
@@ -688,8 +875,8 @@ conteos = {<span class="num">1</span>:<span class="num">0</span>, <span class="n
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>generador_contrasenas.py</strong> — los 8 pasos resueltos, con parámetros configurables (longitud, mayúsculas, dígitos, símbolos).</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>generador_contrasenas.cpp</strong> — los 8 pasos resueltos en C++ (Python como apoyo), con parámetros configurables (longitud, mayúsculas, dígitos, símbolos).</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">.md</span>
@@ -764,6 +951,16 @@ conteos = {<span class="num">1</span>:<span class="num">0</span>, <span class="n
   if ($run){
     $run.addEventListener('click', () => lanzarDado(parseInt($n.value, 10)));
   }
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

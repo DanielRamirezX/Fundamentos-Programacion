@@ -303,6 +303,17 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -345,6 +356,16 @@
         <strong>Sesión integradora.</strong> No aprendemos un tema nuevo: tomamos todo lo que ya sabes escribir
         y aprendemos a escribirlo <em>bien</em>. Es el sello que separa a quien programa de quien solo hace
         que algo corra.
+      </div>
+    </div>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m18 16 4-4-4-4M6 8l-4 4 4 4M14.5 4l-5 16"/></svg>
+      <div class="txt">
+        <strong>C++ al frente, Python como puente.</strong> Desde la sesión 09 el lenguaje <em>principal</em> es
+        <strong>C++</strong>; <em>Python</em> queda como apoyo —ya lo dominas de las sesiones 01-08. Cada bloque de
+        código trae <strong>dos pestañas</strong>: C++ activo por defecto y su equivalente en Python a un clic. Los
+        oficios de hoy —PEP 8, depurar y usar la IA con honestidad— valen <em>en cualquiera de los dos</em>.
       </div>
     </div>
 
@@ -399,8 +420,37 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> escribe el código pensando en quien lo va a leer mañana sin contexto. Ese «alguien» casi siempre eres tú.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estilo.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estilo.cpp</span></div>
+<pre><span class="com">// ✗ Funciona, pero pelea con el lector</span>
+<span class="kw">double</span> <span class="fn">CalcularTotal</span>(<span class="kw">double</span> p,<span class="kw">double</span> iva){<span class="kw">double</span> Resultado=p+p*iva;<span class="kw">return</span> Resultado;}
+
+<span class="kw">double</span> t=<span class="fn">CalcularTotal</span>(<span class="num">100</span>,<span class="num">0.16</span>);
+
+
+<span class="com">// ✓ El mismo cálculo, ahora legible (estilo limpio)</span>
+<span class="kw">const double</span> IVA = <span class="num">0.16</span>;
+
+
+<span class="kw">double</span> <span class="fn">calcular_total</span>(<span class="kw">double</span> precio, <span class="kw">double</span> iva) {
+    <span class="kw">double</span> total = precio + precio * iva;
+    <span class="kw">return</span> total;
+}
+
+
+<span class="kw">double</span> total = <span class="fn">calcular_total</span>(<span class="num">100</span>, IVA);</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estilo.py</span></div>
 <pre><span class="com"># ✗ Funciona, pero pelea con el lector</span>
 <span class="kw">def</span> <span class="fn">CalcularTotal</span>(p,iva):
   Resultado=p+p*iva
@@ -419,6 +469,8 @@ IVA = <span class="num">0.16</span>
 
 
 total = <span class="fn">calcular_total</span>(<span class="num">100</span>, IVA)</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -512,8 +564,39 @@ contador = contador + <span class="num">1</span>
         <p>Recuerda el bug lógico de la sesión 05: el programa corría, pero el promedio salía mal. Sin debugger, lo persigues a ciegas. Con él, pones un alto, miras <span class="mono">suma</span> y <span class="mono">total</span> en cada vuelta, y el error se delata solo.</p>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> antes de cambiar una sola línea para «arreglar» un bug, ponlo bajo el debugger y <em>obsérvalo</em>. La mitad de los bugs no son lo que crees que son.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">promedio.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">promedio.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">double</span> <span class="fn">promedio</span>(vector&lt;<span class="kw">double</span>&gt; calificaciones) {
+    <span class="kw">double</span> suma = <span class="num">0</span>;
+    <span class="kw">int</span> total = calificaciones.<span class="fn">size</span>();
+    <span class="kw">for</span> (<span class="kw">double</span> calif : calificaciones) {
+        suma = suma + calif;
+    }
+    <span class="kw">return</span> suma / total;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;<span class="kw">double</span>&gt; notas = {<span class="num">8.0</span>, <span class="num">9.5</span>, <span class="num">7.0</span>};
+    cout &lt;&lt; <span class="fn">promedio</span>(notas);
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="out">&gt;&gt;&gt; 8.16667</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">promedio.py</span></div>
 <pre><span class="kw">def</span> <span class="fn">promedio</span>(calificaciones):
     suma = <span class="num">0</span>
     total = <span class="fn">len</span>(calificaciones)
@@ -525,6 +608,8 @@ contador = contador + <span class="num">1</span>
 notas = [<span class="num">8.0</span>, <span class="num">9.5</span>, <span class="num">7.0</span>]
 <span class="fn">print</span>(<span class="fn">promedio</span>(notas))
 <span class="out">&gt;&gt;&gt; 8.166666666666666</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -694,8 +779,30 @@ notas = [<span class="num">8.0</span>, <span class="num">9.5</span>, <span class
           </ul>
         </div>
         <div>
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">por_auditar.py</span></div>
+          <div class="codeswitch">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">por_auditar.cpp</span></div>
+<pre><span class="com">// el codigo a mejorar en el pizarron</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">using namespace</span> std;
+<span class="kw">double</span> <span class="fn">Calc</span>( <span class="kw">double</span> N1,<span class="kw">double</span> N2 ){
+<span class="kw">double</span> R=N1*0.16+N2; <span class="com">// sumar</span>
+<span class="kw">return</span> R;}
+<span class="kw">int</span> <span class="fn">main</span>(){
+<span class="kw">double</span> x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50</span>);
+cout&lt;&lt;<span class="str">"resultado "</span>&lt;&lt;x;
+<span class="kw">return</span> <span class="num">0</span>;}</pre>
+              </div>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">por_auditar.py</span></div>
 <pre><span class="com"># el codigo a mejorar en el pizarron</span>
 <span class="kw">def</span> <span class="fn">Calc</span>( N1,N2 ):
   R=N1*0.16+N2 <span class="com"># sumar</span>
@@ -703,6 +810,8 @@ notas = [<span class="num">8.0</span>, <span class="num">9.5</span>, <span class
 
 x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50</span>)
 <span class="fn">print</span>(<span class="str">"resultado"</span>,x)</pre>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -723,8 +832,42 @@ x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50
           </ul>
         </div>
         <div>
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">bug_logico.py</span></div>
+          <div class="codeswitch">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">bug_logico.cpp</span></div>
+<pre><span class="com">// Promedio de aprobados (&gt;= 6)</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">double</span> <span class="fn">promedio_aprobados</span>(vector&lt;<span class="kw">int</span>&gt; notas) {
+    <span class="kw">double</span> suma = <span class="num">0</span>;
+    <span class="kw">int</span> cuenta = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> nota : notas) {
+        <span class="kw">if</span> (nota &gt;= <span class="num">6</span>) {
+            suma = suma + nota;
+        }
+        cuenta = cuenta + <span class="num">1</span>;
+    }
+    <span class="kw">return</span> suma / cuenta;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    cout &lt;&lt; <span class="fn">promedio_aprobados</span>({<span class="num">9</span>, <span class="num">4</span>, <span class="num">8</span>});
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="out">&gt;&gt;&gt; 5.666...  // ¿no debería ser 8.5?</span></pre>
+              </div>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">bug_logico.py</span></div>
 <pre><span class="com"># Promedio de aprobados (&gt;= 6)</span>
 <span class="kw">def</span> <span class="fn">promedio_aprobados</span>(notas):
     suma = <span class="num">0</span>
@@ -738,6 +881,8 @@ x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50
 
 <span class="fn">print</span>(<span class="fn">promedio_aprobados</span>([<span class="num">9</span>, <span class="num">4</span>, <span class="num">8</span>]))
 <span class="out">&gt;&gt;&gt; 5.666...  # ¿no debería ser 8.5?</span></pre>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -859,6 +1004,16 @@ x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

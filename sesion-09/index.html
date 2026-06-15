@@ -227,6 +227,17 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -272,6 +283,17 @@
       </div>
     </div>
 
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
+      <div class="txt">
+        <strong>A partir de hoy, C++ pasa al frente.</strong> El temario oficial de UNITEC es de estilo C, así que
+        adoptamos <strong>C++</strong> como lenguaje <em>principal</em> y conservamos <em>Python</em> como puente
+        —ya lo dominas de las sesiones 01-08. Cada bloque de código trae <strong>dos pestañas</strong>: C++ activo
+        por defecto y su equivalente en Python a un clic de distancia. <span class="underline-ochre">El mismo
+        razonamiento, dos idiomas</span>.
+      </div>
+    </div>
+
     <div class="who">
       <div class="who-block">
         <span class="label">Profesor</span>
@@ -313,8 +335,53 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> anida cuando una decisión <em>depende</em> de otra. Si las preguntas son independientes, mejor sepáralas o únelas con <span class="mono">and</span>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">descuentos.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">descuentos.cpp</span></div>
+<pre><span class="com">// Descuento segun tipo de cliente Y monto</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">string</span> tipo;
+    <span class="kw">double</span> monto, descuento;
+    cout &lt;&lt; <span class="str">"Cliente (vip/normal): "</span>; cin &gt;&gt; tipo;
+    cout &lt;&lt; <span class="str">"Monto de compra: "</span>;  cin &gt;&gt; monto;
+
+    <span class="kw">if</span> (tipo == <span class="str">"vip"</span>) {
+        <span class="com">// dentro de la rama VIP, otra decision</span>
+        <span class="kw">if</span> (monto &gt;= <span class="num">1000</span>) {
+            descuento = <span class="num">0.20</span>;
+        } <span class="kw">else</span> {
+            descuento = <span class="num">0.10</span>;
+        }
+    } <span class="kw">else</span> {
+        <span class="com">// rama cliente normal, anidada tambien</span>
+        <span class="kw">if</span> (monto &gt;= <span class="num">1000</span>) {
+            descuento = <span class="num">0.05</span>;
+        } <span class="kw">else</span> {
+            descuento = <span class="num">0.0</span>;
+        }
+    }
+
+    <span class="kw">double</span> total = monto * (<span class="num">1</span> - descuento);
+    cout &lt;&lt; fixed &lt;&lt; setprecision(<span class="num">2</span>);
+    cout &lt;&lt; <span class="str">"Pagas: $"</span> &lt;&lt; total &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">descuentos.py</span></div>
 <pre><span class="com"># Descuento segun tipo de cliente Y monto</span>
 tipo  = <span class="fn">input</span>(<span class="str">"Cliente (vip/normal): "</span>)
 monto = <span class="kw">float</span>(<span class="fn">input</span>(<span class="str">"Monto de compra: "</span>))
@@ -334,6 +401,8 @@ monto = <span class="kw">float</span>(<span class="fn">input</span>(<span class=
 
 total = monto * (<span class="num">1</span> - descuento)
 <span class="fn">print</span>(<span class="str">f"Pagas: ${total:.2f}"</span>)</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -368,22 +437,63 @@ total = monto * (<span class="num">1</span> - descuento)
         <p>Con ellos, dos <span class="mono">if</span> anidados a menudo se convierten en <em>uno solo</em>, más corto y más claro. Compara la versión anidada de la izquierda con la compuesta: dicen lo mismo.</p>
         <div class="keypoint"><strong>Cuidado con el orden:</strong> Python evalúa primero <span class="mono">not</span>, luego <span class="mono">and</span>, y al final <span class="mono">or</span>. Ante la duda, usa <em>paréntesis</em> y que se lea solo.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">compuestas.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">compuestas.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">int</span> edad;
+    <span class="kw">string</span> resp;
+    cout &lt;&lt; <span class="str">"Edad: "</span>;          cin &gt;&gt; edad;
+    cout &lt;&lt; <span class="str">"Socio? (s/n): "</span>; cin &gt;&gt; resp;
+    <span class="kw">bool</span> socio = (resp == <span class="str">"s"</span>);
+
+    <span class="com">// &amp;&amp; -&gt; deben cumplirse las DOS</span>
+    <span class="kw">if</span> (edad &gt;= <span class="num">18</span> &amp;&amp; socio) {
+        cout &lt;&lt; <span class="str">"Acceso a la sala VIP"</span> &lt;&lt; endl;
+    }
+
+    <span class="com">// || -&gt; basta con UNA</span>
+    <span class="kw">if</span> (edad &lt; <span class="num">12</span> || edad &gt;= <span class="num">65</span>) {
+        cout &lt;&lt; <span class="str">"Entrada con descuento"</span> &lt;&lt; endl;
+    }
+
+    <span class="com">// ! -&gt; invierte la condicion</span>
+    <span class="kw">if</span> (!socio) {
+        cout &lt;&lt; <span class="str">"Te invitamos a inscribirte"</span> &lt;&lt; endl;
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">compuestas.py</span></div>
 <pre>edad   = <span class="kw">int</span>(<span class="fn">input</span>(<span class="str">"Edad: "</span>))
 socio  = <span class="fn">input</span>(<span class="str">"¿Socio? (s/n): "</span>) == <span class="str">"s"</span>
 
-<span class="com"># and -> deben cumplirse las DOS</span>
+<span class="com"># and -&gt; deben cumplirse las DOS</span>
 <span class="kw">if</span> edad &gt;= <span class="num">18</span> <span class="kw">and</span> socio:
     <span class="fn">print</span>(<span class="str">"Acceso a la sala VIP"</span>)
 
-<span class="com"># or -> basta con UNA</span>
+<span class="com"># or -&gt; basta con UNA</span>
 <span class="kw">if</span> edad &lt; <span class="num">12</span> <span class="kw">or</span> edad &gt;= <span class="num">65</span>:
     <span class="fn">print</span>(<span class="str">"Entrada con descuento"</span>)
 
-<span class="com"># not -> invierte la condicion</span>
+<span class="com"># not -&gt; invierte la condicion</span>
 <span class="kw">if</span> <span class="kw">not</span> socio:
     <span class="fn">print</span>(<span class="str">"Te invitamos a inscribirte"</span>)</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -443,8 +553,42 @@ socio  = <span class="fn">input</span>(<span class="str">"¿Socio? (s/n): "</spa
           <li>No hace falta <span class="mono">break</span>: Python no se «cae» al siguiente caso como en C.</li>
         </ul>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">refactor.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">refactor.cpp</span></div>
+<pre><span class="com">// ANTES: escalera if-else if-else</span>
+<span class="kw">if</span> (opcion == <span class="str">'1'</span>) {
+    cout &lt;&lt; <span class="str">"Consultar saldo"</span> &lt;&lt; endl;
+} <span class="kw">else if</span> (opcion == <span class="str">'2'</span>) {
+    cout &lt;&lt; <span class="str">"Depositar"</span> &lt;&lt; endl;
+} <span class="kw">else if</span> (opcion == <span class="str">'3'</span>) {
+    cout &lt;&lt; <span class="str">"Retirar"</span> &lt;&lt; endl;
+} <span class="kw">else</span> {
+    cout &lt;&lt; <span class="str">"Opcion no valida"</span> &lt;&lt; endl;
+}
+
+<span class="com">// DESPUES: el mismo menu con switch-case</span>
+<span class="kw">switch</span> (opcion) {
+    <span class="kw">case</span> <span class="str">'1'</span>:
+        cout &lt;&lt; <span class="str">"Consultar saldo"</span> &lt;&lt; endl; <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'2'</span>:
+        cout &lt;&lt; <span class="str">"Depositar"</span> &lt;&lt; endl; <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'3'</span>:
+        cout &lt;&lt; <span class="str">"Retirar"</span> &lt;&lt; endl; <span class="kw">break</span>;
+    <span class="kw">default</span>:  <span class="com">// el comodin, equivale al else</span>
+        cout &lt;&lt; <span class="str">"Opcion no valida"</span> &lt;&lt; endl;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">refactor.py</span></div>
 <pre><span class="com"># ANTES: escalera if-elif-else</span>
 <span class="kw">if</span> opcion == <span class="str">"1"</span>:
     <span class="fn">print</span>(<span class="str">"Consultar saldo"</span>)
@@ -465,6 +609,8 @@ socio  = <span class="fn">input</span>(<span class="str">"¿Socio? (s/n): "</spa
         <span class="fn">print</span>(<span class="str">"Retirar"</span>)
     <span class="kw">case</span> _:
         <span class="fn">print</span>(<span class="str">"Opcion no valida"</span>)</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -515,8 +661,32 @@ socio  = <span class="fn">input</span>(<span class="str">"¿Socio? (s/n): "</spa
         <p>Sigue el orden. Corre el programa después de cada paso para asegurarte de que no truena antes de continuar —el hábito de <em>debugging</em> de la sesión 05.</p>
         <div class="arrow-note">El plano te dice <em>qué</em> hacer; tú decides el <em>cómo</em>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cajero_atm.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cajero_atm.cpp</span></div>
+<pre><span class="com">// PASO 1: Crea las CONSTANTES del cajero</span>
+<span class="com">//   SALDO_INICIAL, RETIRO_MAXIMO, PIN_CORRECTO</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com">// PASO 5: EL MENU con un while (true) y 4 opciones</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com">// PASO 8: OPCION Retirar (decisiones anidadas)</span>
+<span class="com">//   ¿monto válido? ¿hay fondos? ¿no excede el tope?</span>
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com">// ... y así hasta el PASO 10</span></pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cajero_atm.py</span></div>
 <pre><span class="com"># PASO 1: Crea las CONSTANTES del cajero</span>
 <span class="com">#   SALDO_INICIAL, RETIRO_MAXIMO, PIN_CORRECTO</span>
 <span class="yours">    ← aquí escribes tu código</span>
@@ -529,6 +699,8 @@ socio  = <span class="fn">input</span>(<span class="str">"¿Socio? (s/n): "</spa
 <span class="yours">    ← aquí escribes tu código</span>
 
 <span class="com"># ... y así hasta el PASO 10</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -536,12 +708,15 @@ socio  = <span class="fn">input</span>(<span class="str">"¿Socio? (s/n): "</spa
       <div class="db-head">
         <div>
           <h3>Cajero ATM · plano para construir</h3>
-          <div class="file-meta">cajero_atm.py · 10 pasos guiados · Python 3.12</div>
+          <div class="file-meta">cajero_atm.cpp · 10 pasos guiados · C++ (principal) &middot; Python de apoyo</div>
         </div>
-        <a class="dl-btn" href="cajero_atm.py" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
-          Descargar el plano
-        </a>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+          <a class="dl-btn" href="cajero_atm.cpp" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+            Descargar el plano (C++)
+          </a>
+          <a href="cajero_atm.py" download style="font-family:'JetBrains Mono',monospace; font-size:.76rem; letter-spacing:.04em; color:rgba(239,230,210,.6); text-decoration:none; border-bottom:1px solid rgba(239,230,210,.3); padding-bottom:2px;">↓ versión en Python (cajero_atm.py)</a>
+        </div>
       </div>
       <div class="db-body">
         <p>El cajero pide un PIN (con intentos limitados), muestra un menú y atiende cada operación validando que todo tenga sentido: que no deposites cantidades negativas, que no retires más de lo que tienes ni más del tope permitido. <strong>Usarás todo lo de hoy</strong>:</p>
@@ -587,8 +762,8 @@ socio  = <span class="fn">input</span>(<span class="str">"¿Socio? (s/n): "</spa
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>cajero_atm.py</strong> — los 10 pasos resueltos, con menú de 4 opciones y validaciones anidadas.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>cajero_atm.cpp</strong> — los 10 pasos resueltos en C++ (y, si quieres, su <span class="mono">cajero_atm.py</span> como apoyo), con menú de 4 opciones y validaciones anidadas.</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">.md</span>
@@ -637,6 +812,16 @@ socio  = <span class="fn">input</span>(<span class="str">"¿Socio? (s/n): "</spa
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>

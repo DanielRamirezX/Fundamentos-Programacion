@@ -230,6 +230,16 @@
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
 
+  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
+  .codeswitch{ margin: 0; }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:rgba(239,230,210,.85); }
+  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-pane[hidden]{ display:none; }
+  .cs-pane .code-block{ border-top:none; }
+  @media (max-width:480px){ .cs-flag{ display:none; } }
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -274,6 +284,16 @@
       </div>
     </div>
 
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
+      <div class="txt">
+        <strong>El código va en C++ (principal), Python como apoyo.</strong> Desde la sesión 09 el lenguaje al frente es
+        <strong>C++</strong> —más cercano al temario de estilo C de UNITEC— y <em>Python</em> queda como puente, ya conocido.
+        Cada bloque trae <em>dos pestañas</em>: C++ activo por defecto y su equivalente en Python a un clic. En C++, el
+        arreglo de hoy se llama <span style="font-family:'JetBrains Mono',monospace; font-size:.9em">vector</span>.
+      </div>
+    </div>
+
     <div class="who">
       <div class="who-block">
         <span class="label">Profesor</span>
@@ -315,8 +335,43 @@
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> si vas a tener «el dato 1, el dato 2, el dato 3…», no inventes tres variables: declara <em>una</em> lista. Los conjuntos se guardan en colecciones.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">declaracion.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">declaracion.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// Una lista (vector) de calificaciones</span>
+    vector&lt;<span class="kw">int</span>&gt; calificaciones = {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>};
+
+    <span class="com">// Un vector de nombres (textos)</span>
+    vector&lt;<span class="kw">string</span>&gt; alumnos = {<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <span class="str">"Carla"</span>};
+
+    <span class="com">// Un vector vacio, listo para crecer</span>
+    vector&lt;<span class="kw">int</span>&gt; pendientes;
+
+    <span class="kw">for</span> (<span class="kw">int</span> c : calificaciones) cout &lt;&lt; c &lt;&lt; <span class="str">" "</span>;
+    cout &lt;&lt; endl;
+    <span class="out">8 9 7 10 6</span>
+    <span class="kw">for</span> (<span class="kw">string</span> a : alumnos) cout &lt;&lt; a &lt;&lt; <span class="str">" "</span>;
+    cout &lt;&lt; endl;
+    <span class="out">Ana Beto Carla</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">declaracion.py</span></div>
 <pre><span class="com"># Una lista de calificaciones</span>
 calificaciones = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
 
@@ -330,6 +385,8 @@ pendientes = []
 <span class="out">[8, 9, 7, 10, 6]</span>
 <span class="fn">print</span>(alumnos)
 <span class="out">['Ana', 'Beto', 'Carla']</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -377,8 +434,46 @@ prom = <span class="fn">sum</span>(cals) / <span class="fn">len</span>(cals)
         <p>También puedes pedir <em>una rebanada</em> —un <strong>slice</strong>— con <span class="mono">lista[inicio:fin]</span>. El inicio se incluye; el fin <em>no</em>. Es como decir «desde aquí, hasta justo antes de allá».</p>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> piensa en el índice como «cuántos pasos doy desde el principio». Desde el primer elemento das cero pasos: por eso es el <em>0</em>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexacion.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexacion.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;<span class="kw">int</span>&gt; cals = {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>};
+
+    <span class="com">// Indices positivos (desde el inicio)</span>
+    cout &lt;&lt; cals[<span class="num">0</span>] &lt;&lt; endl;   <span class="com">// primer elemento</span>
+    <span class="out">8</span>
+    cout &lt;&lt; cals[<span class="num">2</span>] &lt;&lt; endl;   <span class="com">// tercer elemento</span>
+    <span class="out">7</span>
+
+    <span class="com">// C++ no tiene indices negativos: vamos desde el final</span>
+    cout &lt;&lt; cals.<span class="fn">back</span>() &lt;&lt; endl;             <span class="com">// el ultimo</span>
+    <span class="out">6</span>
+    cout &lt;&lt; cals[cals.<span class="fn">size</span>() - <span class="num">2</span>] &lt;&lt; endl;   <span class="com">// el penultimo</span>
+    <span class="out">10</span>
+
+    <span class="com">// Rebanada: del indice 1 al 3 (el 3 NO entra)</span>
+    vector&lt;<span class="kw">int</span>&gt; trozo(cals.<span class="fn">begin</span>() + <span class="num">1</span>, cals.<span class="fn">begin</span>() + <span class="num">3</span>);
+    <span class="kw">for</span> (<span class="kw">int</span> x : trozo) cout &lt;&lt; x &lt;&lt; <span class="str">" "</span>;
+    cout &lt;&lt; endl;
+    <span class="out">9 7</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexacion.py</span></div>
 <pre>cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
 
 <span class="com"># Indices positivos (desde el inicio)</span>
@@ -396,6 +491,8 @@ prom = <span class="fn">sum</span>(cals) / <span class="fn">len</span>(cals)
 <span class="com"># Slicing: del indice 1 al 3 (el 3 NO entra)</span>
 <span class="fn">print</span>(cals[<span class="num">1</span>:<span class="num">3</span>])
 <span class="out">[9, 7]</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -484,8 +581,44 @@ prom = <span class="fn">sum</span>(cals) / <span class="fn">len</span>(cals)
         </ul>
         <div class="keypoint"><strong>Regla del cuaderno:</strong> cuando quieras «hacer algo con cada elemento de la lista», la frase ya casi escribe el código: <em>for cada elemento in la lista</em>.</div>
       </div>
-      <div class="code-block">
-        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrido.py</span></div>
+      <div class="codeswitch">
+        <div class="cs-tabs">
+          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+          <button type="button" class="cs-tab" data-lang="py">Python</button>
+          <span class="cs-flag">principal &middot; C++</span>
+        </div>
+        <div class="cs-pane" data-lang="cpp">
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrido.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;<span class="kw">int</span>&gt; cals = {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>};
+
+    <span class="com">// Recorrer los valores (for-each)</span>
+    <span class="kw">for</span> (<span class="kw">int</span> c : cals)
+        cout &lt;&lt; <span class="str">"Calificación: "</span> &lt;&lt; c &lt;&lt; endl;
+    <span class="out">Calificación: 8</span>
+    <span class="out">Calificación: 9</span>
+    <span class="out">Calificación: 7</span>
+    <span class="out">Calificación: 10</span>
+    <span class="out">Calificación: 6</span>
+
+    <span class="com">// Recorrer posición y valor a la vez (con indice)</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; (<span class="kw">int</span>)cals.<span class="fn">size</span>(); i++)
+        cout &lt;&lt; <span class="str">"Parcial "</span> &lt;&lt; (i + <span class="num">1</span>) &lt;&lt; <span class="str">": "</span> &lt;&lt; cals[i] &lt;&lt; endl;
+    <span class="out">Parcial 1: 8</span>
+    <span class="out">Parcial 2: 9</span>
+    <span class="out">...</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+          </div>
+        </div>
+        <div class="cs-pane" data-lang="py" hidden>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrido.py</span></div>
 <pre>cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
 
 <span class="com"># Recorrer los valores</span>
@@ -503,6 +636,8 @@ prom = <span class="fn">sum</span>(cals) / <span class="fn">len</span>(cals)
 <span class="out">Parcial 1: 8</span>
 <span class="out">Parcial 2: 9</span>
 <span class="out">...</span></pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -580,8 +715,54 @@ cals.<span class="fn">append</span>(<span class="num">9</span>)
       </div>
     </div>
 
-    <div class="code-block">
-      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estadisticas.py · ejemplo de referencia</span></div>
+    <div class="codeswitch">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estadisticas.cpp · ejemplo de referencia</span></div>
+<pre><span class="com">// Estadísticas básicas sobre un vector de calificaciones</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;<span class="kw">int</span>&gt; cals = {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>};
+
+    <span class="kw">int</span> suma = <span class="num">0</span>;
+    <span class="kw">int</span> maxima = cals[<span class="num">0</span>];   <span class="com">// arrancamos con el primero</span>
+    <span class="kw">int</span> minima = cals[<span class="num">0</span>];
+    <span class="kw">int</span> aprobadas = <span class="num">0</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> c : cals) {
+        suma = suma + c;
+        <span class="kw">if</span> (c &gt; maxima) maxima = c;
+        <span class="kw">if</span> (c &lt; minima) minima = c;
+        <span class="kw">if</span> (c &gt;= <span class="num">6</span>) aprobadas = aprobadas + <span class="num">1</span>;
+    }
+
+    <span class="kw">double</span> promedio = (<span class="kw">double</span>)suma / cals.<span class="fn">size</span>();
+
+    cout &lt;&lt; <span class="str">"Lista: "</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> c : cals) cout &lt;&lt; c &lt;&lt; <span class="str">" "</span>;
+    cout &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Cantidad de datos: "</span> &lt;&lt; cals.<span class="fn">size</span>() &lt;&lt; endl;
+    cout &lt;&lt; fixed &lt;&lt; <span class="fn">setprecision</span>(<span class="num">2</span>);
+    cout &lt;&lt; <span class="str">"Promedio: "</span> &lt;&lt; promedio &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Máxima: "</span> &lt;&lt; maxima &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Mínima: "</span> &lt;&lt; minima &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Aprobatorias: "</span> &lt;&lt; aprobadas &lt;&lt; <span class="str">" de "</span> &lt;&lt; cals.<span class="fn">size</span>() &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estadisticas.py · ejemplo de referencia</span></div>
 <pre><span class="com"># Estadísticas básicas sobre una lista de calificaciones</span>
 cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
 
@@ -607,6 +788,8 @@ promedio = suma / <span class="fn">len</span>(cals)
 <span class="fn">print</span>(<span class="str">"Máxima:"</span>, maxima)
 <span class="fn">print</span>(<span class="str">"Mínima:"</span>, minima)
 <span class="fn">print</span>(<span class="str">f"Aprobatorias: {aprobadas} de {len(cals)}"</span>)</pre>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -615,9 +798,9 @@ promedio = suma / <span class="fn">len</span>(cals)
     <div class="panel">
       <h3 class="display">Criterios de <em>evaluación</em></h3>
       <ol class="crit-list">
-        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el programa corre completo sin reventar (ojo con el <span class="mono">IndexError</span>).</li>
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el programa corre completo sin reventar (ojo con salirte de los índices: <span class="mono">IndexError</span> en Python, fuera de rango en C++).</li>
         <li><strong>Lógica correcta</strong> — el promedio, la máxima y la mínima son los valores reales de la lista.</li>
-        <li><strong>Funcionamiento óptimo</strong> — el recorrido usa <span class="mono">for</span> y <span class="mono">len()</span>, y funciona aunque cambies la lista.</li>
+        <li><strong>Funcionamiento óptimo</strong> — el recorrido usa <span class="mono">for</span> y el tamaño de la colección (<span class="mono">.size()</span> en C++, <span class="mono">len()</span> en Python), y funciona aunque cambies la lista.</li>
         <li><strong>Autenticidad</strong> — código escrito por ti, no copiado de un compañero.</li>
       </ol>
     </div>
@@ -625,8 +808,8 @@ promedio = suma / <span class="fn">len</span>(cals)
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>estadisticas.py</strong> — el programa que calcula promedio, máxima y mínima recorriendo una lista con <span class="mono">for</span>.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>estadisticas.cpp</strong> (y, si quieres, <span class="mono">estadisticas.py</span> como apoyo) — el programa que calcula promedio, máxima y mínima recorriendo la colección con <span class="mono">for</span>.</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">.md</span>
@@ -675,6 +858,16 @@ promedio = suma / <span class="fn">len</span>(cals)
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
+
+  /* ===== Dual language code switch ===== */
+  document.addEventListener("click", function(ev){
+    var tab = ev.target.closest && ev.target.closest(".cs-tab");
+    if(!tab) return;
+    var sw = tab.closest(".codeswitch"); if(!sw) return;
+    var lang = tab.getAttribute("data-lang");
+    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
+    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
 </script>
 
 </body>
