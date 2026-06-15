@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 25 · Memoria que persiste · Archivos .txt y .csv · open/read/write/with</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --disk-blue: #4a6b86; --disk-purple: #6b5080;
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 60px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 120px); line-height: .95; margin: 0 0 32px; letter-spacing: -.02em; }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 54px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* CONTINUACIÓN BANNER */
+  .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
+  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
+  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* FICHA */
+  .ficha{ margin: 50px 0 0; border: 1.5px solid var(--ink); background: var(--paper-deep); position: relative; z-index: 2; }
+  .ficha .f-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .ficha-grid{ display: grid; grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 820px){ .ficha-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 480px){ .ficha-grid{ grid-template-columns: 1fr; } }
+  .ficha-cell{ padding: 18px 22px; border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
+  .ficha-cell .fc-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .ficha-cell .fc-value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.02rem; color: var(--ink); line-height: 1.3; }
+  .ficha-cell.wide{ grid-column: 1 / -1; border-right: none; }
+  .ficha-cell .fc-value.obj{ font-style: italic; font-weight: 400; font-size: 1.05rem; line-height: 1.5; }
+
+  /* SECTION HEADERS */
+  .sec{ margin: 100px 0; }
+  .sec .s-head{ display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .sec .s-head{ grid-template-columns: 1fr; gap: 8px; } }
+  .sec .s-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
+  .sec .s-head .n.blood{ color: var(--blood); }
+  .sec .s-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .sec .s-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .sec .s-head h2 em.blood{ color: var(--blood); }
+  .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .sec .s-head p strong{ color: var(--blood); }
+  .sec .s-head p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+
+  /* PROSE + CODE 2-col */
+  .twocol{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .twocol{ grid-template-columns: 1fr; gap: 22px; } }
+  .prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .prose p em{ color: var(--blood-dark); font-style: italic; }
+  .prose p strong{ color: var(--blood); font-weight: 600; }
+  .prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .prose ul li strong{ color: var(--ink); }
+  .prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* CODE BLOCK */
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* MEMORIA vs DISCO (volátil vs persistente) */
+  .vola{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 36px; }
+  @media (max-width: 760px){ .vola{ grid-template-columns: 1fr; } }
+  .vola-card{ padding: 24px 26px; border: 1.5px solid var(--ink); }
+  .vola-card.ram{ background: var(--paper-deep); }
+  .vola-card.disk{ background: var(--ink); color: var(--paper); }
+  .vola-card .v-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  .vola-card.ram .v-tag{ color: var(--blood); } .vola-card.disk .v-tag{ color: #f0c8a0; }
+  .vola-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 10px; }
+  .vola-card.ram h3{ color: var(--ink); } .vola-card.disk h3{ color: var(--paper); }
+  .vola-card p{ margin: 0 0 10px; font-size: .96rem; line-height: 1.55; }
+  .vola-card.ram p{ color: var(--ink-soft); } .vola-card.disk p{ color: rgba(239,230,210,.82); }
+  .vola-card p strong{ font-weight: 600; } .vola-card.ram p strong{ color: var(--blood); } .vola-card.disk p strong{ color: #f0c8a0; }
+  .vola-card .v-flow{ font-family: "JetBrains Mono", monospace; font-size: .82rem; margin-top: 14px; padding: 12px 14px; }
+  .vola-card.ram .v-flow{ background: var(--paper); color: var(--ink-soft); } .vola-card.disk .v-flow{ background: rgba(239,230,210,.08); color: #c8dd96; }
+
+  /* MODOS DE APERTURA (tarjetas) */
+  .modos-grid{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px; }
+  @media (max-width: 880px){ .modos-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 460px){ .modos-grid{ grid-template-columns: 1fr; } }
+  .modo-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ochre); padding: 20px 20px 22px; }
+  .modo-card.write{ border-top-color: var(--blood); }
+  .modo-card.append{ border-top-color: var(--olive); }
+  .modo-card .m-letter{ font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 2rem; color: var(--ochre-deep); line-height: 1; }
+  .modo-card.write .m-letter{ color: var(--blood); } .modo-card.append .m-letter{ color: var(--olive-deep); }
+  .modo-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.1rem; margin: 8px 0 6px; color: var(--ink); }
+  .modo-card p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.45; }
+  .modo-card p strong{ color: var(--blood-dark); }
+
+  /* CSV demo (tabla -> texto) */
+  .csv-demo{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; align-items: stretch; }
+  @media (max-width: 820px){ .csv-demo{ grid-template-columns: 1fr; } }
+  .csv-side h4{ font-family: "JetBrains Mono", monospace; font-size: .76rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 12px; text-align: center; }
+  .data-table{ width: 100%; border-collapse: collapse; font-family: "Newsreader", serif; font-size: .9rem; background: var(--paper-deep); border: 1.5px solid var(--ink); }
+  .data-table th, .data-table td{ border: 1px solid var(--line); padding: 9px 12px; text-align: left; }
+  .data-table th{ background: var(--ink); color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; font-weight: 400; }
+  .data-table td{ color: var(--ink); }
+  .csv-raw{ background: var(--ink); padding: 16px 18px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.9; color: var(--c-base); height: 100%; }
+  .csv-raw .comma{ color: var(--blood); font-weight: 700; } .csv-raw .head-row{ color: #f0c8a0; }
+  .csv-foot{ margin-top: 18px; font-style: italic; color: var(--ink-soft); font-size: .95rem; text-align: center; }
+  .csv-foot strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* EXCEPTION callout */
+  .exc-callout{ margin-top: 30px; background: var(--ink); color: var(--paper); padding: 0; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 760px){ .exc-callout{ grid-template-columns: 1fr; } }
+  .exc-callout .exc-text{ padding: 26px 30px; }
+  .exc-callout .exc-text h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 10px; color: #f0c8a0; }
+  .exc-callout .exc-text p{ margin: 0 0 10px; font-size: .96rem; color: rgba(239,230,210,.85); line-height: 1.55; }
+  .exc-callout .exc-text p strong{ color: #f0c8a0; }
+  .exc-callout .exc-text p .mono{ font-family: "JetBrains Mono", monospace; background: rgba(239,230,210,.08); padding: 1px 6px; font-size: .85em; }
+  .exc-callout .exc-code{ background: #16110c; border-left: 1px solid rgba(239,230,210,.12); }
+  .exc-callout .exc-code pre{ margin: 0; padding: 24px 26px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.8; color: var(--c-base); overflow-x: auto; }
+  .exc-callout .exc-code .kw{ color: var(--c-kw); } .exc-callout .exc-code .str{ color: var(--c-str); } .exc-callout .exc-code .fn{ color: var(--c-fn); } .exc-callout .exc-code .com{ color: var(--c-com); font-style: italic; } .exc-callout .exc-code .err{ color: #f0a890; } .exc-callout .exc-code .out{ color: rgba(239,230,210,.55); }
+
+  /* COLAB note */
+  .colab-note{ margin-top: 20px; padding: 16px 22px; background: var(--paper-deep); border-left: 4px solid var(--disk-blue); }
+  .colab-note p{ margin: 0; font-size: .95rem; color: var(--ink); line-height: 1.5; }
+  .colab-note p strong{ color: var(--disk-blue); }
+  .colab-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+
+  /* PRÁCTICA / PROYECTO */
+  .project{ margin: 110px 0; }
+  .project .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 26px; }
+  @media (max-width: 700px){ .project .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .project .head .stamp{ border: 2.5px solid var(--olive); color: var(--olive-deep); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .project h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5.5vw, 64px); line-height: 1; margin: 0 0 14px; letter-spacing: -.015em; }
+  .project h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .project .intro{ color: var(--ink-soft); font-size: 1.08rem; max-width: 820px; margin: 0 0 30px; }
+  .project .intro strong{ color: var(--olive-deep); }
+
+  .scaffold-demo{ display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; margin-bottom: 36px; }
+  @media (max-width: 860px){ .scaffold-demo{ grid-template-columns: 1fr; } }
+  .scaffold-demo .sd-explain h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; margin: 0 0 12px; color: var(--ink); }
+  .scaffold-demo .sd-explain p{ margin: 0 0 14px; font-size: 1rem; color: var(--ink-soft); line-height: 1.55; }
+  .scaffold-demo .sd-explain p strong{ color: var(--blood); }
+  .scaffold-demo .sd-explain .arrow-note{ display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--paper-deep); border-left: 3px solid var(--olive); font-style: italic; font-size: .92rem; color: var(--ink); }
+
+  .tool-pills{ display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; }
+  .tool-pill{ display: inline-flex; align-items: center; gap: 7px; background: var(--paper-deep); border: 1px solid var(--line); padding: 7px 14px; font-size: .82rem; color: var(--ink-soft); }
+  .tool-pill.nuevo{ border-color: var(--ochre); color: var(--ochre-deep); }
+  .tool-pill .mono{ font-family: "JetBrains Mono", monospace; font-size: .9em; }
+
+  .game-preview{ background: #16110c; border: 1px solid var(--ink); padding: 18px 22px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.8; color: var(--c-base); }
+  .game-preview .gp-title{ color: #f0c8a0; font-size: .72rem; letter-spacing: .12em; margin-bottom: 10px; display: block; }
+  .game-preview .prompt{ color: rgba(239,230,210,.5); }
+  .game-preview .hint{ color: #f5b08c; } .game-preview .win{ color: #c8dd96; }
+
+  /* EVAL + EVIDENCIA */
+  .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 820px){ .cierre-practica{ grid-template-columns: 1fr; } }
+  .panel{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 28px 30px 30px; }
+  .panel h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: 1.7rem; margin: 0 0 18px; letter-spacing: -.01em; }
+  .panel h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .crit-list{ margin: 0; padding: 0; list-style: none; counter-reset: cr; }
+  .crit-list li{ counter-increment: cr; position: relative; padding: 12px 0 12px 38px; border-bottom: 1px dashed var(--line); font-size: .96rem; color: var(--ink); line-height: 1.45; }
+  .crit-list li:last-child{ border-bottom: none; }
+  .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
+  .crit-list li strong{ color: var(--blood-dark); }
+  .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
+  .evid-item:last-child{ border-bottom: none; }
+  .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
+  .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
+  .evid-item .ev-txt strong{ color: var(--ink); }
+  .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
+  .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
+  .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
+  .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+
+  /* CIERRE */
+  .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 32px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 25 · Archivos .txt y .csv · open/read/write/with</span>
+    </div>
+    <div class="right">
+      Lunes 10.08.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Continuación de la sesión 24</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">25</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      Memoria que <span class="em">persiste</span>.
+    </h1>
+    <p class="lede">
+      Llevas veinticuatro sesiones enseñándole cosas a la máquina —y cada vez que cierras el programa, las olvida
+      todas. La calculadora, el cajero, el gestor de tareas de la clase pasada: <em>amnésicos</em> los tres. Todo lo que
+      construyeron vivía en la <strong>memoria volátil</strong>, esa que se borra al apagar. Hoy le damos a tu programa
+      lo que más le faltaba: una <strong>libreta donde anotar</strong>. Aprendes a <strong>abrir, leer y escribir
+      archivos</strong> —<span class="mono">.txt</span> y <span class="mono">.csv</span>— para que los datos
+      <span class="underline-ochre">sobrevivan al reinicio</span>.
+    </p>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+      <div class="txt">
+        <strong>Esta sesión continúa la 24.</strong> Allí modelaste cada tarea como un <em>diccionario</em> con clave y
+        valor; el gestor ya funcionaba en memoria. Hoy abrimos la última puerta: que esas tareas no mueran al cerrar la
+        terminal. <strong>Tema extra del temario</strong> —archivos de datos— y broche de oro de tu gestor.
+      </div>
+    </div>
+
+    <div class="ficha">
+      <span class="f-label">OBJETIVO DE LA SESIÓN</span>
+      <div class="ficha-grid">
+        <div class="ficha-cell wide">
+          <div class="fc-label">Objetivo</div>
+          <div class="fc-value obj">Implementar lectura y escritura de archivos de texto y CSV en Python, para persistir datos entre ejecuciones del programa.</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Profesor</div>
+          <div class="fc-value">Carlos Daniel Vaca Ramírez</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Tema</div>
+          <div class="fc-value">Archivos de datos (extra)</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Práctica</div>
+          <div class="fc-value">Gestor de tareas con persistencia</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Entrega</div>
+          <div class="fc-value">Tu gestor en GitHub</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Funciones clave</div>
+          <div class="fc-value mono" style="font-size:.92rem">open · read · write · with</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Formatos</div>
+          <div class="fc-value mono" style="font-size:.92rem">.txt · .csv</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Software</div>
+          <div class="fc-value">Python 3.12 · VS Code · Colab</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT 0: VOLÁTIL vs PERSISTENTE -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">0</div>
+      <div>
+        <h2 class="display">El problema de la <em class="blood">amnesia</em>.</h2>
+        <p>Toda variable que has creado vive en la <strong>memoria RAM</strong>: rapidísima, pero <em>volátil</em>. Cuando el programa termina, esa memoria se libera y tus datos se evaporan. Para conservarlos hay que escribirlos en el <strong>disco</strong>, que es lento pero <em>permanente</em>.</p>
+      </div>
+    </div>
+
+    <div class="vola">
+      <div class="vola-card ram">
+        <div class="v-tag">memoria · RAM</div>
+        <h3>Volátil</h3>
+        <p>Las listas, los diccionarios, las variables del cajero. Viven mientras el programa <strong>está corriendo</strong>. Cierras la terminal y desaparecen sin dejar rastro: la próxima vez arrancas <em>desde cero</em>.</p>
+        <div class="v-flow">crear → usar → cerrar → ✗ se borra</div>
+      </div>
+      <div class="vola-card disk">
+        <div class="v-tag">disco · archivo</div>
+        <h3>Persistente</h3>
+        <p>Un <strong>archivo</strong> en el disco duro. Lo que escribes ahí sigue existiendo aunque apagues la computadora. Mañana lo vuelves a abrir y todo está <em>tal como lo dejaste</em>. Eso es <strong>persistencia</strong>.</p>
+        <div class="v-flow">escribir → cerrar → ✓ permanece</div>
+      </div>
+    </div>
+    <p style="color:var(--ink-soft); font-style:italic; font-size:1rem; max-width:780px;">Haz la prueba en clase: agrega tres tareas a tu gestor de la sesión 24, ciérralo y vuelve a abrirlo. <strong style="color:var(--blood); font-style:normal;">Están vacías.</strong> No es un bug —es lo esperado. Hoy lo arreglamos para siempre.</p>
+  </section>
+
+  <!-- CONCEPT i: open / with -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">Abrir con <em>cuidado</em>: <span class="mono" style="font-style:italic;color:var(--ochre);font-weight:600">with</span>.</h2>
+        <p>Para tocar un archivo necesitas <span class="mono">open()</span>: le das el <strong>nombre</strong> y el <strong>modo</strong>. Y siempre, siempre, lo envuelves en un <span class="mono">with</span> —el que se encarga de <em>cerrarlo</em> por ti, aunque algo salga mal.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Un archivo es como una puerta: <strong>se abre, se usa y se cierra</strong>. Si olvidas cerrarla, el sistema operativo deja recursos atascados y puedes perder datos a medio escribir. El <span class="mono">with</span> resuelve eso: cuando termina su bloque, <em>cierra el archivo automáticamente</em>.</p>
+        <p>A <span class="mono">open()</span> le pasas dos cosas: la <strong>ruta</strong> del archivo y el <strong>modo</strong> —si vienes a leer, a escribir o a agregar. Y un detalle de oro en español: el parámetro <span class="mono">encoding="utf-8"</span>, para que los acentos y las eñes no se rompan.</p>
+        <ul>
+          <li><span class="mono">"r"</span> — leer (es el modo por defecto)</li>
+          <li><span class="mono">"w"</span> — escribir desde cero (<strong>borra</strong> lo anterior)</li>
+          <li><span class="mono">"a"</span> — agregar al final (append)</li>
+        </ul>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> nunca uses <span class="mono">open()</span> a solas. Escríbelo siempre como <span class="mono">with open(...) as f:</span> y deja que Python cierre la puerta por ti.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primer_archivo.py</span></div>
+<pre><span class="com"># ESCRIBIR: el modo "w" crea o reemplaza</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notas.txt"</span>, <span class="str">"w"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+    f.<span class="fn">write</span>(<span class="str">"Estudiar para el examen\n"</span>)
+    f.<span class="fn">write</span>(<span class="str">"Subir la práctica a GitHub\n"</span>)
+<span class="com"># al salir del "with", el archivo se cierra solo</span>
+
+<span class="com"># LEER: el modo "r" recorre el archivo entero</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"notas.txt"</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+    contenido = f.<span class="fn">read</span>()
+
+<span class="fn">print</span>(contenido)
+<span class="out"># Estudiar para el examen</span>
+<span class="out"># Subir la práctica a GitHub</span></pre>
+      </div>
+    </div>
+
+    <!-- MODOS -->
+    <div class="modos-grid">
+      <div class="modo-card">
+        <div class="m-letter">r</div>
+        <h3>read · leer</h3>
+        <p>Abre para <strong>leer</strong>. Si el archivo no existe, <strong>truena</strong> con FileNotFoundError.</p>
+      </div>
+      <div class="modo-card write">
+        <div class="m-letter">w</div>
+        <h3>write · escribir</h3>
+        <p>Crea el archivo o lo <strong>vacía por completo</strong>. Cuidado: lo de antes se pierde.</p>
+      </div>
+      <div class="modo-card append">
+        <div class="m-letter">a</div>
+        <h3>append · agregar</h3>
+        <p>Escribe <strong>al final</strong> sin borrar nada. Ideal para un diario o un registro.</p>
+      </div>
+      <div class="modo-card">
+        <div class="m-letter">+</div>
+        <h3>x · exclusivo</h3>
+        <p>Crea el archivo solo si <strong>no existe</strong>; si ya está, se niega. Útil para no pisar datos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT ii: leer línea por línea -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">ii.</div>
+      <div>
+        <h2 class="display">Leer línea <em>por</em> línea.</h2>
+        <p>Un archivo de texto es, por dentro, una <strong>lista de renglones</strong> separados por el carácter de salto de línea <span class="mono">\n</span>. Recorrerlo con un <span class="mono">for</span> es el pan de cada día —la herencia directa de los ciclos.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Puedes leer todo de un golpe con <span class="mono">read()</span>, pero casi siempre querrás ir <em>renglón por renglón</em>. Para eso, un archivo abierto se puede <strong>iterar como una lista</strong>: cada vuelta del <span class="mono">for</span> te entrega una línea.</p>
+        <p>Cada línea trae pegado su <span class="mono">\n</span> del final. Por eso lo limpiamos con <span class="mono">.strip()</span>, que recorta espacios y saltos sobrantes. Así guardas el dato <em>desnudo</em>, sin basura.</p>
+        <ul>
+          <li><span class="mono">.read()</span> — todo el contenido como un texto</li>
+          <li><span class="mono">.readlines()</span> — una <strong>lista</strong> de líneas</li>
+          <li><span class="mono">.strip()</span> — quita espacios y <span class="mono">\n</span> de los extremos</li>
+          <li><span class="mono">.split(",")</span> — parte una línea por sus comas</li>
+        </ul>
+        <div class="keypoint"><strong>Conecta con la 24:</strong> cada línea del archivo puede volver a convertirse en un <em>diccionario</em>. Texto en el disco; diccionario en la memoria. Ida y vuelta.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cargar_tareas.py</span></div>
+<pre><span class="com"># Cargar las tareas de un .txt a una lista</span>
+tareas = []
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"tareas.txt"</span>, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+    <span class="kw">for</span> linea <span class="kw">in</span> f:
+        tarea = linea.<span class="fn">strip</span>()   <span class="com"># quita el \n</span>
+        <span class="kw">if</span> tarea != <span class="str">""</span>:           <span class="com"># ignora vacías</span>
+            tareas.<span class="fn">append</span>(tarea)
+
+<span class="fn">print</span>(<span class="str">f"Cargué {len(tareas)} tareas."</span>)
+<span class="kw">for</span> i, t <span class="kw">in</span> <span class="fn">enumerate</span>(tareas, <span class="num">1</span>):
+    <span class="fn">print</span>(<span class="str">f"{i}. {t}"</span>)
+
+<span class="out"># Cargué 2 tareas.</span>
+<span class="out"># 1. Estudiar para el examen</span>
+<span class="out"># 2. Subir la práctica a GitHub</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT iii: CSV -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">iii.</div>
+      <div>
+        <h2 class="display">El <em class="blood">CSV</em>: una tabla en texto plano.</h2>
+        <p>Cuando un dato tiene <strong>varias columnas</strong> —tarea, prioridad, hecha— el <span class="mono">.txt</span> se queda corto. Entra el <span class="mono">.csv</span>: <em>Comma-Separated Values</em>, valores separados por comas. Es lo que abre Excel y Google Sheets, en su forma más honesta.</p>
+      </div>
+    </div>
+
+    <div class="csv-demo">
+      <div class="csv-side">
+        <h4>Cómo lo ves tú (una tabla)</h4>
+        <table class="data-table">
+          <tr><th>tarea</th><th>prioridad</th><th>hecha</th></tr>
+          <tr><td>Estudiar</td><td>alta</td><td>no</td></tr>
+          <tr><td>Comprar café</td><td>baja</td><td>sí</td></tr>
+          <tr><td>Llamar a mamá</td><td>media</td><td>no</td></tr>
+        </table>
+      </div>
+      <div class="csv-side">
+        <h4>Cómo lo guarda el disco (texto)</h4>
+        <div class="csv-raw">
+          <span class="head-row">tarea<span class="comma">,</span>prioridad<span class="comma">,</span>hecha</span><br/>
+          Estudiar<span class="comma">,</span>alta<span class="comma">,</span>no<br/>
+          Comprar café<span class="comma">,</span>baja<span class="comma">,</span>sí<br/>
+          Llamar a mamá<span class="comma">,</span>media<span class="comma">,</span>no
+        </div>
+      </div>
+    </div>
+    <p class="csv-foot">La primera línea son los <strong>encabezados</strong>; cada coma marca el salto de una columna a la siguiente.</p>
+
+    <div class="twocol" style="margin-top:36px">
+      <div class="prose">
+        <p>Podrías partir cada línea a mano con <span class="mono">.split(",")</span>… pero ¿y si un dato <em>trae una coma</em> dentro? Para eso existe el <strong>módulo <span class="mono">csv</span></strong> de la biblioteca estándar —el mismo libro que viste en la estantería de la sesión 06—. Él entiende las reglas del formato y no se confunde.</p>
+        <p>Mi favorito es <span class="mono">csv.DictReader</span>: lee cada fila y te la entrega como un <strong>diccionario</strong>, usando los encabezados como claves. Justo la estructura que dominaste la clase pasada.</p>
+        <div class="keypoint"><strong>Detalle fino:</strong> al abrir un CSV se usa <span class="mono">newline=""</span> en <span class="mono">open()</span>. Es la convención que evita renglones en blanco de más al escribir. Cópialo tal cual.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">leer_csv.py</span></div>
+<pre><span class="kw">import</span> csv
+
+<span class="com"># Cada fila llega como un diccionario</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"tareas.csv"</span>, <span class="str">"r"</span>, newline=<span class="str">""</span>,
+          encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+    lector = csv.<span class="fn">DictReader</span>(f)
+    <span class="kw">for</span> fila <span class="kw">in</span> lector:
+        nombre = fila[<span class="str">"tarea"</span>]
+        prio   = fila[<span class="str">"prioridad"</span>]
+        <span class="fn">print</span>(<span class="str">f"{nombre} → {prio}"</span>)
+
+<span class="out"># Estudiar → alta</span>
+<span class="out"># Comprar café → baja</span>
+<span class="out"># Llamar a mamá → media</span></pre>
+      </div>
+    </div>
+
+    <!-- escribir csv -->
+    <div class="twocol" style="margin-top:30px">
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">escribir_csv.py</span></div>
+<pre><span class="kw">import</span> csv
+
+tareas = [
+    {<span class="str">"tarea"</span>: <span class="str">"Estudiar"</span>, <span class="str">"prioridad"</span>: <span class="str">"alta"</span>},
+    {<span class="str">"tarea"</span>: <span class="str">"Comprar café"</span>, <span class="str">"prioridad"</span>: <span class="str">"baja"</span>},
+]
+
+columnas = [<span class="str">"tarea"</span>, <span class="str">"prioridad"</span>]
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"tareas.csv"</span>, <span class="str">"w"</span>, newline=<span class="str">""</span>,
+          encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+    escritor = csv.<span class="fn">DictWriter</span>(f, fieldnames=columnas)
+    escritor.<span class="fn">writeheader</span>()      <span class="com"># los encabezados</span>
+    escritor.<span class="fn">writerows</span>(tareas)   <span class="com"># todas las filas</span>
+
+<span class="fn">print</span>(<span class="str">"Guardado en tareas.csv"</span>)</pre>
+      </div>
+      <div class="prose">
+        <p>Para escribir, su gemelo: <span class="mono">csv.DictWriter</span>. Le dices qué <strong>columnas</strong> quieres (<span class="mono">fieldnames</span>), llamas a <span class="mono">writeheader()</span> para la primera línea, y luego <span class="mono">writerows()</span> vacía toda tu lista de diccionarios de un solo trago.</p>
+        <p>Fíjate en la simetría: la <em>lista de diccionarios</em> de la sesión 24 entra completa, sin traducir. Esa estructura que diseñaste no fue un capricho —era la <strong>antesala del disco</strong>.</p>
+
+        <div class="colab-note">
+          <p><strong>En clase, Google Colab.</strong> Para leer un CSV <em>real</em> sin instalar nada, abriremos un <span class="mono">.ipynb</span> en Colab, subiremos un archivo con el botón de carga y lo leeremos con el mismo módulo <span class="mono">csv</span>. Misma idea, otra ventana.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT iv: excepciones -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">iv.</div>
+      <div>
+        <h2 class="display">Cuando el archivo <em>no existe</em>.</h2>
+        <p>La primera vez que tu gestor arranca, el archivo de tareas <strong>todavía no se ha creado</strong>. Pedirle leer algo que no existe lanza un <span class="mono">FileNotFoundError</span> y revienta el programa. La cura: <span class="mono">try / except</span>.</p>
+      </div>
+    </div>
+
+    <div class="exc-callout">
+      <div class="exc-text">
+        <h3>Anticipar, no rezar.</h3>
+        <p>Un programador <strong>profesional</strong> no asume que el archivo está ahí: <em>contempla</em> que pueda faltar. El bloque <span class="mono">try</span> intenta la lectura; si falla con un <span class="mono">FileNotFoundError</span>, el <span class="mono">except</span> lo atrapa y, en vez de morir, arranca con la <strong>lista vacía</strong>.</p>
+        <p>Es exactamente la mentalidad del <em>debugging</em> de la sesión 05, pero al revés: en vez de cazar el error después, lo <strong>prevemos antes</strong>. La primera ejecución ya no truena: simplemente empieza limpia.</p>
+      </div>
+      <div class="exc-code">
+<pre><span class="kw">def</span> <span class="fn">cargar_tareas</span>():
+    tareas = []
+    <span class="kw">try</span>:
+        <span class="kw">with</span> <span class="fn">open</span>(<span class="str">"tareas.txt"</span>, <span class="str">"r"</span>,
+                  encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+            <span class="kw">for</span> linea <span class="kw">in</span> f:
+                t = linea.<span class="fn">strip</span>()
+                <span class="kw">if</span> t:
+                    tareas.<span class="fn">append</span>(t)
+    <span class="kw">except</span> <span class="err">FileNotFoundError</span>:
+        <span class="com"># primera vez: aún no hay archivo</span>
+        <span class="fn">print</span>(<span class="str">"No hay tareas guardadas todavía."</span>)
+    <span class="kw">return</span> tareas</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÁCTICA / PROYECTO -->
+  <section class="project reveal">
+    <div class="head">
+      <div class="stamp">Tu turno</div>
+      <div>
+        <h2 class="display">Un gestor con <em>memoria</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Toma tu <strong>gestor de tareas de la sesión 24</strong> —el que guarda cada tarea como diccionario— y dale
+      persistencia. La meta es simple de enunciar y honda de lograr: que <strong>las tareas sobrevivan al reinicio</strong>.
+      Agregas dos funciones, <span class="mono">guardar()</span> y <span class="mono">cargar()</span>, y las enganchas en
+      los momentos correctos. Abajo, el plano en vivo que haremos juntos.
+    </p>
+
+    <div class="scaffold-demo">
+      <div class="sd-explain">
+        <h3>El plano del live coding</h3>
+        <p>No empiezas de cero: partes del gestor que ya funciona. Tu trabajo de hoy es <strong>conectarlo al disco</strong> en dos puntos —al arrancar y al modificar—. Cada paso es un comentario; escribe tu código justo debajo.</p>
+        <p>Corre el programa después de cada paso y haz la <em>prueba de la persistencia</em>: agrega una tarea, cierra, vuelve a abrir. Si sigue ahí, ganaste.</p>
+        <div class="arrow-note">El archivo es la libreta; tú decides cuándo anotar en ella.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">gestor_tareas.py</span></div>
+<pre><span class="com"># PASO 1: una constante con el nombre</span>
+ARCHIVO = <span class="str">"tareas.txt"</span>
+
+<span class="com"># PASO 2: cargar() lee el archivo (con try/except)</span>
+<span class="kw">def</span> <span class="fn">cargar</span>():
+    tareas = []
+    <span class="kw">try</span>:
+        <span class="kw">with</span> <span class="fn">open</span>(ARCHIVO, <span class="str">"r"</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+            <span class="kw">for</span> linea <span class="kw">in</span> f:
+                <span class="kw">if</span> linea.<span class="fn">strip</span>():
+                    tareas.<span class="fn">append</span>(linea.<span class="fn">strip</span>())
+    <span class="kw">except</span> <span class="err">FileNotFoundError</span>:
+        <span class="kw">pass</span>          <span class="com"># primera vez: lista vacía</span>
+    <span class="kw">return</span> tareas
+
+<span class="com"># PASO 3: guardar() escribe TODA la lista ("w")</span>
+<span class="com"># PASO 4: llamar cargar() al iniciar</span>
+<span class="com"># PASO 5: llamar guardar() tras agregar o borrar</span></pre>
+      </div>
+    </div>
+
+    <div class="tool-pills">
+      <span class="tool-pill nuevo"><span class="mono">with open()</span> · archivo</span>
+      <span class="tool-pill nuevo"><span class="mono">read · write</span></span>
+      <span class="tool-pill nuevo"><span class="mono">try / except</span></span>
+      <span class="tool-pill">diccionarios (24)</span>
+      <span class="tool-pill">funciones</span>
+      <span class="tool-pill">ciclo <span class="mono">for</span></span>
+    </div>
+
+    <div class="game-preview">
+      <span class="gp-title">▶ LA PRUEBA DE LA PERSISTENCIA</span>
+      <span class="prompt">$ python gestor_tareas.py</span><br/>
+      No hay tareas guardadas todavía.<br/>
+      Opción: 1  →  Agregar: "Estudiar para el final"<br/>
+      <span class="win">Tarea guardada en disco.</span><br/>
+      Opción: 4  →  Salir<br/>
+      <br/>
+      <span class="prompt">$ python gestor_tareas.py</span>   <span class="hint"># lo abres de nuevo</span><br/>
+      Tienes 1 tarea pendiente:<br/>
+      <span class="win">1. Estudiar para el final</span>   <span class="hint"># ¡sobrevivió!</span>
+    </div>
+  </section>
+
+  <!-- EVALUACIÓN + EVIDENCIA -->
+  <section class="cierre-practica reveal">
+    <div class="panel">
+      <h3 class="display">Criterios de <em>evaluación</em></h3>
+      <ol class="crit-list">
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el gestor corre completo, incluso en su primera ejecución (cuando aún no existe el archivo).</li>
+        <li><strong>Lógica correcta</strong> — las tareas realmente persisten: agregar, cerrar y reabrir conserva los datos.</li>
+        <li><strong>Funcionamiento óptimo</strong> — usa <span class="mono">with open()</span>, guarda al modificar y maneja el <span class="mono">FileNotFoundError</span>.</li>
+        <li><strong>Autenticidad</strong> — código escrito por ti, partiendo de tu propio gestor de la sesión 24.</li>
+      </ol>
+    </div>
+
+    <div class="panel">
+      <h3 class="display">Evidencia a <em>entregar</em></h3>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>gestor_tareas.py</strong> — el gestor con las funciones <span class="mono">cargar()</span> y <span class="mono">guardar()</span> integradas.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.txt</span>
+        <span class="ev-txt"><strong>tareas.txt</strong> (o <span class="mono">.csv</span>) — el archivo generado por tu programa, con tareas dentro.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.png</span>
+        <span class="ev-txt"><strong>Captura</strong> de la prueba de persistencia: dos ejecuciones seguidas mostrando que las tareas sobrevivieron al cierre.</span>
+      </div>
+      <div class="conclu-note">
+        <h4>Entrega vía GitHub</h4>
+        <p>Sube tu trabajo a la carpeta <span class="mono">sesion-25/</span> de tu repositorio con un commit claro, p. ej. <span class="mono">"sesion-25: gestor con persistencia"</span>. El repositorio es tu entregable del curso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «Lo que no está escrito,<br/>
+      <span class="em-ochre">se lo lleva</span> <span class="em">el viento</span>.»
+    </div>
+    <div class="quote-author">— Verba volant, scripta manent</div>
+    <div class="quote-meta">Proverbio latino · atribuido a Cayo Tito en el Senado romano</div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 25 <span class="dot">·</span> Memoria que persiste <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-24/index.html">Sesión 24 · Clave y valor</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

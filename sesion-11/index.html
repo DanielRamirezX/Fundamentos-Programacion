@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 11 · Hasta que… · El ciclo while, centinelas y validación robusta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --loop-blue: #4a6b86; --loop-purple: #6b5080;
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 60px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 120px); line-height: .95; margin: 0 0 32px; letter-spacing: -.02em; }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 54px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* CONTINUACIÓN BANNER */
+  .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
+  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
+  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* SECTION HEADERS */
+  .sec{ margin: 100px 0; }
+  .sec .s-head{ display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .sec .s-head{ grid-template-columns: 1fr; gap: 8px; } }
+  .sec .s-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
+  .sec .s-head .n.blood{ color: var(--blood); }
+  .sec .s-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .sec .s-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .sec .s-head h2 em.blood{ color: var(--blood); }
+  .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .sec .s-head p strong{ color: var(--blood); }
+  .sec .s-head p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+
+  /* PROSE + CODE 2-col */
+  .twocol{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .twocol{ grid-template-columns: 1fr; gap: 22px; } }
+  .prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .prose p em{ color: var(--blood-dark); font-style: italic; }
+  .prose p strong{ color: var(--blood); font-weight: 600; }
+  .prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .prose ul li strong{ color: var(--ink); }
+  .prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* CODE BLOCK */
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* FOR vs WHILE comparison */
+  .versus{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  @media (max-width: 760px){ .versus{ grid-template-columns: 1fr; } }
+  .vs-card{ padding: 24px 26px; border: 1.5px solid var(--ink); }
+  .vs-card.a{ background: var(--paper-deep); }
+  .vs-card.b{ background: var(--ink); color: var(--paper); }
+  .vs-card .vs-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  .vs-card.a .vs-tag{ color: var(--blood); } .vs-card.b .vs-tag{ color: #f0c8a0; }
+  .vs-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 10px; }
+  .vs-card.a h3{ color: var(--ink); } .vs-card.b h3{ color: var(--paper); }
+  .vs-card p{ margin: 0 0 10px; font-size: .96rem; line-height: 1.55; }
+  .vs-card.a p{ color: var(--ink-soft); } .vs-card.b p{ color: rgba(239,230,210,.82); }
+  .vs-card p strong{ font-weight: 600; } .vs-card.a p strong{ color: var(--blood); } .vs-card.b p strong{ color: #f0c8a0; }
+  .vs-card ul{ margin: 0; padding-left: 18px; }
+  .vs-card li{ font-size: .9rem; margin-bottom: 6px; line-height: 1.45; }
+  .vs-card.a li{ color: var(--ink-soft); } .vs-card.b li{ color: rgba(239,230,210,.78); }
+
+  /* ANATOMY OF A WHILE (loop diagram) */
+  .anatomy{ margin-top: 30px; background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 30px 26px 32px; position: relative; }
+  .anatomy .an-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .an-flow{ display: flex; flex-direction: column; gap: 0; font-family: "JetBrains Mono", monospace; font-size: .86rem; }
+  .an-node{ display: flex; align-items: center; gap: 12px; padding: 9px 0; }
+  .an-node .stem{ color: var(--ink-faint); white-space: pre; }
+  .an-node .cond{ background: var(--paper); border: 1px solid var(--ink); padding: 4px 11px; color: var(--ink); }
+  .an-node .cond.q{ border-color: var(--ochre-deep); color: var(--ochre-deep); font-weight: 700; }
+  .an-node .cond.exit{ border-color: var(--blood); color: var(--blood); font-weight: 700; }
+  .an-node .res{ font-family: "Newsreader", serif; font-style: italic; color: var(--ink-soft); }
+  .an-node .res.good{ color: var(--olive-deep); }
+  .an-node .res.bad{ color: var(--blood); }
+  .anatomy .an-foot{ margin-top: 18px; font-style: italic; color: var(--ink-soft); font-size: .95rem; }
+  .anatomy .an-foot strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* DANGER PANEL (bucle infinito) */
+  .danger{ margin-top: 30px; border: 2px solid var(--blood); background: var(--paper-deep); position: relative; overflow: hidden; }
+  .danger .dg-bar{ background: var(--blood); color: var(--paper); padding: 12px 24px; display: flex; align-items: center; gap: 12px; }
+  .danger .dg-bar svg{ width: 22px; height: 22px; flex-shrink: 0; }
+  .danger .dg-bar .dg-title{ font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: 1.15rem; letter-spacing: .02em; }
+  .danger .dg-body{ display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  @media (max-width: 820px){ .danger .dg-body{ grid-template-columns: 1fr; } }
+  .danger .dg-col{ padding: 24px 26px; }
+  .danger .dg-col.left{ border-right: 1px dashed var(--line); }
+  @media (max-width: 820px){ .danger .dg-col.left{ border-right: none; border-bottom: 1px dashed var(--line); } }
+  .danger .dg-col h4{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 12px; }
+  .danger .dg-col.left h4{ color: var(--blood); } .danger .dg-col.right h4{ color: var(--olive-deep); }
+  .danger .dg-col p{ margin: 12px 0 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.5; }
+  .danger .dg-col p strong{ color: var(--ink); }
+  .danger .stop-row{ margin: 0; padding: 16px 26px; background: var(--ink); color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .82rem; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .danger .stop-row .kbd{ background: rgba(239,230,210,.12); border: 1px solid rgba(239,230,210,.28); padding: 3px 10px; border-radius: 4px; color: #f0c8a0; }
+  .danger .stop-row .stop-txt{ font-family: "Newsreader", serif; font-style: italic; font-size: .98rem; color: rgba(239,230,210,.85); }
+
+  /* EDGE CASES (casos límite) */
+  .edge-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 30px; }
+  @media (max-width: 820px){ .edge-grid{ grid-template-columns: 1fr; } }
+  .edge-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--olive); padding: 22px 24px 24px; }
+  .edge-card.mid{ border-top-color: var(--ochre); }
+  .edge-card.many{ border-top-color: var(--blood); }
+  .edge-card .ec-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 2.2rem; line-height: 1; color: var(--olive-deep); margin-bottom: 8px; }
+  .edge-card.mid .ec-n{ color: var(--ochre-deep); } .edge-card.many .ec-n{ color: var(--blood); }
+  .edge-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.2rem; margin: 0 0 8px; color: var(--ink); }
+  .edge-card p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
+  .edge-card p strong{ color: var(--ink); }
+  .edge-card .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .82em; border: 1px solid var(--line); }
+
+  /* PRACTICE / EXERCISE CARDS */
+  .ejercicios{ margin: 110px 0; }
+  .ej-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 26px; position: relative; }
+  .ej-card .ej-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
+  .ej-card .ej-body{ padding: 30px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 860px){ .ej-card .ej-body{ grid-template-columns: 1fr; gap: 18px; } }
+  .ej-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 12px; color: var(--ink); }
+  .ej-card .ej-desc{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0 0 16px; }
+  .ej-card .ej-desc em{ color: var(--blood-dark); font-style: italic; }
+  .ej-card .ej-desc strong{ color: var(--blood); }
+  .ej-card .reqs{ margin: 0; padding: 0; list-style: none; }
+  .ej-card .reqs li{ padding: 8px 0 8px 26px; position: relative; font-size: .94rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
+  .ej-card .reqs li:last-child{ border-bottom: none; }
+  .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
+  .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+
+  /* GAME / TERMINAL PREVIEW */
+  .game-preview{ background: rgba(239,230,210,.06); border: 1px solid var(--ink); padding: 18px 22px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.8; color: var(--c-base); }
+  .game-preview.dark{ background: var(--ink); }
+  .game-preview .gp-title{ color: #f0c8a0; font-size: .72rem; letter-spacing: .12em; margin-bottom: 10px; display: block; }
+  .game-preview .prompt{ color: rgba(239,230,210,.5); }
+  .game-preview .hint{ color: #f5b08c; } .game-preview .win{ color: #c8dd96; } .game-preview .errl{ color: #f0a890; }
+
+  /* CHOICE: which to deliver */
+  .choice{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  @media (max-width: 760px){ .choice{ grid-template-columns: 1fr; } }
+  .choice-card{ border: 1.5px solid var(--ink); background: var(--paper); padding: 24px 26px 26px; position: relative; }
+  .choice-card .ch-badge{ position: absolute; top: -12px; left: 22px; background: var(--olive); color: var(--paper); padding: 3px 12px; font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
+  .choice-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 8px 0 10px; color: var(--ink); }
+  .choice-card p{ margin: 0 0 14px; font-size: .96rem; color: var(--ink-soft); line-height: 1.55; }
+  .choice-card p strong{ color: var(--blood); }
+  .choice-card .ch-tags{ display: flex; gap: 8px; flex-wrap: wrap; }
+  .choice-card .ch-tags span{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--paper-deep); border: 1px solid var(--line); padding: 4px 10px; color: var(--ink-soft); }
+
+  /* EVAL + EVIDENCIA */
+  .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 820px){ .cierre-practica{ grid-template-columns: 1fr; } }
+  .panel{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 28px 30px 30px; }
+  .panel h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: 1.7rem; margin: 0 0 18px; letter-spacing: -.01em; }
+  .panel h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .crit-list{ margin: 0; padding: 0; list-style: none; counter-reset: cr; }
+  .crit-list li{ counter-increment: cr; position: relative; padding: 12px 0 12px 38px; border-bottom: 1px dashed var(--line); font-size: .96rem; color: var(--ink); line-height: 1.45; }
+  .crit-list li:last-child{ border-bottom: none; }
+  .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
+  .crit-list li strong{ color: var(--blood-dark); }
+  .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
+  .evid-item:last-child{ border-bottom: none; }
+  .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
+  .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
+  .evid-item .ev-txt strong{ color: var(--ink); }
+  .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
+  .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
+  .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
+  .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+
+  /* CIERRE */
+  .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 32px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 11 · Ciclo while · Centinela · Validación robusta</span>
+    </div>
+    <div class="right">
+      Lunes 22.06.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Ciclo 26-3</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">11</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      Hasta <span class="em">que…</span>
+    </h1>
+    <p class="lede">
+      En la sesión 06 hiciste tu primer juego con un <strong>for</strong>: un ciclo que cuenta <em>cuántas</em>
+      veces dar la vuelta y se detiene solo. Pero la vida real casi nunca sabe el número de antemano. ¿Cuántas
+      veces preguntarás un dato hasta que el usuario lo teclee bien? <em>Las que hagan falta</em>. Hoy aprendes
+      el ciclo que no cuenta, sino que <strong>insiste</strong>: el <strong>while</strong> —repetir
+      <span class="underline-ochre">hasta que se cumpla una condición</span>.
+    </p>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/></svg>
+      <div class="txt">
+        <strong>Esta sesión retoma la 06.</strong> Allí adivinaste el número con un <em>for</em> de intentos
+        fijos. Hoy lo reescribimos con <em>while</em> para que el juego dure <strong>lo que tarde</strong> en
+        acertar —y de paso aprendemos a no caer en el temido <em>bucle infinito</em>.
+      </div>
+    </div>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">6.2 Repetición condicionante: while</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Práctica</span>
+        <span class="value">Adivina el número (con while)</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Entrega</span>
+        <span class="value">Tu programa en GitHub</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT i: EL WHILE -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">El ciclo que no <em>cuenta</em>.</h2>
+        <p>El <span class="mono">while</span> repite un bloque <strong>mientras</strong> una condición sea verdadera. No sabe cuántas vueltas dará: revisa la condición, y si sigue cierta, vuelve a empezar. Es la <em>repetición condicionante</em>.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Léelo en voz alta y se explica solo: <em>«mientras el café no esté listo, sigue esperando»</em>. No cuentas los segundos; revisas una condición una y otra vez hasta que deja de cumplirse.</p>
+        <p>El secreto de todo <span class="mono">while</span> que <strong>termina</strong> son tres piezas que nunca pueden faltar:</p>
+        <ul>
+          <li><strong>Inicialización:</strong> antes del ciclo, preparas la variable que vas a vigilar.</li>
+          <li><strong>Condición:</strong> la pregunta que se revisa al inicio de <em>cada</em> vuelta.</li>
+          <li><strong>Actualización:</strong> dentro del cuerpo, algo <em>cambia</em> para que la condición acabe siendo falsa.</li>
+        </ul>
+        <p>Si te falta la tercera, el ciclo nunca termina. La condición se queda eternamente verdadera y el programa gira para siempre. De eso hablamos en un momento.</p>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> usa <span class="mono">for</span> cuando sabes <em>cuántas</em> veces; usa <span class="mono">while</span> cuando solo sabes <em>cuándo parar</em>.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuenta_regresiva.py</span></div>
+<pre><span class="com"># 1) Inicializar la variable a vigilar</span>
+segundos = <span class="num">5</span>
+
+<span class="com"># 2) Condicion: mientras sea verdadera, repite</span>
+<span class="kw">while</span> segundos &gt; <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">f"Despegue en {segundos}..."</span>)
+    <span class="com"># 3) Actualizar -&gt; acerca el final</span>
+    segundos = segundos - <span class="num">1</span>
+
+<span class="fn">print</span>(<span class="str">"¡Despegue! 🚀"</span>)
+
+<span class="com"># Salida:</span>
+<span class="out"># Despegue en 5...</span>
+<span class="out"># Despegue en 4...</span>
+<span class="out"># Despegue en 3...</span>
+<span class="out"># Despegue en 2...</span>
+<span class="out"># Despegue en 1...</span>
+<span class="out"># ¡Despegue! 🚀</span></pre>
+      </div>
+    </div>
+
+    <!-- FOR vs WHILE -->
+    <div class="versus">
+      <div class="vs-card a">
+        <div class="vs-tag">ya lo conoces · for</div>
+        <h3>Cuando sabes cuántas veces</h3>
+        <p>El <span class="mono">for</span> recorre un rango o una colección <strong>conocida</strong>. Las vueltas están decididas de antemano: siete intentos, diez alumnos, las letras de una palabra.</p>
+        <ul>
+          <li><span class="mono">for i in range(7):</span></li>
+          <li>«Repite esto exactamente 7 veces.»</li>
+          <li>El contador avanza solo, sin que tú lo toques.</li>
+        </ul>
+      </div>
+      <div class="vs-card b">
+        <div class="vs-tag">hoy · while</div>
+        <h3>Cuando solo sabes cuándo parar</h3>
+        <p>El <span class="mono">while</span> repite <strong>mientras</strong> algo sea cierto. No hay número fijo: puede dar una vuelta o mil, según lo que pase dentro.</p>
+        <ul>
+          <li><span class="mono">while not adivinado:</span></li>
+          <li>«Sigue hasta que el usuario acierte.»</li>
+          <li>Tú debes asegurar que la condición cambie.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ANATOMY DIAGRAM -->
+    <div class="anatomy">
+      <span class="an-label">ANATOMÍA DE UN WHILE</span>
+      <div class="an-flow">
+        <div class="an-node"><span class="stem">┌─ </span><span class="cond">segundos = 5</span><span class="res">→ inicialización (antes del ciclo)</span></div>
+        <div class="an-node"><span class="stem">│&nbsp;&nbsp;┌─ </span><span class="cond q">¿segundos &gt; 0?</span><span class="res">→ condición: se revisa cada vuelta</span></div>
+        <div class="an-node"><span class="stem">│&nbsp;&nbsp;│&nbsp;&nbsp;├─ </span><span class="cond">print(...)</span><span class="res good">→ cuerpo: lo que se repite</span></div>
+        <div class="an-node"><span class="stem">│&nbsp;&nbsp;│&nbsp;&nbsp;└─ </span><span class="cond">segundos -= 1</span><span class="res good">→ actualización: acerca el final</span></div>
+        <div class="an-node"><span class="stem">│&nbsp;&nbsp;└─ </span><span class="cond exit">cuando es falsa</span><span class="res bad">→ sale del ciclo y sigue abajo</span></div>
+        <div class="an-node"><span class="stem">└─ </span><span class="cond">print("¡Despegue!")</span><span class="res">→ después del while</span></div>
+      </div>
+      <p class="an-foot"><strong>Quita la actualización</strong> (la línea <span class="mono">segundos -= 1</span>) y la condición jamás será falsa: tienes un bucle infinito.</p>
+    </div>
+  </section>
+
+  <!-- CONCEPT ii: EL CENTINELA -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">ii.</div>
+      <div>
+        <h2 class="display">El <em class="blood">centinela</em> que monta guardia.</h2>
+        <p>A veces no quieres contar, sino leer datos <strong>hasta que aparezca una señal de paro</strong>. Esa señal —un valor especial que significa «ya terminé»— se llama <strong>centinela</strong>. Es el guardián que decide cuándo cerrar la puerta.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Imagina que sumas las ventas del día, pero no sabes cuántas hubo. En lugar de preguntar «¿cuántas?», acuerdas una <em>contraseña de salida</em>: cuando el usuario escriba <span class="mono">0</span>, eso significa «no hay más». Ese <span class="mono">0</span> es el centinela.</p>
+        <p>El patrón es siempre el mismo, y conviene memorizarlo:</p>
+        <ul>
+          <li><strong>Lees una vez antes</strong> del ciclo (la «lectura anticipada»).</li>
+          <li>El <span class="mono">while</span> se repite <strong>mientras el dato no sea el centinela</strong>.</li>
+          <li>Dentro, procesas el dato y vuelves a leer <em>el siguiente</em>.</li>
+        </ul>
+        <p>Así, el centinela nunca se procesa: en cuanto aparece, la condición se vuelve falsa y el ciclo se cierra con elegancia.</p>
+        <div class="keypoint"><strong>Elige bien el centinela:</strong> debe ser un valor <em>imposible</em> entre los datos reales. Para sumar precios, el <span class="mono">0</span> sirve; para sumar edades, mejor un <span class="mono">-1</span>.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">suma_centinela.py</span></div>
+<pre><span class="com"># Suma ventas hasta que el usuario escriba 0</span>
+CENTINELA = <span class="num">0</span>   <span class="com"># señal de "ya no hay más"</span>
+total = <span class="num">0.0</span>
+
+<span class="com"># Lectura anticipada: el primer dato</span>
+venta = <span class="kw">float</span>(<span class="fn">input</span>(<span class="str">"Venta (0 para terminar): "</span>))
+
+<span class="kw">while</span> venta != CENTINELA:
+    total = total + venta
+    <span class="com"># Leer el SIGUIENTE dato antes de revisar</span>
+    venta = <span class="kw">float</span>(<span class="fn">input</span>(<span class="str">"Venta (0 para terminar): "</span>))
+
+<span class="fn">print</span>(<span class="str">f"Total del día: ${total:.2f}"</span>)
+
+<span class="com"># El 0 nunca se suma: solo cierra el ciclo.</span></pre>
+      </div>
+    </div>
+
+    <div class="game-preview dark" style="margin-top:30px;">
+      <span class="gp-title">▶ ASÍ CORRE LA SUMA CON CENTINELA</span>
+      <span class="prompt">Venta (0 para terminar): 120.50</span><br/>
+      <span class="prompt">Venta (0 para terminar): 80</span><br/>
+      <span class="prompt">Venta (0 para terminar): 200.25</span><br/>
+      <span class="prompt">Venta (0 para terminar): 0</span><br/>
+      <span class="win">Total del día: $400.75</span>
+    </div>
+  </section>
+
+  <!-- CONCEPT iii: VALIDACIÓN ROBUSTA -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">Validar <em>hasta</em> que sea correcto.</h2>
+        <p>El uso más cotidiano del <span class="mono">while</span>: no dejar avanzar el programa hasta que el usuario teclee algo <strong>válido</strong>. Si pides una edad y escriben «veinte», no truenas: vuelves a preguntar. Eso es <strong>validación robusta</strong>.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Un programa frágil confía en que el usuario siempre escribe bien. Uno <em>robusto</em> asume lo contrario: que se equivocará, y prepara una segunda oportunidad. El <span class="mono">while</span> es justo esa puerta giratoria —no te deja pasar hasta que el dato cumple las reglas.</p>
+        <p>Aquí entra una herramienta nueva: el <span class="mono">try / except</span>. Si <span class="mono">int(texto)</span> no puede convertir lo que escribieron, Python lanzaría un <span class="mono">ValueError</span> y el programa moriría. Con <span class="mono">try</span> <em>atrapamos</em> ese error y, en lugar de reventar, pedimos el dato de nuevo.</p>
+        <div class="keypoint"><strong>Validar es respetar:</strong> un buen programa nunca culpa al usuario por escribir mal. Lo guía, con calma, hasta que escribe bien.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">validar_edad.py</span></div>
+<pre><span class="com"># Pide una edad válida: entero entre 0 y 120</span>
+edad = <span class="kw">None</span>
+
+<span class="kw">while</span> edad <span class="kw">is</span> <span class="kw">None</span>:
+    texto = <span class="fn">input</span>(<span class="str">"Tu edad: "</span>)
+    <span class="kw">try</span>:
+        numero = <span class="kw">int</span>(texto)
+    <span class="kw">except</span> <span class="err">ValueError</span>:
+        <span class="fn">print</span>(<span class="str">"Eso no es un número. Inténtalo de nuevo."</span>)
+        <span class="kw">continue</span>   <span class="com"># vuelve al inicio del while</span>
+
+    <span class="kw">if</span> <span class="num">0</span> &lt;= numero &lt;= <span class="num">120</span>:
+        edad = numero          <span class="com"># dato válido: rompe la condición</span>
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(<span class="str">"La edad debe estar entre 0 y 120."</span>)
+
+<span class="fn">print</span>(<span class="str">f"Edad registrada: {edad}"</span>)</pre>
+      </div>
+    </div>
+
+    <!-- DANGER: bucle infinito -->
+    <div class="danger">
+      <div class="dg-bar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+        <span class="dg-title">Peligro: el bucle infinito</span>
+      </div>
+      <div class="dg-body">
+        <div class="dg-col left">
+          <h4>✗ Nunca termina</h4>
+          <div class="code-block" style="margin-top:6px;">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">jamas.py</span></div>
+<pre>i = <span class="num">1</span>
+<span class="kw">while</span> i &lt;= <span class="num">5</span>:
+    <span class="fn">print</span>(i)
+    <span class="com"># olvidamos i += 1</span>
+<span class="err"># i siempre vale 1 -&gt; gira por siempre</span></pre>
+          </div>
+          <p>La variable de la condición <strong>nunca cambia</strong>. Resultado: <span class="mono">1</span> impreso sin fin, la terminal se congela.</p>
+        </div>
+        <div class="dg-col right">
+          <h4>✓ Sí termina</h4>
+          <div class="code-block" style="margin-top:6px;">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">si_termina.py</span></div>
+<pre>i = <span class="num">1</span>
+<span class="kw">while</span> i &lt;= <span class="num">5</span>:
+    <span class="fn">print</span>(i)
+    i += <span class="num">1</span>   <span class="com"># la condición avanza</span>
+<span class="com"># i llega a 6 -&gt; la condición es falsa</span></pre>
+          </div>
+          <p>Dentro del cuerpo, algo <strong>acerca el final</strong>. La condición tarde o temprano se vuelve falsa y el ciclo se cierra.</p>
+        </div>
+      </div>
+      <div class="stop-row">
+        <span class="stop-txt">¿Tu programa se quedó atorado? Detenlo con</span>
+        <span class="kbd">Ctrl</span><span style="color:rgba(239,230,210,.5)">+</span><span class="kbd">C</span>
+        <span class="stop-txt">en la terminal. Luego busca: ¿qué variable de la condición olvidé actualizar?</span>
+      </div>
+    </div>
+
+    <!-- EDGE CASES -->
+    <div class="edge-grid">
+      <div class="edge-card">
+        <div class="ec-n">0</div>
+        <h3>Cero vueltas</h3>
+        <p>Si la condición es falsa <strong>desde el inicio</strong>, el cuerpo <em>nunca</em> se ejecuta. <span class="mono">while False:</span> no imprime nada. A diferencia de otros lenguajes, en Python esto es normal y deseado.</p>
+      </div>
+      <div class="edge-card mid">
+        <div class="ec-n">1</div>
+        <h3>Una sola vuelta</h3>
+        <p>El usuario acierta al primer intento; el centinela llega de inmediato. Tu código debe funcionar igual de bien con <strong>una</strong> iteración que con muchas. Pruébalo siempre.</p>
+      </div>
+      <div class="edge-card many">
+        <div class="ec-n">∞</div>
+        <h3>Muchas (o infinitas)</h3>
+        <p>El caso peligroso. Antes de correr, pregúntate: <strong>¿qué hace que esto termine?</strong> Si no puedes señalar la línea que acerca el final, tienes un bucle infinito esperando.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÁCTICA -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">iv.</div>
+      <div>
+        <h2 class="display">Tu turno: <em class="blood">adivina</em> el número.</h2>
+        <p>Volvemos al juego de la sesión 06, pero esta vez con <strong>while</strong>. Ya no hay un tope rígido de intentos contados por un <span class="mono">for</span>: el juego dura <strong>hasta que</strong> el jugador acierta. Es el ejemplo perfecto de un ciclo que no sabe cuántas vueltas dará.</p>
+      </div>
+    </div>
+
+    <div class="ej-card">
+      <span class="ej-tag">Práctica · en clase</span>
+      <div class="ej-body">
+        <div>
+          <h3>Adivina el número (versión while)</h3>
+          <p class="ej-desc">La computadora elige un secreto entre <strong>1 y 100</strong>. El jugador intenta una y otra vez; después de cada intento recibe una pista (<em>muy alto</em> / <em>muy bajo</em>). El <span class="mono">while</span> sigue <strong>hasta que</strong> acierta. Compáralo con tu versión <em>for</em> de la sesión 06: ¿cuál se siente más natural para este problema?</p>
+          <ul class="reqs">
+            <li>Usa <span class="mono">import random</span> y <span class="mono">randint(1, 100)</span></li>
+            <li>El ciclo: <span class="mono">while not adivinado:</span></li>
+            <li>Valida que el intento sea un número (<span class="mono">try / except</span>)</li>
+            <li>Cuenta los intentos y muéstralos al ganar</li>
+            <li>Pista al final: <span class="mono">break</span> al acertar es válido</li>
+          </ul>
+        </div>
+        <div class="ej-preview">
+          <div class="game-preview dark">
+            <span class="gp-title">▶ ASÍ SE VERÁ TU JUEGO</span>
+            <span class="prompt">¡Adivina el número entre 1 y 100!</span><br/>
+            Tu intento: 50<br/>
+            <span class="hint">Muy alto. Inténtalo otra vez.</span><br/>
+            Tu intento: 25<br/>
+            <span class="hint">Muy bajo. Inténtalo otra vez.</span><br/>
+            Tu intento: doce<br/>
+            <span class="errl">Eso no es un número.</span><br/>
+            Tu intento: 37<br/>
+            <span class="win">¡Acertaste en 3 intentos! 🎉</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">adivina_while.py — referencia del profesor</span></div>
+<pre><span class="kw">import</span> random
+
+<span class="com"># 1) Constantes del juego</span>
+NUMERO_MIN = <span class="num">1</span>
+NUMERO_MAX = <span class="num">100</span>
+
+<span class="com"># 2) La máquina elige su secreto</span>
+secreto = random.<span class="fn">randint</span>(NUMERO_MIN, NUMERO_MAX)
+intentos = <span class="num">0</span>
+adivinado = <span class="kw">False</span>
+
+<span class="fn">print</span>(<span class="str">f"¡Adivina el número entre {NUMERO_MIN} y {NUMERO_MAX}!"</span>)
+
+<span class="com"># 3) while: repite HASTA QUE el jugador acierte</span>
+<span class="kw">while</span> <span class="kw">not</span> adivinado:
+    texto = <span class="fn">input</span>(<span class="str">"Tu intento: "</span>)
+
+    <span class="com"># 4) Validación robusta: ¿es un número?</span>
+    <span class="kw">try</span>:
+        intento = <span class="kw">int</span>(texto)
+    <span class="kw">except</span> <span class="err">ValueError</span>:
+        <span class="fn">print</span>(<span class="str">"Eso no es un número."</span>)
+        <span class="kw">continue</span>            <span class="com"># no cuenta como intento</span>
+
+    intentos += <span class="num">1</span>
+
+    <span class="com"># 5) Comparar y dar pista</span>
+    <span class="kw">if</span> intento &lt; secreto:
+        <span class="fn">print</span>(<span class="str">"Muy bajo. Inténtalo otra vez."</span>)
+    <span class="kw">elif</span> intento &gt; secreto:
+        <span class="fn">print</span>(<span class="str">"Muy alto. Inténtalo otra vez."</span>)
+    <span class="kw">else</span>:
+        adivinado = <span class="kw">True</span>   <span class="com"># rompe la condición del while</span>
+        <span class="fn">print</span>(<span class="str">f"¡Acertaste en {intentos} intentos! 🎉"</span>)</pre>
+    </div>
+
+    <!-- CHOICE: entregable -->
+    <div class="choice">
+      <div class="choice-card">
+        <span class="ch-badge">Opción A</span>
+        <h3>Adivina el número con while</h3>
+        <p>Termina y pule el juego de arriba. Que sea <strong>imposible</strong> hacerlo tronar: si escriben letras, símbolos o lo dejan vacío, el programa <em>insiste</em> con calma, sin morir.</p>
+        <div class="ch-tags"><span>while not</span><span>random</span><span>try/except</span><span>contador</span></div>
+      </div>
+      <div class="choice-card">
+        <span class="ch-badge">Opción B</span>
+        <h3>Validador robusto de entrada</h3>
+        <p>Construye un menú o formulario por consola que <strong>no avance</strong> hasta recibir datos válidos: un número en un rango, una opción del menú, un «sí/no» bien escrito. Pura <em>validación con while</em>.</p>
+        <div class="ch-tags"><span>while</span><span>centinela</span><span>try/except</span><span>menú</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVALUACIÓN + EVIDENCIA -->
+  <section class="cierre-practica reveal">
+    <div class="panel">
+      <h3 class="display">Criterios de <em>evaluación</em></h3>
+      <ol class="crit-list">
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el programa corre completo y no revienta ni con entradas raras.</li>
+        <li><strong>Lógica correcta</strong> — el <span class="mono">while</span> termina cuando debe; nada de bucles infinitos ni de centinelas que se procesan.</li>
+        <li><strong>Funcionamiento óptimo</strong> — valida la entrada de verdad: letras, vacíos y números fuera de rango se manejan con elegancia.</li>
+        <li><strong>Autenticidad</strong> — código escrito por ti, no copiado de un compañero.</li>
+      </ol>
+    </div>
+
+    <div class="panel">
+      <h3 class="display">Evidencia a <em>entregar</em></h3>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>adivina_while.py</strong> (opción A) <em>o</em> <strong>validador.py</strong> (opción B) — con el ciclo <span class="mono">while</span> y validación robusta.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.md</span>
+        <span class="ev-txt"><strong>README.md</strong> — explica qué hace tu programa y, sobre todo, <em>qué hace que el ciclo termine</em>.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.png</span>
+        <span class="ev-txt"><strong>Captura</strong> de una corrida completa, incluyendo un intento inválido bien manejado (que se note la validación).</span>
+      </div>
+      <div class="conclu-note">
+        <h4>Entrega vía GitHub</h4>
+        <p>Sube tu trabajo a la carpeta <span class="mono">sesion-11/</span> de tu repositorio con un commit claro, p. ej. <span class="mono">"sesion-11: adivina con while"</span>. El repositorio es tu entregable del curso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «El agua, <span class="em-ochre">gota a gota</span>,<br/>
+      perfora la <span class="em">piedra</span>.»
+    </div>
+    <div class="quote-author">— Ovidio</div>
+    <div class="quote-meta">«Epistulae ex Ponto», IV, 10 · siglo I d.&nbsp;C. — <em>gutta cavat lapidem</em></div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 11 <span class="dot">·</span> Hasta que… <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-10/index.html">Sesión 10 · El arte de no engañarse</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

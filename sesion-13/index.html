@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 13 · Antes del juicio · Repaso bimestral integrador y simulacro de examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --term-blue: #4a6b86;
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 60px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 120px); line-height: .95; margin: 0 0 32px; letter-spacing: -.02em; }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+
+  /* CONTINUACIÓN BANNER */
+  .cont-banner{ margin: 44px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
+  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
+  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* FICHA */
+  .ficha{ margin: 44px 0 0; border: 1.5px solid var(--ink); background: var(--paper-deep); position: relative; }
+  .ficha .f-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .ficha-grid{ display: grid; grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 820px){ .ficha-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 480px){ .ficha-grid{ grid-template-columns: 1fr; } }
+  .ficha-cell{ padding: 18px 22px; border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
+  .ficha-cell .fc-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .ficha-cell .fc-value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.02rem; color: var(--ink); line-height: 1.3; }
+  .ficha-cell.wide{ grid-column: 1 / -1; border-right: none; }
+  .ficha-cell .fc-value.obj{ font-style: italic; font-weight: 400; font-size: 1.05rem; line-height: 1.5; }
+
+  /* SECTION HEADERS */
+  .sec{ margin: 100px 0; }
+  .sec .s-head{ display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .sec .s-head{ grid-template-columns: 1fr; gap: 8px; } }
+  .sec .s-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
+  .sec .s-head .n.blood{ color: var(--blood); }
+  .sec .s-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .sec .s-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .sec .s-head h2 em.blood{ color: var(--blood); }
+  .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .sec .s-head p strong{ color: var(--blood); }
+
+  /* MAPA DEL BIMESTRE */
+  .mapa{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 880px){ .mapa{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 560px){ .mapa{ grid-template-columns: 1fr; } }
+  .mapa-card{ background: var(--paper-deep); border: 1.5px solid var(--ink); border-top: 5px solid var(--ochre); padding: 20px 22px 22px; position: relative; transition: transform .25s ease, box-shadow .25s ease; }
+  .mapa-card:hover{ transform: translateY(-3px); box-shadow: 4px 6px 0 var(--ink); }
+  .mapa-card.entra{ border-top-color: var(--blood); }
+  .mapa-card .mc-week{ font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .mapa-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.32rem; margin: 0 0 10px; color: var(--ink); line-height: 1.1; }
+  .mapa-card h3 .sn{ color: var(--blood); font-style: normal; font-weight: 900; margin-right: 7px; }
+  .mapa-card ul{ margin: 0; padding: 0; list-style: none; }
+  .mapa-card ul li{ padding: 6px 0 6px 20px; position: relative; font-size: .9rem; color: var(--ink-soft); line-height: 1.45; border-bottom: 1px dashed var(--line); }
+  .mapa-card ul li:last-child{ border-bottom: none; }
+  .mapa-card ul li::before{ content: "▹"; position: absolute; left: 0; color: var(--ochre-deep); font-weight: 700; }
+  .mapa-card ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 5px; font-size: .82em; border: 1px solid var(--line); }
+  .mapa-legend{ margin-top: 22px; display: flex; gap: 26px; flex-wrap: wrap; font-size: .85rem; color: var(--ink-soft); }
+  .mapa-legend .li{ display: flex; align-items: center; gap: 9px; }
+  .mapa-legend .sw{ width: 26px; height: 7px; flex-shrink: 0; }
+  .mapa-legend .sw.b{ background: var(--blood); } .mapa-legend .sw.o{ background: var(--ochre); }
+
+  /* code block */
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* REPASO RELÁMPAGO (síntesis sintaxis) */
+  .relampago{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  @media (max-width: 820px){ .relampago{ grid-template-columns: 1fr; } }
+  .rel-card{ background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 0; overflow: hidden; }
+  .rel-card .rc-head{ background: var(--ink); color: var(--paper); padding: 12px 20px; display: flex; align-items: baseline; gap: 12px; }
+  .rel-card .rc-head .tag{ font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: #f0c8a0; }
+  .rel-card .rc-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; margin: 0; }
+  .rel-card .rc-body{ padding: 0; }
+  .rel-card .rc-body pre{ margin: 0; padding: 18px 22px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.7; background: var(--ink); color: var(--c-base); overflow-x: auto; }
+  .rel-card .rc-body pre .kw{ color: var(--c-kw); } .rel-card .rc-body pre .str{ color: var(--c-str); } .rel-card .rc-body pre .num{ color: var(--c-num); } .rel-card .rc-body pre .com{ color: var(--c-com); font-style: italic; } .rel-card .rc-body pre .fn{ color: var(--c-fn); }
+  .rel-card .rc-note{ padding: 14px 22px; font-size: .9rem; color: var(--ink-soft); line-height: 1.5; }
+  .rel-card .rc-note strong{ color: var(--blood); }
+
+  .keypoint{ margin-top: 30px; padding: 16px 22px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.08rem; color: var(--ink); }
+  .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* SIMULACRO / BANCO DE PROBLEMAS */
+  .ejercicios{ margin: 100px 0; }
+  .ej-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 30px; position: relative; }
+  .ej-card .ej-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
+  .ej-card .ej-meta{ position: absolute; top: -13px; right: 26px; background: var(--ink); color: var(--paper); padding: 5px 14px; font-family: "JetBrains Mono", monospace; font-size: .7rem; letter-spacing: .08em; display: flex; gap: 10px; align-items: center; }
+  .ej-card .ej-meta .lvl{ color: #f0c8a0; }
+  .ej-card .ej-body{ padding: 32px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 880px){ .ej-card .ej-body{ grid-template-columns: 1fr; gap: 20px; } }
+  .ej-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 12px; color: var(--ink); line-height: 1.1; }
+  .ej-card .ej-desc{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0 0 16px; }
+  .ej-card .ej-desc em{ color: var(--blood-dark); font-style: italic; }
+  .ej-card .ej-desc strong{ color: var(--blood); }
+  .ej-card .reqs{ margin: 0 0 18px; padding: 0; list-style: none; }
+  .ej-card .reqs li{ padding: 8px 0 8px 26px; position: relative; font-size: .94rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
+  .ej-card .reqs li:last-child{ border-bottom: none; }
+  .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
+  .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  .ej-card .temas{ display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .ej-card .tema-pill{ font-size: .72rem; letter-spacing: .06em; background: var(--paper); border: 1px solid var(--line); padding: 4px 11px; color: var(--ink-soft); font-family: "JetBrains Mono", monospace; }
+  .ej-preview .pv-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  /* terminal preview */
+  .term{ background: #16110c; border: 1px solid var(--ink); font-family: "JetBrains Mono", monospace; font-size: .82rem; }
+  .term .term-bar{ background: rgba(239,230,210,.07); padding: 8px 14px; display: flex; gap: 7px; align-items: center; }
+  .term .term-bar .dot{ width: 10px; height: 10px; border-radius: 50%; } .term .term-bar .r{ background: #c0563d; } .term .term-bar .y{ background: var(--ochre); } .term .term-bar .g{ background: var(--olive); }
+  .term .term-bar .tt{ margin-left: 8px; font-size: .7rem; color: rgba(239,230,210,.4); }
+  .term .term-body{ padding: 18px 20px; line-height: 1.75; color: #d9ccb0; }
+  .term .plain{ color: #e8e0cc; }
+  .term .you{ color: #f0c8a0; }
+  .term .hint{ color: #f5b08c; } .term .ok{ color: #c8dd96; } .term .bad{ color: #e8807a; }
+  .term .dim{ color: rgba(217,204,176,.5); }
+
+  /* PISTA acordeón */
+  .pista{ margin-top: 4px; border-top: 1px dashed var(--line); padding-top: 14px; }
+  .pista summary{ cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 9px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: .98rem; color: var(--ochre-deep); user-select: none; }
+  .pista summary::-webkit-details-marker{ display: none; }
+  .pista summary::before{ content: "✦"; color: var(--ochre); font-style: normal; }
+  .pista[open] summary::before{ content: "✧"; }
+  .pista summary:hover{ color: var(--blood-dark); }
+  .pista .pista-body{ margin-top: 12px; padding: 14px 18px; background: var(--paper); border-left: 4px solid var(--ochre); font-size: .92rem; color: var(--ink-soft); line-height: 1.55; }
+  .pista .pista-body strong{ color: var(--ink); }
+  .pista .pista-body .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  .pista .pista-body code{ font-family: "JetBrains Mono", monospace; color: var(--blood-dark); font-size: .9em; }
+
+  /* CONSEJOS DE EXAMEN */
+  .consejos{ margin: 100px 0; }
+  .consejos-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px){ .consejos-grid{ grid-template-columns: 1fr; } }
+  .consejo{ background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 22px 24px 24px; display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; transition: transform .25s ease, box-shadow .25s ease; }
+  .consejo:hover{ transform: translateX(4px); box-shadow: -4px 4px 0 var(--ochre); }
+  .consejo .num{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 2.2rem; line-height: 1; color: var(--ochre); }
+  .consejo h4{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.18rem; margin: 0 0 7px; color: var(--ink); }
+  .consejo p{ margin: 0; font-size: .94rem; color: var(--ink-soft); line-height: 1.55; }
+  .consejo p strong{ color: var(--blood); }
+  .consejo p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+
+  /* TRAMPAS (errores frecuentes) */
+  .trampas{ margin-top: 36px; border: 1.5px solid var(--ink); background: var(--paper-deep); }
+  .trampa-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-bottom: 1px dashed var(--line); }
+  .trampa-row:last-child{ border-bottom: none; }
+  .trampa-row.header{ background: var(--ink); }
+  .trampa-row.header .tc{ color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; }
+  .tc{ padding: 14px 20px; font-size: .92rem; line-height: 1.5; }
+  .tc.bad{ color: var(--blood-dark); border-right: 1px dashed var(--line); }
+  .tc.bad .mono, .tc.good .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  .tc.good{ color: var(--olive-deep); }
+  .tc.good strong{ color: var(--ink); }
+  @media (max-width: 620px){ .trampa-row{ grid-template-columns: 1fr; } .tc.bad{ border-right: none; border-bottom: 1px dashed var(--line); } }
+
+  /* EVAL + EVIDENCIA */
+  .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 820px){ .cierre-practica{ grid-template-columns: 1fr; } }
+  .panel{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 28px 30px 30px; }
+  .panel h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: 1.7rem; margin: 0 0 18px; letter-spacing: -.01em; }
+  .panel h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .crit-list{ margin: 0; padding: 0; list-style: none; counter-reset: cr; }
+  .crit-list li{ counter-increment: cr; position: relative; padding: 12px 0 12px 38px; border-bottom: 1px dashed var(--line); font-size: .96rem; color: var(--ink); line-height: 1.45; }
+  .crit-list li:last-child{ border-bottom: none; }
+  .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
+  .crit-list li strong{ color: var(--blood-dark); }
+  .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
+  .evid-item:last-child{ border-bottom: none; }
+  .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
+  .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
+  .evid-item .ev-txt strong{ color: var(--ink); }
+  .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
+  .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
+  .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
+  .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+
+  /* PONDERACIÓN */
+  .ponder{ margin-top: 26px; padding: 18px 22px; background: var(--ink); color: var(--paper); }
+  .ponder h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 12px; color: #f0c8a0; font-size: 1.05rem; }
+  .ponder .pbar{ display: flex; height: 26px; overflow: hidden; border: 1px solid rgba(239,230,210,.25); margin-bottom: 12px; }
+  .ponder .pseg{ display: flex; align-items: center; justify-content: center; font-family: "JetBrains Mono", monospace; font-size: .68rem; color: var(--paper); white-space: nowrap; }
+  .ponder .pseg.act{ background: var(--olive); flex: 10; }
+  .ponder .pseg.bim{ background: var(--ochre-deep); flex: 40; }
+  .ponder .pseg.fin{ background: var(--blood); flex: 50; }
+  .ponder .pkey{ font-size: .82rem; color: rgba(239,230,210,.8); line-height: 1.6; }
+  .ponder .pkey strong{ color: #f0c8a0; }
+  .ponder .pkey .hl{ color: var(--c-str); }
+
+  /* CIERRE */
+  .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 32px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 13 · Repaso bimestral integrador · Simulacro de examen</span>
+    </div>
+    <div class="right">
+      Lunes 29.06.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Víspera del Examen Bimestral</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">13</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      Antes del <span class="em">juicio</span>.
+    </h1>
+    <p class="lede">
+      Hemos recorrido seis semanas: aprendimos a <em>pensar</em> antes de teclear, a trazar
+      algoritmos, a nombrar las cosas con variables, a hacer que el programa <em>decida</em> con el
+      <span class="mono">if</span> y a hacerlo <em>repetir</em> con el <span class="mono">while</span> y el
+      <span class="mono">for</span>. Hoy no hay tema nuevo: hoy todo se junta.<br/><br/>
+      Es la <strong>víspera</strong>. El jueves llega el Examen Bimestral, y esta clase es nuestro
+      <span class="underline-ochre">ensayo general</span> — tres problemas tipo examen, con el reloj corriendo,
+      para que el día del juicio no te tome desprevenido.
+    </p>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+      <div class="txt">
+        <strong>Esta sesión cierra el primer bimestre.</strong> Cubre todo lo visto de la sesión 01 a la 12:
+        lógica, algoritmos, pseudocódigo, variables, operadores, decisiones y repetición. El jueves 2 de julio
+        es el examen — hoy llegamos listos.
+      </div>
+    </div>
+
+    <div class="ficha">
+      <span class="f-label">FICHA DE LA SESIÓN</span>
+      <div class="ficha-grid">
+        <div class="ficha-cell wide">
+          <div class="fc-label">Objetivo</div>
+          <div class="fc-value obj">Integrar variables, decisiones y repetición mediante ejercicios diagnósticos y resolución de casos mixtos, para consolidar los aprendizajes del primer bimestre previo al examen.</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Profesor</div>
+          <div class="fc-value">C. D. Vaca Ramírez</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Tema</div>
+          <div class="fc-value">Repaso bimestral integrador</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Actividad</div>
+          <div class="fc-value">Simulacro de examen práctico</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Entrega</div>
+          <div class="fc-value">Simulacro resuelto en GitHub</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Cubre</div>
+          <div class="fc-value">Sesiones 01 → 12 · Semanas 1–6</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Cuenta como</div>
+          <div class="fc-value">Actividad de aprendizaje</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">El jueves</div>
+          <div class="fc-value">Examen Bimestral · Sesión 14</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 0: MAPA DEL BIMESTRE -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">0</div>
+      <div>
+        <h2 class="display">El <em class="blood">mapa</em> de lo que entra.</h2>
+        <p>Antes de practicar, conviene mirar el territorio completo. Esto es <strong>todo el primer bimestre</strong> en un vistazo: seis semanas, doce sesiones. Lo de borde rojo es lo que cae <strong>seguro</strong> en el examen; lo de borde ocre es el cimiento que lo sostiene.</p>
+      </div>
+    </div>
+
+    <div class="mapa">
+      <div class="mapa-card">
+        <div class="mc-week">Semana 1 · Sesiones 01–02</div>
+        <h3><span class="sn">01</span>Pensar antes de teclear</h3>
+        <ul>
+          <li>Lógica y resolución de problemas</li>
+          <li>Modelo <span class="mono">Entrada → Proceso → Salida</span></li>
+          <li>Algoritmos y prueba de escritorio</li>
+        </ul>
+      </div>
+      <div class="mapa-card">
+        <div class="mc-week">Semana 2 · Sesiones 03–04</div>
+        <h3><span class="sn">02</span>Pseudocódigo y variables</h3>
+        <ul>
+          <li>Sentencias fundamentales · E/S</li>
+          <li>Variables, tipos y nombres</li>
+          <li>Tu primer programa en Python</li>
+        </ul>
+      </div>
+      <div class="mapa-card">
+        <div class="mc-week">Semana 3 · Sesiones 05–06</div>
+        <h3><span class="sn">03</span>Constantes y operadores</h3>
+        <ul>
+          <li>Constantes y alcance</li>
+          <li>Operadores aritméticos y de comparación</li>
+          <li>Operadores lógicos · booleanos</li>
+        </ul>
+      </div>
+      <div class="mapa-card entra">
+        <div class="mc-week">Semana 4 · Sesiones 07–08</div>
+        <h3><span class="sn">04</span>La primera bifurcación</h3>
+        <ul>
+          <li>Decisión con <span class="mono">if</span> · indentación</li>
+          <li>Entrada y salida con formato</li>
+          <li><span class="mono">match-case</span> · casos múltiples</li>
+        </ul>
+      </div>
+      <div class="mapa-card entra">
+        <div class="mc-week">Semana 5 · Sesiones 09–10</div>
+        <h3><span class="sn">05</span>Los muchos caminos</h3>
+        <ul>
+          <li><span class="mono">if · elif · else</span></li>
+          <li>Decisiones anidadas</li>
+          <li>PEP 8 · depuración honesta</li>
+        </ul>
+      </div>
+      <div class="mapa-card entra">
+        <div class="mc-week">Semana 6 · Sesiones 11–12</div>
+        <h3><span class="sn">06</span>La repetición</h3>
+        <ul>
+          <li>Ciclo <span class="mono">while</span> · centinela · validación</li>
+          <li>Ciclo <span class="mono">for</span> · <span class="mono">range()</span></li>
+          <li>Acumuladores y contadores</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mapa-legend">
+      <div class="li"><span class="sw b"></span> Núcleo del examen: <em>decisión + repetición + validación</em></div>
+      <div class="li"><span class="sw o"></span> Cimiento que todo lo sostiene</div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN i: REPASO RELÁMPAGO -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">Repaso <em>relámpago</em>.</h2>
+        <p>Las tres herramientas con las que vas a armar cualquier problema del examen, una al lado de la otra. Léelas en voz baja: ya las conoces, solo las estamos <strong>despertando</strong>.</p>
+      </div>
+    </div>
+
+    <div class="relampago">
+      <div class="rel-card">
+        <div class="rc-head"><span class="tag">decisión</span><h3>if · elif · else</h3></div>
+        <div class="rc-body">
+<pre><span class="com"># elige UN camino entre varios</span>
+edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Tu edad: "</span>))
+
+<span class="kw">if</span> edad &lt; <span class="num">13</span>:
+    <span class="fn">print</span>(<span class="str">"Niño"</span>)
+<span class="kw">elif</span> edad &lt; <span class="num">18</span>:
+    <span class="fn">print</span>(<span class="str">"Adolescente"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Adulto"</span>)</pre>
+        </div>
+        <div class="rc-note">El <strong>orden importa</strong>: Python prueba de arriba hacia abajo y se queda con la <em>primera</em> condición verdadera.</div>
+      </div>
+
+      <div class="rel-card">
+        <div class="rc-head"><span class="tag">repetición · cuenta</span><h3>for · range()</h3></div>
+        <div class="rc-body">
+<pre><span class="com"># repite un número CONOCIDO de veces</span>
+suma = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">6</span>):   <span class="com"># 1,2,3,4,5</span>
+    suma = suma + i
+
+<span class="fn">print</span>(<span class="str">"Suma:"</span>, suma)   <span class="out"># Suma: 15</span></pre>
+        </div>
+        <div class="rc-note"><strong>range(a, b)</strong> llega hasta <span class="mono">b - 1</span>, nunca incluye el tope. La <em>variable acumuladora</em> se inicia antes del ciclo.</div>
+      </div>
+
+      <div class="rel-card">
+        <div class="rc-head"><span class="tag">repetición · condición</span><h3>while + validación</h3></div>
+        <div class="rc-body">
+<pre><span class="com"># repite MIENTRAS algo siga siendo cierto</span>
+edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Edad (1-120): "</span>))
+
+<span class="kw">while</span> edad &lt; <span class="num">1</span> <span class="kw">or</span> edad &gt; <span class="num">120</span>:
+    <span class="fn">print</span>(<span class="str">"Dato inválido."</span>)
+    edad = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Edad (1-120): "</span>))
+
+<span class="fn">print</span>(<span class="str">"Gracias."</span>)</pre>
+        </div>
+        <div class="rc-note">El patrón de <strong>validación robusta</strong> de la sesión 11: vuelve a pedir el dato <em>hasta</em> que sea válido. Cuida no caer en un ciclo infinito.</div>
+      </div>
+
+      <div class="rel-card">
+        <div class="rc-head"><span class="tag">decisión · casos</span><h3>match · case</h3></div>
+        <div class="rc-body">
+<pre><span class="com"># un valor contra varios casos exactos</span>
+opcion = <span class="fn">input</span>(<span class="str">"Opción (a/b/c): "</span>)
+
+<span class="kw">match</span> opcion:
+    <span class="kw">case</span> <span class="str">"a"</span>:
+        <span class="fn">print</span>(<span class="str">"Elegiste A"</span>)
+    <span class="kw">case</span> <span class="str">"b"</span> | <span class="str">"c"</span>:
+        <span class="fn">print</span>(<span class="str">"B o C"</span>)
+    <span class="kw">case</span> _:
+        <span class="fn">print</span>(<span class="str">"Opción inválida"</span>)</pre>
+        </div>
+        <div class="rc-note">El <span class="mono">case _</span> es el <strong>comodín</strong>: atrapa todo lo que no encajó arriba, como el <em>else</em> de un menú.</div>
+      </div>
+    </div>
+
+    <div class="keypoint"><strong>La gran idea del bimestre:</strong> casi cualquier programa útil es una mezcla de <em>pedir un dato, validarlo, decidir y repetir</em>. Si dominas esas cuatro acciones, dominas el examen.</div>
+  </section>
+
+  <!-- SIMULACRO: BANCO DE PROBLEMAS -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">ii.</div>
+      <div>
+        <h2 class="display">El <em class="blood">simulacro</em>.</h2>
+        <p>Tres problemas tipo examen. Resuélvelos <strong>con tiempo medido</strong>: 15 minutos cada uno, sin ayuda y sin internet, como el jueves. Si te atoras, abre la pista — pero solo después de intentarlo de verdad. Al final revisamos juntos una solución de referencia.</p>
+      </div>
+    </div>
+
+    <!-- PROBLEMA 1 -->
+    <div class="ej-card">
+      <span class="ej-tag">Problema 1</span>
+      <span class="ej-meta"><span class="lvl">Nivel: tibio</span> · ⏱ 15 min</span>
+      <div class="ej-body">
+        <div>
+          <h3>El boleto del cine</h3>
+          <p class="ej-desc">Un cine cobra <strong>$80</strong> la entrada general. Pide al usuario su <em>edad</em> y aplica el descuento correcto: los <strong>menores de 12</strong> y los <strong>mayores de 60</strong> pagan media entrada; todos los demás pagan completa. Muestra cuánto debe pagar.</p>
+          <div class="temas">
+            <span class="tema-pill">input + int()</span>
+            <span class="tema-pill">if / elif / else</span>
+            <span class="tema-pill">operadores or</span>
+          </div>
+          <ul class="reqs">
+            <li>Define el precio como una <span class="mono">constante</span> (sesión 05)</li>
+            <li>Convierte la edad con <span class="mono">int()</span></li>
+            <li>Combina las dos condiciones con <span class="mono">or</span></li>
+            <li>Imprime el total con <span class="mono">print()</span></li>
+          </ul>
+          <details class="pista">
+            <summary>Ver pista</summary>
+            <div class="pista-body">
+              La media entrada es <code>PRECIO / 2</code>. La condición del descuento es <strong>una sola</strong> línea con <code>or</code>: <span class="mono">if edad &lt; 12 or edad &gt; 60:</span>. Cuidado con los límites — «menores de 12» es <code>&lt; 12</code>, no <code>&lt;=</code>. El que no entra al <code>if</code> cae al <code>else</code> y paga completo.
+            </div>
+          </details>
+        </div>
+        <div class="ej-preview">
+          <div class="pv-label">Corrida esperada</div>
+          <div class="term">
+            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — problema1.py</span></div>
+            <div class="term-body">
+              <span class="plain">¿Cuál es tu edad? </span><span class="you">8</span><br/>
+              <span class="ok">Pagas: $40.0 (media entrada)</span><br/><br/>
+              <span class="plain">¿Cuál es tu edad? </span><span class="you">30</span><br/>
+              <span class="ok">Pagas: $80 (entrada completa)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROBLEMA 2 -->
+    <div class="ej-card">
+      <span class="ej-tag">Problema 2</span>
+      <span class="ej-meta"><span class="lvl">Nivel: templado</span> · ⏱ 15 min</span>
+      <div class="ej-body">
+        <div>
+          <h3>El promedio del grupo</h3>
+          <p class="ej-desc">Pide cuántos alumnos hay en un grupo y luego, con un <strong>ciclo</strong>, lee la calificación de cada uno. Al final muestra el <em>promedio</em> y di si el grupo en conjunto <strong>aprobó</strong> (promedio ≥ 70) o no. Las calificaciones válidas van de <strong>0 a 100</strong>.</p>
+          <div class="temas">
+            <span class="tema-pill">for · range()</span>
+            <span class="tema-pill">acumulador</span>
+            <span class="tema-pill">while · validación</span>
+            <span class="tema-pill">if / else</span>
+          </div>
+          <ul class="reqs">
+            <li>Usa un <span class="mono">acumulador</span> que empiece en <span class="mono">0</span></li>
+            <li>Recorre con <span class="mono">for i in range(n)</span></li>
+            <li>Valida cada nota con <span class="mono">while</span> (sesión 11)</li>
+            <li>El promedio es <span class="mono">suma / n</span></li>
+          </ul>
+          <details class="pista">
+            <summary>Ver pista</summary>
+            <div class="pista-body">
+              Antes del ciclo: <span class="mono">suma = 0</span>. Dentro del <code>for</code>, pides la nota, la <strong>validas</strong> con un <code>while</code> que vuelva a preguntar si está fuera de 0–100, y haces <span class="mono">suma = suma + nota</span>. Después del ciclo, <span class="mono">promedio = suma / n</span> y decides con un <code>if promedio &gt;= 70</code>. Ojo: <strong>no dividas dentro</strong> del ciclo, solo al terminar.
+            </div>
+          </details>
+        </div>
+        <div class="ej-preview">
+          <div class="pv-label">Corrida esperada</div>
+          <div class="term">
+            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — problema2.py</span></div>
+            <div class="term-body">
+              <span class="plain">¿Cuántos alumnos? </span><span class="you">3</span><br/>
+              <span class="plain">Nota del alumno 1: </span><span class="you">150</span><br/>
+              <span class="bad">Inválida. Debe ir de 0 a 100.</span><br/>
+              <span class="plain">Nota del alumno 1: </span><span class="you">80</span><br/>
+              <span class="plain">Nota del alumno 2: </span><span class="you">60</span><br/>
+              <span class="plain">Nota del alumno 3: </span><span class="you">70</span><br/>
+              <span class="ok">Promedio: 70.0 → APROBADO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROBLEMA 3 -->
+    <div class="ej-card">
+      <span class="ej-tag">Problema 3</span>
+      <span class="ej-meta"><span class="lvl">Nivel: examen</span> · ⏱ 15 min</span>
+      <div class="ej-body">
+        <div>
+          <h3>El cajero del menú</h3>
+          <p class="ej-desc">Programa un <strong>menú</strong> que se repita hasta que el usuario elija <em>salir</em>. Opciones: <strong>1)</strong> saludar, <strong>2)</strong> decir si un número es par o impar, <strong>3)</strong> contar del 1 al número dado, <strong>4)</strong> salir. Cualquier otra cosa es opción inválida. Este es el problema <em>integrador</em>: junta todo.</p>
+          <div class="temas">
+            <span class="tema-pill">while True</span>
+            <span class="tema-pill">match / if</span>
+            <span class="tema-pill">% módulo</span>
+            <span class="tema-pill">for</span>
+            <span class="tema-pill">break</span>
+          </div>
+          <ul class="reqs">
+            <li>El menú vive dentro de un <span class="mono">while True</span></li>
+            <li>Par o impar se decide con <span class="mono">numero % 2 == 0</span></li>
+            <li>La opción 3 usa un <span class="mono">for</span> con <span class="mono">range</span></li>
+            <li>La opción 4 corta el ciclo con <span class="mono">break</span></li>
+          </ul>
+          <details class="pista">
+            <summary>Ver pista</summary>
+            <div class="pista-body">
+              Estructura: <span class="mono">while True:</span> imprime el menú, lee la opción, y úsala en un <code>match</code> o en <code>if/elif/else</code>. El operador <strong>módulo</strong> <code>%</code> da el residuo: si <code>n % 2 == 0</code> el número es par. Para «salir», dentro del <code>case "4"</code> pones <code>break</code> y el <code>while</code> termina. Recuerda: lo que <code>input()</code> devuelve es <strong>texto</strong> — compara con <span class="mono">"1"</span> o convierte con <code>int()</code>, pero sé consistente.
+            </div>
+          </details>
+        </div>
+        <div class="ej-preview">
+          <div class="pv-label">Corrida esperada</div>
+          <div class="term">
+            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — problema3.py</span></div>
+            <div class="term-body">
+              <span class="dim">--- MENÚ ---</span><br/>
+              <span class="dim">1 saludar · 2 par/impar · 3 contar · 4 salir</span><br/>
+              <span class="plain">Opción: </span><span class="you">2</span><br/>
+              <span class="plain">Número: </span><span class="you">7</span><br/>
+              <span class="ok">7 es impar</span><br/>
+              <span class="plain">Opción: </span><span class="you">4</span><br/>
+              <span class="hint">¡Hasta luego!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOLUCIÓN DE REFERENCIA -->
+    <div class="s-head" style="margin-top:70px;">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">La <em>solución</em> de referencia.</h2>
+        <p>En la <strong>revisión guiada</strong> resolvemos el Problema 3 juntos en el pizarrón y discutimos alternativas. Aquí queda la versión que comentamos en clase — léela <em>después</em> de intentarlo tú, no antes.</p>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">problema3_referencia.py</span></div>
+<pre><span class="com"># Problema 3 — El cajero del menú</span>
+<span class="com"># Integra: while, match, módulo (%), for y break.</span>
+
+<span class="kw">while</span> <span class="kw">True</span>:
+    <span class="fn">print</span>(<span class="str">"\n--- MENÚ ---"</span>)
+    <span class="fn">print</span>(<span class="str">"1 saludar · 2 par/impar · 3 contar · 4 salir"</span>)
+    opcion = <span class="fn">input</span>(<span class="str">"Opción: "</span>)
+
+    <span class="kw">match</span> opcion:
+        <span class="kw">case</span> <span class="str">"1"</span>:
+            <span class="fn">print</span>(<span class="str">"¡Hola! Qué gusto verte."</span>)
+
+        <span class="kw">case</span> <span class="str">"2"</span>:
+            numero = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Número: "</span>))
+            <span class="kw">if</span> numero % <span class="num">2</span> == <span class="num">0</span>:
+                <span class="fn">print</span>(numero, <span class="str">"es par"</span>)
+            <span class="kw">else</span>:
+                <span class="fn">print</span>(numero, <span class="str">"es impar"</span>)
+
+        <span class="kw">case</span> <span class="str">"3"</span>:
+            tope = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"¿Hasta qué número? "</span>))
+            <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, tope + <span class="num">1</span>):
+                <span class="fn">print</span>(i, end=<span class="str">" "</span>)
+            <span class="fn">print</span>()              <span class="com"># salto de línea final</span>
+
+        <span class="kw">case</span> <span class="str">"4"</span>:
+            <span class="fn">print</span>(<span class="str">"¡Hasta luego!"</span>)
+            <span class="kw">break</span>             <span class="com"># corta el while True</span>
+
+        <span class="kw">case</span> _:
+            <span class="fn">print</span>(<span class="str">"Opción inválida, intenta de nuevo."</span>)</pre>
+    </div>
+    <div class="keypoint" style="margin-top:24px;"><strong>Alternativa válida:</strong> si todavía no te sientes con el <em>match</em>, lo mismo se logra con <span class="mono">if opcion == "1": … elif opcion == "2": …</span>. El examen acepta ambos caminos: lo que se evalúa es que <em>funcione y esté bien razonado</em>.</div>
+  </section>
+
+  <!-- CONSEJOS DE EXAMEN -->
+  <section class="consejos reveal">
+    <div class="s-head">
+      <div class="n display">iv.</div>
+      <div>
+        <h2 class="display">Consejos para el <em>juicio</em>.</h2>
+        <p>El examen no mide qué tan rápido tecleas, sino qué tan claro <strong>piensas</strong>. Estos seis hábitos te ahorran la mitad de los errores. Léelos esta noche, no mañana.</p>
+      </div>
+    </div>
+
+    <div class="consejos-grid">
+      <div class="consejo">
+        <div class="num">1</div>
+        <div>
+          <h4>Lee dos veces antes de teclear</h4>
+          <p>Subraya en el enunciado <strong>qué entra</strong>, qué se procesa y qué debe salir. Es el modelo <span class="mono">E → P → S</span> de la primera semana. Un minuto leyendo ahorra diez depurando.</p>
+        </div>
+      </div>
+      <div class="consejo">
+        <div class="num">2</div>
+        <div>
+          <h4>Haz tu prueba de escritorio</h4>
+          <p>Antes de correr, recorre el código <strong>con un dato de ejemplo</strong> en una hoja, anotando cómo cambia cada variable. Así cazas los errores de lógica que no avisan con ningún mensaje.</p>
+        </div>
+      </div>
+      <div class="consejo">
+        <div class="num">3</div>
+        <div>
+          <h4>Convierte lo que pides</h4>
+          <p>Recuerda que <span class="mono">input()</span> siempre devuelve <strong>texto</strong>. Si vas a hacer cuentas, envuélvelo con <span class="mono">int()</span> o <span class="mono">float()</span> — el bug número uno del bimestre.</p>
+        </div>
+      </div>
+      <div class="consejo">
+        <div class="num">4</div>
+        <div>
+          <h4>Vigila la indentación</h4>
+          <p>En Python, la <strong>sangría es la sintaxis</strong>. Una línea mal indentada cambia por completo qué corre dentro de un <span class="mono">if</span> o un <span class="mono">for</span>. Cuatro espacios, siempre.</p>
+        </div>
+      </div>
+      <div class="consejo">
+        <div class="num">5</div>
+        <div>
+          <h4>Corre seguido, no al final</h4>
+          <p>Escribe poco, corre, verifica; escribe poco más, corre. No teclees el programa entero para descubrir <strong>al final</strong> que truena. El hábito de depuración honesta de la sesión 10.</p>
+        </div>
+      </div>
+      <div class="consejo">
+        <div class="num">6</div>
+        <div>
+          <h4>Cuida los bordes del ciclo</h4>
+          <p>El <span class="mono">range(1, 6)</span> llega al 5, no al 6. Un <span class="mono">while</span> sin línea que cambie su condición es un <strong>ciclo infinito</strong>. Pregúntate siempre: ¿esto termina?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRAMPAS -->
+    <div class="trampas">
+      <div class="trampa-row header">
+        <div class="tc">La trampa frecuente</div>
+        <div class="tc">Cómo evitarla</div>
+      </div>
+      <div class="trampa-row">
+        <div class="tc bad"><span class="mono">if edad = 18:</span> — un solo igual</div>
+        <div class="tc good"><strong>Comparar es <span class="mono">==</span></strong>; un solo <span class="mono">=</span> es asignar. Es <span class="mono">SyntaxError</span>.</div>
+      </div>
+      <div class="trampa-row">
+        <div class="tc bad"><span class="mono">"Total: " + promedio</span> — texto + número</div>
+        <div class="tc good"><strong>Envuelve el número</strong> con <span class="mono">str(promedio)</span>, o usa comas en <span class="mono">print(..., promedio)</span>.</div>
+      </div>
+      <div class="trampa-row">
+        <div class="tc bad"><span class="mono">elif nota &gt; 70:</span> deja fuera el 70</div>
+        <div class="tc good"><strong>Si el 70 aprueba, usa <span class="mono">&gt;=</span></strong>. Los bordes son donde viven los errores de lógica.</div>
+      </div>
+      <div class="trampa-row">
+        <div class="tc bad"><span class="mono">while x &lt; 10:</span> sin tocar <span class="mono">x</span></div>
+        <div class="tc good"><strong>Dentro del ciclo cambia <span class="mono">x</span></strong> (p. ej. <span class="mono">x = x + 1</span>) o nunca termina.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVALUACIÓN + EVIDENCIA -->
+  <section class="cierre-practica reveal">
+    <div class="panel">
+      <h3 class="display">Cómo se <em>evalúa</em></h3>
+      <ol class="crit-list">
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — los tres programas corren completos sin reventar.</li>
+        <li><strong>Lógica correcta</strong> — cada problema hace lo que el enunciado pide, sin errores lógicos en los bordes.</li>
+        <li><strong>Funcionamiento óptimo</strong> — cumple validación, decisión y repetición según corresponda a cada caso.</li>
+        <li><strong>Autenticidad</strong> — resuelto por ti; el simulacro es para detectar tus dudas, no las de otro.</li>
+      </ol>
+      <div class="conclu-note">
+        <h4>Esto es un ensayo, no la función</h4>
+        <p>El simulacro <span class="mono">cuenta como actividad de aprendizaje</span>, no como práctica. Su verdadero premio es llegar al jueves sabiendo exactamente qué repasar esta noche.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3 class="display">Qué <em>entregas</em></h3>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>problema1.py</strong> — el boleto del cine, con el precio en constante.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>problema2.py</strong> — el promedio del grupo, con acumulador y validación.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>problema3.py</strong> — el cajero del menú, integrando ciclo y decisión.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">git</span>
+        <span class="ev-txt"><strong>Repositorio de GitHub</strong> — sube los tres a <span class="mono">sesion-13/</span> y haz un commit con mensaje claro.</span>
+      </div>
+
+      <div class="ponder">
+        <h4>Dónde cae esto en tu calificación</h4>
+        <div class="pbar">
+          <div class="pseg act">Actividades 10%</div>
+          <div class="pseg bim">Examen Bimestral 40%</div>
+          <div class="pseg fin">Examen Final 50%</div>
+        </div>
+        <div class="pkey">
+          <strong>Este simulacro</strong> vive en el <span class="hl">10% de actividades de aprendizaje</span>. El Bimestral del jueves vale 40% (examen 20% + prácticas y entregables 20%); el Final, 50%. Todos los entregables se reciben vía <strong>GitHub</strong>.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «Lo que tenemos que aprender a hacer,<br/>
+      lo aprendemos <span class="em">haciéndolo</span>.»
+    </div>
+    <div class="quote-author">— Aristóteles</div>
+    <div class="quote-meta">Ética a Nicómaco, Libro II · siglo IV a.&nbsp;C.</div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 13 <span class="dot">·</span> Antes del juicio <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-12/index.html">Sesión 12 · Lo finito y lo cíclico</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

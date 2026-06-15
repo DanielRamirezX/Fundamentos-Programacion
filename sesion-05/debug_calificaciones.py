@@ -100,26 +100,28 @@ def esta_aprobado(promedio):
 
 # ===== PROGRAMA PRINCIPAL =====
 
-print("=== REPORTE DE CALIFICACIONES ===")
-nombre = input("Nombre del alumno: ")
-num_materias = int(input("¿Cuántas materias cursó? "))
+if __name__ == "__main__":
 
-calificaciones = []
-for i in range(num_materias):
-    calif = input(f"Calificacion de la materia {i + 1}: ")
-    if validar_calificacion(calif):
-        calificaciones.append(calif)
-    else:
-        print("  -> Esa calificación no es válida (debe ser de 0 a 100)")
-
-promedio = calcular_promedio(calificaciones)
-mejor = encontrar_mejor(calificaciones)
-letra = obtener_letra(promedio)
-estado = esta_aprobado(promedio)
-
-print("--------------------------------")
-print("Alumno:   " + nombre)
-print("Promedio: " + promedio)
-print("Mejor:    " + str(mejor))
-print("Letra:    " + letra)
-print("Estado:   " + estado)
+    print("=== REPORTE DE CALIFICACIONES ===")
+    nombre = input("Nombre del alumno: ")
+    num_materias = int(input("¿Cuántas materias cursó? "))
+    
+    calificaciones = []
+    for i in range(num_materias):
+        calif = input(f"Calificacion de la materia {i + 1}: ")
+        if validar_calificacion(calif):
+            calificaciones.append(calif)
+        else:
+            print("  -> Esa calificación no es válida (debe ser de 0 a 100)")
+    
+    promedio = calcular_promedio(calificaciones)
+    mejor = encontrar_mejor(calificaciones)
+    letra = obtener_letra(promedio)
+    estado = esta_aprobado(promedio)
+    
+    print("--------------------------------")
+    print("Alumno:   " + nombre)
+    print("Promedio: " + promedio)
+    print("Mejor:    " + str(mejor))
+    print("Letra:    " + letra)
+    print("Estado:   " + estado)

@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 26 · La víspera · Repaso final integrador y simulacro de examen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --eve-blue: #4a6b86; --eve-purple: #6b5080;
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 60px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 120px); line-height: .95; margin: 0 0 32px; letter-spacing: -.02em; }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 54px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* CONTINUACIÓN BANNER */
+  .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
+  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
+  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* MANIFIESTO */
+  .manifiesto{ margin: 70px 0; padding: 58px 40px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); position: relative; }
+  .manifiesto .tag{ position: absolute; top:-12px; left: 32px; background: var(--paper); padding: 0 14px; font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); }
+  .manifiesto blockquote{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-weight: 300; font-size: clamp(28px, 4.3vw, 52px); line-height: 1.18; color: var(--ink); letter-spacing: -.01em; }
+  .manifiesto blockquote .accent{ color: var(--blood); font-weight: 600; }
+  .manifiesto blockquote .accent-ochre{ color: var(--ochre); font-weight: 600; }
+  .manifiesto cite{ display:block; margin-top: 26px; font-size: 1rem; font-style: normal; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* SECTION HEADERS */
+  .sec{ margin: 100px 0; }
+  .sec .s-head{ display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .sec .s-head{ grid-template-columns: 1fr; gap: 8px; } }
+  .sec .s-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
+  .sec .s-head .n.blood{ color: var(--blood); }
+  .sec .s-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .sec .s-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .sec .s-head h2 em.blood{ color: var(--blood); }
+  .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .sec .s-head p strong{ color: var(--blood); }
+  .sec .s-head p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+
+  /* PROSE + CODE 2-col */
+  .twocol{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .twocol{ grid-template-columns: 1fr; gap: 22px; } }
+  .prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .prose p em{ color: var(--blood-dark); font-style: italic; }
+  .prose p strong{ color: var(--blood); font-weight: 600; }
+  .prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .prose ul li strong{ color: var(--ink); }
+  .prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* CODE BLOCK */
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* TEMARIO MAP (lo que entra al examen final) */
+  .temario{ margin-top: 30px; }
+  .temario-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 820px){ .temario-grid{ grid-template-columns: 1fr; } }
+  .tema-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 5px solid var(--ochre); padding: 22px 24px 24px; position: relative; }
+  .tema-card.bim2{ border-top-color: var(--blood); }
+  .tema-card .tc-head{ display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
+  .tema-card .tc-tag{ font-family: "JetBrains Mono", monospace; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--paper); background: var(--ochre-deep); padding: 3px 8px; }
+  .tema-card.bim2 .tc-tag{ background: var(--blood); }
+  .tema-card .tc-weight{ margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--ink-faint); }
+  .tema-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 6px 0 10px; color: var(--ink); }
+  .tema-card ul{ margin: 0; padding: 0; list-style: none; }
+  .tema-card ul li{ padding: 7px 0 7px 22px; position: relative; font-size: .93rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
+  .tema-card ul li:last-child{ border-bottom: none; }
+  .tema-card ul li::before{ content: "\25B9"; position: absolute; left: 0; color: var(--ochre-deep); font-weight: 700; }
+  .tema-card.bim2 ul li::before{ color: var(--blood); }
+  .tema-card ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .82em; border: 1px solid var(--line); }
+  .tema-card ul li strong{ color: var(--ink); }
+  .temario-note{ margin-top: 22px; padding: 18px 22px; background: var(--ink); color: var(--c-base); border-left: 4px solid var(--ochre); }
+  .temario-note p{ margin: 0; font-size: .96rem; line-height: 1.55; color: rgba(239,230,210,.85); }
+  .temario-note p strong{ color: #f0c8a0; }
+  .temario-note p em{ color: #c8dd96; font-style: italic; }
+
+  /* PONDERACIÓN BAR */
+  .pond{ margin-top: 26px; border: 1.5px solid var(--ink); background: var(--paper-deep); }
+  .pond .pond-bar{ display: flex; height: 46px; }
+  .pond .seg{ display: flex; align-items: center; justify-content: center; color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .76rem; letter-spacing: .04em; border-right: 1px solid rgba(239,230,210,.25); text-align: center; padding: 0 6px; }
+  .pond .seg:last-child{ border-right: none; }
+  .pond .seg.act{ background: var(--olive); flex: 10; } .pond .seg.bim{ background: var(--ochre-deep); flex: 40; } .pond .seg.fin{ background: var(--blood); flex: 50; }
+  @media (max-width: 600px){ .pond .seg{ font-size: .58rem; } }
+  .pond .pond-legend{ display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
+  @media (max-width: 700px){ .pond .pond-legend{ grid-template-columns: 1fr; } }
+  .pond .pl-cell{ padding: 14px 18px; border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
+  .pond .pl-cell:last-child{ border-right: none; }
+  .pond .pl-cell .pl-name{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.02rem; }
+  .pond .pl-cell .pl-detail{ font-size: .86rem; color: var(--ink-soft); margin-top: 3px; line-height: 1.45; }
+  .pond .pl-cell.fin .pl-name{ color: var(--blood); }
+
+  /* BANCO DE PROBLEMAS (problem bank) */
+  .banco{ margin: 100px 0; }
+  .prob-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 28px; position: relative; }
+  .prob-card .prob-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
+  .prob-card .prob-skills{ position: absolute; top: -13px; right: 22px; display: flex; gap: 6px; }
+  @media (max-width: 560px){ .prob-card .prob-skills{ display: none; } }
+  .prob-card .skill-pill{ font-family: "JetBrains Mono", monospace; font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; background: var(--ink); color: #f0c8a0; padding: 4px 8px; }
+  .prob-card .prob-body{ padding: 34px 32px 30px; }
+  .prob-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 4px 0 12px; color: var(--ink); }
+  .prob-card .prob-desc{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0 0 18px; max-width: 880px; }
+  .prob-card .prob-desc em{ color: var(--blood-dark); font-style: italic; }
+  .prob-card .prob-desc strong{ color: var(--blood); }
+  .prob-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 880px){ .prob-grid{ grid-template-columns: 1fr; gap: 18px; } }
+  .prob-reqs{ margin: 0; padding: 0; list-style: none; }
+  .prob-reqs li{ padding: 8px 0 8px 26px; position: relative; font-size: .94rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
+  .prob-reqs li:last-child{ border-bottom: none; }
+  .prob-reqs li::before{ content: "\25B9"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
+  .prob-reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  .prob-reqs li strong{ color: var(--ink); }
+
+  /* solución desplegable */
+  .sol{ margin-top: 18px; border: 1px solid var(--line); background: var(--paper); }
+  .sol > summary{ cursor: pointer; list-style: none; padding: 14px 20px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1rem; color: var(--olive-deep); display: flex; align-items: center; gap: 12px; user-select: none; }
+  .sol > summary::-webkit-details-marker{ display: none; }
+  .sol > summary .chev{ width: 16px; height: 16px; transition: transform .3s ease; flex-shrink: 0; color: var(--olive-deep); }
+  .sol[open] > summary .chev{ transform: rotate(90deg); }
+  .sol > summary .hint-text{ margin-left: auto; font-family: "Newsreader", serif; font-style: normal; font-size: .82rem; color: var(--ink-faint); }
+  @media (max-width: 560px){ .sol > summary .hint-text{ display: none; } }
+  .sol .sol-body{ border-top: 1px solid var(--line); }
+
+  /* SIMULACRO (timed exam) */
+  .simulacro{ margin: 100px 0; }
+  .sim-frame{ border: 2px solid var(--ink); background: var(--ink); color: var(--paper); position: relative; overflow: hidden; }
+  .sim-head{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 26px 32px; border-bottom: 1px solid rgba(239,230,210,.12); }
+  @media (max-width: 640px){ .sim-head{ grid-template-columns: 1fr; gap: 14px; } }
+  .sim-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.6rem; margin: 0 0 4px; color: #f0c8a0; }
+  .sim-head .sim-meta{ font-family: "JetBrains Mono", monospace; font-size: .76rem; color: rgba(239,230,210,.55); }
+  .sim-timer{ display: inline-flex; align-items: center; gap: 12px; background: rgba(160,36,24,.18); border: 1px solid var(--blood); padding: 10px 18px; }
+  .sim-timer svg{ width: 22px; height: 22px; color: #f0a890; flex-shrink: 0; }
+  .sim-timer .t-num{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.6rem; color: #f0c8a0; line-height: 1; }
+  .sim-timer .t-lbl{ font-family: "JetBrains Mono", monospace; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(239,230,210,.6); }
+  .sim-body{ padding: 28px 32px 32px; }
+  .sim-body > p{ margin: 0 0 22px; font-size: 1rem; line-height: 1.6; color: rgba(239,230,210,.85); max-width: 880px; }
+  .sim-body > p strong{ color: #f0c8a0; }
+  .sim-steps{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 26px; }
+  @media (max-width: 760px){ .sim-steps{ grid-template-columns: 1fr; } }
+  .sim-step{ background: rgba(239,230,210,.06); border: 1px solid rgba(239,230,210,.12); padding: 18px 20px; }
+  .sim-step .ss-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.6rem; color: #f0c8a0; line-height: 1; margin-bottom: 8px; }
+  .sim-step h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; margin: 0 0 6px; color: var(--paper); }
+  .sim-step p{ margin: 0; font-size: .88rem; color: rgba(239,230,210,.72); line-height: 1.5; }
+  .sim-step p .mono{ font-family: "JetBrains Mono", monospace; color: #c8dd96; }
+  .sim-rules{ display: flex; flex-wrap: wrap; gap: 10px; }
+  .sim-rule{ display: inline-flex; align-items: center; gap: 7px; background: rgba(239,230,210,.05); border: 1px solid rgba(239,230,210,.14); padding: 8px 14px; font-size: .82rem; color: rgba(239,230,210,.82); }
+  .sim-rule.ok{ border-color: rgba(200,221,150,.4); color: #c8dd96; }
+  .sim-rule.no{ border-color: rgba(240,168,144,.4); color: #f0a890; }
+
+  /* REPO PROFESIONAL */
+  .repo{ margin: 100px 0; }
+  .repo .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 26px; }
+  @media (max-width: 700px){ .repo .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .repo .head .stamp{ border: 2.5px solid var(--olive); color: var(--olive-deep); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .repo h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(34px, 5vw, 60px); line-height: 1; margin: 0 0 14px; letter-spacing: -.01em; }
+  .repo h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .repo .intro{ color: var(--ink-soft); font-size: 1.08rem; max-width: 820px; margin: 0 0 30px; }
+  .repo .intro strong{ color: var(--olive-deep); }
+  .repo-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 860px){ .repo-grid{ grid-template-columns: 1fr; } }
+
+  /* tree view of repo structure */
+  .tree{ background: var(--ink); color: var(--c-base); padding: 0; overflow: hidden; }
+  .tree .tree-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .tree .tree-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .tree .tree-bar .dot.r{ background: #c0563d; } .tree .tree-bar .dot.y{ background: var(--ochre); } .tree .tree-bar .dot.g{ background: var(--olive); }
+  .tree .tree-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .tree pre{ margin: 0; padding: 20px 22px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.7; overflow-x: auto; }
+  .tree .dir{ color: #f0c8a0; } .tree .file{ color: var(--c-base); } .tree .com{ color: var(--c-com); font-style: italic; } .tree .star{ color: #f5b08c; }
+
+  /* readme anatomy */
+  .readme-card{ background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 24px 26px 26px; }
+  .readme-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 14px; color: var(--ink); }
+  .readme-card ol{ margin: 0; padding: 0; list-style: none; counter-reset: rm; }
+  .readme-card ol li{ counter-increment: rm; position: relative; padding: 11px 0 11px 40px; border-bottom: 1px dashed var(--line); font-size: .95rem; color: var(--ink); line-height: 1.5; }
+  .readme-card ol li:last-child{ border-bottom: none; }
+  .readme-card ol li::before{ content: counter(rm); position: absolute; left: 0; top: 10px; width: 24px; height: 24px; background: var(--olive); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .8rem; }
+  .readme-card ol li strong{ color: var(--olive-deep); }
+  .readme-card ol li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .84em; border: 1px solid var(--line); }
+  .repo-dont{ margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px){ .repo-dont{ grid-template-columns: 1fr; } }
+  .dont-card{ padding: 20px 22px; border: 1.5px solid var(--ink); }
+  .dont-card.si{ background: var(--paper-deep); border-left: 5px solid var(--olive); }
+  .dont-card.no{ background: var(--paper-deep); border-left: 5px solid var(--blood); }
+  .dont-card h4{ font-family: "JetBrains Mono", monospace; font-size: .76rem; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 12px; }
+  .dont-card.si h4{ color: var(--olive-deep); } .dont-card.no h4{ color: var(--blood); }
+  .dont-card ul{ margin: 0; padding-left: 18px; }
+  .dont-card li{ font-size: .92rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.45; }
+  .dont-card li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 5px; font-size: .84em; }
+
+  /* EVAL + EVIDENCIA */
+  .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 820px){ .cierre-practica{ grid-template-columns: 1fr; } }
+  .panel{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 28px 30px 30px; }
+  .panel h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: 1.7rem; margin: 0 0 18px; letter-spacing: -.01em; }
+  .panel h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .crit-list{ margin: 0; padding: 0; list-style: none; counter-reset: cr; }
+  .crit-list li{ counter-increment: cr; position: relative; padding: 12px 0 12px 38px; border-bottom: 1px dashed var(--line); font-size: .96rem; color: var(--ink); line-height: 1.45; }
+  .crit-list li:last-child{ border-bottom: none; }
+  .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
+  .crit-list li strong{ color: var(--blood-dark); }
+  .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
+  .evid-item:last-child{ border-bottom: none; }
+  .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
+  .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
+  .evid-item .ev-txt strong{ color: var(--ink); }
+  .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
+  .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
+  .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
+  .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+
+  /* CIERRE */
+  .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 32px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 26 · Repaso final integrador · Simulacro examen final</span>
+    </div>
+    <div class="right">
+      Jueves 13.08.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Antesala del examen final</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">26</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      La <span class="em">víspera</span>.
+    </h1>
+    <p class="lede">
+      Toda la sesión pasada la dedicamos a la <em>memoria que persiste</em>: archivos que sobreviven a la última
+      línea del programa. Hoy no aprendemos nada nuevo —y, sin embargo, es de las clases más importantes del
+      semestre. Hoy <strong>juntamos las piezas</strong>: funciones, listas, diccionarios, archivos y excepciones,
+      todo a la vez, como caerá en el examen. Resolveremos un problema <em>con el reloj corriendo</em>, repasaremos
+      el mapa de lo que entra, y dejaremos tu repositorio <span class="underline-ochre">listo para mostrarse al mundo</span>.
+    </p>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zM9 21h6M10 19h4"/></svg>
+      <div class="txt">
+        <strong>Esta es la última sesión antes del examen final.</strong> Si algún tema del semestre te quedó
+        a medias —un diccionario que no obedecía, un <em>try/except</em> que no atrapaba— hoy es el momento de
+        sacarlo a la luz. Mañana ya no hay red.
+      </div>
+    </div>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">Repaso final integrador</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Actividad</span>
+        <span class="value">Simulacro de examen práctico</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Entrega</span>
+        <span class="value">Simulacro + README en GitHub</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFIESTO -->
+  <section class="manifiesto reveal">
+    <span class="tag">La idea de hoy</span>
+    <blockquote class="display">
+      No se estudia la víspera <span class="accent-ochre">lo que no se aprendió</span>.<br/>
+      Hoy solo <span class="accent">ordenamos</span> lo que ya sabes.
+    </blockquote>
+    <cite>— Por qué este repaso no es para memorizar, sino para confiar</cite>
+  </section>
+
+  <!-- SECTION i: MAPA DEL EXAMEN -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">El mapa de <em>lo que entra</em>.</h2>
+        <p>El examen final pesa <strong>el 50% del curso</strong> y mira hacia atrás todo el semestre, pero con énfasis en el <strong>segundo bimestre</strong>. Aquí está, sin sorpresas, el territorio que debes dominar. Lo marcado en <span class="mono">rojo</span> es lo que más cae.</p>
+      </div>
+    </div>
+
+    <div class="temario">
+      <div class="temario-grid">
+        <div class="tema-card">
+          <div class="tc-head">
+            <span class="tc-tag">1er bimestre · base</span>
+            <span class="tc-weight">se da por sabido</span>
+          </div>
+          <h3>Fundamentos que ya respiras</h3>
+          <ul>
+            <li>Variables, tipos y conversiones con <span class="mono">int()</span>, <span class="mono">float()</span>, <span class="mono">str()</span></li>
+            <li>Entrada y salida: <span class="mono">input()</span> y <span class="mono">print()</span> con f-strings</li>
+            <li>Decisiones: <span class="mono">if / elif / else</span> y lógica <span class="mono">and · or · not</span></li>
+            <li>Ciclos <span class="mono">for</span> y <span class="mono">while</span>, con <span class="mono">range()</span></li>
+            <li>Constantes y números mágicos (la sesión 06)</li>
+          </ul>
+        </div>
+        <div class="tema-card bim2">
+          <div class="tc-head">
+            <span class="tc-tag">2do bimestre · énfasis</span>
+            <span class="tc-weight">aquí cae el peso</span>
+          </div>
+          <h3>Lo que define este examen</h3>
+          <ul>
+            <li><strong>Funciones</strong>: parámetros, <span class="mono">return</span> y alcance (scope)</li>
+            <li><strong>Listas</strong>: recorrer, agregar, filtrar, ordenar</li>
+            <li><strong>Diccionarios</strong>: claves, valores y <span class="mono">.items()</span></li>
+            <li><strong>Archivos</strong>: <span class="mono">open / with</span>, leer y escribir <span class="mono">.txt</span> y <span class="mono">.csv</span></li>
+            <li><strong>Excepciones</strong>: <span class="mono">try / except / finally</span> que no dejan caer el programa</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="temario-note">
+        <p><strong>La verdad incómoda:</strong> el examen final no pregunta «¿qué es una lista?». Te pide <em>usar</em> una lista de diccionarios, recorrerla con una función, guardarla en un archivo y atrapar el error cuando el archivo no existe — todo dentro del mismo problema. Por eso hoy practicamos <strong>integrando</strong>, no por piezas sueltas.</p>
+      </div>
+
+      <!-- PONDERACIÓN -->
+      <div class="pond">
+        <div class="pond-bar">
+          <div class="seg act">Actividades 10%</div>
+          <div class="seg bim">Examen Bimestral 40%</div>
+          <div class="seg fin">Examen Final 50%</div>
+        </div>
+        <div class="pond-legend">
+          <div class="pl-cell">
+            <div class="pl-name">Actividades · 10%</div>
+            <div class="pl-detail">Entregables de aprendizaje a lo largo del curso, en tu repositorio.</div>
+          </div>
+          <div class="pl-cell">
+            <div class="pl-name">Bimestral · 40%</div>
+            <div class="pl-detail">Examen 20% + prácticas y entregables 20%.</div>
+          </div>
+          <div class="pl-cell fin">
+            <div class="pl-name">Final · 50%</div>
+            <div class="pl-detail">Examen 25% + prácticas y entregables 25%. La mitad de todo se juega aquí.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION ii: BANCO DE PROBLEMAS -->
+  <section class="banco reveal">
+    <div class="s-head">
+      <div class="n blood display">ii.</div>
+      <div>
+        <h2 class="display">El banco de <em class="blood">problemas</em>.</h2>
+        <p>Tres problemas tipo examen, cada uno integrando varios temas. <strong>Resuélvelos primero a solas.</strong> La solución de referencia está plegada bajo cada uno: ábrela apenas después de intentarlo —no antes—. No hay una sola forma correcta; compara la tuya con la mía.</p>
+      </div>
+    </div>
+
+    <!-- PROBLEMA 1 -->
+    <div class="prob-card">
+      <span class="prob-tag">Problema 1</span>
+      <div class="prob-skills">
+        <span class="skill-pill">funciones</span>
+        <span class="skill-pill">listas</span>
+        <span class="skill-pill">excepciones</span>
+      </div>
+      <div class="prob-body">
+        <h3>El promedio que no se cae</h3>
+        <p class="prob-desc">Escribe una función <span class="mono">promedio_seguro(numeros)</span> que reciba una <strong>lista</strong> de calificaciones y devuelva su promedio. Debe sobrevivir a dos desastres: que la lista llegue <em>vacía</em>, y que alguien meta un dato que <em>no es número</em>. En ningún caso debe reventar: devuelve <span class="mono">0.0</span> cuando no hay datos y avisa de lo que ignora.</p>
+        <div class="prob-grid">
+          <div>
+            <ul class="prob-reqs">
+              <li>Una <strong>función</strong> con <span class="mono">return</span> de tipo <span class="mono">float</span>.</li>
+              <li>Recorrer la <strong>lista</strong> sumando solo lo que sea numérico.</li>
+              <li>Atrapar la lista vacía: división entre cero (<span class="mono">ZeroDivisionError</span>).</li>
+              <li>Atrapar valores no numéricos con <span class="mono">try / except</span>.</li>
+              <li>Probarla con al menos <strong>tres listas</strong> distintas.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">enunciado.py</span></div>
+<pre><span class="com"># Tu función debe comportarse así:</span>
+<span class="fn">promedio_seguro</span>([<span class="num">8</span>, <span class="num">9</span>, <span class="num">10</span>])   <span class="com"># &rarr; 9.0</span>
+<span class="fn">promedio_seguro</span>([])           <span class="com"># &rarr; 0.0  (avisa: vacía)</span>
+<span class="fn">promedio_seguro</span>([<span class="num">7</span>, <span class="str">"x"</span>, <span class="num">9</span>]) <span class="com"># &rarr; 8.0  (ignora "x")</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <details class="sol">
+          <summary>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+            Ver solución de referencia
+            <span class="hint-text">ábrela solo después de intentarlo</span>
+          </summary>
+          <div class="sol-body">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">solucion_1.py</span></div>
+<pre><span class="kw">def</span> <span class="fn">promedio_seguro</span>(numeros):
+    <span class="com"># Sumamos solo los valores que sí son números</span>
+    suma = <span class="num">0.0</span>
+    validos = <span class="num">0</span>
+    <span class="kw">for</span> dato <span class="kw">in</span> numeros:
+        <span class="kw">try</span>:
+            suma += <span class="kw">float</span>(dato)
+            validos += <span class="num">1</span>
+        <span class="kw">except</span> (ValueError, TypeError):
+            <span class="fn">print</span>(<span class="str">f"Aviso: ignoro el valor no numérico {dato!r}"</span>)
+
+    <span class="kw">try</span>:
+        <span class="kw">return</span> suma / validos
+    <span class="kw">except</span> ZeroDivisionError:
+        <span class="fn">print</span>(<span class="str">"Aviso: no hay datos numéricos; devuelvo 0.0"</span>)
+        <span class="kw">return</span> <span class="num">0.0</span>
+
+
+<span class="com"># Tres pruebas exigidas</span>
+<span class="fn">print</span>(<span class="fn">promedio_seguro</span>([<span class="num">8</span>, <span class="num">9</span>, <span class="num">10</span>]))   <span class="out"># 9.0</span>
+<span class="fn">print</span>(<span class="fn">promedio_seguro</span>([]))           <span class="out"># 0.0</span>
+<span class="fn">print</span>(<span class="fn">promedio_seguro</span>([<span class="num">7</span>, <span class="str">"x"</span>, <span class="num">9</span>])) <span class="out"># 8.0</span></pre>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- PROBLEMA 2 -->
+    <div class="prob-card">
+      <span class="prob-tag">Problema 2</span>
+      <div class="prob-skills">
+        <span class="skill-pill">diccionarios</span>
+        <span class="skill-pill">listas</span>
+        <span class="skill-pill">funciones</span>
+      </div>
+      <div class="prob-body">
+        <h3>El inventario que se ordena solo</h3>
+        <p class="prob-desc">Tienes una <strong>lista de diccionarios</strong>, cada uno un producto con <span class="mono">nombre</span>, <span class="mono">precio</span> y <span class="mono">stock</span>. Escribe dos funciones: una que devuelva el <strong>valor total</strong> del inventario (precio × stock, sumado), y otra que devuelva los productos <strong>ordenados</strong> del más caro al más barato, <em>sin alterar</em> la lista original.</p>
+        <div class="prob-grid">
+          <div>
+            <ul class="prob-reqs">
+              <li>Recorrer una <strong>lista de diccionarios</strong> con <span class="mono">for</span>.</li>
+              <li>Acceder a valores por clave: <span class="mono">producto["precio"]</span>.</li>
+              <li>Una función <span class="mono">valor_total(inv)</span> que devuelva un número.</li>
+              <li>Usar <span class="mono">sorted()</span> con <span class="mono">key=</span> y <span class="mono">reverse=True</span>.</li>
+              <li>No modificar la lista original al ordenar.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">enunciado.py</span></div>
+<pre>inventario = [
+    {<span class="str">"nombre"</span>: <span class="str">"Café"</span>,  <span class="str">"precio"</span>: <span class="num">85</span>,  <span class="str">"stock"</span>: <span class="num">12</span>},
+    {<span class="str">"nombre"</span>: <span class="str">"Taza"</span>,  <span class="str">"precio"</span>: <span class="num">40</span>,  <span class="str">"stock"</span>: <span class="num">30</span>},
+    {<span class="str">"nombre"</span>: <span class="str">"Libro"</span>, <span class="str">"precio"</span>: <span class="num">220</span>, <span class="str">"stock"</span>: <span class="num">5</span>},
+]
+<span class="com"># valor_total(inventario)  &rarr; 3320</span>
+<span class="com"># mas_caros(inventario)[0] &rarr; el Libro</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <details class="sol">
+          <summary>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+            Ver solución de referencia
+            <span class="hint-text">ábrela solo después de intentarlo</span>
+          </summary>
+          <div class="sol-body">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">solucion_2.py</span></div>
+<pre><span class="kw">def</span> <span class="fn">valor_total</span>(inventario):
+    <span class="com"># Suma precio * stock de cada producto</span>
+    total = <span class="num">0</span>
+    <span class="kw">for</span> producto <span class="kw">in</span> inventario:
+        total += producto[<span class="str">"precio"</span>] * producto[<span class="str">"stock"</span>]
+    <span class="kw">return</span> total
+
+
+<span class="kw">def</span> <span class="fn">mas_caros</span>(inventario):
+    <span class="com"># sorted devuelve una lista NUEVA; no toca la original</span>
+    <span class="kw">return</span> <span class="fn">sorted</span>(inventario, key=<span class="kw">lambda</span> p: p[<span class="str">"precio"</span>], reverse=<span class="kw">True</span>)
+
+
+inventario = [
+    {<span class="str">"nombre"</span>: <span class="str">"Café"</span>,  <span class="str">"precio"</span>: <span class="num">85</span>,  <span class="str">"stock"</span>: <span class="num">12</span>},
+    {<span class="str">"nombre"</span>: <span class="str">"Taza"</span>,  <span class="str">"precio"</span>: <span class="num">40</span>,  <span class="str">"stock"</span>: <span class="num">30</span>},
+    {<span class="str">"nombre"</span>: <span class="str">"Libro"</span>, <span class="str">"precio"</span>: <span class="num">220</span>, <span class="str">"stock"</span>: <span class="num">5</span>},
+]
+
+<span class="fn">print</span>(<span class="str">f"Valor total: ${valor_total(inventario)}"</span>)  <span class="out"># $3320</span>
+<span class="kw">for</span> p <span class="kw">in</span> <span class="fn">mas_caros</span>(inventario):
+    <span class="fn">print</span>(<span class="str">f"{p['nombre']:&lt;8} ${p['precio']}"</span>)</pre>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- PROBLEMA 3 -->
+    <div class="prob-card">
+      <span class="prob-tag">Problema 3 · el integrador</span>
+      <div class="prob-skills">
+        <span class="skill-pill">archivos</span>
+        <span class="skill-pill">dicts</span>
+        <span class="skill-pill">try/except</span>
+      </div>
+      <div class="prob-body">
+        <h3>La agenda que recuerda</h3>
+        <p class="prob-desc">Este es el problema más parecido al examen: lo toca <em>todo</em>. Una pequeña agenda de contactos guardada en un archivo <span class="mono">.csv</span>. Léela en una <strong>lista de diccionarios</strong>; si el archivo aún no existe, no truenes: empieza con la agenda vacía. Agrega un contacto y vuelve a guardarlo en disco conservando lo anterior.</p>
+        <div class="prob-grid">
+          <div>
+            <ul class="prob-reqs">
+              <li>Leer un <span class="mono">.csv</span> con <span class="mono">open / with</span>.</li>
+              <li>Atrapar <span class="mono">FileNotFoundError</span> en la primera corrida.</li>
+              <li>Cada renglón se vuelve un <strong>diccionario</strong> en una <strong>lista</strong>.</li>
+              <li>Una <strong>función</strong> para agregar y otra para guardar.</li>
+              <li>Volver a escribir el archivo sin perder lo anterior.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">enunciado.txt</span></div>
+<pre><span class="com"># contactos.csv (puede no existir aún)</span>
+<span class="out">nombre,telefono</span>
+<span class="out">Ana,5544001122</span>
+<span class="out">Luis,5588990011</span>
+
+<span class="com"># 1ª corrida: el archivo no existe &rarr;</span>
+<span class="com">#   no truena, agenda = []</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <details class="sol">
+          <summary>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>
+            Ver solución de referencia
+            <span class="hint-text">ábrela solo después de intentarlo</span>
+          </summary>
+          <div class="sol-body">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">solucion_3.py</span></div>
+<pre><span class="kw">import</span> csv
+
+ARCHIVO = <span class="str">"contactos.csv"</span>
+
+
+<span class="kw">def</span> <span class="fn">cargar_agenda</span>():
+    <span class="com"># Si el archivo no existe, devolvemos lista vacía</span>
+    <span class="kw">try</span>:
+        <span class="kw">with</span> <span class="fn">open</span>(ARCHIVO, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+            <span class="kw">return</span> <span class="fn">list</span>(csv.<span class="fn">DictReader</span>(f))
+    <span class="kw">except</span> FileNotFoundError:
+        <span class="fn">print</span>(<span class="str">"No hay agenda previa; empiezo vacía."</span>)
+        <span class="kw">return</span> []
+
+
+<span class="kw">def</span> <span class="fn">agregar</span>(agenda, nombre, telefono):
+    agenda.<span class="fn">append</span>({<span class="str">"nombre"</span>: nombre, <span class="str">"telefono"</span>: telefono})
+
+
+<span class="kw">def</span> <span class="fn">guardar</span>(agenda):
+    <span class="kw">with</span> <span class="fn">open</span>(ARCHIVO, <span class="str">"w"</span>, newline=<span class="str">""</span>, encoding=<span class="str">"utf-8"</span>) <span class="kw">as</span> f:
+        escritor = csv.<span class="fn">DictWriter</span>(f, fieldnames=[<span class="str">"nombre"</span>, <span class="str">"telefono"</span>])
+        escritor.<span class="fn">writeheader</span>()
+        escritor.<span class="fn">writerows</span>(agenda)
+
+
+agenda = <span class="fn">cargar_agenda</span>()
+<span class="fn">agregar</span>(agenda, <span class="str">"Ana"</span>, <span class="str">"5544001122"</span>)
+<span class="fn">guardar</span>(agenda)
+<span class="fn">print</span>(<span class="str">f"Agenda con {len(agenda)} contacto(s) guardada."</span>)</pre>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION iii: SIMULACRO CRONOMETRADO -->
+  <section class="simulacro reveal">
+    <div class="s-head">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">El <em>simulacro</em>, con el reloj.</h2>
+        <p>Ahora en serio: elige <strong>uno</strong> de los tres problemas y resuélvelo de cero, <strong>sin abrir la solución</strong>, con el tiempo medido. Así se siente el examen. Después lo revisamos juntos y comparamos caminos.</p>
+      </div>
+    </div>
+
+    <div class="sim-frame">
+      <div class="sim-head">
+        <div>
+          <h3>Simulacro de examen práctico final</h3>
+          <div class="sim-meta">un problema · solución propia · sin copiar · entrega a GitHub</div>
+        </div>
+        <div class="sim-timer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M9 2h6M18 6l1.5-1.5"/></svg>
+          <div>
+            <div class="t-num">25:00</div>
+            <div class="t-lbl">minutos en clase</div>
+          </div>
+        </div>
+      </div>
+      <div class="sim-body">
+        <p>El examen final no se trata de recordar la sintaxis exacta de memoria: se trata de <strong>pensar el problema, descomponerlo y escribir código que corra</strong>. Hazlo con este ritual en tres pasos —el mismo que usarás el día del examen:</p>
+
+        <div class="sim-steps">
+          <div class="sim-step">
+            <div class="ss-n">1</div>
+            <h4>Lee y descompón</h4>
+            <p>Antes de teclear, escribe en comentarios <span class="mono"># PASO 1, # PASO 2…</span> el plan. Pensar primero ahorra el doble de tiempo después.</p>
+          </div>
+          <div class="sim-step">
+            <div class="ss-n">2</div>
+            <h4>Escribe y corre</h4>
+            <p>Resuelve paso por paso. Corre el programa seguido para cazar errores temprano —el hábito de debugging de la sesión 05.</p>
+          </div>
+          <div class="sim-step">
+            <div class="ss-n">3</div>
+            <h4>Prueba los bordes</h4>
+            <p>Pruébalo con datos raros: lista vacía, archivo ausente, texto donde se esperaba número. Si no truena, está bien hecho.</p>
+          </div>
+        </div>
+
+        <div class="sim-rules">
+          <span class="sim-rule ok">✓ tu propia lógica y nombres en snake_case</span>
+          <span class="sim-rule ok">✓ comentarios que expliquen tu plan</span>
+          <span class="sim-rule ok">✓ probarlo antes de entregar</span>
+          <span class="sim-rule no">✗ copiar de un compañero</span>
+          <span class="sim-rule no">✗ abrir la solución de referencia</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION iv: REPO PROFESIONAL -->
+  <section class="repo reveal">
+    <div class="head">
+      <div class="stamp">Tu carta</div>
+      <div>
+        <h2 class="display">Tu repo, <em>presentable</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Tu repositorio de GitHub <strong>es tu entregable del curso</strong> —y, llegado el día, tu primera carta de
+      presentación profesional. Un buen repo se entiende en treinta segundos: estructura clara, nombres limpios y
+      un <strong>README</strong> que cuente qué hay dentro. Hoy lo dejamos así.
+    </p>
+
+    <div class="repo-grid">
+      <div class="tree">
+        <div class="tree-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estructura recomendada</span></div>
+<pre><span class="dir">Fundamentos-Programacion/</span>
+├── <span class="file">README.md</span>          <span class="com"># la portada de todo</span>
+├── <span class="dir">sesion-06/</span>
+│   ├── <span class="file">proyecto_adivina.py</span>
+│   └── <span class="file">README.md</span>
+├── <span class="dir">sesion-09/</span>
+│   └── <span class="file">cajero_atm.py</span>
+├── <span class="dir">sesion-25/</span>
+│   └── <span class="file">contactos.csv</span>
+└── <span class="dir">sesion-26/</span>     <span class="star">&larr; hoy</span>
+    ├── <span class="file">simulacro.py</span>  <span class="com"># tu problema resuelto</span>
+    └── <span class="file">README.md</span>     <span class="com"># qué hace y cómo correrlo</span></pre>
+      </div>
+
+      <div class="readme-card">
+        <h3>Anatomía de un buen README</h3>
+        <ol>
+          <li><strong>Título y una línea</strong> que diga qué es el proyecto.</li>
+          <li><strong>Descripción</strong> breve: qué problema resuelve y para qué sirve.</li>
+          <li><strong>Cómo correrlo</strong>: <span class="mono">python simulacro.py</span> y qué necesita.</li>
+          <li><strong>Ejemplo de uso</strong>: una captura o el texto de una corrida.</li>
+          <li><strong>Autor</strong>: tu nombre, grupo y ciclo <span class="mono">26-3</span>.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="repo-dont">
+      <div class="dont-card si">
+        <h4>Sí · esto da buena impresión</h4>
+        <ul>
+          <li>Nombres de carpeta consistentes: <span class="mono">sesion-26</span>, no <span class="mono">Sesion 26 (final)</span>.</li>
+          <li>Commits con mensaje claro: <span class="mono">"sesion-26: simulacro final"</span>.</li>
+          <li>Un <span class="mono">README.md</span> en la raíz que liste tus sesiones.</li>
+          <li>Código comentado y archivos <span class="mono">.py</span> que corren tal cual.</li>
+        </ul>
+      </div>
+      <div class="dont-card no">
+        <h4>No · esto resta puntos</h4>
+        <ul>
+          <li>Archivos sueltos como <span class="mono">final.py</span>, <span class="mono">final2.py</span>, <span class="mono">bueno_final.py</span>.</li>
+          <li>Carpetas con espacios y mayúsculas mezcladas.</li>
+          <li>Subir capturas borrosas o código que no corre.</li>
+          <li>Un repo sin README: nadie sabe qué está mirando.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVALUACIÓN + EVIDENCIA -->
+  <section class="cierre-practica reveal">
+    <div class="panel">
+      <h3 class="display">Criterios de <em>evaluación</em></h3>
+      <ol class="crit-list">
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — tu simulacro corre completo, de inicio a fin.</li>
+        <li><strong>Lógica correcta</strong> — resuelve de verdad el problema elegido, incluidos los casos borde.</li>
+        <li><strong>Funcionamiento óptimo</strong> — usa funciones y, según el problema, listas, diccionarios, archivos o excepciones.</li>
+        <li><strong>Autenticidad</strong> — tu propio código y tu propio README, no copiados de un compañero.</li>
+      </ol>
+    </div>
+
+    <div class="panel">
+      <h3 class="display">Evidencia a <em>entregar</em></h3>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>simulacro.py</strong> — el problema del banco que resolviste con el reloj, corriendo sin errores.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.md</span>
+        <span class="ev-txt"><strong>README.md</strong> del repositorio personal, actualizado: portada, índice de sesiones y cómo correr tu simulacro.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.png</span>
+        <span class="ev-txt"><strong>Captura</strong> de la terminal mostrando tu simulacro funcionando con un par de casos.</span>
+      </div>
+      <div class="conclu-note">
+        <h4>Entrega vía GitHub</h4>
+        <p>Sube tu trabajo a la carpeta <span class="mono">sesion-26/</span> y deja tu <span class="mono">README.md</span> de la raíz al día, con un commit claro como <span class="mono">"sesion-26: simulacro final"</span>. Este repositorio es tu carta para el examen final.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «La <span class="em-ochre">suerte</span> es lo que sucede<br/>
+      cuando la <span class="em">preparación</span> se encuentra con la oportunidad.»
+    </div>
+    <div class="quote-author">— atribuida a Séneca</div>
+    <div class="quote-meta">Máxima de tradición estoica, popularizada en su nombre · Lucio Anneo Séneca, siglo I d.&nbsp;C.</div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 26 <span class="dot">·</span> La víspera <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-25/index.html">Sesión 25 · Memoria que persiste</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

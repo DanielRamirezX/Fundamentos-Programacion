@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 19 · Tu propia biblioteca · Funciones con varios parámetros · math/random/datetime/statistics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --shelf-blue: #4a6b86; --shelf-purple: #6b5080;
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 60px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 120px); line-height: .95; margin: 0 0 32px; letter-spacing: -.02em; }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 54px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* CONTINUACIÓN BANNER */
+  .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
+  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
+  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* SECTION HEADERS */
+  .sec{ margin: 100px 0; }
+  .sec .s-head{ display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .sec .s-head{ grid-template-columns: 1fr; gap: 8px; } }
+  .sec .s-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
+  .sec .s-head .n.blood{ color: var(--blood); }
+  .sec .s-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .sec .s-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .sec .s-head h2 em.blood{ color: var(--blood); }
+  .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .sec .s-head p strong{ color: var(--blood); }
+  .sec .s-head p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+
+  /* PROSE + CODE 2-col */
+  .twocol{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .twocol{ grid-template-columns: 1fr; gap: 22px; } }
+  .prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .prose p em{ color: var(--blood-dark); font-style: italic; }
+  .prose p strong{ color: var(--blood); font-weight: 600; }
+  .prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .prose ul li strong{ color: var(--ink); }
+  .prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* CODE BLOCK */
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* PARAM ANATOMY (firma de una función) */
+  .anatomy{ margin-top: 30px; background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 30px 26px 32px; position: relative; }
+  .anatomy .an-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .anatomy .an-line{ font-family: "JetBrains Mono", monospace; font-size: clamp(.9rem, 2.6vw, 1.25rem); text-align: center; color: var(--ink); margin: 10px 0 30px; letter-spacing: .01em; }
+  .anatomy .an-line .pos{ color: var(--blood); font-weight: 700; border-bottom: 2px solid var(--blood); }
+  .anatomy .an-line .def{ color: var(--olive-deep); font-weight: 700; border-bottom: 2px solid var(--olive); }
+  .anatomy .an-line .name{ color: var(--ochre-deep); font-weight: 700; }
+  .an-legend{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  @media (max-width: 760px){ .an-legend{ grid-template-columns: 1fr; } }
+  .an-leg{ padding: 14px 16px; background: var(--paper); border: 1px solid var(--line); border-top: 4px solid var(--ink); }
+  .an-leg.pos-c{ border-top-color: var(--blood); }
+  .an-leg.def-c{ border-top-color: var(--olive); }
+  .an-leg.name-c{ border-top-color: var(--ochre); }
+  .an-leg h4{ font-family: "JetBrains Mono", monospace; font-size: .82rem; margin: 0 0 6px; color: var(--ink); }
+  .an-leg.pos-c h4{ color: var(--blood-dark); } .an-leg.def-c h4{ color: var(--olive-deep); } .an-leg.name-c h4{ color: var(--ochre-deep); }
+  .an-leg p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.45; }
+
+  /* SCOPE DIAGRAM (alcance) */
+  .scope{ margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 760px){ .scope{ grid-template-columns: 1fr; } }
+  .scope-card{ padding: 22px 24px 24px; border: 1.5px solid var(--ink); }
+  .scope-card.local{ background: var(--paper-deep); }
+  .scope-card.global{ background: var(--ink); color: var(--paper); }
+  .scope-card .sc-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  .scope-card.local .sc-tag{ color: var(--blood); } .scope-card.global .sc-tag{ color: #f0c8a0; }
+  .scope-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 10px; }
+  .scope-card.local h3{ color: var(--ink); } .scope-card.global h3{ color: var(--paper); }
+  .scope-card p{ margin: 0; font-size: .96rem; line-height: 1.55; }
+  .scope-card.local p{ color: var(--ink-soft); } .scope-card.global p{ color: rgba(239,230,210,.82); }
+  .scope-card p strong{ font-weight: 600; } .scope-card.local p strong{ color: var(--blood); } .scope-card.global p strong{ color: #f0c8a0; }
+
+  /* LIBRARY (bookshelf) */
+  .library{ margin: 130px 0; }
+  .library .head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 36px; }
+  @media (max-width: 700px){ .library .head{ grid-template-columns: 1fr; gap: 10px; } }
+  .library .head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
+  .library .head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .library .head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .library .head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .library .head p strong{ color: var(--ochre-deep); }
+
+  .shelf{ background: var(--paper-deep); border: 2px solid var(--ink); padding: 30px 30px 36px; position: relative; }
+  .shelf .shelf-label{ position: absolute; top: -13px; left: 28px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .22em; font-weight: 700; }
+  .books{ display: flex; align-items: flex-end; gap: 5px; justify-content: center; flex-wrap: wrap; min-height: 200px; padding-top: 16px; padding-bottom: 6px; border-bottom: 8px solid var(--ochre-deep); box-shadow: 0 9px 0 var(--ink); }
+  .book{ display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 14px 12px 16px; min-width: 64px; color: var(--paper); writing-mode: vertical-rl; transform: rotate(180deg); font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; box-shadow: inset -3px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.07); transition: transform .3s ease, box-shadow .3s ease; cursor: pointer; position: relative; border: none; outline-offset: 4px; }
+  .book:hover{ transform: rotate(180deg) translateY(-6px); }
+  .book:focus-visible{ outline: 3px solid var(--ink); }
+  .book.active{ transform: rotate(180deg) translateY(-10px); box-shadow: inset -3px 0 0 rgba(0,0,0,.18), inset 3px 0 0 rgba(255,255,255,.1), 0 8px 0 var(--ink), 0 0 0 3px var(--ink); }
+  .book.tall{ height: 200px; } .book.med{ height: 178px; } .book.short{ height: 158px; }
+  .book.math{ background: var(--blood); } .book.random{ background: var(--olive); } .book.datetime{ background: var(--ochre-deep); } .book.statistics{ background: var(--olive-deep); }
+  .shelf .caption{ margin-top: 24px; text-align: center; font-style: italic; color: var(--ink-soft); font-size: .95rem; }
+  .shelf .caption strong{ color: var(--ochre-deep); font-style: normal; }
+
+  .book-info-panel{ margin-top: 26px; background: var(--paper); border: 1.5px solid var(--ink); min-height: 230px; position: relative; overflow: hidden; transition: border-top-color .35s ease; border-top: 6px solid var(--ink); }
+  .bi-placeholder{ padding: 50px 30px; text-align: center; color: var(--ink-faint); transition: opacity .35s ease; }
+  .bi-placeholder svg{ width: 38px; height: 38px; margin-bottom: 12px; color: var(--ink-faint); }
+  .bi-placeholder p{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-size: 1.15rem; }
+  .bi-placeholder p strong{ color: var(--blood-dark); font-style: normal; }
+  .bi-placeholder.hidden{ display: none; }
+  .bi-content{ padding: 26px 30px 28px; opacity: 0; transition: opacity .35s ease; }
+  .bi-content.shown{ opacity: 1; }
+  .bi-header{ display: flex; align-items: center; gap: 14px; margin-bottom: 6px; flex-wrap: wrap; }
+  .bi-color{ width: 16px; height: 26px; display: inline-block; background: var(--ink); transition: background .35s ease; }
+  .bi-name{ font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--ink); font-size: 1.8rem; line-height: 1; margin: 0; }
+  .bi-tag{ font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-faint); margin-left: 4px; }
+  .bi-desc{ margin: 0 0 22px; font-size: 1rem; color: var(--ink); line-height: 1.55; max-width: 760px; }
+  .bi-desc strong{ color: var(--blood); } .bi-desc em{ color: var(--blood-dark); font-style: italic; }
+  .bi-grid{ display: grid; grid-template-columns: 1.05fr 1fr; gap: 22px; align-items: start; }
+  @media (max-width: 820px){ .bi-grid{ grid-template-columns: 1fr; gap: 16px; } }
+  .bi-funcs h5, .bi-ex h5{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: .92rem; margin: 0 0 10px; color: var(--ink-soft); letter-spacing: .02em; }
+  .bi-funcs ul{ margin: 0; padding: 0; list-style: none; }
+  .bi-funcs ul li{ padding: 7px 0; border-bottom: 1px dashed var(--line); font-family: "Newsreader", serif; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: baseline; }
+  .bi-funcs ul li:last-child{ border-bottom: none; }
+  .bi-funcs ul li code{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 2px 8px; color: var(--ink); font-size: .82rem; border: 1px solid var(--line); white-space: nowrap; }
+  .bi-ex pre{ margin: 0; padding: 16px 18px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .8rem; line-height: 1.7; overflow-x: auto; }
+  .bi-ex pre .kw{ color: var(--c-kw); } .bi-ex pre .str{ color: var(--c-str); } .bi-ex pre .num{ color: var(--c-num); } .bi-ex pre .com{ color: var(--c-com); font-style: italic; } .bi-ex pre .fn{ color: var(--c-fn); } .bi-ex pre .out{ color: rgba(239,230,210,.55); }
+
+  /* DOC TIP */
+  .doc-note{ margin-top: 30px; padding: 16px 22px; background: var(--paper-deep); border-left: 4px solid var(--shelf-blue); }
+  .doc-note p{ margin: 0; font-size: .95rem; color: var(--ink); line-height: 1.5; }
+  .doc-note p strong{ color: var(--shelf-blue); }
+  .doc-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+
+  /* EXERCISE (calcular_edad) */
+  .ejercicios{ margin: 110px 0; }
+  .ej-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 26px; position: relative; }
+  .ej-card .ej-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
+  .ej-card .ej-body{ padding: 34px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 860px){ .ej-card .ej-body{ grid-template-columns: 1fr; gap: 18px; } }
+  .ej-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 12px; color: var(--ink); }
+  .ej-card .ej-desc{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0 0 16px; }
+  .ej-card .ej-desc em{ color: var(--blood-dark); font-style: italic; }
+  .ej-card .ej-desc strong{ color: var(--blood); }
+  .ej-card .reqs{ margin: 0; padding: 0; list-style: none; }
+  .ej-card .reqs li{ padding: 8px 0 8px 26px; position: relative; font-size: .94rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
+  .ej-card .reqs li:last-child{ border-bottom: none; }
+  .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
+  .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+
+  /* PROJECT / DESCARGA */
+  .project{ margin: 110px 0; }
+  .project .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 26px; }
+  @media (max-width: 700px){ .project .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .project .head .stamp{ border: 2.5px solid var(--olive); color: var(--olive-deep); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .project h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5.5vw, 64px); line-height: 1; margin: 0 0 14px; letter-spacing: -.015em; }
+  .project h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .project .intro{ color: var(--ink-soft); font-size: 1.08rem; max-width: 820px; margin: 0 0 30px; }
+  .project .intro strong{ color: var(--olive-deep); }
+
+  .modparts{ display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; margin-bottom: 36px; }
+  @media (max-width: 860px){ .modparts{ grid-template-columns: 1fr; } }
+  .modparts .mp-explain h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; margin: 0 0 12px; color: var(--ink); }
+  .modparts .mp-explain p{ margin: 0 0 14px; font-size: 1rem; color: var(--ink-soft); line-height: 1.55; }
+  .modparts .mp-explain p strong{ color: var(--blood); }
+  .modparts .mp-explain .arrow-note{ display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--paper-deep); border-left: 3px solid var(--olive); font-style: italic; font-size: .92rem; color: var(--ink); }
+
+  .filepair{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 10px; }
+  @media (max-width: 820px){ .filepair{ grid-template-columns: 1fr; } }
+
+  .tool-pills{ display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 30px; }
+  .tool-pill{ display: inline-flex; align-items: center; gap: 7px; background: var(--paper-deep); border: 1px solid var(--line); padding: 7px 14px; font-size: .82rem; color: var(--ink-soft); }
+  .tool-pill.nuevo{ border-color: var(--olive); color: var(--olive-deep); }
+  .tool-pill .mono{ font-family: "JetBrains Mono", monospace; font-size: .9em; }
+
+  /* EVAL + EVIDENCIA */
+  .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 820px){ .cierre-practica{ grid-template-columns: 1fr; } }
+  .panel{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 28px 30px 30px; }
+  .panel h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: 1.7rem; margin: 0 0 18px; letter-spacing: -.01em; }
+  .panel h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .crit-list{ margin: 0; padding: 0; list-style: none; counter-reset: cr; }
+  .crit-list li{ counter-increment: cr; position: relative; padding: 12px 0 12px 38px; border-bottom: 1px dashed var(--line); font-size: .96rem; color: var(--ink); line-height: 1.45; }
+  .crit-list li:last-child{ border-bottom: none; }
+  .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
+  .crit-list li strong{ color: var(--blood-dark); }
+  .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
+  .evid-item:last-child{ border-bottom: none; }
+  .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
+  .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
+  .evid-item .ev-txt strong{ color: var(--ink); }
+  .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
+  .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
+  .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
+  .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+
+  /* CIERRE */
+  .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 32px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 19 · Funciones con varios parámetros · math/random/datetime/statistics</span>
+    </div>
+    <div class="right">
+      Lunes 20.07.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Continuación de la sesión 18</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">19</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      Tu propia <span class="em">biblioteca</span>.
+    </h1>
+    <p class="lede">
+      En la sesión 18 aprendiste a <em>dividir y vencer</em>: una función con <strong>def</strong> y
+      <strong>return</strong> para no repetirte. Hoy esa función crece —recibe <strong>varios parámetros</strong>,
+      aprende a tener <strong>valores por defecto</strong>— y descubres que Python ya trae estantes enteros de
+      funciones escritas y probadas: <strong>math</strong>, <strong>random</strong>, <strong>datetime</strong>,
+      <strong>statistics</strong>. Al final harás lo más bonito de todo:
+      <span class="underline-ochre">guardar tus propias funciones en un módulo</span> y volver a usarlas.
+    </p>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 19V6a2 2 0 0 1 2-2h7v15H6a2 2 0 0 0-2 2zM13 4h5a2 2 0 0 1 2 2v13H13z"/></svg>
+      <div class="txt">
+        <strong>Esta sesión continúa la 18.</strong> Allí una función tomaba —a lo más— un dato y devolvía otro.
+        Hoy le damos <em>más manos</em>: parámetros nombrados, valores por defecto, y la disciplina del
+        <em>alcance</em> para que cada variable viva donde debe.
+      </div>
+    </div>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">Parámetros y bibliotecas</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Práctica</span>
+        <span class="value">Tu módulo de estadística</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Entrega</span>
+        <span class="value">Módulo + programa en GitHub</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT i: VARIOS PARÁMETROS -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">Una función con <em>más manos</em>.</h2>
+        <p>Una función puede recibir <strong>varios parámetros</strong>, separados por comas. Al llamarla, puedes pasarle los argumentos por <strong>posición</strong> (en orden) o por <strong>nombre</strong> (diciendo a cuál pertenecen). Y algunos pueden tener un <strong>valor por defecto</strong>, para que sean opcionales.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>En la sesión 18 una función hacía <em>una</em> cosa con <em>un</em> dato. Pero la vida real pide más contexto: para calcular un precio necesitas el <strong>monto</strong> <em>y</em> la <strong>tasa de impuesto</strong> <em>y</em>, quizá, un <strong>descuento</strong>.</p>
+        <p>Cada uno de esos datos es un <strong>parámetro</strong>: una variable que la función espera recibir. Cuando la llamas, lo que le entregas se llama <em>argumento</em>.</p>
+        <ul>
+          <li>Por <strong>posición</strong>: <span class="mono">precio(100, 0.16)</span> — el orden manda.</li>
+          <li>Por <strong>nombre</strong>: <span class="mono">precio(monto=100, iva=0.16)</span> — el orden ya no importa y se lee solo.</li>
+          <li>Con <strong>valor por defecto</strong>: <span class="mono">def precio(monto, iva=0.16)</span> — si no pasas <span class="mono">iva</span>, vale 0.16.</li>
+        </ul>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> los parámetros con valor por defecto van <em>al final</em> de la lista. Primero los obligatorios, después los opcionales. Python lo exige.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">precios.py</span></div>
+<pre><span class="com"># iva tiene valor por defecto: es opcional</span>
+<span class="kw">def</span> <span class="fn">precio_final</span>(monto, iva=<span class="num">0.16</span>, descuento=<span class="num">0.0</span>):
+    subtotal = monto * (<span class="num">1</span> - descuento)
+    <span class="kw">return</span> subtotal * (<span class="num">1</span> + iva)
+
+<span class="com"># 1) por posicion: monto y, opcional, iva</span>
+<span class="fn">print</span>(<span class="fn">precio_final</span>(<span class="num">100</span>))            <span class="out"># 116.0</span>
+
+<span class="com"># 2) por nombre: el orden ya no importa</span>
+<span class="fn">print</span>(<span class="fn">precio_final</span>(iva=<span class="num">0.08</span>, monto=<span class="num">100</span>))  <span class="out"># 108.0</span>
+
+<span class="com"># 3) los tres datos, con descuento</span>
+<span class="fn">print</span>(<span class="fn">precio_final</span>(<span class="num">100</span>, <span class="num">0.16</span>, descuento=<span class="num">0.10</span>))  <span class="out"># 104.4</span></pre>
+      </div>
+    </div>
+
+    <!-- ANATOMÍA DE LA FIRMA -->
+    <div class="anatomy">
+      <span class="an-label">ANATOMÍA DE LA FIRMA</span>
+      <div class="an-line">def precio_final(<span class="pos">monto</span>, <span class="def">iva=0.16</span>, <span class="def">descuento=0.0</span>):</div>
+      <div class="an-legend">
+        <div class="an-leg pos-c">
+          <h4>monto</h4>
+          <p>Parámetro <strong>obligatorio</strong>. No tiene valor por defecto, así que <em>siempre</em> debes pasarlo al llamar.</p>
+        </div>
+        <div class="an-leg def-c">
+          <h4>iva=0.16</h4>
+          <p>Parámetro con <strong>valor por defecto</strong>. Si no lo pasas, toma 0.16. Por eso es opcional.</p>
+        </div>
+        <div class="an-leg name-c">
+          <h4>descuento=0.0</h4>
+          <p>Otro opcional. Conviene llamarlo <strong>por nombre</strong> al usarlo, para que se lea claro qué significa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT ii: ALCANCE -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">ii.</div>
+      <div>
+        <h2 class="display">¿Dónde <em class="blood">vive</em> una variable?</h2>
+        <p>El <strong>alcance</strong> (en inglés, <em>scope</em>) es el territorio donde una variable existe. Una variable creada <strong>dentro</strong> de una función es <strong>local</strong>: nace al entrar y muere al salir. Afuera, nadie sabe que existió.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Esto, lejos de ser un estorbo, es una <strong>bendición</strong>: cada función es una habitación cerrada. Lo que ocurre dentro no contamina el resto del programa, y puedes nombrar <span class="mono">total</span> o <span class="mono">i</span> en dos funciones distintas sin que choquen.</p>
+        <p>Si una función necesita un dato de afuera, lo correcto es <em>recibirlo como parámetro</em> y <em>devolver el resultado con <span class="mono">return</span></em> —no leer ni escribir variables globales a escondidas.</p>
+        <ul>
+          <li>Variable <strong>local</strong>: definida dentro de la función. Solo vive ahí.</li>
+          <li>Variable <strong>global</strong>: definida en el cuerpo principal. La función puede <em>leerla</em>, pero conviene evitarlo.</li>
+          <li>Si intentas usar afuera una local, Python lanza un <span class="mono">NameError</span>.</li>
+        </ul>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> los datos <em>entran</em> por los parámetros y <em>salen</em> por el <span class="mono">return</span>. Esa es la puerta. Lo demás, déjalo dentro de la habitación.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">alcance.py</span></div>
+<pre><span class="kw">def</span> <span class="fn">area_circulo</span>(radio):
+    <span class="com"># 'resultado' es LOCAL: solo vive aqui</span>
+    resultado = <span class="num">3.1416</span> * radio ** <span class="num">2</span>
+    <span class="kw">return</span> resultado
+
+a = <span class="fn">area_circulo</span>(<span class="num">5</span>)
+<span class="fn">print</span>(a)            <span class="out"># 78.54</span>
+
+<span class="com"># intentar usar la local afuera revienta:</span>
+<span class="fn">print</span>(resultado)
+<span class="err"># NameError: name 'resultado' is not defined</span></pre>
+      </div>
+    </div>
+
+    <div class="scope">
+      <div class="scope-card local">
+        <div class="sc-tag">dentro de la función</div>
+        <h3>Variable local</h3>
+        <p>Nace cuando la función arranca y <strong>desaparece</strong> al terminar. Invisible para el resto del programa. Es tu borrador privado: úsalo sin miedo a ensuciar nada de afuera.</p>
+      </div>
+      <div class="scope-card global">
+        <div class="sc-tag">en el cuerpo principal</div>
+        <h3>Variable global</h3>
+        <p>Vive en todo el archivo y la función puede <strong>leerla</strong>. Pero modificarla desde dentro es fuente de bugs difíciles: mejor recíbela como <strong>parámetro</strong> y devuelve el cambio con <strong>return</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIBRARY (bookshelf) -->
+  <section class="library reveal">
+    <div class="head">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">La <em>estantería</em> estándar.</h2>
+        <p>Antes de escribir una función, pregúntate: <strong>¿ya existe?</strong> La biblioteca estándar de Python trae módulos enteros, escritos y probados por miles de personas. Hoy abrimos cuatro que usarás siempre. <em>Toca cada libro</em> para ver qué guarda dentro:</p>
+      </div>
+    </div>
+
+    <div class="shelf">
+      <span class="shelf-label">PYTHON · STANDARD LIBRARY</span>
+      <div class="books">
+        <button type="button" class="book math tall" data-mod="math">math</button>
+        <button type="button" class="book random med" data-mod="random">random</button>
+        <button type="button" class="book datetime tall" data-mod="datetime">datetime</button>
+        <button type="button" class="book statistics short" data-mod="statistics">statistics</button>
+      </div>
+      <p class="caption"><strong>Estos cuatro hoy.</strong> En la sesión 06 viste que en realidad son más de 200, y luego está PyPI con cientos de miles más. Hoy nos enfocamos en los que más usarás.</p>
+
+      <div class="book-info-panel" id="book-info">
+        <div class="bi-placeholder" id="bi-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19V6a2 2 0 0 1 2-2h7v15H6a2 2 0 0 0-2 2z"/><path d="M13 4h5a2 2 0 0 1 2 2v13H13z"/></svg>
+          <p>Toca <strong>cualquier libro</strong> para conocerlo.</p>
+        </div>
+        <div class="bi-content" id="bi-content" hidden>
+          <div class="bi-header">
+            <span class="bi-color" id="bi-color"></span>
+            <h4 class="bi-name" id="bi-name">math</h4>
+            <span class="bi-tag" id="bi-tag">módulo estándar</span>
+          </div>
+          <p class="bi-desc" id="bi-desc"></p>
+          <div class="bi-grid">
+            <div class="bi-funcs">
+              <h5>Funciones que más usarás</h5>
+              <ul id="bi-funcs"></ul>
+            </div>
+            <div class="bi-ex">
+              <h5>Cómo se ve en uso</h5>
+              <pre id="bi-example"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-note">
+      <p><strong>Lee la documentación oficial.</strong> Cada módulo está documentado en <span class="mono">docs.python.org/es/3/library/</span>. No memorices: aprende a <em>buscar</em>. En clase exploramos juntos las páginas de <span class="mono">math</span>, <span class="mono">random</span>, <span class="mono">datetime</span> y <span class="mono">statistics</span> —ese hábito vale más que cualquier función suelta.</p>
+    </div>
+  </section>
+
+  <!-- EXERCISE: calcular_edad -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">iv.</div>
+      <div>
+        <h2 class="display">El ejercicio del <em class="blood">tiempo</em>.</h2>
+        <p>Primer ejercicio guiado de hoy: una función que calcula tu <strong>edad</strong> a partir de tu fecha de nacimiento, usando <span class="mono">datetime</span>. Parece trivial —no lo es: hay que recordar si ya cumpliste años este año.</p>
+      </div>
+    </div>
+
+    <div class="ej-card">
+      <span class="ej-tag">Ejercicio guiado</span>
+      <div class="ej-body">
+        <div>
+          <h3>calcular_edad(fecha_nacimiento)</h3>
+          <p class="ej-desc">Escribe una función que reciba una <strong>fecha de nacimiento</strong> y devuelva la <em>edad en años cumplidos</em> a día de hoy. El truco: restar los años no basta. Si tu cumpleaños aún no llega este año, tienes <em>un año menos</em>.</p>
+          <ul class="reqs">
+            <li>Usa <span class="mono">date.today()</span> para la fecha de hoy.</li>
+            <li>Recibe la fecha como parámetro tipo <span class="mono">date</span>.</li>
+            <li>Resta los años y corrige con un <span class="mono">if</span> si el cumpleaños no ha pasado.</li>
+            <li>Devuelve la edad con <span class="mono">return</span> (no la imprimas dentro).</li>
+          </ul>
+        </div>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">calcular_edad.py</span></div>
+<pre><span class="kw">from</span> datetime <span class="kw">import</span> date
+
+<span class="kw">def</span> <span class="fn">calcular_edad</span>(fecha_nacimiento):
+    hoy = date.<span class="fn">today</span>()
+    edad = hoy.year - fecha_nacimiento.year
+    <span class="com"># ¿aún no llega el cumpleaños este año?</span>
+    falta_cumple = (hoy.month, hoy.day) &lt; \
+        (fecha_nacimiento.month, fecha_nacimiento.day)
+    <span class="kw">if</span> falta_cumple:
+        edad -= <span class="num">1</span>
+    <span class="kw">return</span> edad
+
+nacimiento = <span class="fn">date</span>(<span class="num">2005</span>, <span class="num">11</span>, <span class="num">3</span>)
+<span class="fn">print</span>(<span class="fn">calcular_edad</span>(nacimiento))  <span class="out"># 20</span></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÁCTICA / PROYECTO: módulo propio -->
+  <section class="project reveal">
+    <div class="head">
+      <div class="stamp">Tu turno</div>
+      <div>
+        <h2 class="display">Construye tu <em>módulo</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Llegó el momento que da título a la sesión. Vas a escribir tu <strong>propia biblioteca</strong>: un archivo
+      <span class="mono">mi_estadistica.py</span> con <strong>cinco o más funciones</strong> de estadística básica,
+      cada una con sus parámetros. Después, en un archivo aparte, lo <strong>importas</strong> y lo usas —tal como
+      hoy importaste <span class="mono">math</span> o <span class="mono">statistics</span>. Ese par de archivos es tu entregable.
+    </p>
+
+    <div class="modparts">
+      <div class="mp-explain">
+        <h3>Dos archivos, una idea</h3>
+        <p>Un <strong>módulo</strong> no es nada exótico: es simplemente <em>un archivo <span class="mono">.py</span> con funciones</em>. Cuando otro archivo lo importa, gana todas esas funciones de golpe.</p>
+        <p>El truco de la casa: protege el código de prueba del módulo con <span class="mono">if __name__ == "__main__":</span>. Así, al <em>importarlo</em>, no se ejecuta la demostración; solo cuando lo corres directamente.</p>
+        <div class="arrow-note">El módulo <em>ofrece</em> las funciones; el programa <em>las consume</em>.</div>
+      </div>
+      <div class="tool-pills" style="align-content:flex-start;">
+        <span class="tool-pill nuevo">módulo propio</span>
+        <span class="tool-pill nuevo"><span class="mono">import mi_estadistica</span></span>
+        <span class="tool-pill nuevo">5+ funciones</span>
+        <span class="tool-pill nuevo">parámetros por defecto</span>
+        <span class="tool-pill"><span class="mono">return</span></span>
+        <span class="tool-pill"><span class="mono">statistics</span></span>
+        <span class="tool-pill">validación</span>
+      </div>
+    </div>
+
+    <div class="filepair">
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mi_estadistica.py · el módulo</span></div>
+<pre><span class="com"># Mi biblioteca de estadistica basica</span>
+<span class="kw">def</span> <span class="fn">promedio</span>(datos):
+    <span class="kw">return</span> <span class="fn">sum</span>(datos) / <span class="fn">len</span>(datos)
+
+<span class="kw">def</span> <span class="fn">maximo</span>(datos):
+    <span class="kw">return</span> <span class="fn">max</span>(datos)
+
+<span class="kw">def</span> <span class="fn">minimo</span>(datos):
+    <span class="kw">return</span> <span class="fn">min</span>(datos)
+
+<span class="kw">def</span> <span class="fn">rango</span>(datos):
+    <span class="kw">return</span> <span class="fn">max</span>(datos) - <span class="fn">min</span>(datos)
+
+<span class="com"># parametro por defecto: nota minima para aprobar = 6.0</span>
+<span class="kw">def</span> <span class="fn">aprobados</span>(datos, minimo_aprob=<span class="num">6.0</span>):
+    <span class="kw">return</span> <span class="fn">sum</span>(<span class="num">1</span> <span class="kw">for</span> n <span class="kw">in</span> datos <span class="kw">if</span> n &gt;= minimo_aprob)
+
+<span class="com"># prueba SOLO si corres este archivo</span>
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="fn">print</span>(<span class="fn">promedio</span>([<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>]))  <span class="out"># 8.0</span></pre>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">reporte.py · el programa que lo usa</span></div>
+<pre><span class="com"># Importo MI propia biblioteca</span>
+<span class="kw">import</span> mi_estadistica <span class="kw">as</span> est
+
+notas = [<span class="num">8.5</span>, <span class="num">9.0</span>, <span class="num">5.5</span>, <span class="num">7.0</span>, <span class="num">10.0</span>]
+
+<span class="fn">print</span>(<span class="str">"=== Reporte del grupo ==="</span>)
+<span class="fn">print</span>(<span class="str">f"Promedio: {est.promedio(notas):.2f}"</span>)
+<span class="fn">print</span>(<span class="str">f"Mayor:    {est.maximo(notas)}"</span>)
+<span class="fn">print</span>(<span class="str">f"Menor:    {est.minimo(notas)}"</span>)
+<span class="fn">print</span>(<span class="str">f"Rango:    {est.rango(notas)}"</span>)
+
+<span class="com"># uso el parametro por defecto y luego uno propio</span>
+<span class="fn">print</span>(<span class="str">f"Aprobados (6.0): {est.aprobados(notas)}"</span>)
+<span class="fn">print</span>(<span class="str">f"Aprobados (8.0): {est.aprobados(notas, 8.0)}"</span>)
+
+<span class="out"># === Reporte del grupo ===</span>
+<span class="out"># Promedio: 8.00</span>
+<span class="out"># Mayor:    10.0</span>
+<span class="out"># Menor:    5.5</span>
+<span class="out"># Rango:    4.5</span>
+<span class="out"># Aprobados (6.0): 4</span>
+<span class="out"># Aprobados (8.0): 3</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVALUACIÓN + EVIDENCIA -->
+  <section class="cierre-practica reveal">
+    <div class="panel">
+      <h3 class="display">Criterios de <em>evaluación</em></h3>
+      <ol class="crit-list">
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el módulo se importa y el programa corre sin reventar.</li>
+        <li><strong>Lógica correcta</strong> — cada función devuelve el resultado correcto, con sus parámetros bien usados.</li>
+        <li><strong>Funcionamiento óptimo</strong> — el módulo tiene 5 o más funciones y el programa las usa de verdad; al menos una con valor por defecto.</li>
+        <li><strong>Autenticidad</strong> — código escrito por ti, no copiado de un compañero.</li>
+      </ol>
+    </div>
+
+    <div class="panel">
+      <h3 class="display">Evidencia a <em>entregar</em></h3>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>mi_estadistica.py</strong> — tu módulo con 5+ funciones (con parámetros y al menos un valor por defecto).</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>reporte.py</strong> — un programa que <em>importa</em> tu módulo y lo usa para mostrar un reporte.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.png</span>
+        <span class="ev-txt"><strong>Captura</strong> de la terminal mostrando el reporte completo en ejecución.</span>
+      </div>
+      <div class="conclu-note">
+        <h4>Entrega vía GitHub</h4>
+        <p>Sube ambos archivos a la carpeta <span class="mono">sesion-19/</span> de tu repositorio con un commit claro, p. ej. <span class="mono">"sesion-19: mi módulo de estadística"</span>. El repositorio es tu entregable del curso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «Siempre imaginé que el <span class="em-ochre">Paraíso</span> sería<br/>
+      algún tipo de <span class="em">biblioteca</span>.»
+    </div>
+    <div class="quote-author">— Jorge Luis Borges</div>
+    <div class="quote-meta">«Poema de los dones», en <em>El hacedor</em>, 1960</div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 19 <span class="dot">·</span> Tu propia biblioteca <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-18/index.html">Sesión 18 · Divide y vencerás</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+
+  /* ===== Book info panel ===== */
+  const moduleData = {
+    math: { color: '#a02418', tag: 'matemáticas avanzadas',
+      desc: 'Operaciones matemáticas: constantes, raíces, potencias, redondeos, trigonometría. El módulo para <em>cálculos científicos o geométricos</em> que no trae el operador suelto.',
+      funcs: [{code:'math.sqrt(n)',what:'raíz cuadrada de n'},{code:'math.pi',what:'la constante π = 3.14159…'},{code:'math.floor(x), .ceil(x)',what:'redondea abajo / arriba'},{code:'math.factorial(n)',what:'factorial de n'}],
+      example: `<span class="kw">import</span> math\n\narea = math.pi * radio ** <span class="num">2</span>\nhipo = math.<span class="fn">sqrt</span>(a**<span class="num">2</span> + b**<span class="num">2</span>)\n<span class="fn">print</span>(math.<span class="fn">factorial</span>(<span class="num">5</span>))  <span class="out"># 120</span>` },
+    random: { color: '#5d6638', tag: 'aleatoriedad',
+      desc: 'Generación de <strong>aleatoriedad</strong>: números, elecciones, mezclas. El módulo de juegos, simulaciones y sorteos. Lo conociste en la sesión 06; hoy le pones funciones encima.',
+      funcs: [{code:'random.randint(a, b)',what:'entero al azar entre a y b'},{code:'random.choice(lista)',what:'elige un elemento al azar'},{code:'random.shuffle(lista)',what:'mezcla una lista en su lugar'},{code:'random.uniform(a, b)',what:'float al azar entre a y b'}],
+      example: `<span class="kw">import</span> random\n\ndado    = random.<span class="fn">randint</span>(<span class="num">1</span>, <span class="num">6</span>)\nganador = random.<span class="fn">choice</span>([<span class="str">"Ana"</span>, <span class="str">"Luis"</span>])\n<span class="fn">print</span>(dado, ganador)` },
+    datetime: { color: '#8a6320', tag: 'fechas y horas',
+      desc: 'Manejo de <strong>fechas y horas</strong>: la fecha de hoy, calcular edades, medir cuántos días pasaron entre dos eventos. El módulo del <em>ejercicio de hoy</em>.',
+      funcs: [{code:'date.today()',what:'la fecha de hoy'},{code:'date(2026, 7, 20)',what:'una fecha específica'},{code:'datetime.now()',what:'fecha y hora actuales'},{code:'(d2 - d1).days',what:'días entre dos fechas'}],
+      example: `<span class="kw">from</span> datetime <span class="kw">import</span> date\n\nhoy    = date.<span class="fn">today</span>()\ninicio = <span class="fn">date</span>(<span class="num">2026</span>, <span class="num">1</span>, <span class="num">15</span>)\ndias   = (hoy - inicio).days\n<span class="fn">print</span>(dias)` },
+    statistics: { color: '#424a26', tag: 'estadística básica',
+      desc: '<strong>Cálculos estadísticos</strong> sin instalar nada extra: promedios, medianas, desviación. Tu <em>modelo a seguir</em> hoy: vas a construir tu propia versión de este módulo.',
+      funcs: [{code:'statistics.mean(xs)',what:'media (promedio)'},{code:'statistics.median(xs)',what:'mediana'},{code:'statistics.mode(xs)',what:'valor más frecuente'},{code:'statistics.stdev(xs)',what:'desviación estándar'}],
+      example: `<span class="kw">import</span> statistics\n\nnotas = [<span class="num">8.5</span>, <span class="num">9.0</span>, <span class="num">7.5</span>]\n<span class="fn">print</span>(statistics.<span class="fn">mean</span>(notas))    <span class="out"># 8.33…</span>\n<span class="fn">print</span>(statistics.<span class="fn">median</span>(notas))  <span class="out"># 8.5</span>` },
+  };
+
+  const $placeholder = document.getElementById('bi-placeholder');
+  const $content = document.getElementById('bi-content');
+  const $panel = document.getElementById('book-info');
+  const $name = document.getElementById('bi-name');
+  const $tag = document.getElementById('bi-tag');
+  const $desc = document.getElementById('bi-desc');
+  const $color = document.getElementById('bi-color');
+  const $funcs = document.getElementById('bi-funcs');
+  const $example = document.getElementById('bi-example');
+
+  document.querySelectorAll('.book[data-mod]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mod = btn.dataset.mod;
+      const data = moduleData[mod];
+      if (!data) return;
+      document.querySelectorAll('.book.active').forEach(b => { if (b !== btn) b.classList.remove('active'); });
+      btn.classList.add('active');
+      $placeholder.classList.add('hidden');
+      $content.hidden = false;
+      $content.classList.remove('shown');
+      $name.textContent = mod;
+      $tag.textContent = data.tag;
+      $desc.innerHTML = data.desc;
+      $color.style.background = data.color;
+      $panel.style.borderTopColor = data.color;
+      $funcs.innerHTML = '';
+      data.funcs.forEach(f => {
+        const li = document.createElement('li');
+        const code = document.createElement('code'); code.textContent = f.code;
+        const span = document.createElement('span'); span.textContent = f.what;
+        li.appendChild(code); li.appendChild(span); $funcs.appendChild(li);
+      });
+      $example.innerHTML = data.example;
+      requestAnimationFrame(() => $content.classList.add('shown'));
+      const rect = $panel.getBoundingClientRect();
+      if (rect.bottom > window.innerHeight) $panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  });
+</script>
+
+</body>
+</html>

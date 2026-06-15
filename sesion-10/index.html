@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 10 · El arte de no engañarse · PEP 8, depuración y uso responsable de IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --path-blue: #4a6b86; --path-purple: #6b5080;
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 60px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 120px); line-height: .95; margin: 0 0 32px; letter-spacing: -.02em; }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 54px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* CONTINUACIÓN BANNER */
+  .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
+  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
+  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* MANIFIESTO */
+  .manifiesto{ margin: 70px 0; padding: 60px 40px; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); position: relative; }
+  .manifiesto .tag{ position: absolute; top:-12px; left: 32px; background: var(--paper); padding: 0 14px; font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); }
+  .manifiesto blockquote{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-weight: 300; font-size: clamp(28px, 4.3vw, 52px); line-height: 1.18; color: var(--ink); letter-spacing: -.01em; }
+  .manifiesto blockquote .accent{ color: var(--blood); font-weight: 600; }
+  .manifiesto blockquote .accent-ochre{ color: var(--ochre); font-weight: 600; }
+  .manifiesto cite{ display:block; margin-top: 28px; font-size: 1rem; font-style: normal; letter-spacing: .15em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* SECTION HEADERS */
+  .sec{ margin: 100px 0; }
+  .sec .s-head{ display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .sec .s-head{ grid-template-columns: 1fr; gap: 8px; } }
+  .sec .s-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
+  .sec .s-head .n.blood{ color: var(--blood); }
+  .sec .s-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .sec .s-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .sec .s-head h2 em.blood{ color: var(--blood); }
+  .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .sec .s-head p strong{ color: var(--blood); }
+  .sec .s-head p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+
+  /* PROSE + CODE 2-col */
+  .twocol{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .twocol{ grid-template-columns: 1fr; gap: 22px; } }
+  .prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .prose p em{ color: var(--blood-dark); font-style: italic; }
+  .prose p strong{ color: var(--blood); font-weight: 600; }
+  .prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .prose ul li strong{ color: var(--ink); }
+  .prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* CODE BLOCK */
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* BEFORE / AFTER refactor split */
+  .ba-tag{ display:flex; gap:10px; margin-bottom: 10px; align-items: center; }
+  .ba-tag .pill{ font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px; }
+  .ba-tag .pill.before{ background: var(--blood); color: var(--paper); }
+  .ba-tag .pill.after{ background: var(--olive); color: var(--paper); }
+  .ba-tag .ba-note{ font-style: italic; font-size: .9rem; color: var(--ink-soft); }
+
+  /* PEP8 RULE CARDS */
+  .pep-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 30px; }
+  @media (max-width: 820px){ .pep-grid{ grid-template-columns: 1fr; } }
+  .pep-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ochre); padding: 22px 24px 24px; }
+  .pep-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.2rem; margin: 0 0 6px; color: var(--ochre-deep); }
+  .pep-card .pep-rule{ margin: 0 0 14px; font-size: .94rem; color: var(--ink-soft); line-height: 1.5; }
+  .pep-card .pep-rule strong{ color: var(--ink); }
+  .pep-card .pep-pair{ display: grid; grid-template-columns: 1fr; gap: 6px; }
+  .pep-card .pep-line{ font-family: "JetBrains Mono", monospace; font-size: .78rem; padding: 7px 11px; line-height: 1.4; }
+  .pep-card .pep-line.bad{ background: rgba(160,36,24,.1); color: var(--blood-dark); border-left: 3px solid var(--blood); }
+  .pep-card .pep-line.good{ background: rgba(93,102,56,.12); color: var(--olive-deep); border-left: 3px solid var(--olive); }
+  .pep-card .pep-line .mk{ float: right; font-weight: 700; }
+  .pep-card .pep-line.bad .mk{ color: var(--blood); } .pep-card .pep-line.good .mk{ color: var(--olive-deep); }
+
+  /* COMENTARIOS: qué vs por qué */
+  .comment-versus{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  @media (max-width: 760px){ .comment-versus{ grid-template-columns: 1fr; } }
+  .cv-card{ padding: 24px 26px; border: 1.5px solid var(--ink); }
+  .cv-card.a{ background: var(--paper-deep); }
+  .cv-card.b{ background: var(--ink); color: var(--paper); }
+  .cv-card .cv-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  .cv-card.a .cv-tag{ color: var(--blood); } .cv-card.b .cv-tag{ color: #c8dd96; }
+  .cv-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 10px; }
+  .cv-card.a h3{ color: var(--ink); } .cv-card.b h3{ color: var(--paper); }
+  .cv-card p{ margin: 0 0 12px; font-size: .96rem; line-height: 1.55; }
+  .cv-card.a p{ color: var(--ink-soft); } .cv-card.b p{ color: rgba(239,230,210,.82); }
+  .cv-card pre{ margin: 0; font-family: "JetBrains Mono", monospace; font-size: .78rem; line-height: 1.7; padding: 14px 16px; overflow-x: auto; }
+  .cv-card.a pre{ background: var(--paper); color: var(--ink); }
+  .cv-card.b pre{ background: rgba(239,230,210,.06); color: var(--c-base); }
+  .cv-card pre .com{ color: var(--ink-faint); font-style: italic; }
+  .cv-card.b pre .com{ color: rgba(200,221,150,.7); }
+  .cv-card pre .kw{ color: var(--blood-dark); } .cv-card.b pre .kw{ color: var(--c-kw); }
+  .cv-card pre .fn{ color: var(--ochre-deep); } .cv-card.b pre .fn{ color: var(--c-fn); }
+  .cv-card pre .num{ color: var(--blood); } .cv-card.b pre .num{ color: var(--c-num); }
+
+  /* DEBUGGER ANATOMY (VS Code) */
+  .debugger{ margin-top: 30px; background: #16110c; border: 1.5px solid var(--ink); overflow: hidden; }
+  .debugger .dbg-bar{ display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(239,230,210,.07); border-bottom: 1px solid rgba(239,230,210,.1); }
+  .debugger .dbg-bar .dot{ width: 10px; height: 10px; border-radius: 50%; } .debugger .dbg-bar .r{ background: #c0563d; } .debugger .dbg-bar .y{ background: var(--ochre); } .debugger .dbg-bar .g{ background: var(--olive); }
+  .debugger .dbg-bar .tt{ margin-left: 8px; font-family: "JetBrains Mono", monospace; font-size: .72rem; color: rgba(239,230,210,.45); }
+  .debugger .dbg-body{ display: grid; grid-template-columns: 1.5fr 1fr; }
+  @media (max-width: 760px){ .debugger .dbg-body{ grid-template-columns: 1fr; } }
+  .dbg-code{ font-family: "JetBrains Mono", monospace; font-size: .8rem; line-height: 1.85; color: var(--c-base); padding: 16px 0 18px; border-right: 1px solid rgba(239,230,210,.1); }
+  .dbg-code .ln{ display: grid; grid-template-columns: 40px 1fr; align-items: center; padding: 0 18px 0 0; }
+  .dbg-code .ln .num{ color: rgba(239,230,210,.3); text-align: right; padding-right: 14px; user-select: none; }
+  .dbg-code .ln.brk{ background: rgba(160,36,24,.16); }
+  .dbg-code .ln.brk .num{ position: relative; color: #f0a890; }
+  .dbg-code .ln.brk .num::before{ content: "●"; position: absolute; left: 4px; color: var(--blood); }
+  .dbg-code .ln.current{ background: rgba(181,133,42,.18); }
+  .dbg-code .ln.current .num::after{ content: "▶"; color: var(--ochre); margin-left: 2px; }
+  .dbg-code .kw{ color: var(--c-kw); } .dbg-code .str{ color: var(--c-str); } .dbg-code .num2{ color: var(--c-num); } .dbg-code .fn{ color: var(--c-fn); } .dbg-code .com{ color: var(--c-com); font-style: italic; }
+  .dbg-watch{ padding: 14px 16px 18px; }
+  .dbg-watch h5{ font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(239,230,210,.45); margin: 0 0 10px; }
+  .dbg-watch h5:not(:first-child){ margin-top: 18px; }
+  .dbg-var{ display: flex; justify-content: space-between; gap: 10px; font-family: "JetBrains Mono", monospace; font-size: .78rem; padding: 5px 0; border-bottom: 1px dashed rgba(239,230,210,.12); }
+  .dbg-var .vname{ color: #f0d8b0; } .dbg-var .vval{ color: #c8dd96; } .dbg-var .vval.alert{ color: #f0a890; }
+  .dbg-watch .stack-row{ font-family: "JetBrains Mono", monospace; font-size: .76rem; color: rgba(239,230,210,.72); padding: 4px 0; }
+  .dbg-watch .stack-row.top{ color: var(--ochre); }
+
+  /* DEBUGGER CONTROL LEGEND */
+  .dbg-legend{ margin-top: 22px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 820px){ .dbg-legend{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 460px){ .dbg-legend{ grid-template-columns: 1fr; } }
+  .dbg-ctrl{ background: var(--paper-deep); border: 1px solid var(--line); padding: 14px 16px; }
+  .dbg-ctrl .key{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 3px 8px; display: inline-block; margin-bottom: 8px; }
+  .dbg-ctrl .name{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1rem; color: var(--ink); display: block; margin-bottom: 3px; }
+  .dbg-ctrl .desc{ font-size: .85rem; color: var(--ink-soft); line-height: 1.4; }
+
+  /* IA: USO RESPONSABLE — semáforo */
+  .ia-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  @media (max-width: 760px){ .ia-grid{ grid-template-columns: 1fr; } }
+  .ia-col{ border: 1.5px solid var(--ink); padding: 24px 26px 26px; }
+  .ia-col.si{ background: var(--paper-deep); border-top: 5px solid var(--olive); }
+  .ia-col.no{ background: var(--paper-deep); border-top: 5px solid var(--blood); }
+  .ia-col h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; margin: 0 0 4px; }
+  .ia-col.si h3{ color: var(--olive-deep); } .ia-col.no h3{ color: var(--blood-dark); }
+  .ia-col .ia-sub{ font-size: .9rem; font-style: italic; color: var(--ink-soft); margin: 0 0 16px; }
+  .ia-col ul{ margin: 0; padding: 0; list-style: none; }
+  .ia-col li{ position: relative; padding: 10px 0 10px 30px; border-bottom: 1px dashed var(--line); font-size: .95rem; color: var(--ink); line-height: 1.5; }
+  .ia-col li:last-child{ border-bottom: none; }
+  .ia-col.si li::before{ content: "✓"; position: absolute; left: 0; top: 9px; color: var(--olive-deep); font-weight: 700; font-family: "JetBrains Mono", monospace; }
+  .ia-col.no li::before{ content: "✗"; position: absolute; left: 0; top: 9px; color: var(--blood); font-weight: 700; font-family: "JetBrains Mono", monospace; }
+  .ia-col li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .82em; border: 1px solid var(--line); }
+  .ia-col li em{ font-style: italic; color: var(--blood-dark); }
+
+  .prompt-demo{ margin-top: 26px; background: var(--ink); color: var(--paper); overflow: hidden; }
+  .prompt-demo .pd-head{ padding: 14px 24px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); font-family: "JetBrains Mono", monospace; font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: #f0c8a0; }
+  .prompt-demo .pd-body{ padding: 22px 26px 26px; }
+  .pd-row{ display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; padding: 12px 0; border-bottom: 1px dashed rgba(239,230,210,.12); }
+  .pd-row:last-child{ border-bottom: none; }
+  .pd-row .pd-mk{ font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: .9rem; padding: 2px 9px; white-space: nowrap; }
+  .pd-row .pd-mk.bad{ background: var(--blood); color: var(--paper); }
+  .pd-row .pd-mk.good{ background: var(--olive); color: var(--paper); }
+  .pd-row .pd-txt{ font-family: "Newsreader", serif; font-size: 1rem; line-height: 1.5; color: rgba(239,230,210,.9); font-style: italic; }
+  .pd-row .pd-txt strong{ color: #f0c8a0; font-style: normal; }
+
+  /* LINTER PANEL */
+  .linter{ margin-top: 30px; background: #16110c; border: 1.5px solid var(--ink); overflow: hidden; }
+  .linter .lt-bar{ display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(239,230,210,.07); border-bottom: 1px solid rgba(239,230,210,.1); }
+  .linter .lt-bar .dot{ width: 10px; height: 10px; border-radius: 50%; } .linter .lt-bar .r{ background: #c0563d; } .linter .lt-bar .y{ background: var(--ochre); } .linter .lt-bar .g{ background: var(--olive); }
+  .linter .lt-bar .tt{ margin-left: 8px; font-family: "JetBrains Mono", monospace; font-size: .72rem; color: rgba(239,230,210,.45); }
+  .linter .lt-body{ padding: 18px 22px; font-family: "JetBrains Mono", monospace; font-size: .8rem; line-height: 1.85; color: var(--c-base); }
+  .linter .lt-line .loc{ color: rgba(239,230,210,.45); } .linter .lt-line .code-id{ color: #f0a890; } .linter .lt-line .msg{ color: rgba(239,230,210,.85); }
+  .linter .lt-line .ok{ color: #c8dd96; }
+  .linter .lt-cmd{ color: #f0c8a0; }
+  .linter-note{ margin-top: 20px; padding: 16px 22px; background: var(--paper-deep); border-left: 4px solid var(--path-blue); }
+  .linter-note p{ margin: 0; font-size: .95rem; color: var(--ink); line-height: 1.5; }
+  .linter-note p strong{ color: var(--path-blue); }
+  .linter-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+
+  /* EXERCISE (caza sin IA) */
+  .ejercicios{ margin: 100px 0; }
+  .ej-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 26px; position: relative; }
+  .ej-card .ej-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
+  .ej-card .ej-body{ padding: 30px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 860px){ .ej-card .ej-body{ grid-template-columns: 1fr; gap: 18px; } }
+  .ej-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 12px; color: var(--ink); }
+  .ej-card .ej-desc{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0 0 16px; }
+  .ej-card .ej-desc em{ color: var(--blood-dark); font-style: italic; }
+  .ej-card .ej-desc strong{ color: var(--blood); }
+  .ej-card .reqs{ margin: 0; padding: 0; list-style: none; }
+  .ej-card .reqs li{ padding: 8px 0 8px 26px; position: relative; font-size: .94rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
+  .ej-card .reqs li:last-child{ border-bottom: none; }
+  .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
+  .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+
+  /* TAREA / ENTREGA */
+  .tarea{ margin: 100px 0; }
+  .tarea .head{ display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .tarea .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .tarea .head .stamp{ border: 2.5px solid var(--blood); color: var(--blood); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .tarea h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5vw, 64px); margin: 0 0 12px; line-height: 1; letter-spacing: -.01em; }
+  .tarea h2 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .tarea .intro{ font-size: 1.05rem; color: var(--ink-soft); margin: 0 0 26px; max-width: 800px; }
+  .tarea .intro strong{ color: var(--blood); }
+  .checklist{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 720px){ .checklist{ grid-template-columns: 1fr; } }
+  .check{ background: var(--paper-deep); padding: 24px 26px; border-left: 4px solid var(--blood); display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; transition: all .3s ease; }
+  .check:hover{ transform: translateX(4px); box-shadow: -4px 4px 0 var(--blood); }
+  .check .box{ width: 26px; height: 26px; border: 2px solid var(--ink); flex-shrink: 0; margin-top: 2px; background: var(--paper); }
+  .check h4{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.15rem; margin: 0 0 6px; }
+  .check p{ margin: 0; font-size: .94rem; color: var(--ink-soft); line-height: 1.5; }
+  .check .deadline{ margin-top: 8px; font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--blood); }
+
+  /* EVAL + EVIDENCIA */
+  .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 820px){ .cierre-practica{ grid-template-columns: 1fr; } }
+  .panel{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 28px 30px 30px; }
+  .panel h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: 1.7rem; margin: 0 0 18px; letter-spacing: -.01em; }
+  .panel h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .crit-list{ margin: 0; padding: 0; list-style: none; counter-reset: cr; }
+  .crit-list li{ counter-increment: cr; position: relative; padding: 12px 0 12px 38px; border-bottom: 1px dashed var(--line); font-size: .96rem; color: var(--ink); line-height: 1.45; }
+  .crit-list li:last-child{ border-bottom: none; }
+  .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
+  .crit-list li strong{ color: var(--blood-dark); }
+  .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
+  .evid-item:last-child{ border-bottom: none; }
+  .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
+  .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
+  .evid-item .ev-txt strong{ color: var(--ink); }
+  .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
+  .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
+  .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
+  .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+
+  /* CIERRE */
+  .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 32px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 10 · PEP 8 · Depuración · Uso responsable de IA</span>
+    </div>
+    <div class="right">
+      Jueves 18.06.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Sello transversal del curso</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">10</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      El arte de no <span class="em">engañarse</span>.
+    </h1>
+    <p class="lede">
+      Llevas nueve sesiones haciendo que la máquina <em>funcione</em>. Hoy aprendes algo más difícil y más
+      duradero: hacer que tu código sea <strong>legible, mantenible y comprendido por su autor</strong> —es
+      decir, por ti. Tres oficios profesionales se juntan en esta clase: <strong>PEP 8</strong>, la depuración
+      sistemática y el uso <em>honesto</em> de la inteligencia artificial. Porque el peor error de un
+      programador no es el que comete la máquina, <span class="underline-ochre">sino el que se cuenta a sí mismo</span>.
+    </p>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0M9 12l2 2 4-4"/></svg>
+      <div class="txt">
+        <strong>Sesión integradora.</strong> No aprendemos un tema nuevo: tomamos todo lo que ya sabes escribir
+        y aprendemos a escribirlo <em>bien</em>. Es el sello que separa a quien programa de quien solo hace
+        que algo corra.
+      </div>
+    </div>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">PEP 8 · Debugging · IA ética</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Práctica</span>
+        <span class="value">Refactorizar código propio</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Entrega</span>
+        <span class="value">Refactor + carta de IA en GitHub</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFIESTO -->
+  <section class="manifiesto reveal">
+    <span class="tag">La idea de hoy</span>
+    <blockquote class="display">
+      Hacer que <span class="accent-ochre">funcione</span> es de aprendiz.<br/>
+      Hacer que se <span class="accent">entienda</span> es de profesional.
+    </blockquote>
+    <cite>— Por qué el código se lee más veces de las que se escribe</cite>
+  </section>
+
+  <!-- CONCEPT i: PEP 8 -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">El acuerdo: <em>PEP 8</em>.</h2>
+        <p>PEP 8 es la <strong>guía de estilo oficial</strong> de Python: un acuerdo entre millones de programadores sobre cómo escribir código que cualquiera pueda leer. No cambia lo que el programa <em>hace</em>; cambia quién lo puede <em>entender</em>.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Tu código corre igual con o sin estilo. Pero el código se escribe una vez y se <strong>lee decenas de veces</strong> —por tu yo de la próxima semana, por tu equipo, por quien te evalúa. PEP 8 elimina las discusiones tontas (¿una o dos líneas en blanco?) para que pienses en lo que importa.</p>
+        <ul>
+          <li><strong>Nombres:</strong> <span class="mono">snake_case</span> para variables y funciones; <span class="mono">MAYÚSCULAS</span> para constantes —como ya haces desde la sesión 06.</li>
+          <li><strong>Espacios:</strong> uno alrededor de los operadores (<span class="mono">a = b + 1</span>), ninguno pegado a los paréntesis.</li>
+          <li><strong>Indentación:</strong> 4 espacios, nunca tabuladores mezclados.</li>
+          <li><strong>Longitud de línea:</strong> hasta 79 caracteres; si se alarga, parte la línea.</li>
+        </ul>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> escribe el código pensando en quien lo va a leer mañana sin contexto. Ese «alguien» casi siempre eres tú.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estilo.py</span></div>
+<pre><span class="com"># ✗ Funciona, pero pelea con el lector</span>
+<span class="kw">def</span> <span class="fn">CalcularTotal</span>(p,iva):
+  Resultado=p+p*iva
+  <span class="kw">return</span> Resultado
+
+t=<span class="fn">CalcularTotal</span>(<span class="num">100</span>,<span class="num">0.16</span>)
+
+
+<span class="com"># ✓ El mismo cálculo, ahora legible (PEP 8)</span>
+IVA = <span class="num">0.16</span>
+
+
+<span class="kw">def</span> <span class="fn">calcular_total</span>(precio, iva):
+    total = precio + precio * iva
+    <span class="kw">return</span> total
+
+
+total = <span class="fn">calcular_total</span>(<span class="num">100</span>, IVA)</pre>
+      </div>
+    </div>
+
+    <!-- PEP 8 RULE CARDS -->
+    <div class="pep-grid">
+      <div class="pep-card">
+        <h3>Nombres con sentido</h3>
+        <p class="pep-rule">Variables y funciones en <strong>snake_case</strong>; constantes en MAYÚSCULAS. Que el nombre diga <em>qué guarda</em>, no <em>x</em> ni <em>dato2</em>.</p>
+        <div class="pep-pair">
+          <div class="pep-line bad">x = 18 <span class="mk">✗</span></div>
+          <div class="pep-line good">edad_minima = 18 <span class="mk">✓</span></div>
+        </div>
+      </div>
+      <div class="pep-card">
+        <h3>Espacios que respiran</h3>
+        <p class="pep-rule">Un espacio alrededor de <strong>=</strong>, <strong>+</strong>, <strong>==</strong>; coma seguida de espacio. Nada pegado a los paréntesis.</p>
+        <div class="pep-pair">
+          <div class="pep-line bad">total=a+b*c <span class="mk">✗</span></div>
+          <div class="pep-line good">total = a + b * c <span class="mk">✓</span></div>
+        </div>
+      </div>
+      <div class="pep-card">
+        <h3>Indentación pareja</h3>
+        <p class="pep-rule">Siempre <strong>4 espacios</strong>. Nunca mezcles tabuladores y espacios: Python truena con un <span class="mono">TabError</span> o, peor, miente sin avisar.</p>
+        <div class="pep-pair">
+          <div class="pep-line bad">if ok:<br/>&nbsp;&nbsp;hacer()&nbsp;&nbsp;&nbsp;# 2 espacios <span class="mk">✗</span></div>
+          <div class="pep-line good">if ok:<br/>&nbsp;&nbsp;&nbsp;&nbsp;hacer()&nbsp;&nbsp;# 4 espacios <span class="mk">✓</span></div>
+        </div>
+      </div>
+      <div class="pep-card">
+        <h3>Líneas cortas</h3>
+        <p class="pep-rule">Hasta <strong>79 caracteres</strong>. Si una condición se alarga, pártela con paréntesis y léela en dos renglones.</p>
+        <div class="pep-pair">
+          <div class="pep-line bad">if a and b and c and d and e and f: <span class="mk">✗</span></div>
+          <div class="pep-line good">if (a and b and c<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and d and e): <span class="mk">✓</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT ii: COMENTARIOS -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">ii.</div>
+      <div>
+        <h2 class="display">Comentar el <em class="blood">por qué</em>, no el <em class="blood">qué</em>.</h2>
+        <p>El código ya dice <strong>qué</strong> hace —se lee solo. Un buen comentario explica lo que el código no puede: el <strong>por qué</strong>, la decisión, la trampa que evitaste. Comentar lo obvio es ruido que envejece mal.</p>
+      </div>
+    </div>
+
+    <div class="comment-versus">
+      <div class="cv-card a">
+        <div class="cv-tag">✗ comentario inútil · narra el «qué»</div>
+        <h3>Repite lo que ya se ve</h3>
+        <p>Este comentario no aporta nada: el código ya grita lo que hace. Y si cambias el código y olvidas el comentario, ahora <em>miente</em>.</p>
+<pre><span class="com"># sumar 1 a contador</span>
+contador = contador + <span class="num">1</span>
+
+<span class="com"># revisar si edad es mayor a 18</span>
+<span class="kw">if</span> edad &gt; <span class="num">18</span>:
+    ...</pre>
+      </div>
+      <div class="cv-card b">
+        <div class="cv-tag">✓ comentario valioso · explica el «por qué»</div>
+        <h3>Cuenta lo que el código calla</h3>
+        <p>Aquí el comentario revela una <strong>decisión</strong> y una regla del negocio que ningún lector adivinaría leyendo solo las líneas.</p>
+<pre><span class="com"># 18 inclusive: la mayoría de edad</span>
+<span class="com"># legal en México cuenta el día 18.</span>
+<span class="kw">if</span> edad &gt;= <span class="num">18</span>:
+    ...
+
+<span class="com"># Reintentamos 3 veces porque la API</span>
+<span class="com"># falla de forma intermitente.</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT iii: DEBUGGER -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">El <em>debugger</em>: ver, no adivinar.</h2>
+        <p>Depurar a punta de <span class="mono">print()</span> es adivinar a oscuras. El <strong>debugger de VS Code</strong> detiene el programa donde tú quieras y te deja <em>mirar dentro</em>: ver cada variable, avanzar línea por línea y seguir la pista del error sin tocar el código.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Un <strong>breakpoint</strong> es un alto: pones un punto rojo a la izquierda de una línea y el programa se congela justo antes de ejecutarla. Ahí abres el panel de variables y ves la <em>verdad</em> —no lo que crees que vale <span class="mono">promedio</span>, sino lo que realmente vale.</p>
+        <p>Recuerda el bug lógico de la sesión 05: el programa corría, pero el promedio salía mal. Sin debugger, lo persigues a ciegas. Con él, pones un alto, miras <span class="mono">suma</span> y <span class="mono">total</span> en cada vuelta, y el error se delata solo.</p>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> antes de cambiar una sola línea para «arreglar» un bug, ponlo bajo el debugger y <em>obsérvalo</em>. La mitad de los bugs no son lo que crees que son.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">promedio.py</span></div>
+<pre><span class="kw">def</span> <span class="fn">promedio</span>(calificaciones):
+    suma = <span class="num">0</span>
+    total = <span class="fn">len</span>(calificaciones)
+    <span class="kw">for</span> calif <span class="kw">in</span> calificaciones:
+        suma = suma + calif
+    <span class="kw">return</span> suma / total
+
+
+notas = [<span class="num">8.0</span>, <span class="num">9.5</span>, <span class="num">7.0</span>]
+<span class="fn">print</span>(<span class="fn">promedio</span>(notas))
+<span class="out">&gt;&gt;&gt; 8.166666666666666</span></pre>
+      </div>
+    </div>
+
+    <!-- DEBUGGER ANATOMY -->
+    <div class="debugger">
+      <div class="dbg-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">RUN AND DEBUG — promedio.py · pausado en breakpoint</span></div>
+      <div class="dbg-body">
+        <div class="dbg-code">
+          <div class="ln"><span class="num">1</span><span><span class="kw">def</span> <span class="fn">promedio</span>(calificaciones):</span></div>
+          <div class="ln"><span class="num">2</span><span>&nbsp;&nbsp;&nbsp;&nbsp;suma = <span class="num2">0</span></span></div>
+          <div class="ln"><span class="num">3</span><span>&nbsp;&nbsp;&nbsp;&nbsp;total = <span class="fn">len</span>(calificaciones)</span></div>
+          <div class="ln brk current"><span class="num">4</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> calif <span class="kw">in</span> calificaciones:</span></div>
+          <div class="ln"><span class="num">5</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;suma = suma + calif</span></div>
+          <div class="ln"><span class="num">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> suma / total</span></div>
+        </div>
+        <div class="dbg-watch">
+          <h5>Variables</h5>
+          <div class="dbg-var"><span class="vname">calificaciones</span><span class="vval">[8.0, 9.5, 7.0]</span></div>
+          <div class="dbg-var"><span class="vname">suma</span><span class="vval">8.0</span></div>
+          <div class="dbg-var"><span class="vname">total</span><span class="vval">3</span></div>
+          <div class="dbg-var"><span class="vname">calif</span><span class="vval alert">8.0</span></div>
+          <h5>Call stack</h5>
+          <div class="stack-row top">promedio()  ·  línea 4</div>
+          <div class="stack-row">&lt;module&gt;  ·  línea 10</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEBUGGER CONTROLS LEGEND -->
+    <div class="dbg-legend">
+      <div class="dbg-ctrl">
+        <span class="key">F9</span>
+        <span class="name">Breakpoint</span>
+        <span class="desc">Pon un alto en la línea. El programa se congela justo antes de ejecutarla.</span>
+      </div>
+      <div class="dbg-ctrl">
+        <span class="key">F10</span>
+        <span class="name">Step Over</span>
+        <span class="desc">Avanza a la siguiente línea sin entrar en las funciones que llama.</span>
+      </div>
+      <div class="dbg-ctrl">
+        <span class="key">F11</span>
+        <span class="name">Step Into</span>
+        <span class="desc">Entra <em>dentro</em> de la función para ver qué hace por dentro.</span>
+      </div>
+      <div class="dbg-ctrl">
+        <span class="key">F5</span>
+        <span class="name">Continue</span>
+        <span class="desc">Sigue corriendo hasta el próximo breakpoint o el final.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT iv: IA RESPONSABLE -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">iv.</div>
+      <div>
+        <h2 class="display">La IA como <em class="blood">copiloto</em>, no como piloto.</h2>
+        <p>La inteligencia artificial puede acelerarte —o impedir que aprendas. La diferencia no está en la herramienta, sino en <strong>cómo la usas</strong>. La regla del curso es simple: pide <em>explicaciones</em>, no soluciones; y nunca firmes código que no entiendes.</p>
+      </div>
+    </div>
+
+    <div class="ia-grid">
+      <div class="ia-col si">
+        <h3>Sí: úsala para entender</h3>
+        <p class="ia-sub">La IA como tutor que te explica, no como mano que te resuelve.</p>
+        <ul>
+          <li>«<em>Explícame</em> qué hace este <span class="mono">for</span> línea por línea.»</li>
+          <li>«¿<em>Por qué</em> me sale este <span class="mono">TypeError</span> y qué lo causa?»</li>
+          <li>«Dame <em>tres pistas</em> para encontrar el bug, sin decirme la solución.»</li>
+          <li>«¿Mi nombre de variable sigue PEP 8? Sugiéreme uno mejor.»</li>
+          <li>«¿Qué <em>conceptos</em> debo estudiar para resolver esto yo solo?»</li>
+        </ul>
+      </div>
+      <div class="ia-col no">
+        <h3>No: que piense por ti</h3>
+        <p class="ia-sub">Si copias lo que no entiendes, el examen —y la vida— te lo cobrará.</p>
+        <ul>
+          <li>«Hazme toda la práctica del cajero y dámela lista.»</li>
+          <li>Pegar código generado <em>sin leerlo ni probarlo</em>.</li>
+          <li>Entregar como tuyo algo que <em>no podrías explicar</em> en el pizarrón.</li>
+          <li>Confiar ciegamente: la IA <em>también se equivoca</em> y alucina.</li>
+          <li>Saltarte el debugger porque «la IA ya me lo arregló».</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="prompt-demo">
+      <div class="pd-head">▶ EL MISMO PROBLEMA, DOS FORMAS DE PEDIR</div>
+      <div class="pd-body">
+        <div class="pd-row">
+          <span class="pd-mk bad">PILOTO</span>
+          <span class="pd-txt">«Mi promedio sale mal, <strong>arréglame el código</strong> y pégamelo completo.» — Te quedas igual de ignorante; no aprendiste nada y no sabrás defenderlo.</span>
+        </div>
+        <div class="pd-row">
+          <span class="pd-mk good">COPILOTO</span>
+          <span class="pd-txt">«Mi promedio sale mal. <strong>No me des la solución:</strong> dime qué variables debería vigilar en el debugger y qué tipo de error suele causar esto.» — Aprendes a cazarlo tú.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT v: LINTERS -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">v.</div>
+      <div>
+        <h2 class="display">El <em>linter</em>: un PEP 8 que no se cansa.</h2>
+        <p>Un <strong>linter</strong> es un programa que revisa tu programa: lee tu código y te marca, en tiempo real, dónde rompes el estilo o dejas un error tonto. <span class="mono">ruff</span> y <span class="mono">flake8</span> son los más usados; viven dentro de VS Code y trabajan mientras escribes.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>El linter no juzga si tu lógica es correcta —para eso está el debugger—; juzga si tu código es <em>limpio</em>. Subraya la variable sin usar, el espacio de más, la línea de 120 caracteres. Es PEP 8 convertido en un asistente incansable que nunca se distrae.</p>
+        <p>Instalas la extensión <strong>Ruff</strong> de VS Code y, a partir de ahí, los problemas aparecen subrayados como faltas de ortografía. También puedes correrlo en la terminal para una revisión completa antes de entregar.</p>
+        <ul>
+          <li>Instala en clase: <span class="mono">pip install ruff</span></li>
+          <li>Revisa un archivo: <span class="mono">ruff check estilo.py</span></li>
+          <li>Arregla lo automático: <span class="mono">ruff check --fix estilo.py</span></li>
+        </ul>
+        <div class="keypoint"><strong>Ojo:</strong> el linter te dice <em>cómo</em> escribir mejor, no <em>qué</em> escribir. Sigue siendo tu cabeza la que programa.</div>
+      </div>
+      <div>
+        <div class="linter">
+          <div class="lt-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — ruff check estilo.py</span></div>
+          <div class="lt-body">
+            <span class="lt-cmd">$ ruff check estilo.py</span><br/><br/>
+            <span class="lt-line"><span class="loc">estilo.py:2:1</span> <span class="code-id">E741</span> <span class="msg">nombre ambiguo de variable «l»</span></span><br/>
+            <span class="lt-line"><span class="loc">estilo.py:3:8</span> <span class="code-id">E225</span> <span class="msg">falta espacio alrededor de «=»</span></span><br/>
+            <span class="lt-line"><span class="loc">estilo.py:5:80</span> <span class="code-id">E501</span> <span class="msg">línea muy larga (96 &gt; 79)</span></span><br/>
+            <span class="lt-line"><span class="loc">estilo.py:7:1</span> <span class="code-id">F401</span> <span class="msg">«math» importado pero sin usar</span></span><br/><br/>
+            <span class="msg">Found 4 errors.</span><br/>
+            <span class="ok">[*] 2 fixable with `--fix`.</span>
+          </div>
+        </div>
+        <div class="linter-note">
+          <p><strong>Léelo de izquierda a derecha:</strong> archivo, línea y columna, el código del error (<span class="mono">E501</span>) y la explicación. Cada código es una regla concreta de PEP 8 que puedes buscar y entender.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EJERCICIO: caza sin IA -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">vi.</div>
+      <div>
+        <h2 class="display">La cacería <em class="blood">a mano</em>.</h2>
+        <p>Dos actividades en clase. Primero auditamos en grupo un programa mal escrito; después cada quien caza un bug <strong>sin IA</strong>, usando solo el debugger. Hoy demuestras que sabes <em>pensar</em>, no solo preguntar.</p>
+      </div>
+    </div>
+
+    <div class="ej-card">
+      <span class="ej-tag">Actividad 1 · en grupo</span>
+      <div class="ej-body">
+        <div>
+          <h3>Auditoría de estilo</h3>
+          <p class="ej-desc">Proyectamos un programa <em>feo pero funcional</em> y, entre todos, lo <strong>refactorizamos</strong>: cazamos cada violación a PEP 8 y la corregimos en vivo. Mismo comportamiento, mucho mejor código.</p>
+          <ul class="reqs">
+            <li>Encuentra los nombres que no son <span class="mono">snake_case</span></li>
+            <li>Marca los espacios faltantes alrededor de operadores</li>
+            <li>Detecta las líneas que pasan de <span class="mono">79</span> caracteres</li>
+            <li>Convierte los <span class="mono">números mágicos</span> en constantes con nombre</li>
+            <li>Borra los comentarios que solo repiten el «qué»</li>
+          </ul>
+        </div>
+        <div>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">por_auditar.py</span></div>
+<pre><span class="com"># el codigo a mejorar en el pizarron</span>
+<span class="kw">def</span> <span class="fn">Calc</span>( N1,N2 ):
+  R=N1*0.16+N2 <span class="com"># sumar</span>
+  <span class="kw">return</span> R
+
+x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50</span>)
+<span class="fn">print</span>(<span class="str">"resultado"</span>,x)</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ej-card">
+      <span class="ej-tag">Actividad 2 · individual · sin IA</span>
+      <div class="ej-body">
+        <div>
+          <h3>Caza el bug con el debugger</h3>
+          <p class="ej-desc">Te entrego un programa que <strong>corre sin reventar pero da un resultado falso</strong> —un bug lógico, de los que no avisan. Tu reto: encontrarlo usando <em>solo</em> el debugger. Nada de IA, nada de <span class="mono">print()</span> regados.</p>
+          <ul class="reqs">
+            <li>Pon un <span class="mono">breakpoint</span> antes del cálculo sospechoso</li>
+            <li>Avanza con <span class="mono">F10</span> y mira las variables en cada vuelta</li>
+            <li>Compara lo que <em>crees</em> que vale cada una con lo que <em>realmente</em> vale</li>
+            <li>Anota en qué línea la realidad se separó de tu suposición</li>
+            <li>Arréglalo y vuelve a correr bajo el debugger para confirmar</li>
+          </ul>
+        </div>
+        <div>
+          <div class="code-block">
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">bug_logico.py</span></div>
+<pre><span class="com"># Promedio de aprobados (&gt;= 6)</span>
+<span class="kw">def</span> <span class="fn">promedio_aprobados</span>(notas):
+    suma = <span class="num">0</span>
+    cuenta = <span class="num">0</span>
+    <span class="kw">for</span> nota <span class="kw">in</span> notas:
+        <span class="kw">if</span> nota &gt;= <span class="num">6</span>:
+            suma = suma + nota
+        cuenta = cuenta + <span class="num">1</span>
+    <span class="kw">return</span> suma / cuenta
+
+
+<span class="fn">print</span>(<span class="fn">promedio_aprobados</span>([<span class="num">9</span>, <span class="num">4</span>, <span class="num">8</span>]))
+<span class="out">&gt;&gt;&gt; 5.666...  # ¿no debería ser 8.5?</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAREA / ENTREGA -->
+  <section class="tarea reveal">
+    <div class="head">
+      <div class="stamp">Entrega</div>
+      <div>
+        <h2 class="display">Refactoriza lo <em>tuyo</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Esta entrega no es código nuevo: es <strong>volver a un programa que ya escribiste</strong> —tu juego de
+      la sesión 06, tu cajero de la 09, el que prefieras— y pulirlo hasta dejarlo profesional. Aplica PEP 8,
+      mejora los nombres, limpia los comentarios. Y acompáñalo de una <strong>carta breve</strong> donde cuentes,
+      con honestidad, cómo usas la IA en esta materia.
+    </p>
+
+    <div class="checklist">
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>1. El refactor</h4>
+          <p>Toma un programa propio anterior y aplícale PEP 8: <span class="mono">snake_case</span>, espacios, líneas cortas, constantes con nombre. Mismo comportamiento, código limpio. Pásale <span class="mono">ruff check</span> antes de entregar.</p>
+          <div class="deadline">archivo: <span class="mono">sesion-10/refactor_&lt;nombre&gt;.py</span></div>
+        </div>
+      </div>
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>2. Antes y después</h4>
+          <p>En el <span class="mono">README.md</span> explica <strong>tres cambios</strong> concretos que hiciste y por qué mejoran el código. Incluye una captura del linter sin errores.</p>
+          <div class="deadline">archivo: <span class="mono">sesion-10/README.md</span></div>
+        </div>
+      </div>
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>3. Mi carta sobre la IA</h4>
+          <p>Media página, en tus palabras: ¿cómo usas la IA en esta materia de forma <strong>responsable</strong>? Da un ejemplo de algo que le preguntaste para <em>aprender</em>, no para que te lo resolviera.</p>
+          <div class="deadline">archivo: <span class="mono">sesion-10/uso_de_ia.md</span></div>
+        </div>
+      </div>
+      <div class="check">
+        <div class="box"></div>
+        <div>
+          <h4>4. Commit honesto</h4>
+          <p>Sube todo a GitHub con un mensaje claro: <span class="mono">"sesion-10: refactor + carta de IA"</span>. Sin «final», sin «v2». Tu repositorio es tu palabra.</p>
+          <div class="deadline">tip: <span class="mono">$ git commit -m "sesion-10: ..."</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVALUACIÓN + EVIDENCIA -->
+  <section class="cierre-practica reveal">
+    <div class="panel">
+      <h3 class="display">Criterios de <em>evaluación</em></h3>
+      <ol class="crit-list">
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el programa refactorizado corre igual que el original.</li>
+        <li><strong>Lógica correcta</strong> — el refactor no rompió nada: hace exactamente lo mismo que antes.</li>
+        <li><strong>Funcionamiento óptimo</strong> — cumple PEP 8 y pasa <span class="mono">ruff check</span> sin advertencias; comentarios que explican el «por qué».</li>
+        <li><strong>Autenticidad</strong> — código y carta escritos por ti; la IA, si la usaste, queda declarada con honestidad.</li>
+      </ol>
+    </div>
+
+    <div class="panel">
+      <h3 class="display">Evidencia a <em>entregar</em></h3>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>refactor_&lt;nombre&gt;.py</strong> — un programa propio anterior, reescrito con PEP 8 y nombres claros.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.md</span>
+        <span class="ev-txt"><strong>README.md</strong> — tres mejoras explicadas y la captura del linter en verde.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.md</span>
+        <span class="ev-txt"><strong>uso_de_ia.md</strong> — media página sobre tu uso responsable de la IA, con un ejemplo real.</span>
+      </div>
+      <div class="conclu-note">
+        <h4>Entrega vía GitHub</h4>
+        <p>Sube tu trabajo a la carpeta <span class="mono">sesion-10/</span> de tu repositorio con un commit claro, p. ej. <span class="mono">"sesion-10: refactor + carta de IA"</span>. El repositorio es tu entregable del curso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «El primer principio es que <span class="em-ochre">no debes engañarte</span><br/>
+      a ti mismo —y tú eres <span class="em">la persona más fácil de engañar</span>.»
+    </div>
+    <div class="quote-author">— Richard Feynman</div>
+    <div class="quote-meta">Discurso de graduación, Caltech, 1974 · «Cargo Cult Science»</div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 10 <span class="dot">·</span> El arte de no engañarse <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-09/index.html">Sesión 09 · Los muchos caminos</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

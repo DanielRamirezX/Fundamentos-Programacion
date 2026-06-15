@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sesión 23 · El tablero del mundo · Matrices aplicadas, doble for y el juego del gato</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #efe6d2; --paper-deep: #e6dbc2; --paper-darker: #d9ccb0;
+    --ink: #2a1d14; --ink-soft: #4a3a2c; --ink-faint: #8a7a6a;
+    --blood: #a02418; --blood-dark: #6e1810;
+    --ochre: #b5852a; --ochre-deep: #8a6320;
+    --olive: #5d6638; --olive-deep: #424a26;
+    --line: rgba(42,29,20,.18);
+    --grid-blue: #4a6b86; --grid-purple: #6b5080;
+    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper); color: var(--ink);
+    font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    background-image: radial-gradient(rgba(42,29,20,.05) 1px, transparent 1px), radial-gradient(rgba(42,29,20,.04) 1px, transparent 1px);
+    background-size: 22px 22px, 17px 17px; background-position: 0 0, 11px 11px;
+  }
+  body::before{
+    content:""; position: fixed; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.16   0 0 0 0 0.11   0 0 0 0 0.08   0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity:.55; z-index: 1;
+  }
+  main{ position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+  .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
+  .mono{ font-family: "JetBrains Mono", monospace; }
+  .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
+  .underline-ochre{ position: relative; padding-bottom: .15em; }
+  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
+  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
+
+  /* TOP BAR */
+  .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
+  .top .left{ display:flex; gap:18px; align-items: baseline; }
+  .top .seal{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.7rem; color: var(--blood); }
+  .top .meta{ font-size:.78rem; letter-spacing:.05em; }
+  .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
+
+  /* HERO */
+  .hero{ position: relative; padding: 30px 0 60px; }
+  .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 120px); line-height: .95; margin: 0 0 32px; letter-spacing: -.02em; }
+  .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
+  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
+  .hero .lede em{ color: var(--ink); font-style: italic; }
+  .hero .lede strong{ color: var(--blood); font-weight: 600; }
+  .hero .who{ position: relative; z-index: 2; margin-top: 54px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; }
+  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
+  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
+
+  /* CONTINUACIÓN BANNER */
+  .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
+  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
+  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* SECTION HEADERS */
+  .sec{ margin: 100px 0; }
+  .sec .s-head{ display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: end; margin-bottom: 30px; }
+  @media (max-width: 700px){ .sec .s-head{ grid-template-columns: 1fr; gap: 8px; } }
+  .sec .s-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
+  .sec .s-head .n.blood{ color: var(--blood); }
+  .sec .s-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
+  .sec .s-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
+  .sec .s-head h2 em.blood{ color: var(--blood); }
+  .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
+  .sec .s-head p strong{ color: var(--blood); }
+  .sec .s-head p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+
+  /* PROSE + CODE 2-col */
+  .twocol{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+  @media (max-width: 880px){ .twocol{ grid-template-columns: 1fr; gap: 22px; } }
+  .prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .prose p em{ color: var(--blood-dark); font-style: italic; }
+  .prose p strong{ color: var(--blood); font-weight: 600; }
+  .prose ul{ margin: 0 0 16px; padding-left: 20px; }
+  .prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
+  .prose ul li strong{ color: var(--ink); }
+  .prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+
+  /* CODE BLOCK */
+  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
+  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
+  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
+  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
+  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
+  .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
+  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+
+  /* MATRIX MAP (indexación fila/columna) */
+  .matrixmap{ margin-top: 30px; background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 32px 28px 34px; position: relative; }
+  .matrixmap .mm-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .mm-wrap{ display: grid; grid-template-columns: auto auto; gap: 14px 18px; align-items: center; justify-content: center; }
+  .mm-corner{ }
+  .mm-colheads{ display: grid; grid-template-columns: repeat(3, 64px); gap: 10px; }
+  .mm-colhead{ text-align: center; font-family: "JetBrains Mono", monospace; font-size: .8rem; color: var(--ochre-deep); font-weight: 700; }
+  .mm-rowhead{ font-family: "JetBrains Mono", monospace; font-size: .8rem; color: var(--blood); font-weight: 700; padding-right: 4px; }
+  .mm-rows{ display: grid; grid-template-rows: repeat(3, auto); gap: 10px; }
+  .mm-row{ display: grid; grid-template-columns: auto repeat(3, 64px); gap: 10px; align-items: center; }
+  .mm-cell{ width: 64px; height: 64px; border: 1.5px solid var(--ink); background: var(--paper); display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: "JetBrains Mono", monospace; transition: transform .25s ease, box-shadow .25s ease, background .25s ease; cursor: default; }
+  .mm-cell .idx{ font-size: .68rem; color: var(--ink-faint); }
+  .mm-cell .val{ font-size: 1.05rem; color: var(--ink); font-weight: 700; }
+  .mm-cell:hover{ transform: translateY(-3px); box-shadow: 0 5px 0 var(--ink); background: var(--paper-darker); }
+  .mm-cell.diag{ border-color: var(--blood); }
+  .matrixmap .mm-foot{ margin-top: 22px; text-align: center; font-style: italic; color: var(--ink-soft); font-size: .95rem; }
+  .matrixmap .mm-foot strong{ color: var(--ochre-deep); font-style: normal; }
+  .matrixmap .mm-foot .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
+  @media (max-width: 560px){ .mm-colheads, .mm-row{ grid-template-columns: auto repeat(3, 48px); } .mm-colheads{ grid-template-columns: repeat(3, 48px); } .mm-cell{ width: 48px; height: 48px; } }
+
+  /* SUMS GRID (fila / columna / total) */
+  .sums-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 30px; }
+  @media (max-width: 820px){ .sums-grid{ grid-template-columns: 1fr; } }
+  .sum-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--olive); padding: 22px 24px 24px; }
+  .sum-card.col-c{ border-top-color: var(--ochre); }
+  .sum-card.tot-c{ border-top-color: var(--blood); }
+  .sum-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.25rem; margin: 0 0 4px; color: var(--olive-deep); }
+  .sum-card.col-c h3{ color: var(--ochre-deep); } .sum-card.tot-c h3{ color: var(--blood-dark); }
+  .sum-card .sc-rule{ font-style: italic; color: var(--ink-soft); font-size: .92rem; margin: 0 0 14px; line-height: 1.45; }
+  .sum-card pre{ margin: 0; padding: 14px 16px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .76rem; line-height: 1.7; overflow-x: auto; }
+  .sum-card pre .kw{ color: var(--c-kw); } .sum-card pre .str{ color: var(--c-str); } .sum-card pre .num{ color: var(--c-num); } .sum-card pre .com{ color: var(--c-com); font-style: italic; } .sum-card pre .fn{ color: var(--c-fn); }
+
+  /* APLICACIONES (tarjetas de usos de matrices) */
+  .apps{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+  @media (max-width: 880px){ .apps{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px){ .apps{ grid-template-columns: 1fr; } }
+  .app-card{ background: var(--paper-deep); border: 1px solid var(--ink); padding: 20px 20px 22px; }
+  .app-card .ac-ic{ width: 30px; height: 30px; color: var(--blood); margin-bottom: 12px; }
+  .app-card h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.12rem; margin: 0 0 6px; color: var(--ink); }
+  .app-card p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.5; }
+  .app-card p strong{ color: var(--blood-dark); }
+
+  /* PROJECT / DOWNLOAD */
+  .project{ margin: 110px 0; }
+  .project .head{ display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: end; margin-bottom: 26px; }
+  @media (max-width: 700px){ .project .head{ grid-template-columns: 1fr; gap: 12px; } }
+  .project .head .stamp{ border: 2.5px solid var(--olive); color: var(--olive-deep); padding: 10px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 1.4rem; transform: rotate(-3deg); letter-spacing: .05em; }
+  .project h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(36px, 5.5vw, 64px); line-height: 1; margin: 0 0 14px; letter-spacing: -.015em; }
+  .project h2 em{ font-style: italic; color: var(--olive-deep); font-weight: 600; }
+  .project .intro{ color: var(--ink-soft); font-size: 1.08rem; max-width: 820px; margin: 0 0 30px; }
+  .project .intro strong{ color: var(--olive-deep); }
+
+  .scaffold-demo{ display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; margin-bottom: 36px; }
+  @media (max-width: 860px){ .scaffold-demo{ grid-template-columns: 1fr; } }
+  .scaffold-demo .sd-explain h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.4rem; margin: 0 0 12px; color: var(--ink); }
+  .scaffold-demo .sd-explain p{ margin: 0 0 14px; font-size: 1rem; color: var(--ink-soft); line-height: 1.55; }
+  .scaffold-demo .sd-explain p strong{ color: var(--blood); }
+  .scaffold-demo .sd-explain .arrow-note{ display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--paper-deep); border-left: 3px solid var(--olive); font-style: italic; font-size: .92rem; color: var(--ink); }
+  .code-block .yours{ color: var(--olive); background: rgba(93,102,56,.18); padding: 0 4px; }
+
+  .download-box{ margin-top: 6px; background: var(--ink); color: var(--paper); padding: 0; overflow: hidden; }
+  .download-box .db-head{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 28px 32px; border-bottom: 1px solid rgba(239,230,210,.12); }
+  @media (max-width: 640px){ .download-box .db-head{ grid-template-columns: 1fr; } }
+  .download-box .db-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 0 0 6px; color: #f0c8a0; }
+  .download-box .db-head .file-meta{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: rgba(239,230,210,.55); }
+  .dl-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--olive); color: var(--paper); text-decoration: none; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; border: none; cursor: pointer; }
+  .dl-btn:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
+  .dl-btn svg{ width: 18px; height: 18px; }
+  .download-box .db-body{ padding: 26px 32px 30px; }
+  .download-box .db-body > p{ margin: 0 0 18px; font-size: 1rem; color: rgba(239,230,210,.85); line-height: 1.55; }
+  .download-box .db-body > p strong{ color: #f0c8a0; }
+  .tool-pills{ display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; }
+  .tool-pill{ display: inline-flex; align-items: center; gap: 7px; background: rgba(239,230,210,.08); border: 1px solid rgba(239,230,210,.15); padding: 7px 14px; font-size: .82rem; color: rgba(239,230,210,.85); }
+  .tool-pill.nuevo{ border-color: rgba(240,200,160,.4); color: #f0c8a0; }
+  .tool-pill .mono{ font-family: "JetBrains Mono", monospace; font-size: .9em; }
+  .game-preview{ background: rgba(239,230,210,.06); border: 1px solid rgba(239,230,210,.12); padding: 18px 22px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.8; color: var(--c-base); }
+  .game-preview .gp-title{ color: #f0c8a0; font-size: .72rem; letter-spacing: .12em; margin-bottom: 10px; display: block; }
+  .game-preview .prompt{ color: rgba(239,230,210,.5); }
+  .game-preview .hint{ color: #f5b08c; } .game-preview .win{ color: #c8dd96; }
+
+  /* EVAL + EVIDENCIA */
+  .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+  @media (max-width: 820px){ .cierre-practica{ grid-template-columns: 1fr; } }
+  .panel{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 28px 30px 30px; }
+  .panel h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: 1.7rem; margin: 0 0 18px; letter-spacing: -.01em; }
+  .panel h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
+  .crit-list{ margin: 0; padding: 0; list-style: none; counter-reset: cr; }
+  .crit-list li{ counter-increment: cr; position: relative; padding: 12px 0 12px 38px; border-bottom: 1px dashed var(--line); font-size: .96rem; color: var(--ink); line-height: 1.45; }
+  .crit-list li:last-child{ border-bottom: none; }
+  .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
+  .crit-list li strong{ color: var(--blood-dark); }
+  .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
+  .evid-item:last-child{ border-bottom: none; }
+  .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
+  .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
+  .evid-item .ev-txt strong{ color: var(--ink); }
+  .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
+  .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
+  .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
+  .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+
+  /* CIERRE */
+  .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
+  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
+  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
+  .cierre .small-caps{ color: var(--blood); }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
+  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
+  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
+  .cierre .sig{ margin-top: 32px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--ink); }
+  .cierre .sig::before{ content:"—  "; color: var(--blood); }
+  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
+
+  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer .dot{ color: var(--blood); margin: 0 10px;}
+  footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
+  footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
+
+  .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in{ opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- TOP BAR -->
+  <div class="top">
+    <div class="left">
+      <span class="seal">V.</span>
+      <span class="meta">Cuaderno del profesor · Sesión 23 · Matrices aplicadas · Doble for · Juego del gato</span>
+    </div>
+    <div class="right">
+      Lunes 03.08.2026 · 18:00 – 20:00<br/>
+      <span style="color:var(--blood)">UNITEC Atizapán · Continuación de la sesión 22</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="session-no display">23</div>
+    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <h1 class="display">
+      El tablero del <span class="em">mundo</span>.
+    </h1>
+    <p class="lede">
+      En la sesión 22 abriste la <em>segunda dimensión</em>: descubriste que una lista puede contener listas y que,
+      con eso, nace la <strong>matriz</strong> —filas y columnas, como un tablero de ajedrez o una hoja de cálculo.
+      Hoy aprendemos a <strong>habitarla</strong>: recorrerla casilla por casilla con <strong>dos ciclos for
+      anidados</strong>, sumar por fila, por columna y en total, y —para cerrar— darle vida a un tablero de verdad.
+      <span class="underline-ochre">Hoy el doble for se vuelve un juego</span>.
+    </p>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      <div class="txt">
+        <strong>Esta sesión continúa la 22.</strong> Allí viste qué <em>es</em> un arreglo bidimensional; hoy lo
+        <strong>indexas y lo recorres</strong>. El secreto es uno solo: un <em>for</em> para las filas y, adentro,
+        otro <em>for</em> para las columnas.
+      </div>
+    </div>
+
+    <div class="who">
+      <div class="who-block">
+        <span class="label">Profesor</span>
+        <span class="value">Carlos Daniel Vaca Ramírez</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Tema</span>
+        <span class="value">7.6 Matrices · doble for</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Práctica</span>
+        <span class="value">Juego del gato · 2 jugadores</span>
+      </div>
+      <div class="who-block">
+        <span class="label">Entrega</span>
+        <span class="value">Tu juego en GitHub</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT i: INDEXACIÓN -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">i.</div>
+      <div>
+        <h2 class="display">Dos números, <em>una</em> casilla.</h2>
+        <p>En una lista normal, una celda se nombra con un índice: <span class="mono">lista[3]</span>. En una matriz hacen falta <strong>dos</strong>: primero la <strong>fila</strong>, después la <strong>columna</strong>. Se escribe <span class="mono">tablero[fila][columna]</span> —y, como siempre, se cuenta desde el cero.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Piensa en un edificio: <em>primero eliges el piso</em> (la fila) y <em>luego el departamento</em> (la columna). El primer corchete te lleva a un <strong>renglón completo</strong> —que es a su vez una lista—; el segundo corchete entra a una <strong>celda</strong> de ese renglón.</p>
+        <p>Por eso <span class="mono">tablero[0]</span> te devuelve la fila entera, y <span class="mono">tablero[0][2]</span> la tercera casilla de esa fila. Asignar es igual de directo: <span class="mono">tablero[1][1] = "X"</span> coloca una pieza justo en el centro.</p>
+        <ul>
+          <li>El <strong>primer</strong> índice elige la <span class="mono">fila</span> (renglón).</li>
+          <li>El <strong>segundo</strong> índice elige la <span class="mono">columna</span> dentro de esa fila.</li>
+          <li>Si te pasas del límite, Python avisa con un <span class="mono">IndexError</span>.</li>
+        </ul>
+        <div class="keypoint"><strong>Regla del cuaderno:</strong> di siempre <em>fila, columna</em> —en ese orden— y nunca te equivocarás de casilla. La fila es el «¿en qué renglón?»; la columna, el «¿en qué lugar de ese renglón?».</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexar.py</span></div>
+<pre><span class="com"># Una matriz 3x3: tres filas, cada una con tres columnas</span>
+tablero = [
+    [<span class="str">"X"</span>, <span class="str">"O"</span>, <span class="str">" "</span>],   <span class="com"># fila 0</span>
+    [<span class="str">" "</span>, <span class="str">"X"</span>, <span class="str">"O"</span>],   <span class="com"># fila 1</span>
+    [<span class="str">" "</span>, <span class="str">" "</span>, <span class="str">"X"</span>],   <span class="com"># fila 2</span>
+]
+
+<span class="com"># Un solo corchete: la fila entera (es una lista)</span>
+<span class="fn">print</span>(tablero[<span class="num">0</span>])        <span class="out"># ['X', 'O', ' ']</span>
+
+<span class="com"># Dos corchetes: una sola casilla</span>
+<span class="fn">print</span>(tablero[<span class="num">0</span>][<span class="num">2</span>])     <span class="out"># ' '</span>
+<span class="fn">print</span>(tablero[<span class="num">2</span>][<span class="num">2</span>])     <span class="out"># 'X'</span>
+
+<span class="com"># Asignar es igual: fila 1, columna 0</span>
+tablero[<span class="num">1</span>][<span class="num">0</span>] = <span class="str">"O"</span>
+<span class="fn">print</span>(tablero[<span class="num">1</span>])        <span class="out"># ['O', 'X', 'O']</span></pre>
+      </div>
+    </div>
+
+    <!-- MATRIX MAP -->
+    <div class="matrixmap">
+      <span class="mm-label">EL MAPA DE LA MATRIZ · tablero[fila][columna]</span>
+      <div class="mm-rows">
+        <div class="mm-colheads" style="margin-left: 86px;">
+          <div class="mm-colhead">col 0</div>
+          <div class="mm-colhead">col 1</div>
+          <div class="mm-colhead">col 2</div>
+        </div>
+        <div class="mm-row">
+          <div class="mm-rowhead">fila 0</div>
+          <div class="mm-cell diag"><span class="idx">[0][0]</span><span class="val">X</span></div>
+          <div class="mm-cell"><span class="idx">[0][1]</span><span class="val">O</span></div>
+          <div class="mm-cell"><span class="idx">[0][2]</span><span class="val">·</span></div>
+        </div>
+        <div class="mm-row">
+          <div class="mm-rowhead">fila 1</div>
+          <div class="mm-cell"><span class="idx">[1][0]</span><span class="val">·</span></div>
+          <div class="mm-cell diag"><span class="idx">[1][1]</span><span class="val">X</span></div>
+          <div class="mm-cell"><span class="idx">[1][2]</span><span class="val">O</span></div>
+        </div>
+        <div class="mm-row">
+          <div class="mm-rowhead">fila 2</div>
+          <div class="mm-cell"><span class="idx">[2][0]</span><span class="val">·</span></div>
+          <div class="mm-cell"><span class="idx">[2][1]</span><span class="val">·</span></div>
+          <div class="mm-cell diag"><span class="idx">[2][2]</span><span class="val">X</span></div>
+        </div>
+      </div>
+      <p class="mm-foot"><strong>Pasa el cursor por las casillas.</strong> Las de borde rojo son la <span class="mono">diagonal principal</span>: <span class="mono">[0][0] [1][1] [2][2]</span> —la línea que da la victoria a la <em>X</em> en este tablero.</p>
+    </div>
+  </section>
+
+  <!-- CONCEPT ii: DOBLE FOR -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">ii.</div>
+      <div>
+        <h2 class="display">El recorrido del <em class="blood">doble for</em>.</h2>
+        <p>Para tocar <strong>todas</strong> las casillas de una matriz se usan <strong>dos ciclos anidados</strong>: el de afuera avanza por las filas, y el de adentro, por las columnas de la fila actual. Es el patrón que repetirás toda la vida con datos en dos dimensiones.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>Léelo como un lector recorre una página: bajas de <em>renglón en renglón</em> (el <span class="mono">for</span> de afuera) y, en cada renglón, lees <em>de izquierda a derecha</em> (el <span class="mono">for</span> de adentro). Cuando terminas una fila, vuelves al margen y bajas a la siguiente.</p>
+        <p>El <span class="mono">for</span> exterior toma el número de fila; el interior, el de columna. Con esos dos números entras a cada celda exacta: <span class="mono">tablero[fila][columna]</span>. Nueve casillas, recorridas en orden, con apenas seis líneas.</p>
+        <div class="keypoint"><strong>Cuida la sangría:</strong> el <span class="mono">for</span> de columnas vive <em>dentro</em> del de filas. Si lo sacas un nivel, recorrerás mal el tablero —ese es el error de lógica más típico de hoy.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrer.py</span></div>
+<pre>tablero = [
+    [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>],
+    [<span class="num">6</span>, <span class="num">5</span>, <span class="num">4</span>],
+    [<span class="num">3</span>, <span class="num">2</span>, <span class="num">1</span>],
+]
+
+<span class="com"># for de afuera: una fila a la vez</span>
+<span class="kw">for</span> fila <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="com"># for de adentro: cada columna de esa fila</span>
+    <span class="kw">for</span> columna <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        valor = tablero[fila][columna]
+        <span class="fn">print</span>(<span class="str">f"[{fila}][{columna}] = {valor}"</span>)
+
+<span class="out"># [0][0] = 7   [0][1] = 8   [0][2] = 9</span>
+<span class="out"># [1][0] = 6   [1][1] = 5   [1][2] = 4</span>
+<span class="out"># [2][0] = 3   [2][1] = 2   [2][2] = 1</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT iii: SUMAS -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">Sumar por <em>fila</em>, por <em>columna</em>, en <em>total</em>.</h2>
+        <p>El mismo doble for, tres lecturas distintas. Imagina una tabla de <strong>calificaciones</strong>: cada fila es un <strong>alumno</strong> y cada columna una <strong>materia</strong>. Sumar por fila te da el desempeño de cada alumno; por columna, el de cada materia.</p>
+      </div>
+    </div>
+
+    <div class="twocol">
+      <div class="prose">
+        <p>La clave está en <em>dónde reinicias el acumulador</em>. Para el promedio <strong>por alumno</strong> (fila), pones <span class="mono">suma = 0</span> al empezar cada fila y recorres sus columnas. Para el promedio <strong>por materia</strong> (columna), fijas la columna y bajas por todas las filas.</p>
+        <p>Es el corazón de las hojas de cálculo: cada total de fila o de columna que ves en Excel es, por dentro, exactamente este recorrido. Domínalo aquí y lo reconocerás en todas partes.</p>
+        <ul>
+          <li><strong>Por alumno:</strong> recorre las <span class="mono">columnas</span> de una fila fija.</li>
+          <li><strong>Por materia:</strong> recorre las <span class="mono">filas</span> de una columna fija.</li>
+          <li><strong>Total:</strong> un acumulador único para <em>todas</em> las celdas.</li>
+        </ul>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">calificaciones.py</span></div>
+<pre><span class="com"># filas = alumnos · columnas = materias</span>
+notas = [
+    [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>],   <span class="com"># Ana</span>
+    [<span class="num">6</span>, <span class="num">10</span>, <span class="num">8</span>],  <span class="com"># Beto</span>
+    [<span class="num">9</span>, <span class="num">7</span>, <span class="num">9</span>],   <span class="com"># Caro</span>
+]
+nombres = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <span class="str">"Caro"</span>]
+
+<span class="com"># Promedio por alumno (recorre las columnas de su fila)</span>
+<span class="kw">for</span> fila <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    suma = <span class="num">0</span>
+    <span class="kw">for</span> columna <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        suma += notas[fila][columna]
+    promedio = suma / <span class="num">3</span>
+    <span class="fn">print</span>(<span class="str">f"{nombres[fila]}: {promedio:.1f}"</span>)
+
+<span class="out"># Ana: 8.0   Beto: 8.0   Caro: 8.3</span></pre>
+      </div>
+    </div>
+
+    <!-- SUMS GRID -->
+    <div class="sums-grid">
+      <div class="sum-card">
+        <h3>Suma por fila</h3>
+        <p class="sc-rule">Acumulador que se reinicia <em>en cada fila</em>; recorre sus columnas.</p>
+<pre><span class="kw">for</span> f <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    suma = <span class="num">0</span>
+    <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        suma += m[f][c]
+    <span class="fn">print</span>(suma)</pre>
+      </div>
+      <div class="sum-card col-c">
+        <h3>Suma por columna</h3>
+        <p class="sc-rule">Fija la columna afuera; baja por <em>todas las filas</em>.</p>
+<pre><span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    suma = <span class="num">0</span>
+    <span class="kw">for</span> f <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        suma += m[f][c]
+    <span class="fn">print</span>(suma)</pre>
+      </div>
+      <div class="sum-card tot-c">
+        <h3>Suma total</h3>
+        <p class="sc-rule">Un solo acumulador <em>antes</em> de los dos ciclos: cae cada celda.</p>
+<pre>total = <span class="num">0</span>
+<span class="kw">for</span> f <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+        total += m[f][c]
+<span class="fn">print</span>(total)</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCEPT iv: APLICACIONES -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">iv.</div>
+      <div>
+        <h2 class="display">Para qué sirve <em class="blood">una matriz</em>.</h2>
+        <p>Las matrices no son un capricho académico: son la forma natural de guardar cualquier dato que vive en una <strong>cuadrícula</strong>. Donde haya filas y columnas, hay una matriz esperando.</p>
+      </div>
+    </div>
+
+    <div class="apps">
+      <div class="app-card">
+        <svg class="ac-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+        <h4>Tableros de juego</h4>
+        <p>Ajedrez, gato, buscaminas, Sudoku. Cada casilla es un <strong>[fila][columna]</strong> —justo lo de hoy.</p>
+      </div>
+      <div class="app-card">
+        <svg class="ac-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3h18v18H3z"/><path d="M3 8h18M8 8v13"/></svg>
+        <h4>Hojas de cálculo</h4>
+        <p>Excel y Sheets son matrices gigantes. Los totales por fila y columna son <strong>doble for</strong> puro.</p>
+      </div>
+      <div class="app-card">
+        <svg class="ac-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>
+        <h4>Imágenes digitales</h4>
+        <p>Una foto es una matriz de <strong>píxeles</strong>: cada celda guarda un color. Filtrar es recorrerla.</p>
+      </div>
+      <div class="app-card">
+        <svg class="ac-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>
+        <h4>Datos y reportes</h4>
+        <p>Tablas de calificaciones, ventas por mes, censos. Filas y columnas que <strong>se suman</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÁCTICA / PROYECTO -->
+  <section class="project reveal">
+    <div class="head">
+      <div class="stamp">Tu turno</div>
+      <div>
+        <h2 class="display">El juego del <em>gato</em>.</h2>
+      </div>
+    </div>
+    <p class="intro">
+      Hora de jugar —y de programar. Vas a construir un <strong>tres en raya para 2 jugadores</strong> sobre una
+      matriz <strong>3×3</strong>. El plano ya trae lo aburrido resuelto: <span class="mono">crear_tablero()</span> y
+      <span class="mono">mostrar_tablero()</span> están hechas, y el bucle principal ya alterna a X y O. Tu reto son
+      las <strong>tres funciones clave</strong>, todas marcadas con <span class="mono"># TODO</span>: validar la
+      jugada, pedirla y —el corazón de la sesión— <strong>detectar al ganador con doble for</strong>.
+    </p>
+
+    <div class="scaffold-demo">
+      <div class="sd-explain">
+        <h3>Cómo funciona el archivo</h3>
+        <p>Cada función pendiente trae un comentario <span class="mono"># PASO N</span> que explica exactamente qué debe hacer. <strong>No borres lo ya hecho.</strong> Escribe tu código donde dice <span class="mono"># TODO</span>.</p>
+        <p>Sigue el orden de los pasos y corre el programa después de cada uno para asegurarte de que no truena antes de seguir —el hábito de <em>debugging</em> de la sesión 05.</p>
+        <div class="arrow-note">El plano te dice <em>qué</em> hacer; tú decides el <em>cómo</em>.</div>
+      </div>
+      <div class="code-block">
+        <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">juego_gato.py</span></div>
+<pre><span class="com"># PASO 1: validar_celda(tablero, fila, columna)</span>
+<span class="com">#   True si fila y columna estan en rango Y la celda</span>
+<span class="com">#   esta VACIA. Si no, False.</span>
+<span class="kw">def</span> <span class="fn">validar_celda</span>(tablero, fila, columna):
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com"># PASO 2: pedir_jugada(tablero, simbolo)</span>
+<span class="com">#   Pide fila y columna hasta que la celda sea valida,</span>
+<span class="com">#   luego escribe: tablero[fila][columna] = simbolo</span>
+<span class="kw">def</span> <span class="fn">pedir_jugada</span>(tablero, simbolo):
+<span class="yours">    ← aquí escribes tu código</span>
+
+<span class="com"># PASO 3: hay_ganador(tablero, simbolo)</span>
+<span class="com">#   Revisa filas, columnas y las 2 diagonales (doble for)</span>
+<span class="kw">def</span> <span class="fn">hay_ganador</span>(tablero, simbolo):
+<span class="yours">    ← aquí escribes tu código</span></pre>
+      </div>
+    </div>
+
+    <div class="download-box">
+      <div class="db-head">
+        <div>
+          <h3>Juego del gato · plano para construir</h3>
+          <div class="file-meta">juego_gato.py · 3 funciones · matriz 3×3 · Python 3.12</div>
+        </div>
+        <a class="dl-btn" href="juego_gato.py" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+          Descargar el plano
+        </a>
+      </div>
+      <div class="db-body">
+        <p>Dos jugadores se turnan marcando casillas con X y O. El programa valida cada jugada (que la celda esté libre y dentro del tablero) y, tras cada turno, revisa con <strong>doble for</strong> si alguien completó una línea de tres —en fila, columna o diagonal. Si se llenan las nueve casillas sin ganador, es <strong>empate</strong>. Usarás todo lo de hoy:</p>
+
+        <div class="tool-pills">
+          <span class="tool-pill nuevo">matriz 3×3</span>
+          <span class="tool-pill nuevo"><span class="mono">tablero[f][c]</span></span>
+          <span class="tool-pill nuevo">doble <span class="mono">for</span></span>
+          <span class="tool-pill">validación</span>
+          <span class="tool-pill">funciones</span>
+          <span class="tool-pill">ciclo <span class="mono">while</span></span>
+        </div>
+
+        <div class="game-preview">
+          <span class="gp-title">▶ ASÍ SE VERÁ TU JUEGO TERMINADO</span>
+          <span class="prompt">     0   1   2</span><br/>
+          <span class="prompt">   +---+---+---+</span><br/>
+          <span class="prompt"> 0 | X | O |   |</span><br/>
+          <span class="prompt"> 1 |   | X | O |</span><br/>
+          <span class="prompt"> 2 |   |   | X |</span><br/>
+          Turno de X — fila: 2  columna: 2<br/>
+          <span class="win">¡Ganó X! Tres en raya (diagonal).</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVALUACIÓN + EVIDENCIA -->
+  <section class="cierre-practica reveal">
+    <div class="panel">
+      <h3 class="display">Criterios de <em>evaluación</em></h3>
+      <ol class="crit-list">
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el juego corre completo, una partida entera sin reventar.</li>
+        <li><strong>Lógica correcta</strong> — detecta al ganador en filas, columnas y diagonales, y no deja jugar sobre una casilla ocupada.</li>
+        <li><strong>Funcionamiento óptimo</strong> — alterna los dos jugadores, valida el rango del tablero y anuncia victoria o empate.</li>
+        <li><strong>Autenticidad</strong> — código escrito por ti, no copiado de un compañero.</li>
+      </ol>
+    </div>
+
+    <div class="panel">
+      <h3 class="display">Evidencia a <em>entregar</em></h3>
+      <div class="evid-item">
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>juego_gato.py</strong> — las tres funciones <span class="mono"># TODO</span> resueltas: <span class="mono">validar_celda</span>, <span class="mono">pedir_jugada</span> y <span class="mono">hay_ganador</span> con doble for.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.md</span>
+        <span class="ev-txt"><strong>README.md</strong> — explica cómo se juega y cómo detectas al ganador (filas, columnas, diagonales).</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">.png</span>
+        <span class="ev-txt"><strong>Captura</strong> de la terminal con una partida completa: una victoria y, si haces el reto, un empate.</span>
+      </div>
+      <div class="conclu-note">
+        <h4>Entrega vía GitHub</h4>
+        <p>Sube tu trabajo a la carpeta <span class="mono">sesion-23/</span> de tu repositorio con un commit claro, p. ej. <span class="mono">"sesion-23: juego del gato"</span>. El repositorio es tu entregable del curso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="cierre reveal">
+    <div class="small-caps">Una última cosa antes de cerrar</div>
+    <div class="quote display">
+      «El único movimiento ganador<br/>
+      es <span class="em-ochre">no jugar</span>.<br/>
+      ¿Qué tal <span class="em">una buena partida</span> de ajedrez?»
+    </div>
+    <div class="quote-author">— WOPR / Joshua</div>
+    <div class="quote-meta">«WarGames» (Juegos de guerra), 1983 · tras agotar el tres en raya</div>
+    <div class="sig">C. D. Vaca
+      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
+    </div>
+  </section>
+
+  <footer>
+    Sesión 23 <span class="dot">·</span> El tablero del mundo <span class="dot">·</span> 26-3
+    <div class="nav-prev">
+      ← Vuelve a <a href="../sesion-22/index.html">Sesión 22 · Dos dimensiones</a>
+      &nbsp;·&nbsp;
+      <a href="../">índice del curso</a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
