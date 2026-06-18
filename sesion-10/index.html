@@ -305,11 +305,11 @@
 
   /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
   .codeswitch{ margin: 0; }
-  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
-  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
-  .cs-tab:hover{ color:rgba(239,230,210,.85); }
-  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
-  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
+  .cs-tabs{ display:flex; align-items:center; gap:0; background:var(--paper-deep); border:1px solid var(--line); border-bottom:none; }
+  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
+  .cs-tab:hover{ color:var(--ink); }
+  .cs-tab.active{ color:var(--ink); border-bottom-color:var(--blood); background:var(--paper); }
+  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); }
   .cs-pane[hidden]{ display:none; }
   .cs-pane .code-block{ border-top:none; }
   @media (max-width:480px){ .cs-flag{ display:none; } }
@@ -380,11 +380,11 @@
       </div>
       <div class="who-block">
         <span class="label">Práctica</span>
-        <span class="value">Refactorizar código propio</span>
+        <span class="value">Auditar, depurar y comentar</span>
       </div>
       <div class="who-block">
         <span class="label">Entrega</span>
-        <span class="value">Refactor + carta de IA en GitHub</span>
+        <span class="value">Programa comentado · Blackboard</span>
       </div>
     </div>
   </section>
@@ -759,8 +759,8 @@ notas = [<span class="num">8.0</span>, <span class="num">9.5</span>, <span class
     <div class="s-head">
       <div class="n blood display">vi.</div>
       <div>
-        <h2 class="display">La cacería <em class="blood">a mano</em>.</h2>
-        <p>Dos actividades en clase. Primero auditamos en grupo un programa mal escrito; después cada quien caza un bug <strong>sin IA</strong>, usando solo el debugger. Hoy demuestras que sabes <em>pensar</em>, no solo preguntar.</p>
+        <h2 class="display">Llévalo a la <em class="blood">práctica</em>.</h2>
+        <p>Tres actividades en clase. Primero auditamos en grupo un programa mal escrito; luego cada quien caza un bug <strong>sin IA</strong> con el debugger; y al final usamos la IA como <em>debe</em> usarse —de tutor— para entender un programa denso y dejarlo <strong>comentado línea por línea</strong>. Pensar primero; preguntar bien después.</p>
       </div>
     </div>
 
@@ -887,6 +887,90 @@ x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50
         </div>
       </div>
     </div>
+
+    <div class="ej-card">
+      <span class="ej-tag">Actividad 3 · individual · con IA</span>
+      <div class="ej-body">
+        <div>
+          <h3>Entiende y comenta con la IA</h3>
+          <p class="ej-desc">Te entrego un programa <strong>denso pero correcto</strong>: recorre una <em>lista</em> de registros y hace <em>malabares con los tipos</em> —texto que se vuelve número, conteos, divisiones—. Tu reto no es arreglarlo, sino <strong>entenderlo del todo</strong> y entregarlo <strong>comentado línea por línea</strong>. Aquí la IA sí entra, pero como <em>tutor</em>, no como autor.</p>
+          <ul class="reqs">
+            <li>Antes de la IA: <em>predice</em> la salida del programa y anótala</li>
+            <li>Pídele que te lo <strong>explique línea por línea</strong> —nunca que lo reescriba</li>
+            <li>Pregunta por el <strong>manejo de tipos</strong>: ¿qué hace <span class="mono">stod</span> / <span class="mono">float()</span>?</li>
+            <li>Pregunta cómo <em>recorre la lista</em> y qué guarda en cada vuelta</li>
+            <li>Escribe <strong>tú</strong> el comentario de cada línea, con tus palabras</li>
+            <li>Corre el programa: ¿la salida coincide con lo que entendiste?</li>
+          </ul>
+        </div>
+        <div>
+          <div class="codeswitch">
+            <div class="cs-tabs">
+              <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+              <button type="button" class="cs-tab" data-lang="py">Python</button>
+              <span class="cs-flag">principal &middot; C++</span>
+            </div>
+            <div class="cs-pane" data-lang="cpp">
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">notas.cpp</span></div>
+<pre><span class="com">// Clasifica registros "nombre:puntaje"</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    vector&lt;string&gt; datos = {<span class="str">"Ana:8.5"</span>, <span class="str">"Luis:6"</span>,
+                            <span class="str">"Mia:9.2"</span>, <span class="str">"Joel:4.7"</span>};
+    vector&lt;string&gt; aprobados;
+    <span class="kw">double</span> suma = <span class="num">0.0</span>;
+
+    <span class="kw">for</span> (string registro : datos) {
+        <span class="kw">int</span> sep = registro.<span class="fn">find</span>(<span class="str">":"</span>);
+        string nombre = registro.<span class="fn">substr</span>(<span class="num">0</span>, sep);
+        <span class="kw">double</span> puntaje = <span class="fn">stod</span>(registro.<span class="fn">substr</span>(sep + <span class="num">1</span>));
+        suma = suma + puntaje;
+        <span class="kw">if</span> (puntaje &gt;= <span class="num">6</span>) {
+            aprobados.<span class="fn">push_back</span>(nombre);
+        }
+    }
+
+    <span class="kw">double</span> promedio = suma / datos.<span class="fn">size</span>();
+    cout &lt;&lt; <span class="str">"Promedio: "</span> &lt;&lt; promedio &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Aprobados: "</span> &lt;&lt; aprobados.<span class="fn">size</span>()
+         &lt;&lt; <span class="str">" de "</span> &lt;&lt; datos.<span class="fn">size</span>() &lt;&lt; endl;
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="out">&gt;&gt;&gt; Promedio: 7.1</span>
+<span class="out">&gt;&gt;&gt; Aprobados: 3 de 4</span></pre>
+              </div>
+            </div>
+            <div class="cs-pane" data-lang="py" hidden>
+              <div class="code-block">
+                <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">notas.py</span></div>
+<pre><span class="com"># Clasifica registros "nombre:puntaje"</span>
+datos = [<span class="str">"Ana:8.5"</span>, <span class="str">"Luis:6"</span>, <span class="str">"Mia:9.2"</span>, <span class="str">"Joel:4.7"</span>]
+aprobados = []
+suma = <span class="num">0.0</span>
+
+<span class="kw">for</span> registro <span class="kw">in</span> datos:
+    nombre, texto = registro.<span class="fn">split</span>(<span class="str">":"</span>)
+    puntaje = <span class="fn">float</span>(texto)
+    suma = suma + puntaje
+    <span class="kw">if</span> puntaje &gt;= <span class="num">6</span>:
+        aprobados.<span class="fn">append</span>(nombre)
+
+promedio = suma / <span class="fn">len</span>(datos)
+<span class="fn">print</span>(<span class="str">"Promedio:"</span>, <span class="fn">round</span>(promedio, <span class="num">2</span>))
+<span class="fn">print</span>(<span class="str">"Aprobados:"</span>, <span class="fn">len</span>(aprobados), <span class="str">"de"</span>, <span class="fn">len</span>(datos))
+<span class="out">&gt;&gt;&gt; Promedio: 7.1</span>
+<span class="out">&gt;&gt;&gt; Aprobados: 3 de 4</span></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- TAREA / ENTREGA -->
@@ -894,47 +978,47 @@ x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50
     <div class="head">
       <div class="stamp">Entrega</div>
       <div>
-        <h2 class="display">Refactoriza lo <em>tuyo</em>.</h2>
+        <h2 class="display">Comenta lo que <em>entendiste</em>.</h2>
       </div>
     </div>
     <p class="intro">
-      Esta entrega no es código nuevo: es <strong>volver a un programa que ya escribiste</strong> —tu juego de
-      la sesión 06, tu cajero de la 09, el que prefieras— y pulirlo hasta dejarlo profesional. Aplica PEP 8,
-      mejora los nombres, limpia los comentarios. Y acompáñalo de una <strong>carta breve</strong> donde cuentes,
-      con honestidad, cómo usas la IA en esta materia.
+      La entrega de hoy no es código nuevo ni un refactor: es <strong>el programa de la Actividad 3, comentado
+      línea por línea</strong>. Cada renglón lleva un comentario —escrito con <em>tus palabras</em>— que dice
+      qué hace. Usa la IA como <strong>tutor</strong> para entenderlo, jamás como autor de tus comentarios. Si
+      puedes explicar cada línea, el programa ya es tuyo.
     </p>
 
     <div class="checklist">
       <div class="check">
         <div class="box"></div>
         <div>
-          <h4>1. El refactor</h4>
-          <p>Toma un programa propio anterior y aplícale PEP 8: <span class="mono">snake_case</span>, espacios, líneas cortas, constantes con nombre. Mismo comportamiento, código limpio. Pásale <span class="mono">ruff check</span> antes de entregar.</p>
-          <div class="deadline">archivo: <span class="mono">sesion-10/refactor_&lt;nombre&gt;.py</span></div>
+          <h4>1. Entiende antes de comentar</h4>
+          <p>Lee el programa, <strong>predice su salida</strong> y córrelo para confirmarla. Recurre a la IA solo para que te explique lo que no entiendas —línea por línea, nunca para reescribirlo.</p>
+          <div class="deadline">salida esperada: <span class="mono">Promedio: 7.1 · Aprobados: 3 de 4</span></div>
         </div>
       </div>
       <div class="check">
         <div class="box"></div>
         <div>
-          <h4>2. Antes y después</h4>
-          <p>En el <span class="mono">README.md</span> explica <strong>tres cambios</strong> concretos que hiciste y por qué mejoran el código. Incluye una captura del linter sin errores.</p>
-          <div class="deadline">archivo: <span class="mono">sesion-10/README.md</span></div>
+          <h4>2. Comenta línea por línea</h4>
+          <p>Cada línea significativa lleva un comentario que dice <strong>qué hace</strong>, con tus palabras. Detente sobre todo en el <em>recorrido de la lista</em> y en cada <em>conversión de tipo</em> (<span class="mono">stod</span> / <span class="mono">float()</span>).</p>
+          <div class="deadline">archivo: <span class="mono">sesion-10/notas_comentado.cpp</span></div>
         </div>
       </div>
       <div class="check">
         <div class="box"></div>
         <div>
-          <h4>3. Mi carta sobre la IA</h4>
-          <p>Media página, en tus palabras: ¿cómo usas la IA en esta materia de forma <strong>responsable</strong>? Da un ejemplo de algo que le preguntaste para <em>aprender</em>, no para que te lo resolviera.</p>
-          <div class="deadline">archivo: <span class="mono">sesion-10/uso_de_ia.md</span></div>
+          <h4>3. Declara tu uso de la IA</h4>
+          <p>Al inicio del archivo, un bloque de comentarios honesto: <strong>qué le preguntaste</strong> a la IA y qué entendiste por tu cuenta. La IA fue tu tutor, no tu autor.</p>
+          <div class="deadline">arriba del código, en comentarios</div>
         </div>
       </div>
       <div class="check">
         <div class="box"></div>
         <div>
-          <h4>4. Commit honesto</h4>
-          <p>Sube todo a GitHub con un mensaje claro: <span class="mono">"sesion-10: refactor + carta de IA"</span>. Sin «final», sin «v2». Tu repositorio es tu palabra.</p>
-          <div class="deadline">tip: <span class="mono">$ git commit -m "sesion-10: ..."</span></div>
+          <h4>4. Súbelo a Blackboard</h4>
+          <p>Entrega el programa comentado en la actividad de la <strong>Sesión 10</strong> en <strong>Blackboard</strong>. Adjunta el archivo <span class="mono">.cpp</span> (y el <span class="mono">.py</span> si lo hiciste). Sin «final», sin «v2».</p>
+          <div class="deadline">límite: <span class="mono">a más tardar la siguiente clase · lun 22.06.2026</span></div>
         </div>
       </div>
     </div>
@@ -945,30 +1029,26 @@ x=<span class="fn">Calc</span>(<span class="num">100</span>,<span class="num">50
     <div class="panel">
       <h3 class="display">Criterios de <em>evaluación</em></h3>
       <ol class="crit-list">
-        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el programa refactorizado corre igual que el original.</li>
-        <li><strong>Lógica correcta</strong> — el refactor no rompió nada: hace exactamente lo mismo que antes.</li>
-        <li><strong>Funcionamiento óptimo</strong> — cumple PEP 8 y pasa <span class="mono">ruff check</span> sin advertencias; comentarios que explican el «por qué».</li>
-        <li><strong>Autenticidad</strong> — código y carta escritos por ti; la IA, si la usaste, queda declarada con honestidad.</li>
+        <li><strong>Comprensión real</strong> — los comentarios explican el «qué hace» de cada línea con tus palabras; no son copia textual de la IA.</li>
+        <li><strong>Cobertura completa</strong> — cada línea significativa está comentada, incluido el recorrido de la lista y cada conversión de tipo.</li>
+        <li><strong>Exactitud</strong> — los comentarios coinciden con lo que el programa realmente hace y con su salida (<span class="mono">Promedio: 7.1</span>).</li>
+        <li><strong>Honestidad con la IA</strong> — declaras cómo la usaste: fue tu tutor para entender, no la mano que resolvió.</li>
       </ol>
     </div>
 
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>notas_comentado.cpp</strong> — el programa de la Actividad 3, comentado línea por línea (principal).</span>
+      </div>
+      <div class="evid-item">
         <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>refactor_&lt;nombre&gt;.py</strong> — un programa propio anterior, reescrito con PEP 8 y nombres claros.</span>
-      </div>
-      <div class="evid-item">
-        <span class="file-ic">.md</span>
-        <span class="ev-txt"><strong>README.md</strong> — tres mejoras explicadas y la captura del linter en verde.</span>
-      </div>
-      <div class="evid-item">
-        <span class="file-ic">.md</span>
-        <span class="ev-txt"><strong>uso_de_ia.md</strong> — media página sobre tu uso responsable de la IA, con un ejemplo real.</span>
+        <span class="ev-txt"><strong>notas_comentado.py</strong> — la misma lógica en Python, también comentada (puente).</span>
       </div>
       <div class="conclu-note">
-        <h4>Entrega vía GitHub</h4>
-        <p>Sube tu trabajo a la carpeta <span class="mono">sesion-10/</span> de tu repositorio con un commit claro, p. ej. <span class="mono">"sesion-10: refactor + carta de IA"</span>. El repositorio es tu entregable del curso.</p>
+        <h4>Entrega vía Blackboard</h4>
+        <p>Sube el programa comentado a la actividad de la <strong>Sesión 10</strong> en <strong>Blackboard</strong>, <strong>a más tardar la siguiente clase</strong> (lunes 22.06.2026). No se hacen commits: la entrega de esta sesión es por Blackboard.</p>
       </div>
     </div>
   </section>
