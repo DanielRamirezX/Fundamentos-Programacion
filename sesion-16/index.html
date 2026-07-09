@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sesión 16 · El laberinto fractal · Ciclos anidados, patrones, tablas y combinaciones</title>
+<title>Sesión 16 · Práctica 2 · Estructuras condicionales · Ecuación cuadrática</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -59,7 +59,7 @@
   .hero .lede em{ color: var(--ink); font-style: italic; }
   .hero .lede strong{ color: var(--blood); font-weight: 600; }
 
-  /* CONTINUACIÓN BANNER */
+  /* BANNERS */
   .cont-banner{ margin: 44px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
   .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
   .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
@@ -112,47 +112,29 @@
   .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
   .code-block.full{ margin-top: 30px; }
 
-  /* ANATOMÍA DEL DOBLE FOR */
-  .anatomy{ margin-top: 30px; display: grid; grid-template-columns: 1.05fr 1fr; gap: 26px; align-items: stretch; }
-  @media (max-width: 880px){ .anatomy{ grid-template-columns: 1fr; } }
-  .anatomy .matrix-demo{ background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 24px 26px; }
-  .anatomy .matrix-demo h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; margin: 0 0 6px; color: var(--ochre-deep); }
-  .anatomy .matrix-demo p.sub{ margin: 0 0 18px; font-size: .9rem; color: var(--ink-soft); }
-  .grid-table{ display: grid; gap: 4px; justify-content: start; }
-  .grid-table .gt-cell{ width: 46px; height: 38px; display: flex; align-items: center; justify-content: center; font-family: "JetBrains Mono", monospace; font-size: .76rem; background: var(--paper); border: 1px solid var(--ink); color: var(--ink-soft); }
-  .grid-table .gt-cell.head{ background: var(--ink); color: var(--paper); font-weight: 700; }
-  .grid-table .gt-cell.corner{ background: transparent; border-color: transparent; }
-  .grid-table .gt-cell.rh{ background: var(--blood); color: var(--paper); font-weight: 700; }
-  .grid-table .gt-cell .ri{ color: var(--blood-dark); font-weight: 700; }
-  .grid-table .gt-cell .ci{ color: var(--ochre-deep); font-weight: 700; }
-  .anatomy .legend-mini{ margin-top: 18px; display: flex; flex-direction: column; gap: 8px; font-size: .86rem; color: var(--ink-soft); }
-  .anatomy .legend-mini .lm{ display: flex; align-items: center; gap: 10px; }
-  .anatomy .legend-mini .sw-i{ width: 16px; height: 16px; flex-shrink: 0; }
-  .anatomy .legend-mini .sw-i.row{ background: var(--blood); } .anatomy .legend-mini .sw-i.col{ background: var(--ochre); }
+  /* FÓRMULA GENERAL */
+  .formula-card{ background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 34px 28px 26px; text-align: center; }
+  .formula-card .fq{ font-family: "Fraunces", serif; font-weight: 600; font-style: italic; font-size: clamp(26px, 4vw, 40px); color: var(--ink); display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .formula-card .fq .frac{ display: inline-flex; flex-direction: column; text-align: center; }
+  .formula-card .fq .num-line{ padding: 0 14px 8px; border-bottom: 2.5px solid var(--ink); }
+  .formula-card .fq .den-line{ padding-top: 8px; }
+  .formula-card .fq .disc{ color: var(--blood); border-top: 2.5px solid var(--blood); padding: 2px 4px 0; }
+  .formula-card .fq .radic{ color: var(--blood); }
+  .formula-card .fq-caption{ margin-top: 20px; font-size: .95rem; color: var(--ink-soft); font-style: italic; }
+  .formula-card .fq-caption strong{ color: var(--blood); font-style: normal; }
 
-  /* TABLA DE EJECUCIÓN / PRUEBA DE ESCRITORIO */
-  .trace{ margin-top: 30px; border: 1.5px solid var(--ink); background: var(--paper-deep); }
-  .trace .trace-head{ background: var(--ink); color: var(--paper); padding: 12px 20px; font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; }
-  .trace-grid{ display: grid; grid-template-columns: 70px 90px 90px 1fr; }
-  .trace-grid .tc{ padding: 10px 16px; border-right: 1px dashed var(--line); border-top: 1px dashed var(--line); font-size: .88rem; display: flex; align-items: center; }
-  .trace-grid .tc:nth-child(4n){ border-right: none; }
-  .trace-grid .tc.th{ font-family: "JetBrains Mono", monospace; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); border-top: none; }
-  .trace-grid .tc.i{ font-family: "JetBrains Mono", monospace; color: var(--blood-dark); font-weight: 700; }
-  .trace-grid .tc.j{ font-family: "JetBrains Mono", monospace; color: var(--ochre-deep); font-weight: 700; }
-  .trace-grid .tc.iter{ font-family: "JetBrains Mono", monospace; color: var(--ink-soft); }
-  .trace-grid .tc.what .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .82em; border: 1px solid var(--line); }
-  @media (max-width: 620px){ .trace-grid{ grid-template-columns: 52px 70px 70px 1fr; } .trace-grid .tc{ padding: 8px 10px; font-size: .8rem; } }
-
-  /* TEORÍA CARDS (aplicaciones) */
+  /* TEORÍA CARDS */
   .teoria-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 30px; }
   @media (max-width: 880px){ .teoria-grid{ grid-template-columns: 1fr; } }
   .teoria-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ochre); padding: 22px 24px 24px; }
+  .teoria-card.neg{ border-top-color: var(--blood); }
   .teoria-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.25rem; margin: 0 0 8px; color: var(--ochre-deep); }
+  .teoria-card.neg h3{ color: var(--blood-dark); }
   .teoria-card .mono-fn{ font-family: "JetBrains Mono", monospace; font-size: .8rem; color: var(--blood); background: var(--paper); padding: 2px 8px; border: 1px solid var(--line); }
   .teoria-card p{ margin: 12px 0 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.55; }
   .teoria-card p strong{ color: var(--ink); }
 
-  /* LIVE CODING / patrones */
+  /* DOS BLOQUES LADO A LADO */
   .patterns{ margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
   @media (max-width: 860px){ .patterns{ grid-template-columns: 1fr; } }
   .pat-block .pat-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
@@ -164,8 +146,9 @@
   .term .term-body{ padding: 18px 20px; line-height: 1.55; color: #d9ccb0; white-space: pre; overflow-x: auto; }
   .term .term-body .star{ color: #e8c35a; }
   .term .term-body .dim{ color: rgba(217,204,176,.45); }
+  .term .term-body .usr{ color: #c8dd96; }
 
-  /* EJERCICIOS */
+  /* ENTREGABLE */
   .ejercicios{ margin: 100px 0; }
   .ej-intro{ color: var(--ink-soft); font-size: 1.05rem; max-width: 760px; margin: 0 0 30px; }
   .ej-intro strong{ color: var(--blood); }
@@ -183,7 +166,17 @@
   .ej-card .reqs li:last-child{ border-bottom: none; }
   .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
   .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  .ej-card .reqs li strong{ color: var(--ink); }
   .ej-preview .pv-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+
+  /* mock del documento (Word/PDF) */
+  .doc-mock{ background: #f7f2e4; border: 1px solid var(--ink); box-shadow: 6px 6px 0 rgba(42,29,20,.12); padding: 26px 30px; }
+  .doc-mock .dm-title{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; text-align: center; color: var(--ink); border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 14px; }
+  .doc-mock .dm-sec{ display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .doc-mock .dm-sec:last-child{ border-bottom: none; }
+  .doc-mock .dm-sec .dm-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 700; color: var(--blood); font-size: .95rem; }
+  .doc-mock .dm-sec .dm-t{ font-size: .92rem; color: var(--ink-soft); line-height: 1.4; }
+  .doc-mock .dm-sec .dm-t strong{ color: var(--ink); }
 
   .choose-note{ margin-top: 6px; padding: 18px 24px; background: var(--ink); color: var(--paper); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
   .choose-note .ic{ width: 30px; height: 30px; color: #f0c8a0; flex-shrink: 0; }
@@ -214,6 +207,11 @@
   .pond h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 8px; color: var(--ochre-deep); font-size: 1.05rem; }
   .pond p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.55; }
   .pond p strong{ color: var(--ink); }
+  .biblio{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--grid-blue); }
+  .biblio h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 8px; color: var(--grid-blue); font-size: 1.05rem; }
+  .biblio p{ margin: 0 0 8px; font-size: .88rem; color: var(--ink-soft); line-height: 1.5; padding-left: 18px; text-indent: -18px; }
+  .biblio p:last-child{ margin-bottom: 0; }
+  .biblio p em{ font-style: italic; }
 
   /* CIERRE */
   .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
@@ -258,90 +256,368 @@
   <div class="top">
     <div class="left">
       <span class="seal">V.</span>
-      <span class="meta">Cuaderno del profesor · Sesión 16 · Ciclos anidados · Patrones · Tablas y combinaciones</span>
+      <span class="meta">Cuaderno del profesor · Sesión 16 · Práctica 2 de 4 (institucional)</span>
     </div>
     <div class="right">
       Jueves 09.07.2026 · 18:00 – 20:00<br/>
-      <span style="color:var(--blood)">UNITEC Atizapán · Continuación de la sesión 15</span>
+      <span style="color:var(--blood)">Laboratorio de Cómputo · clave ICM004</span>
     </div>
   </div>
 
   <!-- HERO -->
   <section class="hero">
     <div class="session-no display">16</div>
-    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <div class="kicker">Práctica de laboratorio · Ciclo 26-3</div>
     <h1 class="display">
-      El laberinto <span class="em">fractal</span>.
+      Las dos <span class="em">raíces</span>.
     </h1>
     <p class="lede">
-      En la sesión pasada cerramos el juicio del examen y abrimos, apenas, la puerta de los
-      <strong>ciclos anidados</strong>: un <em>for</em> que vive dentro de otro <em>for</em>. Hoy cruzamos
-      el umbral. Descubriremos que basta repetir <em>una repetición</em> para que aparezcan, como por
-      ensalmo, las <strong>tablas</strong>, las <strong>cuadrículas</strong> y los
-      <span class="underline-ochre">patrones que se dibujan solos</span>. Dos ejes, dos índices, y de
-      pronto todo el plano es nuestro.
+      Práctica institucional 2 de 4: <strong>estructuras condicionales</strong>. Hoy volvemos a la
+      encrucijada del <em>if</em> — pero con bata de laboratorio. La misión: escribir un programa que
+      resuelva la <strong>ecuación cuadrática</strong> con la fórmula general, usando la
+      <em>estructura condicional doble</em>, compilado desde <strong>VS Code</strong> con la extensión
+      de C/C++. Un solo número —el discriminante— decidirá si tu programa entrega dos raíces o
+      <span class="underline-ochre">confiesa que no las hay</span>.
     </p>
-
-    <div class="cont-banner">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      <div class="txt">
-        <strong>Esta sesión continúa la 15.</strong> Ya sabes que un ciclo dentro de otro recorre el bucle
-        interior <em>completo</em> por cada vuelta del exterior. Hoy convertimos esa idea en filas y columnas.
-      </div>
-    </div>
 
     <div class="cont-banner">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
       <div class="txt">
-        <strong>El código va en C++ (principal), con Python de apoyo.</strong> Desde la sesión 09 adoptamos
-        <strong>C++</strong> como lenguaje de cabecera —más cercano al temario de estilo C de UNITEC— y conservamos
-        <em>Python</em> como puente. Cada bloque trae <strong>dos pestañas</strong>: C++ activo por defecto y su
-        equivalente en Python a un clic. <span class="underline-ochre">El mismo doble <em>for</em>, dos idiomas</span>.
+        <strong>La práctica se guía en C++, con Python de puente.</strong> El practicario oficial pide un
+        programa <em>en lenguaje C</em> con el compilador de CodeBlocks; nosotros lo construiremos en
+        <strong>C++</strong> —el lenguaje de cabecera del curso desde la sesión 09— usando
+        <strong>VS Code con la extensión de C/C++</strong>, que por debajo compila con el mismo
+        g++ de MinGW. Cada bloque trae dos pestañas: C++ activo y su equivalente en Python a un clic.
+      </div>
+    </div>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      <div class="txt">
+        <strong>Todo se entrega en Blackboard,</strong> en la actividad <strong>«Práctica 2»</strong>:
+        tu código fuente, su copia en <em>.txt</em> y un documento PDF o Word con título, introducción,
+        desarrollo, conclusiones y bibliografía en formato APA. Los detalles, al final de esta página.
       </div>
     </div>
 
     <div class="ficha">
-      <span class="f-label">FICHA DE LA SESIÓN</span>
+      <span class="f-label">FICHA DE LA PRÁCTICA</span>
       <div class="ficha-grid">
         <div class="ficha-cell wide">
-          <div class="fc-label">Objetivo (Carta Descriptiva)</div>
-          <div class="fc-value obj">Aplicar ciclos anidados a situaciones con datos tabulares mediante programación y prueba de escritorio, para modelar recorridos, combinaciones y patrones.</div>
+          <div class="fc-label">Objetivo de la práctica</div>
+          <div class="fc-value obj">Utilizar las estructuras condicionales por medio del manejo del compilador de C++ en VS Code, para realizar un programa que resuelva la ecuación cuadrática mediante la fórmula general.</div>
         </div>
         <div class="ficha-cell">
-          <div class="fc-label">Contenido</div>
-          <div class="fc-value">6.3 Ciclos anidados · 6.4 Aplicaciones</div>
+          <div class="fc-label">Temas y subtemas</div>
+          <div class="fc-value">5.1 Sentencia if · 5.2 if–else · 5.3 if–else anidados</div>
         </div>
         <div class="ficha-cell">
-          <div class="fc-label">Tema</div>
-          <div class="fc-value">Patrones, tablas y combinaciones</div>
+          <div class="fc-label">Duración</div>
+          <div class="fc-value">2 horas</div>
         </div>
         <div class="ficha-cell">
-          <div class="fc-label">Práctica</div>
-          <div class="fc-value">Live coding · pirámide y rombo</div>
+          <div class="fc-label">Laboratorio</div>
+          <div class="fc-value">Cómputo · equipo i5+ · seguridad N/A</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Software</div>
+          <div class="fc-value">VS Code + extensión C/C++ · Windows 10+</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Versión oficial</div>
+          <div class="fc-value">C · CodeBlocks</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Nuestra versión</div>
+          <div class="fc-value">C++ · VS Code</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Aporta el alumno</div>
+          <div class="fc-value">Memoria USB para sus programas</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Entrega</div>
-          <div class="fc-value">Programa con ciclo anidado · GitHub</div>
+          <div class="fc-value">Blackboard · actividad «Práctica 2»</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONCEPT i: el doble for -->
+  <!-- SECCIÓN i: SUSTENTO TEÓRICO -->
   <section class="sec reveal">
     <div class="s-head">
       <div class="n display">i.</div>
       <div>
-        <h2 class="display">Un ciclo dentro de <em>otro ciclo</em>.</h2>
-        <p>La regla es de una simpleza implacable: por <strong>cada vuelta</strong> del ciclo de afuera, el de adentro se ejecuta <strong>de principio a fin</strong>. Si el exterior da 3 vueltas y el interior 4, el cuerpo más profundo corre <strong>3 × 4 = 12</strong> veces.</p>
+        <h2 class="display">Sustento <em>teórico</em>: el arte de decidir.</h2>
+        <p>Toda decisión en código tiene la misma anatomía: una <strong>condición</strong> que resulta verdadera o falsa, y uno o dos caminos posibles. La unidad 5 del temario les da tres nombres: <strong>if</strong>, <strong>if–else</strong> e <strong>if–else anidados</strong> (Templeman, 2018).</p>
+      </div>
+    </div>
+
+    <div class="teoria-grid">
+      <div class="teoria-card">
+        <h3>5.1 · Condicional simple</h3>
+        <span class="mono-fn">if</span>
+        <p>Solo toma en cuenta la <strong>parte positiva</strong> de la condición: si es verdadera, ejecuta su bloque; si es falsa, no ocurre nada y el programa sigue de largo. Es el guardia que solo actúa cuando algo pasa.</p>
+      </div>
+      <div class="teoria-card">
+        <h3>5.2 · Condicional doble</h3>
+        <span class="mono-fn">if – else</span>
+        <p>Toma en cuenta también la <strong>parte negativa</strong> de la condición ocupando un <strong>else</strong>: un camino para el sí y otro para el no. Nunca se ejecutan ambos; nunca se queda callada. Es la estructura que exige esta práctica.</p>
+      </div>
+      <div class="teoria-card">
+        <h3>5.3 · Anidados</h3>
+        <span class="mono-fn">if dentro de if</span>
+        <p>Un <strong>if–else dentro de otro</strong>: la primera decisión abre la puerta y la segunda afina la respuesta. Con ellos distinguiremos, dentro del camino positivo, si la ecuación tiene dos raíces distintas o una sola repetida.</p>
+      </div>
+    </div>
+
+    <div class="patterns">
+      <div class="pat-block">
+        <div class="pat-label">Estructura condicional simple</div>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">condicional_simple.cpp</span></div>
+<pre><span class="com">// 5.1 · Solo la parte positiva de la condicion</span>
+<span class="kw">if</span> (condicion) {
+    instruccion1;
+    instruccion2;
+    instruccion3;
+}
+<span class="com">// si la condicion es falsa, no ocurre nada</span></pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">condicional_simple.py</span></div>
+<pre><span class="com"># 5.1 · Solo la parte positiva de la condición</span>
+<span class="kw">if</span> condicion:
+    instruccion1
+    instruccion2
+    instruccion3
+<span class="com"># si la condición es falsa, no ocurre nada</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pat-block">
+        <div class="pat-label">Estructura condicional doble</div>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">condicional_doble.cpp</span></div>
+<pre><span class="com">// 5.2 · Tambien la parte negativa, con else</span>
+<span class="kw">if</span> (condicion) {
+    instruccion1;
+    instruccion2;
+    instruccion3;
+}
+<span class="kw">else</span> {
+    instruccion1;
+    instruccion2;
+}</pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">condicional_doble.py</span></div>
+<pre><span class="com"># 5.2 · También la parte negativa, con else</span>
+<span class="kw">if</span> condicion:
+    instruccion1
+    instruccion2
+    instruccion3
+<span class="kw">else</span>:
+    instruccion1
+    instruccion2</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="color:var(--ink-soft); font-style:italic; font-size:1rem; max-width:780px; margin-top:24px;">Estas estructuras ya las conoces de las sesiones de decisión — hoy la novedad no es la sintaxis sino el <strong style="color:var(--blood); font-style:normal;">oficio</strong>: compilar el programa desde VS Code sin errores, probar con casos distintos y documentar el resultado como se documenta en un laboratorio.</p>
+  </section>
+
+  <!-- SECCIÓN ii: LA FÓRMULA GENERAL -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">ii.</div>
+      <div>
+        <h2 class="display">El problema: la <em>fórmula general</em>.</h2>
+        <p>Una ecuación cuadrática tiene la forma <strong>ax² + bx + c = 0</strong>. La fórmula general la resuelve siempre… cuando hay solución. Y quien decide si la hay es un solo número escondido bajo la raíz: el <strong>discriminante</strong>.</p>
       </div>
     </div>
 
     <div class="concept-body">
       <div class="concept-prose">
-        <p>Piensa en un reloj. La manecilla de los minutos da una vuelta entera —sus 60 minutos— por <em>cada</em> hora que avanza la manecilla de las horas. El ciclo exterior es la hora; el interior, el minuto. No avanzamos a la siguiente hora hasta que se agotaron <strong>todos</strong> los minutos.</p>
-        <p>En código, casi siempre nombramos al índice exterior <span class="mono">fila</span> (o <span class="mono">i</span>) y al interior <span class="mono">columna</span> (o <span class="mono">j</span>). El exterior elige <em>en qué renglón estamos</em>; el interior recorre ese renglón <em>de izquierda a derecha</em>, casilla por casilla.</p>
-        <div class="keypoint"><strong>La pregunta de oro:</strong> ¿qué se repite por cada repetición? Si la respuesta tiene dos ejes —filas y columnas, horas y minutos, productos y meses— pide a gritos un ciclo anidado.</div>
+        <p>Antes de escribir una línea de código, entiende la matemática. La fórmula pide tres coeficientes —<span class="mono" style="background:var(--paper-deep);padding:1px 6px;font-size:.85em">a</span>, <span class="mono" style="background:var(--paper-deep);padding:1px 6px;font-size:.85em">b</span> y <span class="mono" style="background:var(--paper-deep);padding:1px 6px;font-size:.85em">c</span>— y devuelve hasta dos valores de <em>x</em>: uno con el signo <strong>+</strong> y otro con el signo <strong>−</strong> antes de la raíz.</p>
+        <p>El peligro vive dentro de la raíz cuadrada: si <strong>b² − 4ac</strong> es negativo, no existe raíz real y la fórmula se rompe. Ahí entra la <em>estructura condicional doble</em>: la parte positiva calcula las raíces; la parte negativa lo dice con honestidad.</p>
+        <ul>
+          <li><strong>Δ &gt; 0</strong> — dos raíces reales <em>distintas</em>: x₁ y x₂.</li>
+          <li><strong>Δ = 0</strong> — una sola raíz <em>doble</em>: x₁ = x₂.</li>
+          <li><strong>Δ &lt; 0</strong> — <strong>sin soluciones reales</strong>: el camino del <span class="mono">else</span>.</li>
+        </ul>
+        <div class="keypoint"><strong>La condición de oro:</strong> <span style="font-family:'JetBrains Mono',monospace; font-style:normal; font-size:.9em">discriminante &gt;= 0</span>. Verdadera → aplica la fórmula. Falsa → informa que no hay soluciones reales. Esa única pregunta es toda la práctica.</div>
+      </div>
+
+      <div>
+        <div class="formula-card">
+          <div class="fq">
+            <span>x =</span>
+            <span class="frac">
+              <span class="num-line">−b ± <span class="radic">√</span><span class="disc">b² − 4ac</span></span>
+              <span class="den-line">2a</span>
+            </span>
+          </div>
+          <div class="fq-caption">La fórmula general. Lo marcado en rojo es el <strong>discriminante (Δ)</strong>: el número que decide qué rama del <strong>if–else</strong> se ejecuta.</div>
+        </div>
+        <div class="teoria-card neg" style="margin-top:22px;">
+          <h3>Un caso más: a = 0</h3>
+          <span class="mono-fn">división entre cero</span>
+          <p>Si <strong>a = 0</strong> la ecuación ni siquiera es cuadrática y el denominador <strong>2a</strong> vale cero. Un <strong>if simple (5.1)</strong> al inicio del programa detecta este caso y avisa antes de que la aritmética truene. Los programas de laboratorio también se protegen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN iii: LIVE CODING -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">iii.</div>
+      <div>
+        <h2 class="display">Live coding: el programa <em class="blood">completo</em>.</h2>
+        <p>En VS Code: crea tu archivo <strong>cuadratica.cpp</strong> y, con la extensión de C/C++ instalada, presiona <strong>▶ Run C/C++ File</strong> — la extensión compila con g++ y ejecuta en la terminal. Pedimos los tres coeficientes, calculamos el discriminante y dejamos que la <strong>condicional doble</strong> tome la decisión.</p>
+      </div>
+    </div>
+
+    <div class="codeswitch full">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuadratica.cpp</span></div>
+<pre><span class="com">// PRACTICA 2 · Ecuacion cuadratica con la formula general</span>
+<span class="com">// Estructuras condicionales: el discriminante decide el camino</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;cmath&gt;</span>      <span class="com">// aqui vive sqrt()</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">double</span> a, b, c;
+
+    cout &lt;&lt; <span class="str">"=== Ecuacion cuadratica: ax^2 + bx + c = 0 ==="</span> &lt;&lt; endl;
+    cout &lt;&lt; <span class="str">"Coeficiente a: "</span>;
+    cin &gt;&gt; a;
+    cout &lt;&lt; <span class="str">"Coeficiente b: "</span>;
+    cin &gt;&gt; b;
+    cout &lt;&lt; <span class="str">"Coeficiente c: "</span>;
+    cin &gt;&gt; c;
+
+    <span class="com">// 5.1 · if simple: con a = 0 no hay ecuacion cuadratica</span>
+    <span class="kw">if</span> (a == <span class="num">0</span>) {
+        cout &lt;&lt; <span class="str">"Con a = 0 no es cuadratica (2a seria cero)."</span> &lt;&lt; endl;
+        <span class="kw">return</span> <span class="num">0</span>;
+    }
+
+    <span class="kw">double</span> discriminante = b * b - <span class="num">4</span> * a * c;
+
+    <span class="com">// 5.2 · condicional doble: parte positiva y parte negativa</span>
+    <span class="kw">if</span> (discriminante &gt;= <span class="num">0</span>) {
+        <span class="kw">double</span> x1 = (-b + <span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a);
+        <span class="kw">double</span> x2 = (-b - <span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a);
+        cout &lt;&lt; <span class="str">"x1 = "</span> &lt;&lt; x1 &lt;&lt; endl;
+        cout &lt;&lt; <span class="str">"x2 = "</span> &lt;&lt; x2 &lt;&lt; endl;
+    } <span class="kw">else</span> {
+        cout &lt;&lt; <span class="str">"Discriminante negativo: no hay soluciones reales."</span> &lt;&lt; endl;
+    }
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="com">/* CONCLUSIONES:
+   Aqui, en un comentario, escribe tu redaccion breve con las
+   observaciones sobre los resultados y los conocimientos
+   adquiridos al concluir la practica. */</span></pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuadratica.py</span></div>
+<pre><span class="com"># PRÁCTICA 2 · Ecuación cuadrática con la fórmula general</span>
+<span class="com"># Estructuras condicionales: el discriminante decide el camino</span>
+<span class="kw">import</span> math   <span class="com"># aquí vive sqrt()</span>
+
+<span class="fn">print</span>(<span class="str">"=== Ecuación cuadrática: ax² + bx + c = 0 ==="</span>)
+a = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Coeficiente a: "</span>))
+b = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Coeficiente b: "</span>))
+c = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Coeficiente c: "</span>))
+
+<span class="com"># 5.1 · if simple: con a = 0 no hay ecuación cuadrática</span>
+<span class="kw">if</span> a == <span class="num">0</span>:
+    <span class="fn">print</span>(<span class="str">"Con a = 0 no es cuadrática (2a sería cero)."</span>)
+<span class="kw">else</span>:
+    discriminante = b ** <span class="num">2</span> - <span class="num">4</span> * a * c
+
+    <span class="com"># 5.2 · condicional doble: parte positiva y parte negativa</span>
+    <span class="kw">if</span> discriminante &gt;= <span class="num">0</span>:
+        x1 = (-b + math.<span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a)
+        x2 = (-b - math.<span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a)
+        <span class="fn">print</span>(<span class="str">f"x1 = </span>{x1}<span class="str">"</span>)
+        <span class="fn">print</span>(<span class="str">f"x2 = </span>{x2}<span class="str">"</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(<span class="str">"Discriminante negativo: no hay soluciones reales."</span>)
+
+<span class="com"># CONCLUSIONES: aquí, en comentario, tu redacción breve con las</span>
+<span class="com"># observaciones y los conocimientos adquiridos en la práctica.</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="patterns">
+      <div class="pat-block">
+        <div class="pat-label">Corrida 1 · discriminante positivo</div>
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — cuadratica</span></div>
+          <div class="term-body">=== Ecuacion cuadratica: ax^2 + bx + c = 0 ===
+Coeficiente a: <span class="usr">1</span>
+Coeficiente b: <span class="usr">-5</span>
+Coeficiente c: <span class="usr">6</span>
+<span class="star">x1 = 3</span>
+<span class="star">x2 = 2</span></div>
+        </div>
+      </div>
+      <div class="pat-block">
+        <div class="pat-label">Corrida 2 · discriminante negativo (el else)</div>
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — cuadratica</span></div>
+          <div class="term-body">=== Ecuacion cuadratica: ax^2 + bx + c = 0 ===
+Coeficiente a: <span class="usr">1</span>
+Coeficiente b: <span class="usr">2</span>
+Coeficiente c: <span class="usr">5</span>
+<span class="dim">Discriminante negativo: no hay soluciones reales.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RETO: anidados -->
+    <div class="concept-body" style="margin-top:40px;">
+      <div class="concept-prose">
+        <p><strong>Sube de nivel (5.3 · anidados).</strong> Dentro de la rama positiva se esconde un caso especial: cuando el discriminante vale <em>exactamente cero</em>, x₁ y x₂ son el mismo número. Un <strong>if–else anidado</strong> dentro del camino positivo lo distingue con elegancia: primera decisión, ¿hay raíces?; segunda decisión, ¿son una o dos?</p>
+        <div class="keypoint"><strong>Pruébalo con:</strong> a = 1, b = −4, c = 4. El discriminante da 16 − 16 = 0 y tu programa debe responder con una sola raíz doble: x = 2.</div>
       </div>
       <div class="codeswitch">
         <div class="cs-tabs">
@@ -351,399 +627,109 @@
         </div>
         <div class="cs-pane" data-lang="cpp">
           <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">doble_for.cpp</span></div>
-<pre><span class="com">// Por cada fila, recorremos TODAS sus columnas</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="kw">for</span> (<span class="kw">int</span> fila = <span class="num">0</span>; fila &lt; <span class="num">3</span>; fila++) {        <span class="com">// exterior: 0, 1, 2</span>
-        <span class="kw">for</span> (<span class="kw">int</span> columna = <span class="num">0</span>; columna &lt; <span class="num">4</span>; columna++) { <span class="com">// interior: 0, 1, 2, 3</span>
-            cout &lt;&lt; <span class="str">"("</span> &lt;&lt; fila &lt;&lt; <span class="str">", "</span> &lt;&lt; columna &lt;&lt; <span class="str">")  "</span>;
-        }
-        cout &lt;&lt; endl;                          <span class="com">// salto de linea al cerrar la fila</span>
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuadratica_anidada.cpp</span></div>
+<pre><span class="com">// 5.3 · if-else anidado: afinar la rama positiva</span>
+<span class="kw">if</span> (discriminante &gt;= <span class="num">0</span>) {
+    <span class="kw">if</span> (discriminante == <span class="num">0</span>) {
+        cout &lt;&lt; <span class="str">"Raiz doble: x = "</span> &lt;&lt; -b / (<span class="num">2</span> * a) &lt;&lt; endl;
+    } <span class="kw">else</span> {
+        <span class="kw">double</span> x1 = (-b + <span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a);
+        <span class="kw">double</span> x2 = (-b - <span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a);
+        cout &lt;&lt; <span class="str">"x1 = "</span> &lt;&lt; x1 &lt;&lt; <span class="str">", x2 = "</span> &lt;&lt; x2 &lt;&lt; endl;
     }
-    <span class="kw">return</span> <span class="num">0</span>;
-}
-
-<span class="com">// Salida:</span>
-<span class="out">(0, 0)  (0, 1)  (0, 2)  (0, 3)</span>
-<span class="out">(1, 0)  (1, 1)  (1, 2)  (1, 3)</span>
-<span class="out">(2, 0)  (2, 1)  (2, 2)  (2, 3)</span></pre>
+} <span class="kw">else</span> {
+    cout &lt;&lt; <span class="str">"No hay soluciones reales."</span> &lt;&lt; endl;
+}</pre>
           </div>
         </div>
         <div class="cs-pane" data-lang="py" hidden>
           <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">doble_for.py</span></div>
-<pre><span class="com"># Por cada fila, recorremos TODAS sus columnas</span>
-<span class="kw">for</span> fila <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):          <span class="com"># exterior: 0, 1, 2</span>
-    <span class="kw">for</span> columna <span class="kw">in</span> <span class="fn">range</span>(<span class="num">4</span>):   <span class="com"># interior: 0, 1, 2, 3</span>
-        <span class="fn">print</span>(<span class="str">f"(</span>{fila}<span class="str">, </span>{columna}<span class="str">)"</span>, end=<span class="str">"  "</span>)
-    <span class="fn">print</span>()                  <span class="com"># salto de línea al cerrar la fila</span>
-
-<span class="com"># Salida:</span>
-<span class="out">(0, 0)  (0, 1)  (0, 2)  (0, 3)</span>
-<span class="out">(1, 0)  (1, 1)  (1, 2)  (1, 3)</span>
-<span class="out">(2, 0)  (2, 1)  (2, 2)  (2, 3)</span></pre>
+            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuadratica_anidada.py</span></div>
+<pre><span class="com"># 5.3 · if-else anidado: afinar la rama positiva</span>
+<span class="kw">if</span> discriminante &gt;= <span class="num">0</span>:
+    <span class="kw">if</span> discriminante == <span class="num">0</span>:
+        <span class="fn">print</span>(<span class="str">f"Raíz doble: x = </span>{-b / (<span class="num">2</span> * a)}<span class="str">"</span>)
+    <span class="kw">else</span>:
+        x1 = (-b + math.<span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a)
+        x2 = (-b - math.<span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a)
+        <span class="fn">print</span>(<span class="str">f"x1 = </span>{x1}<span class="str">, x2 = </span>{x2}<span class="str">"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"No hay soluciones reales."</span>)</pre>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Anatomía visual + tabla de ejecución -->
-    <div class="anatomy">
-      <div class="matrix-demo">
-        <h4>El plano que dibuja el doble <span class="mono" style="font-style:normal">for</span></h4>
-        <p class="sub">Cada celda es un par <span class="mono">(fila, columna)</span>. El exterior fija el renglón rojo; el interior pinta sus casillas ocre.</p>
-        <div class="grid-table" style="grid-template-columns: 46px repeat(4, 46px);">
-          <div class="gt-cell corner"></div>
-          <div class="gt-cell head">c0</div>
-          <div class="gt-cell head">c1</div>
-          <div class="gt-cell head">c2</div>
-          <div class="gt-cell head">c3</div>
-
-          <div class="gt-cell rh">f0</div>
-          <div class="gt-cell"><span class="ri">0</span>,<span class="ci">0</span></div>
-          <div class="gt-cell"><span class="ri">0</span>,<span class="ci">1</span></div>
-          <div class="gt-cell"><span class="ri">0</span>,<span class="ci">2</span></div>
-          <div class="gt-cell"><span class="ri">0</span>,<span class="ci">3</span></div>
-
-          <div class="gt-cell rh">f1</div>
-          <div class="gt-cell"><span class="ri">1</span>,<span class="ci">0</span></div>
-          <div class="gt-cell"><span class="ri">1</span>,<span class="ci">1</span></div>
-          <div class="gt-cell"><span class="ri">1</span>,<span class="ci">2</span></div>
-          <div class="gt-cell"><span class="ri">1</span>,<span class="ci">3</span></div>
-
-          <div class="gt-cell rh">f2</div>
-          <div class="gt-cell"><span class="ri">2</span>,<span class="ci">0</span></div>
-          <div class="gt-cell"><span class="ri">2</span>,<span class="ci">1</span></div>
-          <div class="gt-cell"><span class="ri">2</span>,<span class="ci">2</span></div>
-          <div class="gt-cell"><span class="ri">2</span>,<span class="ci">3</span></div>
-        </div>
-        <div class="legend-mini">
-          <div class="lm"><span class="sw-i row"></span> <strong>fila</strong> · índice exterior · avanza despacio</div>
-          <div class="lm"><span class="sw-i col"></span> <strong>columna</strong> · índice interior · vuela de 0 a 3</div>
-        </div>
-      </div>
-
-      <div class="trace">
-        <div class="trace-head">Prueba de escritorio · primeras 6 iteraciones del cuerpo</div>
-        <div class="trace-grid">
-          <div class="tc th">paso</div>
-          <div class="tc th">fila</div>
-          <div class="tc th">columna</div>
-          <div class="tc th">¿qué imprime?</div>
-
-          <div class="tc iter">1</div><div class="tc i">0</div><div class="tc j">0</div><div class="tc what"><span class="mono">(0, 0)</span></div>
-          <div class="tc iter">2</div><div class="tc i">0</div><div class="tc j">1</div><div class="tc what"><span class="mono">(0, 1)</span></div>
-          <div class="tc iter">3</div><div class="tc i">0</div><div class="tc j">2</div><div class="tc what"><span class="mono">(0, 2)</span></div>
-          <div class="tc iter">4</div><div class="tc i">0</div><div class="tc j">3</div><div class="tc what"><span class="mono">(0, 3)</span> · cierra fila</div>
-          <div class="tc iter">5</div><div class="tc i">1</div><div class="tc j">0</div><div class="tc what"><span class="mono">(1, 0)</span> · reinicia columna</div>
-          <div class="tc iter">6</div><div class="tc i">1</div><div class="tc j">1</div><div class="tc what"><span class="mono">(1, 1)</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONCEPT ii: tres aplicaciones -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n display">ii.</div>
-      <div>
-        <h2 class="display">Tres rostros del mismo <em>laberinto</em>.</h2>
-        <p>El doble <span class="mono" style="background:var(--paper-deep);padding:1px 7px;border:1px solid var(--line);font-size:.85em">for</span> es una sola herramienta, pero se disfraza de tres maneras. Reconocer el disfraz es la mitad de saber resolver el problema (contenido <strong>6.4</strong>).</p>
-      </div>
-    </div>
-
-    <div class="teoria-grid">
-      <div class="teoria-card">
-        <h3>Patrones</h3>
-        <span class="mono-fn">dibujar en pantalla</span>
-        <p>El interior repite un <strong>carácter</strong> y el exterior controla cuántas veces y en qué renglón. Cuando el límite del interior <em>depende</em> del índice exterior, nacen las pirámides y los triángulos. La forma vive en esa dependencia.</p>
-      </div>
-      <div class="teoria-card">
-        <h3>Tablas</h3>
-        <span class="mono-fn">filas × columnas</span>
-        <p>Reportes, calendarios, tablas de multiplicar. El exterior es la <strong>fila</strong>; el interior, la <strong>columna</strong>. En cada cruce se calcula o muestra un dato. Es el alma de toda hoja de cálculo y de toda cuadrícula de juego.</p>
-      </div>
-      <div class="teoria-card">
-        <h3>Combinaciones</h3>
-        <span class="mono-fn">cada uno con cada uno</span>
-        <p>Emparejar <strong>todos</strong> los elementos de un conjunto con <strong>todos</strong> los de otro: tallas con colores, jugadores con rivales, días con horarios. El producto cartesiano hecho código, sin que se escape un solo par.</p>
-      </div>
-    </div>
-
-    <!-- Tabla de multiplicar como ejemplo de TABLA -->
-    <div class="codeswitch full" style="margin-top:30px;">
-      <div class="cs-tabs">
-        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-        <button type="button" class="cs-tab" data-lang="py">Python</button>
-        <span class="cs-flag">principal &middot; C++</span>
-      </div>
-      <div class="cs-pane" data-lang="cpp">
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tabla_multiplicar.cpp</span></div>
-<pre><span class="com">// TABLA: una rejilla de multiplicaciones del 1 al 5</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="kw">const int</span> LIMITE = <span class="num">5</span>;
-
-    <span class="kw">for</span> (<span class="kw">int</span> fila = <span class="num">1</span>; fila &lt;= LIMITE; fila++) {        <span class="com">// renglones 1..5</span>
-        <span class="kw">for</span> (<span class="kw">int</span> columna = <span class="num">1</span>; columna &lt;= LIMITE; columna++) { <span class="com">// columnas 1..5</span>
-            <span class="kw">int</span> producto = fila * columna;
-            <span class="com">// setw(3) reserva 3 espacios para que la rejilla quede alineada</span>
-            cout &lt;&lt; setw(<span class="num">3</span>) &lt;&lt; producto &lt;&lt; <span class="str">" "</span>;
-        }
-        cout &lt;&lt; endl;                          <span class="com">// termina el renglon</span>
-    }
-    <span class="kw">return</span> <span class="num">0</span>;
-}
-
-<span class="com">// Salida (cuadricula perfectamente alineada):</span>
-<span class="out">  1   2   3   4   5</span>
-<span class="out">  2   4   6   8  10</span>
-<span class="out">  3   6   9  12  15</span>
-<span class="out">  4   8  12  16  20</span>
-<span class="out">  5  10  15  20  25</span></pre>
-        </div>
-      </div>
-      <div class="cs-pane" data-lang="py" hidden>
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tabla_multiplicar.py</span></div>
-<pre><span class="com"># TABLA: una rejilla de multiplicaciones del 1 al 5</span>
-LIMITE = <span class="num">5</span>
-
-<span class="kw">for</span> fila <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, LIMITE + <span class="num">1</span>):        <span class="com"># renglones 1..5</span>
-    <span class="kw">for</span> columna <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, LIMITE + <span class="num">1</span>):   <span class="com"># columnas 1..5</span>
-        producto = fila * columna
-        <span class="com"># :3 reserva 3 espacios para que la rejilla quede alineada</span>
-        <span class="fn">print</span>(<span class="str">f"</span>{producto:<span class="num">3</span>}<span class="str">"</span>, end=<span class="str">" "</span>)
-    <span class="fn">print</span>()                          <span class="com"># termina el renglón</span>
-
-<span class="com"># Salida (cuadrícula perfectamente alineada):</span>
-<span class="out">  1   2   3   4   5</span>
-<span class="out">  2   4   6   8  10</span>
-<span class="out">  3   6   9  12  15</span>
-<span class="out">  4   8  12  16  20</span>
-<span class="out">  5  10  15  20  25</span></pre>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONCEPT iii: LIVE CODING patrones -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n blood display">iii.</div>
-      <div>
-        <h2 class="display">Live coding: la <em class="blood">pirámide</em> y el rombo.</h2>
-        <p>Aquí está el truco que lo cambia todo: hacer que el límite del ciclo interior <strong>dependa</strong> del índice exterior. En cuanto <span class="mono" style="background:var(--paper-deep);padding:1px 7px;border:1px solid var(--line);font-size:.85em">range</span> deja de ser fijo, la cuadrícula se vuelve <em>forma</em>.</p>
-      </div>
-    </div>
-
-    <div class="patterns">
-      <div class="pat-block">
-        <div class="codeswitch">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">principal &middot; C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">piramide.cpp</span></div>
-<pre><span class="com">// PATRON: triangulo de estrellas que crece</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="kw">const int</span> ALTURA = <span class="num">5</span>;
-
-    <span class="kw">for</span> (<span class="kw">int</span> fila = <span class="num">1</span>; fila &lt;= ALTURA; fila++) {
-        <span class="com">// el interior depende de la fila: 1, 2, 3...</span>
-        <span class="kw">for</span> (<span class="kw">int</span> estrella = <span class="num">0</span>; estrella &lt; fila; estrella++) {
-            cout &lt;&lt; <span class="str">"*"</span>;
-        }
-        cout &lt;&lt; endl;   <span class="com">// baja de renglon</span>
-    }
-    <span class="kw">return</span> <span class="num">0</span>;
-}</pre>
-            </div>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">piramide.py</span></div>
-<pre><span class="com"># PATRÓN: triángulo de estrellas que crece</span>
-ALTURA = <span class="num">5</span>
-
-<span class="kw">for</span> fila <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, ALTURA + <span class="num">1</span>):
-    <span class="com"># el interior depende de la fila: 1, 2, 3...</span>
-    <span class="kw">for</span> estrella <span class="kw">in</span> <span class="fn">range</span>(fila):
-        <span class="fn">print</span>(<span class="str">"*"</span>, end=<span class="str">""</span>)
-    <span class="fn">print</span>()   <span class="com"># baja de renglón</span></pre>
-            </div>
-          </div>
-        </div>
-        <div class="pat-label" style="margin-top:14px">Así se verá en la terminal</div>
-        <div class="term">
-          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — piramide.py</span></div>
-          <div class="term-body"><span class="star">*</span>
-<span class="star">**</span>
-<span class="star">***</span>
-<span class="star">****</span>
-<span class="star">*****</span></div>
-        </div>
-      </div>
-
-      <div class="pat-block">
-        <div class="codeswitch">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">principal &middot; C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">piramide_centrada.cpp</span></div>
-<pre><span class="com">// PATRON: piramide centrada con espacios</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="kw">const int</span> ALTURA = <span class="num">5</span>;
-
-    <span class="kw">for</span> (<span class="kw">int</span> fila = <span class="num">1</span>; fila &lt;= ALTURA; fila++) {
-        <span class="kw">int</span> espacios  = ALTURA - fila;     <span class="com">// sangria decreciente</span>
-        <span class="kw">int</span> estrellas = <span class="num">2</span> * fila - <span class="num">1</span>;    <span class="com">// 1, 3, 5, 7, 9</span>
-        <span class="com">// string(n, c) repite el caracter c, n veces</span>
-        cout &lt;&lt; <span class="kw">string</span>(espacios, <span class="str">' '</span>) &lt;&lt; <span class="kw">string</span>(estrellas, <span class="str">'*'</span>) &lt;&lt; endl;
-    }
-    <span class="kw">return</span> <span class="num">0</span>;
-}</pre>
-            </div>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">piramide_centrada.py</span></div>
-<pre><span class="com"># PATRÓN: pirámide centrada con espacios</span>
-ALTURA = <span class="num">5</span>
-
-<span class="kw">for</span> fila <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, ALTURA + <span class="num">1</span>):
-    espacios = ALTURA - fila        <span class="com"># sangría decreciente</span>
-    estrellas = <span class="num">2</span> * fila - <span class="num">1</span>      <span class="com"># 1, 3, 5, 7, 9</span>
-    <span class="fn">print</span>(<span class="str">" "</span> * espacios + <span class="str">"*"</span> * estrellas)</pre>
-            </div>
-          </div>
-        </div>
-        <div class="pat-label" style="margin-top:14px">Así se verá en la terminal</div>
-        <div class="term">
-          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — piramide_centrada.py</span></div>
-          <div class="term-body"><span class="dim">····</span><span class="star">*</span>
-<span class="dim">···</span><span class="star">***</span>
-<span class="dim">··</span><span class="star">*****</span>
-<span class="dim">·</span><span class="star">*******</span>
-<span class="star">*********</span></div>
-        </div>
-      </div>
-    </div>
-
-    <p style="color:var(--ink-soft); font-style:italic; font-size:1rem; max-width:780px; margin-top:24px;">El truco de repetir un carácter —<span class="mono" style="background:var(--paper-deep);padding:1px 6px;font-size:.85em">"*" * estrellas</span> en Python, <span class="mono" style="background:var(--paper-deep);padding:1px 6px;font-size:.85em">string(estrellas, '*')</span> en C++— a veces ahorra el ciclo interior. Pero entiende primero la versión con doble <span class="mono" style="background:var(--paper-deep);padding:1px 6px;font-size:.85em">for</span>: el atajo solo se gana después de dominar el camino largo.</p>
-  </section>
-
-  <!-- EJERCICIOS / ENTREGABLE -->
+  <!-- SECCIÓN iv: ENTREGABLE -->
   <section class="ejercicios reveal">
     <div class="s-head">
       <div class="n blood display">iv.</div>
       <div>
-        <h2 class="display">Tu <em class="blood">entregable</em>: elige tu laberinto.</h2>
-        <p>Escribe <strong>un</strong> programa con ciclo anidado. Tienes <strong>tres casos</strong> de uso para elegir —uno por cada rostro del laberinto—. Resuelve el que más te rete y súbelo a GitHub.</p>
+        <h2 class="display">Tu <em class="blood">entregable</em>: programa y documento.</h2>
+        <p>La Práctica 2 tiene <strong>dos partes</strong>: el programa que resuelve la ecuación cuadrática y un documento breve, en PDF o Word, que cuenta cómo lo lograste. Ambos se suben a la actividad <strong>«Práctica 2»</strong> en Blackboard.</p>
       </div>
     </div>
 
-    <p class="ej-intro">No copies los tres: <strong>escoge uno</strong>, hazlo tuyo y que funcione de principio a fin. Si terminas pronto y quieres más puntos de actividad, atrévete con un segundo.</p>
+    <p class="ej-intro">Realiza <strong>un programa</strong> que resuelva la ecuación cuadrática por medio de la fórmula general, utilizando la <strong>estructura condicional doble</strong> y el compilador de C++ desde VS Code. Guárdalo también en tu memoria USB — el laboratorio no perdona los archivos huérfanos.</p>
 
     <div class="ej-card">
-      <span class="ej-tag">Opción A</span>
-      <span class="ej-pill">tabla</span>
+      <span class="ej-tag">Parte A</span>
+      <span class="ej-pill">programa · c++ / vs code</span>
       <div class="ej-body">
         <div>
-          <h3>Generador de reportes</h3>
-          <p class="ej-desc">Una <strong>tabla de ventas</strong>: por cada producto (fila), muestra sus ventas en cada mes (columna) y el <em>total por producto</em> al final del renglón. El doble <span class="mono">for</span> recorre la rejilla; un acumulador suma la fila.</p>
+          <h3>La ecuación cuadrática</h3>
+          <p class="ej-desc">Un programa que pida los coeficientes <strong>a</strong>, <strong>b</strong> y <strong>c</strong>, calcule el <em>discriminante</em> y use la <strong>condicional doble</strong>: si es mayor o igual a cero, muestra x₁ y x₂ con la fórmula general; si no, informa que <em>no hay soluciones reales</em>.</p>
           <ul class="reqs">
-            <li>Al menos <span class="mono">3</span> productos y <span class="mono">3</span> meses</li>
-            <li>Ciclo exterior = producto, interior = mes</li>
-            <li>Acumula y muestra el <span class="mono">total</span> por renglón</li>
-            <li>Alinea las columnas con <span class="mono">f"{x:5}"</span></li>
+            <li>Compilado y probado en <span class="mono">VS Code</span> con la extensión C/C++</li>
+            <li>Lee <span class="mono">a</span>, <span class="mono">b</span> y <span class="mono">c</span> como decimales (<span class="mono">double</span>)</li>
+            <li>Usa <span class="mono">sqrt()</span> de <span class="mono">&lt;cmath&gt;</span> para la raíz</li>
+            <li>Estructura condicional <strong>doble</strong> obligatoria; la anidada suma</li>
+            <li>Comentarios explicando cada decisión del programa</li>
+            <li>Al final del código, tus <strong>conclusiones</strong> en un comentario</li>
           </ul>
         </div>
         <div class="ej-preview">
-          <div class="pv-label">Así se verá (ejemplo)</div>
+          <div class="pv-label">Pruébalo al menos con estos tres casos</div>
           <div class="term">
-            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — reporte.py</span></div>
-            <div class="term-body"><span class="dim">Producto   Ene  Feb  Mar  Total</span>
-Café        12   15   20    47
-Pan         30   28   25    83
-Leche       18   22   19    59</div>
+            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">PLAN DE PRUEBAS</span></div>
+            <div class="term-body"><span class="dim"># caso 1 · dos raices distintas</span>
+a=1, b=-5, c=6   <span class="star">→ x1 = 3, x2 = 2</span>
+
+<span class="dim"># caso 2 · raiz doble</span>
+a=1, b=-4, c=4   <span class="star">→ x = 2</span>
+
+<span class="dim"># caso 3 · sin solucion real (else)</span>
+a=1, b=2, c=5    <span class="star">→ no hay soluciones reales</span></div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="ej-card">
-      <span class="ej-tag">Opción B</span>
-      <span class="ej-pill">patrón</span>
+      <span class="ej-tag">Parte B</span>
+      <span class="ej-pill">documento · pdf / word</span>
       <div class="ej-body">
         <div>
-          <h3>El rombo de estrellas</h3>
-          <p class="ej-desc">Dibuja un <strong>rombo</strong> (o un diamante) hecho de estrellas, centrado. Es una pirámide que crece y luego <em>decrece</em>: dos ciclos anidados, uno para la mitad de arriba y otro para la de abajo.</p>
+          <h3>El documento de la práctica</h3>
+          <p class="ej-desc">Un documento en <strong>PDF o Word</strong> que narre tu práctica como se narra un experimento: qué hiciste, cómo lo hiciste y qué aprendiste. Breve y honesto vale más que largo y copiado.</p>
           <ul class="reqs">
-            <li>Usa una constante <span class="mono">ALTURA</span> impar</li>
-            <li>El interior depende de la fila (espacios y estrellas)</li>
-            <li>Mitad ascendente + mitad descendente</li>
-            <li>Debe quedar <em>simétrico</em> al voltearlo</li>
+            <li><strong>Título</strong> — de la práctica, con tu nombre, materia y fecha</li>
+            <li><strong>Introducción</strong> — qué es una estructura condicional y qué resuelve la fórmula general</li>
+            <li><strong>Desarrollo</strong> — cómo construiste el programa, con capturas de VS Code y de las corridas</li>
+            <li><strong>Conclusiones</strong> — observaciones sobre los resultados y lo aprendido</li>
+            <li><strong>Bibliografía</strong> — en formato <strong>APA</strong> (abajo tienes las dos referencias base)</li>
           </ul>
         </div>
         <div class="ej-preview">
-          <div class="pv-label">Así se verá (ejemplo)</div>
-          <div class="term">
-            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — rombo.py</span></div>
-            <div class="term-body"><span class="dim">··</span><span class="star">*</span>
-<span class="dim">·</span><span class="star">***</span>
-<span class="star">*****</span>
-<span class="dim">·</span><span class="star">***</span>
-<span class="dim">··</span><span class="star">*</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="ej-card">
-      <span class="ej-tag">Opción C</span>
-      <span class="ej-pill">cuadrícula / combinación</span>
-      <div class="ej-body">
-        <div>
-          <h3>El tablero vacío</h3>
-          <p class="ej-desc">Dibuja la <strong>cuadrícula</strong> de un juego: el tablero del <em>gato</em> (3×3) o un campo de <em>buscaminas</em> (por ejemplo 8×8) con todas sus casillas vacías. El doble <span class="mono">for</span> coloca cada celda y traza las líneas.</p>
-          <ul class="reqs">
-            <li>Tamaño en constantes <span class="mono">FILAS</span> y <span class="mono">COLUMNAS</span></li>
-            <li>Casillas vacías con <span class="mono">.</span> o espacios</li>
-            <li>Separa columnas con <span class="mono">|</span> y filas con líneas</li>
-            <li>Extra: numera filas y columnas (combinación de etiquetas)</li>
-          </ul>
-        </div>
-        <div class="ej-preview">
-          <div class="pv-label">Así se verá (ejemplo · gato 3×3)</div>
-          <div class="term">
-            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — tablero.py</span></div>
-            <div class="term-body"> . | . | .
-<span class="dim">---+---+---</span>
- . | . | .
-<span class="dim">---+---+---</span>
- . | . | .</div>
+          <div class="pv-label">Estructura del documento</div>
+          <div class="doc-mock">
+            <div class="dm-title">Práctica 2 · Estructuras condicionales</div>
+            <div class="dm-sec"><span class="dm-n">1.</span><span class="dm-t"><strong>Título</strong> — práctica, alumno, materia, fecha</span></div>
+            <div class="dm-sec"><span class="dm-n">2.</span><span class="dm-t"><strong>Introducción</strong> — el problema y las estructuras usadas</span></div>
+            <div class="dm-sec"><span class="dm-n">3.</span><span class="dm-t"><strong>Desarrollo</strong> — construcción del programa + capturas</span></div>
+            <div class="dm-sec"><span class="dm-n">4.</span><span class="dm-t"><strong>Conclusiones</strong> — resultados y aprendizajes</span></div>
+            <div class="dm-sec"><span class="dm-n">5.</span><span class="dm-t"><strong>Bibliografía</strong> — formato APA</span></div>
           </div>
         </div>
       </div>
@@ -751,7 +737,7 @@ Leche       18   22   19    59</div>
 
     <div class="choose-note">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg>
-      <p><strong>Importante:</strong> entrega <strong>un solo</strong> caso a tu elección, pero tu código debe contener al menos <strong>dos ciclos for anidados</strong> y, donde aplique, un acumulador. Pon tus <span style="color:#f0c8a0;font-family:'JetBrains Mono',monospace;font-size:.9em">#</span> comentarios explicando qué hace cada ciclo.</p>
+      <p><strong>Importante:</strong> todo se entrega en la actividad <strong>«Práctica 2» de Blackboard</strong>: el código fuente, su copia en <strong>.txt</strong> y el documento <strong>PDF o Word</strong>. Las conclusiones van <strong>dos veces</strong>: como comentario al final del código y como sección del documento.</p>
     </div>
   </section>
 
@@ -760,34 +746,39 @@ Leche       18   22   19    59</div>
     <div class="panel">
       <h3 class="display">Criterios de <em>evaluación</em></h3>
       <ol class="crit-list">
-        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el programa corre completo sin reventar.</li>
-        <li><strong>Lógica correcta</strong> — la tabla, el patrón o el tablero salen exactamente como se pide.</li>
-        <li><strong>Funcionamiento óptimo</strong> — usa ciclos anidados de verdad y constantes; nada de imprimir línea por línea a mano.</li>
-        <li><strong>Autenticidad</strong> — código hecho por ti, comprendido por ti; no copiado de un compañero.</li>
+        <li><strong>Código y sintaxis sin errores de compilación</strong> — g++ compila a la primera, sin advertencias ignoradas.</li>
+        <li><strong>Lógica del programa sin errores lógicos</strong> — las raíces son las correctas y el else responde cuando debe.</li>
+        <li><strong>Funcionamiento óptimo</strong> — de acuerdo con los requisitos explicados en los requerimientos, con los tres casos de prueba superados.</li>
+        <li><strong>Autenticidad</strong> — código hecho por el alumno; no clones de programas de compañeros.</li>
       </ol>
       <div class="pond">
         <h4>Cómo cuenta en el curso</h4>
-        <p>Este entregable suma a <strong>Actividades de aprendizaje (10%)</strong> y al bloque de <strong>prácticas del Examen Bimestral (20%)</strong>. El examen vale 40% (examen 20% + prácticas 20%); el Final, 50% (examen 25% + prácticas 25%). Todo entregable vive en tu <strong>repositorio de GitHub</strong>.</p>
+        <p>Las prácticas institucionales forman el bloque de <strong>prácticas</strong> de los exámenes. Esta Práctica 2 suma al bloque del <strong>Examen Final (prácticas 25%)</strong> y a tus <strong>Actividades de aprendizaje (10%)</strong>. Recuerda la aritmética del curso: Bimestral 40% (examen 20% + prácticas 20%) y Final 50% (examen 25% + prácticas 25%).</p>
       </div>
     </div>
 
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.cpp</span>
-        <span class="ev-txt"><strong>Tu programa</strong> en C++ (y Python como apoyo, si quieres) con el caso elegido (A, B o C) y sus dos ciclos <span class="mono" style="font-family:'JetBrains Mono',monospace">for</span> anidados.</span>
+        <span class="file-ic">.c</span>
+        <span class="ev-txt"><strong>El código fuente</strong> de tu programa, tal como lo compilaste en VS Code (siguiendo la guía en C++, tu archivo será <strong>.cpp</strong>; el practicario lo lista como .c — entrégalo igual).</span>
       </div>
       <div class="evid-item">
-        <span class="file-ic">.png</span>
-        <span class="ev-txt"><strong>Captura</strong> de la terminal mostrando la salida (la tabla, el patrón o el tablero ya dibujado).</span>
+        <span class="file-ic">.txt</span>
+        <span class="ev-txt"><strong>Copia del código en texto plano</strong> — el mismo programa pegado en el Bloc de notas, como lo pide el practicario.</span>
       </div>
       <div class="evid-item">
-        <span class="file-ic">.md</span>
-        <span class="ev-txt"><strong>README</strong> breve: qué opción elegiste y, en una frase, qué hace el ciclo exterior y qué el interior.</span>
+        <span class="file-ic">.pdf / .docx</span>
+        <span class="ev-txt"><strong>El documento</strong> con Título, Introducción, Desarrollo, Conclusiones y Bibliografía en formato APA (Parte B).</span>
       </div>
       <div class="conclu-note">
-        <h4>Haz tu prueba de escritorio</h4>
-        <p>Antes de entregar, traza a mano las primeras <span class="mono">filas × columnas</span> iteraciones en una tablita —como la de la sección i— y verifica que tu salida coincida. Es el hábito que distingue al que <em>programa</em> del que <em>adivina</em>.</p>
+        <h4>No olvides tus conclusiones en el código</h4>
+        <p>Al final de tu programa, en forma de comentario (<span class="mono">/* ... */</span> en C y C++, <span class="mono">#</span> en Python), escribe una redacción breve con tus observaciones sobre los resultados y los conocimientos adquiridos al concluir la práctica.</p>
+      </div>
+      <div class="biblio">
+        <h4>Bibliografía de la práctica (formato APA)</h4>
+        <p>Templeman, J. (2018). <em>Fundamentos de programación: algoritmos, estructuras de datos y objetos.</em> McGraw-Hill.</p>
+        <p>Deitel, P. y Deitel, H. (2019). <em>C++: cómo programar.</em> Pearson / Prentice Hall.</p>
       </div>
     </div>
   </section>
@@ -796,18 +787,19 @@ Leche       18   22   19    59</div>
   <section class="cierre reveal">
     <div class="small-caps">Una última cosa antes de cerrar</div>
     <div class="quote display">
-      «La naturaleza usa tan pocos hilos de su urdimbre que cada <span class="em-ochre">pequeña parte</span><br/>
-      reproduce, en escala menor, <span class="em">el todo del tapiz</span>.»
+      «Dos caminos se bifurcaban en un bosque y yo…<br/>
+      yo tomé <span class="em">el menos transitado</span>.<br/>
+      Y eso hizo <span class="em-ochre">toda la diferencia</span>.»
     </div>
-    <div class="quote-author">— Benoît Mandelbrot</div>
-    <div class="quote-meta">La geometría fractal de la naturaleza · 1982</div>
+    <div class="quote-author">— Robert Frost</div>
+    <div class="quote-meta">El camino no elegido · 1916</div>
     <div class="sig">C. D. Vaca
       <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
     </div>
   </section>
 
   <footer>
-    Sesión 16 <span class="dot">·</span> El laberinto fractal <span class="dot">·</span> 26-3
+    Sesión 16 <span class="dot">·</span> Práctica 2 · Las dos raíces <span class="dot">·</span> 26-3
     <div class="nav-prev">
       ← Vuelve a <a href="../sesion-15/index.html">Sesión 15 · Después del juicio</a>
       &nbsp;·&nbsp;
