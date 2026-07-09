@@ -243,6 +243,23 @@
   .cs-pane .code-block{ border-top:none; }
   @media (max-width:480px){ .cs-flag{ display:none; } }
 
+  /* DOWNLOAD SCAFFOLD (plano) */
+  .download-box{ margin-top: 26px; background: var(--ink); color: var(--paper); padding: 0; overflow: hidden; }
+  .download-box .db-head{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 28px 32px; border-bottom: 1px solid rgba(239,230,210,.12); }
+  @media (max-width: 640px){ .download-box .db-head{ grid-template-columns: 1fr; } }
+  .download-box .db-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 0 0 6px; color: #f0c8a0; }
+  .download-box .db-head .file-meta{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: rgba(239,230,210,.55); }
+  .dl-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--olive); color: var(--paper); text-decoration: none; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; border: none; cursor: pointer; }
+  .dl-btn:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
+  .dl-btn svg{ width: 18px; height: 18px; }
+  .dl-col{ display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  @media (max-width: 640px){ .dl-col{ align-items: flex-start; } }
+  .dl-alt{ font-family: "JetBrains Mono", monospace; font-size: .76rem; color: rgba(239,230,210,.6); text-decoration: none; border-bottom: 1px dashed rgba(239,230,210,.3); transition: color .25s ease, border-color .25s ease; }
+  .dl-alt:hover{ color: #f0c8a0; border-bottom-color: #f0c8a0; }
+  .download-box .db-body{ padding: 26px 32px 30px; }
+  .download-box .db-body > p{ margin: 0; font-size: 1rem; color: rgba(239,230,210,.85); line-height: 1.55; }
+  .download-box .db-body > p strong{ color: #f0c8a0; }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -496,8 +513,8 @@
     <div class="s-head">
       <div class="n blood display">iii.</div>
       <div>
-        <h2 class="display">Live coding: el programa <em class="blood">completo</em>.</h2>
-        <p>En VS Code: crea tu archivo <strong>cuadratica.cpp</strong> y, con la extensión de C/C++ instalada, presiona <strong>▶ Run C/C++ File</strong> — la extensión compila con g++ y ejecuta en la terminal. Pedimos los tres coeficientes, calculamos el discriminante y dejamos que la <strong>condicional doble</strong> tome la decisión.</p>
+        <h2 class="display">Live coding: yo lo armo, <em class="blood">tú lo escribes</em>.</h2>
+        <p>En VS Code: crea tu archivo <strong>cuadratica.cpp</strong> y, con la extensión de C/C++ instalada, presiona <strong>▶ Run C/C++ File</strong> — compila con g++ y ejecuta en la terminal. El programa completo lo construimos <strong>juntos en clase, en vivo</strong>… y se borra del proyector al final. En esta página solo queda el <strong>plano</strong>: los pasos, no las respuestas.</p>
       </div>
     </div>
 
@@ -510,46 +527,40 @@
       <div class="cs-pane" data-lang="cpp">
         <div class="code-block">
           <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuadratica.cpp</span></div>
-<pre><span class="com">// PRACTICA 2 · Ecuacion cuadratica con la formula general</span>
-<span class="com">// Estructuras condicionales: el discriminante decide el camino</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;cmath&gt;</span>      <span class="com">// aqui vive sqrt()</span>
+<pre><span class="com">// PRACTICA 2 · La ecuacion cuadratica — PLANO GUIADO</span>
+<span class="com">// Escribe tu codigo debajo de cada PASO. No borres los pasos:</span>
+<span class="com">// al final quedaran como los comentarios de tu programa.</span>
+
+<span class="com">// PASO 1: incluye &lt;iostream&gt; y la libreria donde vive sqrt()</span>
+
 <span class="kw">using namespace</span> std;
 
 <span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="kw">double</span> a, b, c;
 
-    cout &lt;&lt; <span class="str">"=== Ecuacion cuadratica: ax^2 + bx + c = 0 ==="</span> &lt;&lt; endl;
-    cout &lt;&lt; <span class="str">"Coeficiente a: "</span>;
-    cin &gt;&gt; a;
-    cout &lt;&lt; <span class="str">"Coeficiente b: "</span>;
-    cin &gt;&gt; b;
-    cout &lt;&lt; <span class="str">"Coeficiente c: "</span>;
-    cin &gt;&gt; c;
+    <span class="com">// PASO 2: declara los coeficientes a, b y c como double</span>
 
-    <span class="com">// 5.1 · if simple: con a = 0 no hay ecuacion cuadratica</span>
-    <span class="kw">if</span> (a == <span class="num">0</span>) {
-        cout &lt;&lt; <span class="str">"Con a = 0 no es cuadratica (2a seria cero)."</span> &lt;&lt; endl;
-        <span class="kw">return</span> <span class="num">0</span>;
-    }
+    <span class="com">// PASO 3: presenta el programa y pide los tres coeficientes</span>
+    <span class="com">//         (cout para preguntar, cin para leer)</span>
 
-    <span class="kw">double</span> discriminante = b * b - <span class="num">4</span> * a * c;
+    <span class="com">// PASO 4: if SIMPLE (5.1) — si a == 0 no es cuadratica:</span>
+    <span class="com">//         avisa al usuario y termina con return 0;</span>
 
-    <span class="com">// 5.2 · condicional doble: parte positiva y parte negativa</span>
-    <span class="kw">if</span> (discriminante &gt;= <span class="num">0</span>) {
-        <span class="kw">double</span> x1 = (-b + <span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a);
-        <span class="kw">double</span> x2 = (-b - <span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a);
-        cout &lt;&lt; <span class="str">"x1 = "</span> &lt;&lt; x1 &lt;&lt; endl;
-        cout &lt;&lt; <span class="str">"x2 = "</span> &lt;&lt; x2 &lt;&lt; endl;
-    } <span class="kw">else</span> {
-        cout &lt;&lt; <span class="str">"Discriminante negativo: no hay soluciones reales."</span> &lt;&lt; endl;
-    }
+    <span class="com">// PASO 5: calcula el discriminante (b*b - 4*a*c)</span>
+    <span class="com">//         y guardalo en una variable double</span>
+
+    <span class="com">// PASO 6: condicional DOBLE (5.2) — parte positiva:</span>
+    <span class="com">//         si el discriminante es mayor o igual a cero,</span>
+    <span class="com">//         calcula x1 y x2 con la formula general</span>
+    <span class="com">//         (pista: sqrt(discriminante) es la raiz)</span>
+    <span class="com">//         y muestralas en pantalla</span>
+
+    <span class="com">// PASO 7: parte negativa (else): informa que no hay</span>
+    <span class="com">//         soluciones reales</span>
 
     <span class="kw">return</span> <span class="num">0</span>;
 }
 
-<span class="com">/* CONCLUSIONES:
-   Aqui, en un comentario, escribe tu redaccion breve con las
+<span class="com">/* CONCLUSIONES (PASO 8): tu redaccion breve con las
    observaciones sobre los resultados y los conocimientos
    adquiridos al concluir la practica. */</span></pre>
         </div>
@@ -557,39 +568,58 @@
       <div class="cs-pane" data-lang="py" hidden>
         <div class="code-block">
           <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuadratica.py</span></div>
-<pre><span class="com"># PRÁCTICA 2 · Ecuación cuadrática con la fórmula general</span>
-<span class="com"># Estructuras condicionales: el discriminante decide el camino</span>
-<span class="kw">import</span> math   <span class="com"># aquí vive sqrt()</span>
+<pre><span class="com"># PRÁCTICA 2 · La ecuación cuadrática — PLANO GUIADO</span>
+<span class="com"># Escribe tu código debajo de cada PASO. No borres los pasos:</span>
+<span class="com"># al final quedarán como los comentarios de tu programa.</span>
 
-<span class="fn">print</span>(<span class="str">"=== Ecuación cuadrática: ax² + bx + c = 0 ==="</span>)
-a = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Coeficiente a: "</span>))
-b = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Coeficiente b: "</span>))
-c = <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Coeficiente c: "</span>))
+<span class="com"># PASO 1: importa la librería donde vive sqrt()</span>
 
-<span class="com"># 5.1 · if simple: con a = 0 no hay ecuación cuadrática</span>
-<span class="kw">if</span> a == <span class="num">0</span>:
-    <span class="fn">print</span>(<span class="str">"Con a = 0 no es cuadrática (2a sería cero)."</span>)
-<span class="kw">else</span>:
-    discriminante = b ** <span class="num">2</span> - <span class="num">4</span> * a * c
+<span class="com"># PASO 2 y 3: presenta el programa y pide los coeficientes</span>
+<span class="com">#             a, b y c (input + float, son decimales)</span>
 
-    <span class="com"># 5.2 · condicional doble: parte positiva y parte negativa</span>
-    <span class="kw">if</span> discriminante &gt;= <span class="num">0</span>:
-        x1 = (-b + math.<span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a)
-        x2 = (-b - math.<span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a)
-        <span class="fn">print</span>(<span class="str">f"x1 = </span>{x1}<span class="str">"</span>)
-        <span class="fn">print</span>(<span class="str">f"x2 = </span>{x2}<span class="str">"</span>)
-    <span class="kw">else</span>:
-        <span class="fn">print</span>(<span class="str">"Discriminante negativo: no hay soluciones reales."</span>)
+<span class="com"># PASO 4: if SIMPLE (5.1) — si a == 0 no es cuadrática:</span>
+<span class="com">#         avisa al usuario; el resto va en el else</span>
 
-<span class="com"># CONCLUSIONES: aquí, en comentario, tu redacción breve con las</span>
-<span class="com"># observaciones y los conocimientos adquiridos en la práctica.</span></pre>
+<span class="com"># PASO 5: calcula el discriminante (b**2 - 4*a*c)</span>
+<span class="com">#         y guárdalo en una variable</span>
+
+<span class="com"># PASO 6: condicional DOBLE (5.2) — parte positiva:</span>
+<span class="com">#         si el discriminante es mayor o igual a cero,</span>
+<span class="com">#         calcula x1 y x2 con la fórmula general</span>
+<span class="com">#         (pista: math.sqrt(discriminante) es la raíz)</span>
+<span class="com">#         y muéstralas en pantalla</span>
+
+<span class="com"># PASO 7: parte negativa (else): informa que no hay</span>
+<span class="com">#         soluciones reales</span>
+
+<span class="com"># CONCLUSIONES (PASO 8): tu redacción breve con las</span>
+<span class="com"># observaciones y los conocimientos adquiridos.</span></pre>
         </div>
       </div>
     </div>
 
-    <div class="patterns">
+    <div class="download-box">
+      <div class="db-head">
+        <div>
+          <h3>La ecuación cuadrática · plano para construir</h3>
+          <div class="file-meta">cuadratica.cpp · 8 pasos guiados + reto · C++ (y Python como apoyo)</div>
+        </div>
+        <div class="dl-col">
+          <a class="dl-btn" href="cuadratica.cpp" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+            Descargar el plano (C++)
+          </a>
+          <a class="dl-alt" href="cuadratica.py" download>↓ versión en Python</a>
+        </div>
+      </div>
+      <div class="db-body">
+        <p>El plano solo trae <strong>comentarios PASO a PASO</strong> y espacio en blanco debajo de cada uno. Ábrelo en VS Code y ve llenándolo mientras construimos el programa en clase. <strong>Cada línea de código la escribes tú</strong> — ese proceso es la práctica; copiarlo de otro lado es perderla (y el criterio de <strong>autenticidad</strong> lo nota).</p>
+      </div>
+    </div>
+
+    <div class="patterns" style="margin-top:34px;">
       <div class="pat-block">
-        <div class="pat-label">Corrida 1 · discriminante positivo</div>
+        <div class="pat-label">Corrida 1 · así debe comportarse el tuyo</div>
         <div class="term">
           <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — cuadratica</span></div>
           <div class="term-body">=== Ecuacion cuadratica: ax^2 + bx + c = 0 ===
@@ -628,33 +658,29 @@ Coeficiente c: <span class="usr">5</span>
         <div class="cs-pane" data-lang="cpp">
           <div class="code-block">
             <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuadratica_anidada.cpp</span></div>
-<pre><span class="com">// 5.3 · if-else anidado: afinar la rama positiva</span>
+<pre><span class="com">// 5.3 · la FORMA del anidado — el contenido es tuyo</span>
 <span class="kw">if</span> (discriminante &gt;= <span class="num">0</span>) {
-    <span class="kw">if</span> (discriminante == <span class="num">0</span>) {
-        cout &lt;&lt; <span class="str">"Raiz doble: x = "</span> &lt;&lt; -b / (<span class="num">2</span> * a) &lt;&lt; endl;
+    <span class="kw">if</span> (<span class="com">/* ¿cuando hay una sola raiz? */</span>) {
+        <span class="com">// la raiz doble no necesita sqrt()... ¿por que?</span>
     } <span class="kw">else</span> {
-        <span class="kw">double</span> x1 = (-b + <span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a);
-        <span class="kw">double</span> x2 = (-b - <span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a);
-        cout &lt;&lt; <span class="str">"x1 = "</span> &lt;&lt; x1 &lt;&lt; <span class="str">", x2 = "</span> &lt;&lt; x2 &lt;&lt; endl;
+        <span class="com">// dos raices distintas: x1 y x2</span>
     }
 } <span class="kw">else</span> {
-    cout &lt;&lt; <span class="str">"No hay soluciones reales."</span> &lt;&lt; endl;
+    <span class="com">// sin soluciones reales</span>
 }</pre>
           </div>
         </div>
         <div class="cs-pane" data-lang="py" hidden>
           <div class="code-block">
             <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cuadratica_anidada.py</span></div>
-<pre><span class="com"># 5.3 · if-else anidado: afinar la rama positiva</span>
+<pre><span class="com"># 5.3 · la FORMA del anidado — el contenido es tuyo</span>
 <span class="kw">if</span> discriminante &gt;= <span class="num">0</span>:
-    <span class="kw">if</span> discriminante == <span class="num">0</span>:
-        <span class="fn">print</span>(<span class="str">f"Raíz doble: x = </span>{-b / (<span class="num">2</span> * a)}<span class="str">"</span>)
+    <span class="kw">if</span> ...:   <span class="com"># ¿cuándo hay una sola raíz?</span>
+        <span class="com"># la raíz doble no necesita sqrt()... ¿por qué?</span>
     <span class="kw">else</span>:
-        x1 = (-b + math.<span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a)
-        x2 = (-b - math.<span class="fn">sqrt</span>(discriminante)) / (<span class="num">2</span> * a)
-        <span class="fn">print</span>(<span class="str">f"x1 = </span>{x1}<span class="str">, x2 = </span>{x2}<span class="str">"</span>)
+        <span class="com"># dos raíces distintas: x1 y x2</span>
 <span class="kw">else</span>:
-    <span class="fn">print</span>(<span class="str">"No hay soluciones reales."</span>)</pre>
+    <span class="com"># sin soluciones reales</span></pre>
           </div>
         </div>
       </div>
@@ -679,7 +705,7 @@ Coeficiente c: <span class="usr">5</span>
       <div class="ej-body">
         <div>
           <h3>La ecuación cuadrática</h3>
-          <p class="ej-desc">Un programa que pida los coeficientes <strong>a</strong>, <strong>b</strong> y <strong>c</strong>, calcule el <em>discriminante</em> y use la <strong>condicional doble</strong>: si es mayor o igual a cero, muestra x₁ y x₂ con la fórmula general; si no, informa que <em>no hay soluciones reales</em>.</p>
+          <p class="ej-desc">Un programa que pida los coeficientes <strong>a</strong>, <strong>b</strong> y <strong>c</strong>, calcule el <em>discriminante</em> y use la <strong>condicional doble</strong>: si es mayor o igual a cero, muestra x₁ y x₂ con la fórmula general; si no, informa que <em>no hay soluciones reales</em>. Parte del <strong>plano</strong> <span class="mono">cuadratica.cpp</span> de la sección iii — cada línea de código es tuya.</p>
           <ul class="reqs">
             <li>Compilado y probado en <span class="mono">VS Code</span> con la extensión C/C++</li>
             <li>Lee <span class="mono">a</span>, <span class="mono">b</span> y <span class="mono">c</span> como decimales (<span class="mono">double</span>)</li>
