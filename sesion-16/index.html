@@ -260,6 +260,28 @@
   .download-box .db-body > p{ margin: 0; font-size: 1rem; color: rgba(239,230,210,.85); line-height: 1.55; }
   .download-box .db-body > p strong{ color: #f0c8a0; }
 
+  /* SOLUCIÓN SELLADA (diagrama de flujo) */
+  .solucion{ margin-top: 48px; border: 2px dashed var(--blood); background: var(--paper-deep); padding: 30px 32px 32px; position: relative; }
+  .solucion .sol-label{ position: absolute; top: -13px; left: 26px; background: var(--blood); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; }
+  .solucion .sol-head{ display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: center; }
+  @media (max-width: 720px){ .solucion .sol-head{ grid-template-columns: 1fr; } }
+  .solucion h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 6px; color: var(--blood-dark); }
+  .solucion .sol-hint{ margin: 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.5; max-width: 580px; }
+  .solucion .sol-hint strong{ color: var(--blood); }
+  .sol-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--blood); color: var(--paper); border: none; cursor: pointer; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; }
+  .sol-btn:hover{ background: var(--blood-dark); transform: translateY(-2px); box-shadow: 0 4px 0 var(--blood-dark); }
+  .sol-btn svg{ width: 18px; height: 18px; transition: transform .3s ease; }
+  .sol-btn.open svg{ transform: rotate(180deg); }
+  .sol-body{ margin-top: 26px; border-top: 1px dashed var(--line); padding-top: 26px; }
+  .sol-body[hidden]{ display: none; }
+  .sol-flow{ overflow-x: auto; }
+  .sol-flow svg{ display: block; width: 100%; max-width: 840px; min-width: 620px; margin: 0 auto; }
+  .sol-legend{ display: flex; flex-wrap: wrap; gap: 12px 26px; justify-content: center; margin-top: 20px; font-size: .85rem; color: var(--ink-soft); }
+  .sol-legend .li{ display: flex; align-items: center; gap: 9px; }
+  .sol-legend .li svg{ width: 30px; height: 20px; flex-shrink: 0; }
+  .sol-caption{ margin: 16px auto 0; max-width: 660px; text-align: center; font-size: .9rem; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
+  .sol-caption strong{ color: var(--blood-dark); font-style: normal; }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -685,6 +707,131 @@ Coeficiente c: <span class="usr">5</span>
         </div>
       </div>
     </div>
+
+    <!-- SOLUCIÓN SELLADA: diagrama de flujo -->
+    <div class="solucion">
+      <span class="sol-label">Solución sellada</span>
+      <div class="sol-head">
+        <div>
+          <h3>La solución completa, sin sintaxis.</h3>
+          <p class="sol-hint">Si te atoras con el plano, aquí está la <strong>lógica entera</strong> del programa — dibujada como diagrama de flujo, no como código. Traducirla a C++ sigue siendo <strong>tu trabajo</strong>, y es justo lo que se evalúa. Ábrela solo después de intentarlo.</p>
+        </div>
+        <button type="button" class="sol-btn" id="solBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="sb-txt">Ver la solución</span>
+        </button>
+      </div>
+
+      <div class="sol-body" id="solBody" hidden>
+        <div class="sol-flow">
+          <svg viewBox="0 0 820 990" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo del programa de la ecuación cuadrática">
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#2a1d14"/>
+              </marker>
+            </defs>
+
+            <!-- INICIO -->
+            <ellipse cx="410" cy="40" rx="70" ry="25" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="410" y="46" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="16" fill="#efe6d2">INICIO</text>
+            <line x1="410" y1="65" x2="410" y2="90" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- E/S: leer coeficientes -->
+            <path d="M322,95 L522,95 L498,149 L298,149 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="410" y="117" text-anchor="middle" font-family="Newsreader, serif" font-size="15.5" fill="#2a1d14">Mostrar el título del programa</text>
+            <text x="410" y="139" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">Leer a, b, c</text>
+            <line x1="410" y1="149" x2="410" y2="173" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- DECISIÓN 1: a == 0 (if simple 5.1) -->
+            <polygon points="410,178 505,228 410,278 315,228" fill="#efe6d2" stroke="#a02418" stroke-width="2"/>
+            <text x="410" y="234" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="#2a1d14">¿a == 0?</text>
+            <text x="316" y="170" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">if simple · 5.1</text>
+
+            <!-- Sí: no es cuadrática → FIN -->
+            <line x1="505" y1="228" x2="570" y2="228" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="532" y="216" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">Sí</text>
+            <path d="M587,200 L777,200 L753,256 L563,256 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="670" y="222" text-anchor="middle" font-family="Newsreader, serif" font-size="14.5" fill="#2a1d14">Avisar: «con a = 0 no es</text>
+            <text x="670" y="242" text-anchor="middle" font-family="Newsreader, serif" font-size="14.5" fill="#2a1d14">cuadrática (2a sería cero)»</text>
+            <line x1="670" y1="256" x2="670" y2="286" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <ellipse cx="670" cy="312" rx="46" ry="23" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="670" y="318" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="15" fill="#efe6d2">FIN</text>
+
+            <!-- No: sigue -->
+            <line x1="410" y1="278" x2="410" y2="304" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="428" y="298" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">No</text>
+
+            <!-- PROCESO: discriminante -->
+            <rect x="275" y="309" width="270" height="52" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="410" y="341" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">discriminante = b·b − 4·a·c</text>
+            <line x1="410" y1="361" x2="410" y2="386" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- DECISIÓN 2: disc >= 0 (condicional doble 5.2) -->
+            <polygon points="410,390 540,455 410,520 280,455" fill="#efe6d2" stroke="#a02418" stroke-width="2"/>
+            <text x="410" y="450" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">¿discriminante</text>
+            <text x="410" y="471" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">&gt;= 0?</text>
+            <text x="545" y="410" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">condicional doble · 5.2</text>
+
+            <!-- No: sin soluciones reales (rama izquierda) -->
+            <line x1="280" y1="455" x2="248" y2="455" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="264" y="441" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">No</text>
+            <path d="M52,427 L242,427 L218,483 L28,483 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="135" y="449" text-anchor="middle" font-family="Newsreader, serif" font-size="14.5" fill="#2a1d14">Mostrar «no hay</text>
+            <text x="135" y="469" text-anchor="middle" font-family="Newsreader, serif" font-size="14.5" fill="#2a1d14">soluciones reales»</text>
+            <path d="M135,483 L135,928 L346,928" fill="none" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- Sí: baja al reto -->
+            <line x1="410" y1="520" x2="410" y2="544" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="428" y="538" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">Sí</text>
+
+            <!-- DECISIÓN 3 (RETO 5.3): disc == 0, punteada -->
+            <polygon points="410,548 535,610 410,672 285,610" fill="#efe6d2" stroke="#a02418" stroke-width="2" stroke-dasharray="7 5"/>
+            <text x="410" y="605" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">¿discriminante</text>
+            <text x="410" y="626" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">== 0?</text>
+            <text x="540" y="568" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">anidado · reto 5.3</text>
+
+            <!-- Sí (reto): raíz doble -->
+            <line x1="535" y1="610" x2="583" y2="610" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="556" y="598" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">Sí</text>
+            <rect x="588" y="584" width="200" height="52" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="688" y="616" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">x = −b / (2·a)</text>
+            <line x1="688" y1="636" x2="688" y2="662" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <path d="M600,668 L800,668 L776,720 L576,720 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="688" y="700" text-anchor="middle" font-family="Newsreader, serif" font-size="14.5" fill="#2a1d14">Mostrar la raíz doble</text>
+            <path d="M688,720 L688,928 L474,928" fill="none" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- No (reto): dos raíces -->
+            <line x1="410" y1="672" x2="410" y2="697" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="428" y="691" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">No</text>
+
+            <!-- PROCESO: x1 y x2 -->
+            <rect x="265" y="702" width="290" height="72" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="410" y="731" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">x1 = (−b + √disc) / (2·a)</text>
+            <text x="410" y="755" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14.5" fill="#2a1d14">x2 = (−b − √disc) / (2·a)</text>
+            <line x1="410" y1="774" x2="410" y2="798" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- E/S: mostrar x1 y x2 -->
+            <path d="M317,802 L527,802 L503,854 L293,854 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="410" y="834" text-anchor="middle" font-family="Newsreader, serif" font-size="14.5" fill="#2a1d14">Mostrar x1 y x2</text>
+            <line x1="410" y1="854" x2="410" y2="898" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- FIN -->
+            <ellipse cx="410" cy="928" rx="58" ry="26" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="410" y="934" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="16" fill="#efe6d2">FIN</text>
+          </svg>
+        </div>
+
+        <div class="sol-legend">
+          <span class="li"><svg viewBox="0 0 30 20"><ellipse cx="15" cy="10" rx="13" ry="8" fill="#5d6638" stroke="#2a1d14"/></svg> inicio / fin</span>
+          <span class="li"><svg viewBox="0 0 30 20"><rect x="2" y="3" width="26" height="14" fill="#e6dbc2" stroke="#2a1d14"/></svg> proceso</span>
+          <span class="li"><svg viewBox="0 0 30 20"><path d="M7,3 L28,3 L23,17 L2,17 Z" fill="#efe6d2" stroke="#2a1d14"/></svg> entrada / salida</span>
+          <span class="li"><svg viewBox="0 0 30 20"><polygon points="15,1 29,10 15,19 1,10" fill="#efe6d2" stroke="#a02418" stroke-width="1.5"/></svg> decisión</span>
+          <span class="li"><svg viewBox="0 0 30 20"><polygon points="15,1 29,10 15,19 1,10" fill="#efe6d2" stroke="#a02418" stroke-width="1.5" stroke-dasharray="4 3"/></svg> reto opcional</span>
+        </div>
+
+        <p class="sol-caption">El rombo <strong>punteado</strong> es el reto 5.3 (anidado): si decides no hacerlo, del «Sí» del discriminante pasas directo a calcular <strong>x1 y x2</strong>. Cada figura del diagrama corresponde a un PASO del plano — tu trabajo es escribir la línea de C++ que la realiza.</p>
+      </div>
+    </div>
   </section>
 
   <!-- SECCIÓN iv: ENTREGABLE -->
@@ -850,6 +997,17 @@ a=1, b=2, c=5    <span class="star">→ no hay soluciones reales</span></div>
     var lang = tab.getAttribute("data-lang");
     sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
     sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
+
+  /* ===== Solución sellada: diagrama de flujo ===== */
+  const solBtn = document.getElementById('solBtn');
+  const solBody = document.getElementById('solBody');
+  solBtn.addEventListener('click', function(){
+    const abrir = solBody.hidden;
+    solBody.hidden = !abrir;
+    solBtn.classList.toggle('open', abrir);
+    solBtn.querySelector('.sb-txt').textContent = abrir ? 'Ocultar la solución' : 'Ver la solución';
+    if (abrir) solBody.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 </script>
 
