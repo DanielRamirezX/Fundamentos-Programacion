@@ -230,6 +230,11 @@
   .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
   .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
   .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .panel p.panel-txt{ margin: 0 0 16px; font-size: .96rem; color: var(--ink-soft); line-height: 1.55; }
+  .panel p.panel-txt strong{ color: var(--blood); }
+  .err-pills{ display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+  .err-pill{ font-family: "JetBrains Mono", monospace; font-size: .76rem; background: var(--paper); border: 1px solid var(--line); padding: 4px 10px; color: var(--blood-dark); white-space: nowrap; }
+  .err-pill.soft{ color: var(--olive-deep); }
 
   /* CIERRE */
   .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
@@ -290,7 +295,8 @@
       Cuando <span class="em">todo</span> falla.
     </h1>
     <p class="lede">
-      La clase pasada tejimos <em>laberintos</em> con ciclos anidados: máquinas que repiten, combinan y
+      La clase pasada, en el laboratorio, dejamos que el discriminante decidiera por nosotros; y una
+      sesión antes tejimos <em>laberintos</em> con ciclos anidados: máquinas que repiten, combinan y
       llenan tablas sin equivocarse… mientras nadie las moleste. Pero el mundo real está lleno de dedos
       torpes y de gente con prisa. Hoy aceptamos una verdad incómoda: <strong>todo lo que puede fallar,
       tarde o temprano fallará</strong>. Un programa adulto no reza para que nada salga mal —
@@ -331,7 +337,7 @@
       </div>
       <div class="who-block">
         <span class="label">Entrega</span>
-        <span class="value">Cajero ATM v2.0 en GitHub</span>
+        <span class="value">Ninguna · investigación de errores comunes</span>
       </div>
     </div>
   </section>
@@ -678,8 +684,9 @@ cuentas = {<span class="str">"1001"</span>: <span class="num">2500.0</span>, <sp
       Volvemos al <strong>cajero ATM de la sesión 09</strong> («Los muchos caminos»). Funciona de maravilla…
       hasta que un humano lo toca. Hoy lo tomamos en vivo y lo <strong>refactorizamos</strong>: cada punto
       marcado con <span class="mono">FRÁGIL</span> se envuelve con <span class="mono">try/catch</span> en C++ (o <span class="mono">try/except/else/finally</span> en Python)
-      hasta que sea <em>imposible</em> hacerlo tronar. Naces con la versión frágil; entregas la versión 2.0,
-      a prueba de fallos.
+      hasta que sea <em>imposible</em> hacerlo tronar. Naces con la versión frágil y sales del aula con la 2.0,
+      a prueba de fallos. <strong>Hoy no se entrega nada</strong>: es entrenamiento puro, de los que se quedan
+      en las manos.
     </p>
 
     <div class="scaffold-demo">
@@ -777,35 +784,43 @@ monto = <span class="fn">float</span>(<span class="fn">input</span>(<span class=
     </div>
   </section>
 
-  <!-- EVALUACIÓN + EVIDENCIA -->
+  <!-- SIN ENTREGA + ENCOMIENDA -->
   <section class="cierre-practica reveal">
     <div class="panel">
-      <h3 class="display">Criterios de <em>evaluación</em></h3>
-      <ol class="crit-list">
-        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el cajero corre completo y no muestra un solo traceback ante ninguna de las entradas malas.</li>
-        <li><strong>Lógica correcta</strong> — cada <span style="font-style:italic">catch</span> (o <span style="font-style:italic">except</span> en Python) atrapa el error correcto y por su tipo; nada de <span class="mono">catch(...)</span> ni <span class="mono">except:</span> pelón que silencie todo.</li>
-        <li><strong>Funcionamiento óptimo</strong> — los seis puntos frágiles endurecidos, validación de saldo y monto, opción de menú inexistente manejada con cortesía.</li>
-        <li><strong>Autenticidad</strong> — código tuyo, no copiado; con tag de versión <span class="mono">v2.0</span> en tu repositorio.</li>
-      </ol>
+      <h3 class="display">Hoy <em>no</em> se entrega nada</h3>
+      <p class="panel-txt">El cajero endurecido se queda en el aula: lo rompemos juntos, lo reparamos juntos y ahí termina. <strong>No hay archivo que subir</strong> — ni a GitHub, ni a Blackboard; ni capturas, ni README.</p>
+      <p class="panel-txt">Lo que sí te llevas es una <strong>encomienda de investigación</strong>: pequeña, sin calificación, y de las que pagan interés compuesto. Se trata de conocer de antemano los errores que Python te va a lanzar durante el resto del curso — y de tu carrera.</p>
+      <div class="conclu-note">
+        <h4>¿Por qué sin entrega?</h4>
+        <p>Porque esta vez el objetivo no es un archivo: es un <em>reflejo</em>. Cuando un traceback aparezca en tu pantalla la próxima semana, quiero que lo mires y digas «te conozco» — que sepas qué lo provocó y dónde buscar la falla, en vez de congelarte frente al muro rojo.</p>
+      </div>
     </div>
 
     <div class="panel">
-      <h3 class="display">Entregable a <em>GitHub</em></h3>
-      <div class="evid-item">
-        <span class="file-ic">.cpp</span>
-        <span class="ev-txt"><strong>cajero_atm_robusto.cpp</strong> — versión 2.0 en C++ (y Python como apoyo) con manejo completo de excepciones en cada punto frágil.</span>
-      </div>
-      <div class="evid-item">
-        <span class="file-ic">tag</span>
-        <span class="ev-txt"><strong>Etiqueta de versión</strong> en el repo: <span class="mono">git tag v2.0</span> y <span class="mono">git push origin v2.0</span>.</span>
-      </div>
-      <div class="evid-item">
-        <span class="file-ic">.png</span>
-        <span class="ev-txt"><strong>Capturas</strong> probando las cinco entradas que antes lo rompían, ahora respondidas con calma.</span>
+      <h3 class="display">La encomienda: <em>conoce a tus enemigos</em></h3>
+      <p class="panel-txt">Investiga por tu cuenta los <strong>errores más comunes de Python</strong>. Para cada uno, anota en tu cuaderno tres cosas:</p>
+      <ol class="crit-list">
+        <li><strong>Qué lo provoca</strong> — la línea de código típica que lo dispara.</li>
+        <li><strong>Cuándo ocurre</strong> — ¿al ejecutar cualquier cosa, o solo con ciertas entradas o datos?</li>
+        <li><strong>Cómo se evita o se maneja</strong> — validando antes, con <span class="mono" style="font-family:'JetBrains Mono',monospace;background:var(--paper);padding:1px 6px;font-size:.85em;border:1px solid var(--line)">try/except</span>, o simplemente escribiendo con más cuidado.</li>
+      </ol>
+      <p class="panel-txt" style="margin-top:16px;">Empieza por esta lista — los cuatro de hoy ya los conoces:</p>
+      <div class="err-pills">
+        <span class="err-pill soft">ValueError</span>
+        <span class="err-pill soft">ZeroDivisionError</span>
+        <span class="err-pill soft">KeyError</span>
+        <span class="err-pill soft">FileNotFoundError</span>
+        <span class="err-pill">SyntaxError</span>
+        <span class="err-pill">IndentationError</span>
+        <span class="err-pill">NameError</span>
+        <span class="err-pill">TypeError</span>
+        <span class="err-pill">IndexError</span>
+        <span class="err-pill">AttributeError</span>
+        <span class="err-pill">ModuleNotFoundError</span>
       </div>
       <div class="conclu-note">
-        <h4>No olvides tus conclusiones</h4>
-        <p>Al final del archivo, en <span class="mono">#</span> comentarios, escribe qué punto te costó más endurecer y una reflexión: ¿cuándo conviene <span class="mono">capturar</span> y cuándo dejar que el error <span class="mono">propague</span>? Esto cuenta para tu actividad.</p>
+        <h4>Dónde buscar</h4>
+        <p>La documentación oficial (<span class="mono">docs.python.org</span>, sección <em>Built-in Exceptions</em>), tus propios tracebacks de sesiones pasadas, y los errores que te salgan esta semana. Cada uno que reconozcas hoy es un problema que no te detendrá en tus futuros desarrollos.</p>
       </div>
     </div>
   </section>
@@ -827,7 +842,7 @@ monto = <span class="fn">float</span>(<span class="fn">input</span>(<span class=
   <footer>
     Sesión 17 <span class="dot">·</span> Cuando todo falla <span class="dot">·</span> 26-3
     <div class="nav-prev">
-      ← Vuelve a <a href="../sesion-16/index.html">Sesión 16 · El laberinto fractal</a>
+      ← Vuelve a <a href="../sesion-16/index.html">Sesión 16 · Práctica 2 · Las dos raíces</a>
       &nbsp;·&nbsp;
       <a href="../">índice del curso</a>
     </div>
