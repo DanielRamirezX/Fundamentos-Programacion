@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sesión 20 · El primer arreglo · Listas, indexación, recorrido y métodos básicos</title>
+<title>Sesión 20 · Divide y vencerás · Funciones, def, return y modularidad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     --ochre: #b5852a; --ochre-deep: #8a6320;
     --olive: #5d6638; --olive-deep: #424a26;
     --line: rgba(42,29,20,.18);
-    --path-blue: #4a6b86; --path-purple: #6b5080;
+    --term-blue: #4a6b86;
     --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
   }
   *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
@@ -58,16 +58,24 @@
   .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
   .hero .lede em{ color: var(--ink); font-style: italic; }
   .hero .lede strong{ color: var(--blood); font-weight: 600; }
-  .hero .who{ position: relative; z-index: 2; margin-top: 54px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; }
-  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
-  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
-  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
 
   /* CONTINUACIÓN BANNER */
   .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
   .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
   .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
   .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* FICHA */
+  .ficha{ margin: 50px 0 0; border: 1.5px solid var(--ink); background: var(--paper-deep); position: relative; }
+  .ficha .f-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .ficha-grid{ display: grid; grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 820px){ .ficha-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 480px){ .ficha-grid{ grid-template-columns: 1fr; } }
+  .ficha-cell{ padding: 18px 22px; border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
+  .ficha-cell .fc-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .ficha-cell .fc-value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.02rem; color: var(--ink); line-height: 1.3; }
+  .ficha-cell.wide{ grid-column: 1 / -1; border-right: none; }
+  .ficha-cell .fc-value.obj{ font-style: italic; font-weight: 400; font-size: 1.05rem; line-height: 1.5; }
 
   /* SECTION HEADERS */
   .sec{ margin: 100px 0; }
@@ -80,22 +88,53 @@
   .sec .s-head h2 em.blood{ color: var(--blood); }
   .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
   .sec .s-head p strong{ color: var(--blood); }
-  .sec .s-head p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
 
-  /* PROSE + CODE 2-col */
-  .twocol{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
-  @media (max-width: 880px){ .twocol{ grid-template-columns: 1fr; gap: 22px; } }
-  .prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
-  .prose p em{ color: var(--blood-dark); font-style: italic; }
-  .prose p strong{ color: var(--blood); font-weight: 600; }
-  .prose ul{ margin: 0 0 16px; padding-left: 20px; }
-  .prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
-  .prose ul li strong{ color: var(--ink); }
-  .prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
-  .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .sec-prose{ max-width: 760px; }
+  .sec-prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .sec-prose p em{ color: var(--blood-dark); font-style: italic; }
+  .sec-prose p strong{ color: var(--blood); font-weight: 600; }
+  .keypoint{ margin: 24px 0; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
   .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
 
-  /* CODE BLOCK */
+  /* divide y vencerás: estudio de caso lado a lado */
+  .compint{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 36px; }
+  @media (max-width: 760px){ .compint{ grid-template-columns: 1fr; } }
+  .ci-card{ padding: 24px 26px; border: 1.5px solid var(--ink); }
+  .ci-card.c{ background: var(--paper-deep); }
+  .ci-card.py{ background: var(--ink); color: var(--paper); }
+  .ci-card .ci-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  .ci-card.c .ci-tag{ color: var(--blood); } .ci-card.py .ci-tag{ color: #f0c8a0; }
+  .ci-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 10px; }
+  .ci-card.c h3{ color: var(--ink); } .ci-card.py h3{ color: var(--paper); }
+  .ci-card p{ margin: 0 0 10px; font-size: .96rem; line-height: 1.55; }
+  .ci-card.c p{ color: var(--ink-soft); } .ci-card.py p{ color: rgba(239,230,210,.8); }
+  .ci-card p strong{ font-weight: 600; } .ci-card.c p strong{ color: var(--blood); } .ci-card.py p strong{ color: #f0c8a0; }
+  .ci-card .ci-flow{ font-family: "JetBrains Mono", monospace; font-size: .82rem; margin-top: 14px; padding: 12px 14px; }
+  .ci-card.c .ci-flow{ background: var(--paper); color: var(--ink-soft); } .ci-card.py .ci-flow{ background: rgba(239,230,210,.08); color: #c8dd96; }
+
+  /* anatomía de una función */
+  .anatomy{ margin: 34px 0; border: 1.5px solid var(--ink); background: var(--ink); padding: 30px 28px; position: relative; }
+  .anatomy .a-label{ position: absolute; top: -13px; left: 26px; background: var(--blood); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .anatomy .a-line{ font-family: "JetBrains Mono", monospace; font-size: clamp(.92rem, 2.4vw, 1.35rem); color: var(--c-base); line-height: 2.1; white-space: nowrap; overflow-x: auto; padding-bottom: 6px; }
+  .anatomy .part{ position: relative; padding: 2px 2px; border-bottom: 2px solid transparent; }
+  .anatomy .part.kw{ color: var(--c-kw); border-bottom-color: var(--c-kw); }
+  .anatomy .part.name{ color: var(--c-fn); border-bottom-color: var(--c-fn); }
+  .anatomy .part.param{ color: var(--c-num); border-bottom-color: var(--c-num); }
+  .anatomy .part.ret{ color: var(--c-kw); border-bottom-color: var(--blood); }
+  .anatomy .part.val{ color: var(--c-str); border-bottom-color: var(--c-str); }
+  .anatomy-legend{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 26px; }
+  @media (max-width: 760px){ .anatomy-legend{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px){ .anatomy-legend{ grid-template-columns: 1fr; } }
+  .leg{ padding-left: 14px; border-left: 3px solid var(--ochre); }
+  .leg .leg-h{ font-family: "JetBrains Mono", monospace; font-size: .74rem; letter-spacing: .04em; color: #f0c8a0; margin-bottom: 4px; }
+  .leg .leg-t{ font-size: .82rem; color: rgba(239,230,210,.78); line-height: 1.4; }
+  .leg.l1{ border-left-color: var(--c-kw); }
+  .leg.l2{ border-left-color: var(--c-fn); }
+  .leg.l3{ border-left-color: var(--c-num); }
+  .leg.l4{ border-left-color: var(--blood); }
+  .leg.l5{ border-left-color: var(--c-str); }
+
+  /* code block */
   .code-block{ background: var(--ink); position: relative; overflow: hidden; }
   .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
   .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
@@ -103,69 +142,33 @@
   .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
   .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
   .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+  .code-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; align-items: start; }
+  @media (max-width: 880px){ .code-grid{ grid-template-columns: 1fr; } }
+  .code-cap{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 10px; }
 
-  /* ÍNDICE / CASILLEROS (visual de indexación) */
-  .casillero{ margin-top: 30px; background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 30px 26px 32px; position: relative; }
-  .casillero .cs-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
-  .casillero .cs-name{ font-family: "JetBrains Mono", monospace; font-size: .9rem; color: var(--ink-soft); margin-bottom: 16px; }
-  .casillero .cs-name strong{ color: var(--blood); }
-  .cells{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-  @media (max-width: 600px){ .cells{ grid-template-columns: repeat(3, 1fr); } }
-  .cell{ border: 1.5px solid var(--ink); background: var(--paper); text-align: center; }
-  .cell .pos{ font-family: "JetBrains Mono", monospace; font-size: .7rem; background: var(--ink); color: var(--paper); padding: 4px 0; letter-spacing: .05em; }
-  .cell .pos .neg{ color: #f0c8a0; }
-  .cell .val{ font-family: "Fraunces", serif; font-weight: 700; font-size: 1.5rem; padding: 14px 0 8px; color: var(--ink); }
-  .cell .lbl{ font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); padding-bottom: 10px; }
-  .casillero .cs-foot{ margin-top: 20px; font-style: italic; color: var(--ink-soft); font-size: .95rem; }
-  .casillero .cs-foot strong{ color: var(--ochre-deep); font-style: normal; }
-  .casillero .cs-foot .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  /* print vs return */
+  .teoria-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  @media (max-width: 820px){ .teoria-grid{ grid-template-columns: 1fr; } }
+  .teoria-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ochre); padding: 22px 24px 24px; }
+  .teoria-card.blood{ border-top-color: var(--blood); }
+  .teoria-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.25rem; margin: 0 0 8px; color: var(--ochre-deep); }
+  .teoria-card.blood h3{ color: var(--blood-dark); }
+  .teoria-card .mono-fn{ font-family: "JetBrains Mono", monospace; font-size: .8rem; color: var(--blood); background: var(--paper); padding: 2px 8px; border: 1px solid var(--line); }
+  .teoria-card p{ margin: 12px 0 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.55; }
+  .teoria-card p strong{ color: var(--ink); }
+  .teoria-card .verdict{ margin-top: 14px; font-family: "JetBrains Mono", monospace; font-size: .78rem; padding: 9px 12px; background: var(--paper); border-left: 3px solid var(--ochre); color: var(--ink-soft); }
+  .teoria-card.blood .verdict{ border-left-color: var(--blood); }
 
-  /* MÉTODOS (cards) */
-  .metodos{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 30px; }
-  @media (max-width: 820px){ .metodos{ grid-template-columns: 1fr; } }
-  .metodo-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--olive); padding: 22px 24px 24px; }
-  .metodo-card.b2{ border-top-color: var(--ochre); }
-  .metodo-card.b3{ border-top-color: var(--blood); }
-  .metodo-card h3{ font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 1.05rem; margin: 0 0 4px; color: var(--olive-deep); }
-  .metodo-card.b2 h3{ color: var(--ochre-deep); } .metodo-card.b3 h3{ color: var(--blood-dark); }
-  .metodo-card .mc-sub{ font-style: italic; color: var(--ink-soft); font-size: .92rem; margin: 0 0 14px; line-height: 1.45; }
-  .metodo-card pre{ margin: 0; padding: 14px 16px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .78rem; line-height: 1.7; overflow-x: auto; }
-  .metodo-card pre .kw{ color: var(--c-kw); } .metodo-card pre .str{ color: var(--c-str); } .metodo-card pre .num{ color: var(--c-num); } .metodo-card pre .com{ color: var(--c-com); font-style: italic; } .metodo-card pre .fn{ color: var(--c-fn); } .metodo-card pre .out{ color: rgba(239,230,210,.55); }
+  /* regla UFUR cards */
+  .principios{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+  @media (max-width: 820px){ .principios{ grid-template-columns: 1fr; } }
+  .pri-card{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 24px 24px 26px; position: relative; }
+  .pri-card .pri-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 2.4rem; color: var(--ochre); line-height: 1; margin-bottom: 10px; }
+  .pri-card h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.18rem; margin: 0 0 8px; color: var(--ink); }
+  .pri-card p{ margin: 0; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; }
+  .pri-card p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
 
-  /* VERSUS (variables sueltas vs lista) */
-  .versus{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
-  @media (max-width: 760px){ .versus{ grid-template-columns: 1fr; } }
-  .vs-card{ padding: 24px 26px; border: 1.5px solid var(--ink); }
-  .vs-card.a{ background: var(--paper-deep); }
-  .vs-card.b{ background: var(--ink); color: var(--paper); }
-  .vs-card .vs-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
-  .vs-card.a .vs-tag{ color: var(--blood); } .vs-card.b .vs-tag{ color: #f0c8a0; }
-  .vs-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 10px; }
-  .vs-card.a h3{ color: var(--ink); } .vs-card.b h3{ color: var(--paper); }
-  .vs-card p{ margin: 0 0 10px; font-size: .96rem; line-height: 1.55; }
-  .vs-card.a p{ color: var(--ink-soft); } .vs-card.b p{ color: rgba(239,230,210,.82); }
-  .vs-card p strong{ font-weight: 600; } .vs-card.a p strong{ color: var(--blood); } .vs-card.b p strong{ color: #f0c8a0; }
-  .vs-card pre{ margin: 12px 0 0; padding: 14px 16px; font-family: "JetBrains Mono", monospace; font-size: .78rem; line-height: 1.7; overflow-x: auto; }
-  .vs-card.a pre{ background: var(--ink); color: var(--c-base); } .vs-card.b pre{ background: rgba(239,230,210,.07); color: var(--c-base); }
-  .vs-card pre .kw{ color: var(--c-kw); } .vs-card pre .str{ color: var(--c-str); } .vs-card pre .num{ color: var(--c-num); } .vs-card pre .com{ color: var(--c-com); font-style: italic; } .vs-card pre .fn{ color: var(--c-fn); }
-
-  /* ERROR CALLOUT (IndexError) */
-  .errbox{ margin-top: 30px; border: 1.5px solid var(--blood); background: var(--paper-deep); overflow: hidden; }
-  .errbox .eb-head{ background: var(--blood); color: var(--paper); padding: 12px 22px; display: flex; align-items: center; gap: 12px; }
-  .errbox .eb-head svg{ width: 22px; height: 22px; flex-shrink: 0; }
-  .errbox .eb-head h3{ margin: 0; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.25rem; }
-  .errbox .eb-body{ display: grid; grid-template-columns: 1fr 1fr; gap: 0; align-items: stretch; }
-  @media (max-width: 760px){ .errbox .eb-body{ grid-template-columns: 1fr; } }
-  .errbox .eb-text{ padding: 22px 24px; }
-  .errbox .eb-text p{ margin: 0 0 12px; font-size: .98rem; color: var(--ink); line-height: 1.55; }
-  .errbox .eb-text p:last-child{ margin-bottom: 0; }
-  .errbox .eb-text strong{ color: var(--blood-dark); }
-  .errbox .eb-text .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
-  .errbox .eb-code{ background: var(--ink); }
-  .errbox .eb-code pre{ margin: 0; padding: 22px 24px; font-family: "JetBrains Mono", monospace; font-size: .8rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; height: 100%; }
-  .errbox .eb-code pre .kw{ color: var(--c-kw); } .errbox .eb-code pre .str{ color: var(--c-str); } .errbox .eb-code pre .num{ color: var(--c-num); } .errbox .eb-code pre .com{ color: var(--c-com); font-style: italic; } .errbox .eb-code pre .fn{ color: var(--c-fn); } .errbox .eb-code pre .err{ color: #f0a890; } .errbox .eb-code pre .out{ color: rgba(239,230,210,.55); }
-
-  /* EJERCICIO / PRÁCTICA */
+  /* EXERCISES */
   .ejercicios{ margin: 100px 0; }
   .ej-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 26px; position: relative; }
   .ej-card .ej-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
@@ -181,14 +184,28 @@
   .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
   .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
   .ej-preview .pv-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
+  /* terminal preview */
   .term{ background: #16110c; border: 1px solid var(--ink); font-family: "JetBrains Mono", monospace; font-size: .82rem; }
   .term .term-bar{ background: rgba(239,230,210,.07); padding: 8px 14px; display: flex; gap: 7px; align-items: center; }
   .term .term-bar .dot{ width: 10px; height: 10px; border-radius: 50%; } .term .term-bar .r{ background: #c0563d; } .term .term-bar .y{ background: var(--ochre); } .term .term-bar .g{ background: var(--olive); }
   .term .term-bar .tt{ margin-left: 8px; font-size: .7rem; color: rgba(239,230,210,.4); }
-  .term .term-body{ padding: 18px 20px; line-height: 1.8; color: #d9ccb0; }
+  .term .term-body{ padding: 18px 20px; line-height: 1.7; color: #d9ccb0; }
   .term .plain{ color: #e8e0cc; }
   .term .prompt{ color: rgba(217,204,176,.55); }
-  .term .hint{ color: #f5b08c; } .term .win{ color: #c8dd96; }
+  .term .ok{ color: #8fbf6f; } .term .warn{ color: #e8c35a; } .term .bad{ color: #e06050; }
+
+  /* mapa de funciones del ATM */
+  .map-table{ border: 1.5px solid var(--ink); background: var(--paper-deep); margin: 26px 0 10px; }
+  .map-row{ display: grid; grid-template-columns: 1.1fr 1.4fr 1fr; align-items: stretch; border-bottom: 1px solid var(--line); }
+  .map-row:last-child{ border-bottom: none; }
+  .map-row.header{ background: var(--ink); }
+  .map-row.header .map-cell{ color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
+  .map-cell{ padding: 14px 18px; border-right: 1px dashed var(--line); display: flex; align-items: center; font-size: .92rem; }
+  .map-cell:last-child{ border-right: none; }
+  .map-cell.fn-side{ font-family: "JetBrains Mono", monospace; font-size: .82rem; color: var(--olive-deep); font-weight: 700; }
+  .map-cell.resp{ color: var(--ink); }
+  .map-cell.io{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--blood-dark); }
+  @media (max-width: 700px){ .map-row, .map-row.header{ grid-template-columns: 1fr 1.2fr; } .map-cell.io{ display: none; } }
 
   /* EVAL + EVIDENCIA */
   .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
@@ -210,6 +227,7 @@
   .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
   .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
   .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .pond-note{ margin-top: 14px; font-size: .82rem; color: var(--ink-faint); font-style: italic; line-height: 1.5; }
 
   /* CIERRE */
   .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
@@ -240,6 +258,7 @@
   .cs-pane[hidden]{ display:none; }
   .cs-pane .code-block{ border-top:none; }
   @media (max-width:480px){ .cs-flag{ display:none; } }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -253,11 +272,11 @@
   <div class="top">
     <div class="left">
       <span class="seal">V.</span>
-      <span class="meta">Cuaderno del profesor · Sesión 20 · Listas · Indexación · Recorrido · Métodos básicos</span>
+      <span class="meta">Cuaderno del profesor · Sesión 20 · Funciones · def · return · Modularidad</span>
     </div>
     <div class="right">
       Jueves 23.07.2026 · 18:00 – 20:00<br/>
-      <span style="color:var(--blood)">UNITEC Atizapán · Continuación de la sesión 19</span>
+      <span style="color:var(--blood)">UNITEC Atizapán · Retoma la sesión 17</span>
     </div>
   </div>
 
@@ -266,456 +285,244 @@
     <div class="session-no display">20</div>
     <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
     <h1 class="display">
-      El primer <span class="em">arreglo</span>.
+      Divide<br/>y <span class="em">vencerás</span>.
     </h1>
     <p class="lede">
-      Hasta hoy cada dato vivía en su propia variable: <em>una caja, un nombre, un valor</em>. Eso funciona
-      cuando son tres cosas; se vuelve absurdo cuando son treinta. El <strong>arreglo</strong> —que en Python
-      llamamos <strong>lista</strong>— es la respuesta: una sola caja con muchos compartimentos numerados,
-      capaz de guardar todo un grupo de datos relacionados bajo un único nombre.
-      <span class="underline-ochre">Hoy dejas de nombrar uno por uno y empiezas a pensar en conjuntos</span>.
+      En la sesión 17 blindamos nuestros programas para que no se rompan cuando todo falla, y en el
+      laboratorio hemos venido afilando ciclos y arreglos, práctica tras práctica.
+      Hoy atacamos el otro enemigo, el más silencioso: el <strong>desorden</strong>. Un programa de ochenta líneas
+      que hace de todo es una maraña que nadie —ni tú dentro de un mes— puede leer. La solución es antigua y
+      elegante: <em>parte el problema en pedazos pequeños</em>, resuelve cada pedazo por separado y dale un nombre.
+      Eso es una <strong>función</strong>. Hoy aprendes a <span class="underline-ochre">dividir para vencer</span>.
+    </p>
+    <p class="lede" style="margin-top:18px; font-size:1.02rem; color:var(--ink-faint);">
+      <em>Nota del curso:</em> desde la sesión 09 el lenguaje principal es <strong>C++</strong> (más cercano al temario tipo C de UNITEC);
+      el código se muestra en C++ por defecto y conservas <strong>Python como apoyo</strong> en la otra pestaña. Pulsa las pestañas de cada bloque para alternar.
     </p>
 
     <div class="cont-banner">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="9" width="4.5" height="6"/><rect x="9.75" y="9" width="4.5" height="6"/><rect x="16.5" y="9" width="4.5" height="6"/></svg>
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4 4.2 4.2M3 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4 4.2-4.2"/></svg>
       <div class="txt">
-        <strong>Esta sesión inaugura el tema 7.</strong> Ya dominas variables, decisiones, ciclos y funciones.
-        Hoy le das a tu programa <em>memoria de colección</em>: una estructura que ordena muchos valores en fila.
+        <strong>Esta sesión retoma la 17.</strong> Ya sabes cómo evitar que un programa reviente; hoy aprendes
+        a evitar que se vuelva <em>imposible de leer</em>. Las dos cosas hacen un programa profesional.
       </div>
     </div>
 
-    <div class="cont-banner">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
-      <div class="txt">
-        <strong>El código va en C++ (principal), Python como apoyo.</strong> Desde la sesión 09 el lenguaje al frente es
-        <strong>C++</strong> —más cercano al temario de estilo C de UNITEC— y <em>Python</em> queda como puente, ya conocido.
-        Cada bloque trae <em>dos pestañas</em>: C++ activo por defecto y su equivalente en Python a un clic. En C++, el
-        arreglo de hoy se llama <span style="font-family:'JetBrains Mono',monospace; font-size:.9em">vector</span>.
-      </div>
-    </div>
-
-    <div class="who">
-      <div class="who-block">
-        <span class="label">Profesor</span>
-        <span class="value">Carlos Daniel Vaca Ramírez</span>
-      </div>
-      <div class="who-block">
-        <span class="label">Tema</span>
-        <span class="value">7. Arreglos (listas)</span>
-      </div>
-      <div class="who-block">
-        <span class="label">Práctica</span>
-        <span class="value">Estadísticas sobre una lista</span>
-      </div>
-      <div class="who-block">
-        <span class="label">Entrega</span>
-        <span class="value">Tu programa en GitHub</span>
+    <div class="ficha">
+      <span class="f-label">FICHA DE LA SESIÓN</span>
+      <div class="ficha-grid">
+        <div class="ficha-cell wide">
+          <div class="fc-label">Objetivo</div>
+          <div class="fc-value obj">Aplicar el principio de divide y vencerás mediante funciones en C++ (y Python como apoyo) —parámetros y return—, para estructurar programas modulares, legibles y reutilizables.</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Profesor</div>
+          <div class="fc-value">Carlos Daniel Vaca Ramírez</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Tema</div>
+          <div class="fc-value">Diseño modular y funciones</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Práctica</div>
+          <div class="fc-value">Refactorizar el cajero ATM</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Entrega</div>
+          <div class="fc-value">ATM 3.0 en GitHub</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Conceptos clave</div>
+          <div class="fc-value">función · parámetro · return</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Software</div>
+          <div class="fc-value">C++ (g++) · Python 3.12 + VS Code</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Regla del día</div>
+          <div class="fc-value">Una función, una responsabilidad</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- CONCEPT i: QUÉ ES UN ARREGLO + DECLARACIÓN -->
+  <!-- CONCEPT 0: DIVIDE Y VENCERÁS (estudio de caso) -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">0</div>
+      <div>
+        <h2 class="display">El principio de <em class="blood">divide y vencerás</em>.</h2>
+        <p>Es la estrategia más vieja del oficio: ningún problema grande se resuelve de un golpe. <strong>Se parte en problemas pequeños</strong>, cada uno fácil de entender y de probar. En programación, cada pedazo se llama función.</p>
+      </div>
+    </div>
+
+    <div class="sec-prose">
+      <p>Imagina un programa de cajero automático escrito de corrido: ochenta líneas que validan el PIN, consultan el saldo, retiran dinero, depositan, imprimen el recibo… todo amontonado en un solo bloque. Funciona. Pero si mañana cambia la regla del retiro, tienes que <em>leer las ochenta líneas</em> para encontrar dónde tocar. Y si te equivocas, rompes algo que no tenía nada que ver.</p>
+      <p>Ahora imagina el <strong>mismo programa partido en cinco funciones</strong>: <span class="mono">validar_pin</span>, <span class="mono">consultar_saldo</span>, <span class="mono">retirar</span>, <span class="mono">depositar</span> e <span class="mono">imprimir_recibo</span>. Cada una hace una sola cosa, cabe en la pantalla y se lee como una frase. Cambiar la regla del retiro es ahora abrir <em>una sola función</em> y arreglarla ahí. Lo demás ni se entera.</p>
+      <div class="keypoint"><strong>La gran idea:</strong> una función es un nombre que le pones a un trozo de trabajo. En vez de repetir o amontonar código, lo encierras, lo bautizas y lo llamas cuando lo necesitas.</div>
+    </div>
+
+    <div class="compint">
+      <div class="ci-card c">
+        <div class="ci-tag">antes · todo amontonado</div>
+        <h3>El bloque monolítico</h3>
+        <p>Un solo muro de 80 líneas. Para entender qué hace el retiro, hay que leerlo <strong>todo</strong>. Si copias y pegas el mismo cálculo tres veces, tienes <strong>tres lugares</strong> que mantener.</p>
+        <div class="ci-flow"># 80 líneas seguidas
+# ...validar... saldo...
+# ...retirar... recibo...
+# todo en main, sin nombres</div>
+      </div>
+      <div class="ci-card py">
+        <div class="ci-tag">después · modular</div>
+        <h3>Cinco funciones</h3>
+        <p>Cada tarea tiene su nombre y su lugar. El programa principal se vuelve un <strong>índice legible</strong> que solo llama funciones. Cada pieza se prueba <strong>por separado</strong>.</p>
+        <div class="ci-flow">validar_pin()
+consultar_saldo()
+retirar()
+imprimir_recibo()</div>
+      </div>
+    </div>
+    <p class="pond-note">Mismo resultado en pantalla, distinta arquitectura por dentro. El monolito y los módulos hacen lo mismo hoy; pero solo uno seguirá vivo y editable dentro de seis meses.</p>
+  </section>
+
+  <!-- CONCEPT i: ANATOMÍA DE UNA FUNCIÓN -->
   <section class="sec reveal">
     <div class="s-head">
       <div class="n display">i.</div>
       <div>
-        <h2 class="display">Una caja con muchos <em>compartimentos</em>.</h2>
-        <p>Un <strong>arreglo</strong> es una colección ordenada de valores guardados bajo un solo nombre. En Python esa estructura se llama <strong>lista</strong>: se escribe entre corchetes <span class="mono">[ ]</span> y sus elementos se separan con comas.</p>
+        <h2 class="display">Anatomía de una <em>función</em>.</h2>
+        <p>Toda función en Python tiene la misma forma. Conócela una vez y las reconocerás todas. Estas son las cinco partes que importan: <strong>la palabra clave, el nombre, el parámetro, el cuerpo y la devolución</strong>.</p>
       </div>
     </div>
 
-    <div class="twocol">
-      <div class="prose">
-        <p>Pensemos en las calificaciones de un alumno. Con lo que sabías hasta ayer, declararías una variable por cada parcial: <span class="mono">cal1</span>, <span class="mono">cal2</span>, <span class="mono">cal3</span>… Funciona, pero no escala: si mañana son veinte materias, tendrías veinte nombres distintos y veinte líneas casi idénticas.</p>
-        <p>La <strong>lista</strong> resuelve eso de raíz. Un solo nombre, <span class="mono">calificaciones</span>, contiene <em>todos</em> los valores en orden. La lista <em>recuerda la posición</em> de cada dato y crece o se encoge según lo necesites.</p>
-        <ul>
-          <li>Se declara con corchetes: <span class="mono">[8, 9, 7]</span>.</li>
-          <li>Una lista <strong>vacía</strong> también es válida: <span class="mono">[]</span>.</li>
-          <li>Puede guardar números, textos o ambos: <span class="mono">["Ana", 9, True]</span>.</li>
-        </ul>
-        <div class="keypoint"><strong>Regla del cuaderno:</strong> si vas a tener «el dato 1, el dato 2, el dato 3…», no inventes tres variables: declara <em>una</em> lista. Los conjuntos se guardan en colecciones.</div>
+    <div class="anatomy">
+      <span class="a-label">ANATOMÍA · def</span>
+      <div class="a-line">
+        <span class="part kw">def</span> <span class="part name">area_circulo</span>(<span class="part param">radio</span>):<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="part ret">return</span> <span class="part val">3.1416 * radio * radio</span>
       </div>
-      <div class="codeswitch">
-        <div class="cs-tabs">
-          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-          <button type="button" class="cs-tab" data-lang="py">Python</button>
-          <span class="cs-flag">principal &middot; C++</span>
+      <div class="anatomy-legend">
+        <div class="leg l1">
+          <div class="leg-h">def</div>
+          <div class="leg-t">La palabra clave que anuncia: «aquí defino una función».</div>
         </div>
-        <div class="cs-pane" data-lang="cpp">
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">declaracion.cpp</span></div>
-<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="com">// Una lista (vector) de calificaciones</span>
-    vector&lt;<span class="kw">int</span>&gt; calificaciones = {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>};
-
-    <span class="com">// Un vector de nombres (textos)</span>
-    vector&lt;<span class="kw">string</span>&gt; alumnos = {<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <span class="str">"Carla"</span>};
-
-    <span class="com">// Un vector vacio, listo para crecer</span>
-    vector&lt;<span class="kw">int</span>&gt; pendientes;
-
-    <span class="kw">for</span> (<span class="kw">int</span> c : calificaciones) cout &lt;&lt; c &lt;&lt; <span class="str">" "</span>;
-    cout &lt;&lt; endl;
-    <span class="out">8 9 7 10 6</span>
-    <span class="kw">for</span> (<span class="kw">string</span> a : alumnos) cout &lt;&lt; a &lt;&lt; <span class="str">" "</span>;
-    cout &lt;&lt; endl;
-    <span class="out">Ana Beto Carla</span>
-    <span class="kw">return</span> <span class="num">0</span>;
-}</pre>
-          </div>
+        <div class="leg l2">
+          <div class="leg-h">area_circulo</div>
+          <div class="leg-t">El nombre. Un verbo o sustantivo claro, en snake_case.</div>
         </div>
-        <div class="cs-pane" data-lang="py" hidden>
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">declaracion.py</span></div>
-<pre><span class="com"># Una lista de calificaciones</span>
-calificaciones = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
-
-<span class="com"># Una lista de nombres (textos)</span>
-alumnos = [<span class="str">"Ana"</span>, <span class="str">"Beto"</span>, <span class="str">"Carla"</span>]
-
-<span class="com"># Una lista vacía, lista para crecer</span>
-pendientes = []
-
-<span class="fn">print</span>(calificaciones)
-<span class="out">[8, 9, 7, 10, 6]</span>
-<span class="fn">print</span>(alumnos)
-<span class="out">['Ana', 'Beto', 'Carla']</span></pre>
-          </div>
+        <div class="leg l3">
+          <div class="leg-h">(radio)</div>
+          <div class="leg-t">El parámetro: el dato que la función recibe para trabajar.</div>
+        </div>
+        <div class="leg l4">
+          <div class="leg-h">return</div>
+          <div class="leg-t">Devuelve el resultado a quien la llamó. La función entrega su fruto.</div>
+        </div>
+        <div class="leg l5">
+          <div class="leg-h">3.1416 * …</div>
+          <div class="leg-t">El cuerpo: el trabajo en sí, siempre sangrado 4 espacios.</div>
         </div>
       </div>
     </div>
 
-    <!-- VARIABLES SUELTAS VS LISTA -->
-    <div class="versus">
-      <div class="vs-card a">
-        <div class="vs-tag">antes · variables sueltas</div>
-        <h3>Un nombre por cada dato</h3>
-        <p>Cada calificación necesita su propia variable. Para promediarlas las escribes <strong>todas a mano</strong>. Si llegan más, hay que tocar el código en varios lugares.</p>
-<pre><span class="com"># 5 datos -&gt; 5 variables</span>
-cal1 = <span class="num">8</span>
-cal2 = <span class="num">9</span>
-cal3 = <span class="num">7</span>
-cal4 = <span class="num">10</span>
-cal5 = <span class="num">6</span>
-prom = (cal1+cal2+cal3+cal4+cal5) / <span class="num">5</span></pre>
-      </div>
-      <div class="vs-card b">
-        <div class="vs-tag">hoy · una lista</div>
-        <h3>Un nombre para todos</h3>
-        <p>Una sola variable los contiene a todos. Para sumarlos y contarlos usas funciones que <strong>no cambian</strong> aunque mañana sean cincuenta datos. El código se vuelve <strong>general</strong>.</p>
-<pre><span class="com"># 5 (o 500) datos -&gt; una lista</span>
-cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
-prom = <span class="fn">sum</span>(cals) / <span class="fn">len</span>(cals)
-<span class="fn">print</span>(prom)
-<span class="out">8.0</span></pre>
-      </div>
+    <div class="sec-prose">
+      <p>Definir una función no la ejecuta: solo le enseña a Python <em>cómo</em> hacer algo y lo guarda con un nombre. Para que trabaje, hay que <strong>llamarla</strong> por su nombre y pasarle el argumento entre paréntesis. Entonces el dato entra por el parámetro, el cuerpo corre, y <span class="mono">return</span> entrega el resultado de vuelta.</p>
     </div>
-  </section>
 
-  <!-- CONCEPT ii: INDEXACIÓN -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n blood display">ii.</div>
+    <div class="code-grid">
       <div>
-        <h2 class="display">Cada dato tiene su <em class="blood">número</em>.</h2>
-        <p>Dentro de la lista, cada elemento ocupa una posición llamada <strong>índice</strong>. Se accede con corchetes: <span class="mono">lista[i]</span>. Y aquí va la primera sorpresa: <strong>el conteo empieza en cero</strong>, no en uno.</p>
-      </div>
-    </div>
-
-    <div class="twocol">
-      <div class="prose">
-        <p>El primer elemento vive en el índice <strong>0</strong>, el segundo en el <strong>1</strong>, y así sucesivamente. Por eso una lista de cinco elementos tiene índices que van del <span class="mono">0</span> al <span class="mono">4</span> —nunca al 5—.</p>
-        <p>Python añade una elegancia que C no tiene: los <strong>índices negativos</strong>. El <span class="mono">-1</span> es el <em>último</em> elemento, el <span class="mono">-2</span> el penúltimo. Así llegas al final de la fila sin saber cuántos elementos hay.</p>
-        <p>También puedes pedir <em>una rebanada</em> —un <strong>slice</strong>— con <span class="mono">lista[inicio:fin]</span>. El inicio se incluye; el fin <em>no</em>. Es como decir «desde aquí, hasta justo antes de allá».</p>
-        <div class="keypoint"><strong>Regla del cuaderno:</strong> piensa en el índice como «cuántos pasos doy desde el principio». Desde el primer elemento das cero pasos: por eso es el <em>0</em>.</div>
-      </div>
-      <div class="codeswitch">
-        <div class="cs-tabs">
-          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-          <button type="button" class="cs-tab" data-lang="py">Python</button>
-          <span class="cs-flag">principal &middot; C++</span>
-        </div>
-        <div class="cs-pane" data-lang="cpp">
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexacion.cpp</span></div>
-<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    vector&lt;<span class="kw">int</span>&gt; cals = {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>};
-
-    <span class="com">// Indices positivos (desde el inicio)</span>
-    cout &lt;&lt; cals[<span class="num">0</span>] &lt;&lt; endl;   <span class="com">// primer elemento</span>
-    <span class="out">8</span>
-    cout &lt;&lt; cals[<span class="num">2</span>] &lt;&lt; endl;   <span class="com">// tercer elemento</span>
-    <span class="out">7</span>
-
-    <span class="com">// C++ no tiene indices negativos: vamos desde el final</span>
-    cout &lt;&lt; cals.<span class="fn">back</span>() &lt;&lt; endl;             <span class="com">// el ultimo</span>
-    <span class="out">6</span>
-    cout &lt;&lt; cals[cals.<span class="fn">size</span>() - <span class="num">2</span>] &lt;&lt; endl;   <span class="com">// el penultimo</span>
-    <span class="out">10</span>
-
-    <span class="com">// Rebanada: del indice 1 al 3 (el 3 NO entra)</span>
-    vector&lt;<span class="kw">int</span>&gt; trozo(cals.<span class="fn">begin</span>() + <span class="num">1</span>, cals.<span class="fn">begin</span>() + <span class="num">3</span>);
-    <span class="kw">for</span> (<span class="kw">int</span> x : trozo) cout &lt;&lt; x &lt;&lt; <span class="str">" "</span>;
-    cout &lt;&lt; endl;
-    <span class="out">9 7</span>
-    <span class="kw">return</span> <span class="num">0</span>;
+        <p class="code-cap">Definir · enseñar la receta</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.cpp</span></div>
+<pre><span class="com">// PASO 1 · definimos la función</span>
+<span class="com">// (esto NO la ejecuta todavía)</span>
+<span class="kw">double</span> <span class="fn">area_circulo</span>(<span class="kw">double</span> radio) {
+    <span class="com">// recibe el radio, devuelve el área</span>
+    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio;
 }</pre>
+            </div>
           </div>
-        </div>
-        <div class="cs-pane" data-lang="py" hidden>
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">indexacion.py</span></div>
-<pre>cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
-
-<span class="com"># Indices positivos (desde el inicio)</span>
-<span class="fn">print</span>(cals[<span class="num">0</span>])   <span class="com"># primer elemento</span>
-<span class="out">8</span>
-<span class="fn">print</span>(cals[<span class="num">2</span>])   <span class="com"># tercer elemento</span>
-<span class="out">7</span>
-
-<span class="com"># Indices negativos (desde el final)</span>
-<span class="fn">print</span>(cals[-<span class="num">1</span>])  <span class="com"># el ultimo</span>
-<span class="out">6</span>
-<span class="fn">print</span>(cals[-<span class="num">2</span>])  <span class="com"># el penultimo</span>
-<span class="out">10</span>
-
-<span class="com"># Slicing: del indice 1 al 3 (el 3 NO entra)</span>
-<span class="fn">print</span>(cals[<span class="num">1</span>:<span class="num">3</span>])
-<span class="out">[9, 7]</span></pre>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.py</span></div>
+<pre><span class="com"># PASO 1 · definimos la función</span>
+<span class="com"># (esto NO la ejecuta todavía)</span>
+<span class="kw">def</span> <span class="fn">area_circulo</span>(radio):
+    <span class="com"># recibe el radio, devuelve el área</span>
+    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio</pre>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- CASILLERO VISUAL -->
-    <div class="casillero">
-      <span class="cs-label">EL CASILLERO DE ÍNDICES</span>
-      <div class="cs-name">La lista <strong>cals = [8, 9, 7, 10, 6]</strong> · cinco compartimentos, dos formas de numerarlos</div>
-      <div class="cells">
-        <div class="cell">
-          <div class="pos">0 <span class="neg">/ -5</span></div>
-          <div class="val">8</div>
-          <div class="lbl">primero</div>
-        </div>
-        <div class="cell">
-          <div class="pos">1 <span class="neg">/ -4</span></div>
-          <div class="val">9</div>
-          <div class="lbl">segundo</div>
-        </div>
-        <div class="cell">
-          <div class="pos">2 <span class="neg">/ -3</span></div>
-          <div class="val">7</div>
-          <div class="lbl">tercero</div>
-        </div>
-        <div class="cell">
-          <div class="pos">3 <span class="neg">/ -2</span></div>
-          <div class="val">10</div>
-          <div class="lbl">penúltimo</div>
-        </div>
-        <div class="cell">
-          <div class="pos">4 <span class="neg">/ -1</span></div>
-          <div class="val">6</div>
-          <div class="lbl">último</div>
-        </div>
-      </div>
-      <p class="cs-foot"><strong>Arriba en blanco</strong> el índice positivo; <strong>en ocre</strong> el negativo. <span class="mono">cals[0]</span> y <span class="mono">cals[-5]</span> apuntan al mismo 8. El último elemento es siempre <span class="mono">cals[-1]</span>, no importa cuántos haya.</p>
-    </div>
-
-    <!-- ERROR: IndexError -->
-    <div class="errbox">
-      <div class="eb-head">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
-        <h3>El error que todos cometen: IndexError</h3>
-      </div>
-      <div class="eb-body">
-        <div class="eb-text">
-          <p>Como una lista de cinco llega hasta el índice <strong>4</strong>, pedir el <span class="mono">cals[5]</span> es salirse del casillero. Python no inventa un valor: <strong>detiene el programa</strong> con un <span class="mono">IndexError</span>.</p>
-          <p>Es el <em>desbordamiento</em> clásico: querer el «quinto» pensando en el índice 5, cuando el quinto vive en el 4. Para evitarlo, el último índice válido siempre es <span class="mono">len(lista) - 1</span>.</p>
-          <p><strong>Mejor todavía:</strong> recorre con un <span class="mono">for</span> (lo veremos enseguida) y deja que Python cuide los límites por ti.</p>
-        </div>
-        <div class="eb-code">
-<pre>cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
-<span class="com"># indices validos: 0, 1, 2, 3, 4</span>
-
-<span class="fn">print</span>(cals[<span class="num">5</span>])   <span class="com"># ✗ no existe</span>
-
-<span class="err">Traceback (most recent call last):</span>
-<span class="err">  File "indexacion.py", line 4</span>
-<span class="err">IndexError: list index out of range</span>
-
-<span class="com"># ✓ el ultimo, sin contar:</span>
-<span class="fn">print</span>(cals[-<span class="num">1</span>])
-<span class="out">6</span></pre>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONCEPT iii: RECORRIDO + MÉTODOS -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n display">iii.</div>
       <div>
-        <h2 class="display">Recorrer la fila <em>entera</em>.</h2>
-        <p>Casi nunca tocas un solo elemento: quieres pasar por <strong>todos</strong>. El <span class="mono">for</span> recorre la lista de principio a fin sin que tú lleves la cuenta de los índices. Luego, tres herramientas básicas: <span class="mono">append</span>, <span class="mono">len</span> y <span class="mono">in</span>.</p>
-      </div>
-    </div>
-
-    <div class="twocol">
-      <div class="prose">
-        <p>El ciclo <span class="mono">for elemento in lista:</span> entrega, uno a uno, cada valor de la lista. No manejas índices, no corres riesgo de <span class="mono">IndexError</span>: Python sabe dónde empieza y dónde termina la fila.</p>
-        <p>Si además necesitas la <em>posición</em> de cada dato —no solo el valor—, <span class="mono">enumerate()</span> te entrega ambos: el índice y el elemento, en pareja.</p>
-        <ul>
-          <li><span class="mono">for c in cals:</span> recorre los <strong>valores</strong>.</li>
-          <li><span class="mono">for i, c in enumerate(cals):</span> recorre <strong>posición y valor</strong>.</li>
-          <li>El cuerpo del <span class="mono">for</span> se repite una vez por cada elemento.</li>
-        </ul>
-        <div class="keypoint"><strong>Regla del cuaderno:</strong> cuando quieras «hacer algo con cada elemento de la lista», la frase ya casi escribe el código: <em>for cada elemento in la lista</em>.</div>
-      </div>
-      <div class="codeswitch">
-        <div class="cs-tabs">
-          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-          <button type="button" class="cs-tab" data-lang="py">Python</button>
-          <span class="cs-flag">principal &middot; C++</span>
-        </div>
-        <div class="cs-pane" data-lang="cpp">
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrido.cpp</span></div>
-<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    vector&lt;<span class="kw">int</span>&gt; cals = {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>};
-
-    <span class="com">// Recorrer los valores (for-each)</span>
-    <span class="kw">for</span> (<span class="kw">int</span> c : cals)
-        cout &lt;&lt; <span class="str">"Calificación: "</span> &lt;&lt; c &lt;&lt; endl;
-    <span class="out">Calificación: 8</span>
-    <span class="out">Calificación: 9</span>
-    <span class="out">Calificación: 7</span>
-    <span class="out">Calificación: 10</span>
-    <span class="out">Calificación: 6</span>
-
-    <span class="com">// Recorrer posición y valor a la vez (con indice)</span>
-    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; (<span class="kw">int</span>)cals.<span class="fn">size</span>(); i++)
-        cout &lt;&lt; <span class="str">"Parcial "</span> &lt;&lt; (i + <span class="num">1</span>) &lt;&lt; <span class="str">": "</span> &lt;&lt; cals[i] &lt;&lt; endl;
-    <span class="out">Parcial 1: 8</span>
-    <span class="out">Parcial 2: 9</span>
-    <span class="out">...</span>
-    <span class="kw">return</span> <span class="num">0</span>;
-}</pre>
+        <p class="code-cap">Llamar · usar la receta</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
           </div>
-        </div>
-        <div class="cs-pane" data-lang="py" hidden>
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorrido.py</span></div>
-<pre>cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.cpp</span></div>
+<pre><span class="com">// PASO 2 · la llamamos con un argumento</span>
+<span class="kw">double</span> chico  = <span class="fn">area_circulo</span>(<span class="num">2</span>);
+<span class="kw">double</span> grande = <span class="fn">area_circulo</span>(<span class="num">10</span>);
 
-<span class="com"># Recorrer los valores</span>
-<span class="kw">for</span> c <span class="kw">in</span> cals:
-    <span class="fn">print</span>(<span class="str">"Calificación:"</span>, c)
-<span class="out">Calificación: 8</span>
-<span class="out">Calificación: 9</span>
-<span class="out">Calificación: 7</span>
-<span class="out">Calificación: 10</span>
-<span class="out">Calificación: 6</span>
-
-<span class="com"># Recorrer posición y valor a la vez</span>
-<span class="kw">for</span> i, c <span class="kw">in</span> <span class="fn">enumerate</span>(cals):
-    <span class="fn">print</span>(<span class="str">f"Parcial {i + 1}: {c}"</span>)
-<span class="out">Parcial 1: 8</span>
-<span class="out">Parcial 2: 9</span>
-<span class="out">...</span></pre>
+cout &lt;&lt; chico  &lt;&lt; endl;   <span class="out">// 12.5664</span>
+cout &lt;&lt; grande &lt;&lt; endl;   <span class="out">// 314.16</span></pre>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.py</span></div>
+<pre><span class="com"># PASO 2 · la llamamos con un argumento</span>
+chico = <span class="fn">area_circulo</span>(<span class="num">2</span>)
+grande = <span class="fn">area_circulo</span>(<span class="num">10</span>)
 
-    <!-- MÉTODOS BÁSICOS -->
-    <div class="metodos">
-      <div class="metodo-card">
-        <h3>lista.append(x)</h3>
-        <p class="mc-sub">Agrega un elemento <em>al final</em>. Así crece una lista que empezó vacía.</p>
-<pre>cals = []
-cals.<span class="fn">append</span>(<span class="num">8</span>)
-cals.<span class="fn">append</span>(<span class="num">9</span>)
-<span class="fn">print</span>(cals)
-<span class="out">[8, 9]</span></pre>
-      </div>
-      <div class="metodo-card b2">
-        <h3>len(lista)</h3>
-        <p class="mc-sub">Devuelve <em>cuántos</em> elementos hay. Indispensable para promedios y límites.</p>
-<pre>cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>]
-<span class="fn">print</span>(<span class="fn">len</span>(cals))
-<span class="out">3</span>
-<span class="com"># último índice válido</span>
-<span class="fn">print</span>(<span class="fn">len</span>(cals) - <span class="num">1</span>)
-<span class="out">2</span></pre>
-      </div>
-      <div class="metodo-card b3">
-        <h3>x in lista</h3>
-        <p class="mc-sub">Pregunta si un valor <em>está</em> en la lista. Responde <span class="mono">True</span> o <span class="mono">False</span>.</p>
-<pre>cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>]
-<span class="fn">print</span>(<span class="num">9</span> <span class="kw">in</span> cals)
-<span class="out">True</span>
-<span class="fn">print</span>(<span class="num">5</span> <span class="kw">in</span> cals)
-<span class="out">False</span></pre>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRÁCTICA / EJERCICIO -->
-  <section class="ejercicios reveal">
-    <div class="s-head">
-      <div class="n blood display">iv.</div>
-      <div>
-        <h2 class="display">Tu turno: <em class="blood">estadísticas</em>.</h2>
-        <p>Reúne lo de hoy en un programa con propósito: que reciba una lista de calificaciones y calcule sus <strong>estadísticas básicas</strong> —promedio, máxima y mínima— recorriéndola con un <span class="mono">for</span>.</p>
-      </div>
-    </div>
-
-    <div class="ej-card">
-      <span class="ej-tag">Práctica de la sesión</span>
-      <div class="ej-body">
-        <div>
-          <h3>Estadísticas de una lista</h3>
-          <p class="ej-desc">Escribe un programa que parta de una <strong>lista de números</strong> (calificaciones) y muestre el <em>promedio</em>, el valor <em>máximo</em> y el <em>mínimo</em>. Recorre la lista con un <span class="mono">for</span> y usa <span class="mono">len()</span> para contar. Pruébalo con varias listas, incluida una de un solo elemento.</p>
-          <ul class="reqs">
-            <li>Declara la lista con al menos <span class="mono">5</span> calificaciones</li>
-            <li>Calcula la <strong>suma</strong> recorriendo con <span class="mono">for</span> (no uses <span class="mono">sum()</span> en esta versión)</li>
-            <li>Obtén el <strong>promedio</strong> dividiendo entre <span class="mono">len(lista)</span></li>
-            <li>Halla el <strong>máximo</strong> y el <strong>mínimo</strong> comparando dentro del ciclo</li>
-            <li>Reto extra: muestra <em>cuántas</em> calificaciones son aprobatorias (<span class="mono">&gt;= 6</span>) usando <span class="mono">in</span> o una condición</li>
-          </ul>
-        </div>
-        <div class="ej-preview">
-          <div class="pv-label">Así se verá (ejemplo)</div>
-          <div class="term">
-            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — estadisticas.py</span></div>
-            <div class="term-body">
-              <span class="plain">Lista: [8, 9, 7, 10, 6]</span><br/>
-              <span class="plain">Cantidad de datos: 5</span><br/>
-              <span class="win">Promedio: 8.00</span><br/>
-              <span class="hint">Máxima: 10</span><br/>
-              <span class="hint">Mínima: 6</span><br/>
-              <span class="plain">Aprobatorias: 5 de 5</span>
+<span class="fn">print</span>(chico)   <span class="out"># 12.5664</span>
+<span class="fn">print</span>(grande)  <span class="out"># 314.16</span></pre>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="codeswitch">
+    <div class="keypoint"><strong>Una función, escrita una vez; usada muchas.</strong> No reescribimos la fórmula del área dos veces: la definimos una sola vez y la llamamos con distintos radios. Eso es <em>reutilización</em>, el premio de modularizar.</div>
+  </section>
+
+  <!-- CONCEPT ii: PRINT vs RETURN -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n blood display">ii.</div>
+      <div>
+        <h2 class="display">El gran malentendido: <em class="blood">print()</em> no es <em class="blood">return</em>.</h2>
+        <p>Es la confusión número uno de quien empieza con funciones. Las dos hacen «que algo salga» de la función, pero son cosas distintas. <strong>Una le habla al humano; la otra le habla al programa.</strong></p>
+      </div>
+    </div>
+
+    <div class="teoria-grid">
+      <div class="teoria-card">
+        <h3>print() · <span class="mono-fn">le habla al humano</span></h3>
+        <p><strong>Muestra</strong> un texto en la pantalla y se acabó. Es para que <em>tú</em> lo leas. El programa no se queda con nada: lo dicho, dicho está. Si intentas guardar lo que «devuelve», recibes un <span class="mono">None</span> vacío.</p>
+        <div class="verdict"># sirve para AVISAR, no para calcular</div>
+      </div>
+      <div class="teoria-card blood">
+        <h3>return · <span class="mono-fn">le habla al programa</span></h3>
+        <p><strong>Entrega</strong> un valor de vuelta a quien llamó la función. Ese valor se puede <em>guardar en una variable, sumar, comparar o pasar a otra función</em>. Es la materia prima con la que el programa sigue trabajando.</p>
+        <div class="verdict"># sirve para CALCULAR y seguir usando</div>
+      </div>
+    </div>
+
+    <div class="codeswitch" style="margin-top:30px;">
       <div class="cs-tabs">
         <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
         <button type="button" class="cs-tab" data-lang="py">Python</button>
@@ -723,71 +530,301 @@ cals.<span class="fn">append</span>(<span class="num">9</span>)
       </div>
       <div class="cs-pane" data-lang="cpp">
         <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estadisticas.cpp · ejemplo de referencia</span></div>
-<pre><span class="com">// Estadísticas básicas sobre un vector de calificaciones</span>
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">print_vs_return.cpp</span></div>
+<pre><span class="com">// ──────── Versión que solo IMPRIME (void) ────────</span>
+<span class="kw">void</span> <span class="fn">cuadrado_imprime</span>(<span class="kw">int</span> numero) {
+    cout &lt;&lt; numero * numero &lt;&lt; endl;   <span class="com">// muestra en pantalla y nada más</span>
+}   <span class="com">// void: no entrega ningún valor</span>
+
+<span class="fn">cuadrado_imprime</span>(<span class="num">5</span>);   <span class="out">// imprime: 25</span>
+<span class="com">// int resultado = cuadrado_imprime(5);  →  ERROR: void no devuelve nada</span>
+
+
+<span class="com">// ──────── Versión que DEVUELVE ────────</span>
+<span class="kw">int</span> <span class="fn">cuadrado</span>(<span class="kw">int</span> numero) {
+    <span class="kw">return</span> numero * numero;   <span class="com">// entrega el valor a quien llamó</span>
+}
+
+<span class="kw">int</span> resultado = <span class="fn">cuadrado</span>(<span class="num">5</span>);   <span class="com">// resultado vale 25 de verdad</span>
+<span class="kw">int</span> total = resultado + <span class="num">1</span>;     <span class="com">// ¡ahora sí podemos seguir calculando!</span>
+cout &lt;&lt; total &lt;&lt; endl;            <span class="out">// imprime: 26</span></pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">print_vs_return.py</span></div>
+<pre><span class="com"># ──────── Versión que solo IMPRIME ────────</span>
+<span class="kw">def</span> <span class="fn">cuadrado_imprime</span>(numero):
+    <span class="fn">print</span>(numero * numero)   <span class="com"># muestra en pantalla y nada más</span>
+
+resultado = <span class="fn">cuadrado_imprime</span>(<span class="num">5</span>)   <span class="out"># imprime: 25</span>
+<span class="fn">print</span>(resultado)                  <span class="out"># imprime: None  ← no guardó nada</span>
+<span class="com"># total = resultado + 1  →  TypeError: no se puede sumar None</span>
+
+
+<span class="com"># ──────── Versión que DEVUELVE ────────</span>
+<span class="kw">def</span> <span class="fn">cuadrado</span>(numero):
+    <span class="kw">return</span> numero * numero    <span class="com"># entrega el valor a quien llamó</span>
+
+resultado = <span class="fn">cuadrado</span>(<span class="num">5</span>)            <span class="com"># resultado vale 25 de verdad</span>
+total = resultado + <span class="num">1</span>             <span class="com"># ¡ahora sí podemos seguir calculando!</span>
+<span class="fn">print</span>(total)                     <span class="out"># imprime: 26</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="keypoint"><strong>Regla práctica:</strong> si necesitas <em>usar</em> el resultado más adelante, usa <span class="mono">return</span>. Reserva <span class="mono">print()</span> para el último momento, cuando ya solo quieres mostrarle algo a la persona. Una función bien hecha calcula con <span class="mono">return</span> y deja que <em>otra</em> parte del programa decida si imprimir.</div>
+  </section>
+
+  <!-- CONCEPT iii: UNA FUNCIÓN, UNA RESPONSABILIDAD -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">Una función, <em>una responsabilidad</em>.</h2>
+        <p>La regla de oro del diseño modular. Si para explicar qué hace tu función tienes que usar la palabra <strong>«y»</strong>, probablemente son dos funciones disfrazadas de una. Pártela.</p>
+      </div>
+    </div>
+
+    <div class="principios">
+      <div class="pri-card">
+        <div class="pri-n">1</div>
+        <h4>Hace una sola cosa</h4>
+        <p>«Calcula el promedio.» No «calcula el promedio <span class="mono">y</span> lo imprime <span class="mono">y</span> lo guarda». Una tarea por función.</p>
+      </div>
+      <div class="pri-card">
+        <div class="pri-n">2</div>
+        <h4>Su nombre lo dice todo</h4>
+        <p>Un verbo claro: <span class="mono">validar_pin</span>, <span class="mono">calcular_iva</span>. Si lees el nombre y ya sabes qué hace, está bien bautizada.</p>
+      </div>
+      <div class="pri-card">
+        <div class="pri-n">3</div>
+        <h4>Cabe en la pantalla</h4>
+        <p>Si necesitas hacer scroll para verla completa, es demasiado larga. Pártela en funciones más pequeñas que se llamen entre sí.</p>
+      </div>
+    </div>
+
+    <div class="codeswitch" style="margin-top:30px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">una_responsabilidad.cpp</span></div>
+<pre><span class="com">// ✗ MAL: una función que hace de todo</span>
+<span class="kw">void</span> <span class="fn">procesar</span>(<span class="kw">int</span> nota) {
+    <span class="kw">string</span> estado;
+    <span class="kw">if</span> (nota &gt;= <span class="num">60</span>) {            <span class="com">// decide</span>
+        estado = <span class="str">"APROBADO"</span>;
+    } <span class="kw">else</span> {
+        estado = <span class="str">"REPROBADO"</span>;
+    }
+    cout &lt;&lt; <span class="str">"Resultado: "</span> &lt;&lt; estado;  <span class="com">// y además imprime</span>
+    <span class="com">// hace dos cosas: decidir Y mostrar</span>
+}
+
+
+<span class="com">// ✓ BIEN: cada función, una sola tarea</span>
+<span class="kw">bool</span> <span class="fn">esta_aprobado</span>(<span class="kw">int</span> nota) {
+    <span class="com">// responsabilidad única: DECIDIR</span>
+    <span class="kw">return</span> nota &gt;= <span class="num">60</span>;
+}
+
+<span class="kw">void</span> <span class="fn">mostrar_resultado</span>(<span class="kw">bool</span> aprobado) {
+    <span class="com">// responsabilidad única: MOSTRAR</span>
+    <span class="kw">if</span> (aprobado) {
+        cout &lt;&lt; <span class="str">"Resultado: APROBADO"</span>;
+    } <span class="kw">else</span> {
+        cout &lt;&lt; <span class="str">"Resultado: REPROBADO"</span>;
+    }
+}
+
+<span class="com">// el programa principal solo coordina:</span>
+<span class="fn">mostrar_resultado</span>(<span class="fn">esta_aprobado</span>(<span class="num">75</span>));   <span class="out">// Resultado: APROBADO</span></pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">una_responsabilidad.py</span></div>
+<pre><span class="com"># ✗ MAL: una función que hace de todo</span>
+<span class="kw">def</span> <span class="fn">procesar</span>(nota):
+    <span class="kw">if</span> nota &gt;= <span class="num">60</span>:           <span class="com"># decide</span>
+        estado = <span class="str">"APROBADO"</span>
+    <span class="kw">else</span>:
+        estado = <span class="str">"REPROBADO"</span>
+    <span class="fn">print</span>(<span class="str">"Resultado: "</span> + estado)  <span class="com"># y además imprime</span>
+    <span class="com"># hace dos cosas: decidir Y mostrar</span>
+
+
+<span class="com"># ✓ BIEN: cada función, una sola tarea</span>
+<span class="kw">def</span> <span class="fn">esta_aprobado</span>(nota):
+    <span class="com"># responsabilidad única: DECIDIR</span>
+    <span class="kw">return</span> nota &gt;= <span class="num">60</span>
+
+<span class="kw">def</span> <span class="fn">mostrar_resultado</span>(aprobado):
+    <span class="com"># responsabilidad única: MOSTRAR</span>
+    <span class="kw">if</span> aprobado:
+        <span class="fn">print</span>(<span class="str">"Resultado: APROBADO"</span>)
+    <span class="kw">else</span>:
+        <span class="fn">print</span>(<span class="str">"Resultado: REPROBADO"</span>)
+
+<span class="com"># el programa principal solo coordina:</span>
+<span class="fn">mostrar_resultado</span>(<span class="fn">esta_aprobado</span>(<span class="num">75</span>))   <span class="out"># Resultado: APROBADO</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="keypoint"><strong>Fíjate en la última línea:</strong> <span class="mono">esta_aprobado(75)</span> devuelve <span class="mono">True</span>, y ese valor entra directo a <span class="mono">mostrar_resultado</span>. Las funciones pequeñas <em>encajan unas en otras</em> como piezas. Eso es modularidad de verdad.</div>
+  </section>
+
+  <!-- LIVE CODING / PRÁCTICA: EL ATM -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">iv.</div>
+      <div>
+        <h2 class="display">Live coding: descomponer el <em class="blood">cajero ATM</em>.</h2>
+        <p>Recuperamos el cajero de sesiones pasadas —ese muro de código que crecía sin control— y lo <strong>refactorizamos en clase, en vivo</strong>, función por función. No le cambiamos lo que hace: le cambiamos la forma en que está escrito. Eso es <em>refactorizar</em>.</p>
+      </div>
+    </div>
+
+    <div class="sec-prose">
+      <p>Primero acordamos juntos el <strong>mapa de funciones</strong>: qué tareas hay dentro del cajero, qué nombre le ponemos a cada una, qué dato recibe y qué devuelve. Una vez que el mapa está claro, escribir cada función es casi mecánico. <em>El diseño es el trabajo difícil; el código es la consecuencia.</em></p>
+    </div>
+
+    <div class="map-table">
+      <div class="map-row header">
+        <div class="map-cell">Función</div>
+        <div class="map-cell">Su única responsabilidad</div>
+        <div class="map-cell">recibe → devuelve</div>
+      </div>
+      <div class="map-row">
+        <div class="map-cell fn-side">validar_pin(pin)</div>
+        <div class="map-cell resp">Comprobar que el PIN tecleado es correcto.</div>
+        <div class="map-cell io">int → bool</div>
+      </div>
+      <div class="map-row">
+        <div class="map-cell fn-side">retirar(saldo, monto)</div>
+        <div class="map-cell resp">Restar el monto si hay fondos; devolver el saldo nuevo.</div>
+        <div class="map-cell io">float, float → float</div>
+      </div>
+      <div class="map-row">
+        <div class="map-cell fn-side">depositar(saldo, monto)</div>
+        <div class="map-cell resp">Sumar el monto al saldo y devolver el saldo nuevo.</div>
+        <div class="map-cell io">float, float → float</div>
+      </div>
+      <div class="map-row">
+        <div class="map-cell fn-side">mostrar_menu()</div>
+        <div class="map-cell resp">Imprimir las opciones del cajero en pantalla.</div>
+        <div class="map-cell io">() → void</div>
+      </div>
+    </div>
+
+    <div class="codeswitch" style="margin-top:26px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">principal &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">atm_funciones.cpp</span></div>
+<pre><span class="com">// Cada función vive sola y se prueba sola.</span>
 <span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;iomanip&gt;</span>
 <span class="kw">using namespace</span> std;
 
-<span class="kw">int</span> <span class="fn">main</span>() {
-    vector&lt;<span class="kw">int</span>&gt; cals = {<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>};
+<span class="kw">const int</span> PIN_CORRECTO = <span class="num">1234</span>;   <span class="com">// constante (como en la sesión 6)</span>
 
-    <span class="kw">int</span> suma = <span class="num">0</span>;
-    <span class="kw">int</span> maxima = cals[<span class="num">0</span>];   <span class="com">// arrancamos con el primero</span>
-    <span class="kw">int</span> minima = cals[<span class="num">0</span>];
-    <span class="kw">int</span> aprobadas = <span class="num">0</span>;
+<span class="kw">bool</span> <span class="fn">validar_pin</span>(<span class="kw">int</span> pin) {
+    <span class="com">// DECIDE: ¿el PIN es correcto? devuelve true o false</span>
+    <span class="kw">return</span> pin == PIN_CORRECTO;
+}
 
-    <span class="kw">for</span> (<span class="kw">int</span> c : cals) {
-        suma = suma + c;
-        <span class="kw">if</span> (c &gt; maxima) maxima = c;
-        <span class="kw">if</span> (c &lt; minima) minima = c;
-        <span class="kw">if</span> (c &gt;= <span class="num">6</span>) aprobadas = aprobadas + <span class="num">1</span>;
+<span class="kw">double</span> <span class="fn">retirar</span>(<span class="kw">double</span> saldo, <span class="kw">double</span> monto) {
+    <span class="com">// CALCULA y devuelve el saldo nuevo</span>
+    <span class="kw">if</span> (monto &gt; saldo) {
+        cout &lt;&lt; <span class="str">"Fondos insuficientes."</span> &lt;&lt; endl;  <span class="com">// avisa al usuario</span>
+        <span class="kw">return</span> saldo;          <span class="com">// y deja el saldo sin cambios</span>
     }
+    <span class="kw">return</span> saldo - monto;
+}
 
-    <span class="kw">double</span> promedio = (<span class="kw">double</span>)suma / cals.<span class="fn">size</span>();
+<span class="kw">double</span> <span class="fn">depositar</span>(<span class="kw">double</span> saldo, <span class="kw">double</span> monto) {
+    <span class="kw">return</span> saldo + monto;
+}
 
-    cout &lt;&lt; <span class="str">"Lista: "</span>;
-    <span class="kw">for</span> (<span class="kw">int</span> c : cals) cout &lt;&lt; c &lt;&lt; <span class="str">" "</span>;
-    cout &lt;&lt; endl;
-    cout &lt;&lt; <span class="str">"Cantidad de datos: "</span> &lt;&lt; cals.<span class="fn">size</span>() &lt;&lt; endl;
-    cout &lt;&lt; fixed &lt;&lt; <span class="fn">setprecision</span>(<span class="num">2</span>);
-    cout &lt;&lt; <span class="str">"Promedio: "</span> &lt;&lt; promedio &lt;&lt; endl;
-    cout &lt;&lt; <span class="str">"Máxima: "</span> &lt;&lt; maxima &lt;&lt; endl;
-    cout &lt;&lt; <span class="str">"Mínima: "</span> &lt;&lt; minima &lt;&lt; endl;
-    cout &lt;&lt; <span class="str">"Aprobatorias: "</span> &lt;&lt; aprobadas &lt;&lt; <span class="str">" de "</span> &lt;&lt; cals.<span class="fn">size</span>() &lt;&lt; endl;
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// El programa principal solo COORDINA las piezas:</span>
+    <span class="kw">double</span> saldo = <span class="num">1500.0</span>;
+    <span class="kw">if</span> (<span class="fn">validar_pin</span>(<span class="num">1234</span>)) {
+        saldo = <span class="fn">retirar</span>(saldo, <span class="num">500.0</span>);
+        saldo = <span class="fn">depositar</span>(saldo, <span class="num">200.0</span>);
+        cout &lt;&lt; <span class="str">"Saldo final: "</span> &lt;&lt; saldo;   <span class="out">// Saldo final: 1200</span>
+    }
     <span class="kw">return</span> <span class="num">0</span>;
 }</pre>
         </div>
       </div>
       <div class="cs-pane" data-lang="py" hidden>
         <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">estadisticas.py · ejemplo de referencia</span></div>
-<pre><span class="com"># Estadísticas básicas sobre una lista de calificaciones</span>
-cals = [<span class="num">8</span>, <span class="num">9</span>, <span class="num">7</span>, <span class="num">10</span>, <span class="num">6</span>]
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">atm_funciones.py</span></div>
+<pre><span class="com"># Cada función vive sola y se prueba sola.</span>
+PIN_CORRECTO = <span class="num">1234</span>          <span class="com"># constante (como en la sesión 6)</span>
 
-suma   = <span class="num">0</span>
-maxima = cals[<span class="num">0</span>]   <span class="com"># arrancamos con el primero</span>
-minima = cals[<span class="num">0</span>]
-aprobadas = <span class="num">0</span>
+<span class="kw">def</span> <span class="fn">validar_pin</span>(pin):
+    <span class="com"># DECIDE: ¿el PIN es correcto? devuelve True o False</span>
+    <span class="kw">return</span> pin == PIN_CORRECTO
 
-<span class="kw">for</span> c <span class="kw">in</span> cals:
-    suma = suma + c
-    <span class="kw">if</span> c &gt; maxima:
-        maxima = c
-    <span class="kw">if</span> c &lt; minima:
-        minima = c
-    <span class="kw">if</span> c &gt;= <span class="num">6</span>:
-        aprobadas = aprobadas + <span class="num">1</span>
+<span class="kw">def</span> <span class="fn">retirar</span>(saldo, monto):
+    <span class="com"># CALCULA y devuelve el saldo nuevo</span>
+    <span class="kw">if</span> monto &gt; saldo:
+        <span class="fn">print</span>(<span class="str">"Fondos insuficientes."</span>)  <span class="com"># avisa al usuario</span>
+        <span class="kw">return</span> saldo            <span class="com"># y deja el saldo sin cambios</span>
+    <span class="kw">return</span> saldo - monto
 
-promedio = suma / <span class="fn">len</span>(cals)
+<span class="kw">def</span> <span class="fn">depositar</span>(saldo, monto):
+    <span class="kw">return</span> saldo + monto
 
-<span class="fn">print</span>(<span class="str">"Lista:"</span>, cals)
-<span class="fn">print</span>(<span class="str">"Cantidad de datos:"</span>, <span class="fn">len</span>(cals))
-<span class="fn">print</span>(<span class="str">f"Promedio: {promedio:.2f}"</span>)
-<span class="fn">print</span>(<span class="str">"Máxima:"</span>, maxima)
-<span class="fn">print</span>(<span class="str">"Mínima:"</span>, minima)
-<span class="fn">print</span>(<span class="str">f"Aprobatorias: {aprobadas} de {len(cals)}"</span>)</pre>
+<span class="com"># El programa principal solo COORDINA las piezas:</span>
+saldo = <span class="num">1500.0</span>
+<span class="kw">if</span> <span class="fn">validar_pin</span>(<span class="num">1234</span>):
+    saldo = <span class="fn">retirar</span>(saldo, <span class="num">500.0</span>)
+    saldo = <span class="fn">depositar</span>(saldo, <span class="num">200.0</span>)
+    <span class="fn">print</span>(<span class="str">"Saldo final:"</span>, saldo)   <span class="out"># Saldo final: 1200.0</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="ej-card" style="margin-top:30px;">
+      <span class="ej-tag">Tu turno · en clase</span>
+      <div class="ej-body">
+        <div>
+          <h3>Refactoriza el cajero</h3>
+          <p class="ej-desc">Toma la versión vieja del cajero (el bloque monolítico) y <strong>pártela en funciones bien nombradas</strong>, sin cambiar lo que el programa hace para el usuario. Cuando termines, el <span class="mono">main</span> debe leerse como un índice de tareas, no como un muro.</p>
+          <ul class="reqs">
+            <li>Al menos <span class="mono">4 funciones</span> con una sola responsabilidad cada una</li>
+            <li>Usa <span class="mono">return</span> para calcular; reserva <span class="mono">print()</span> para mostrar</li>
+            <li>Nombres en <span class="mono">snake_case</span> que digan qué hace cada función</li>
+            <li>El saldo inicial vive en una <span class="mono">constante</span></li>
+            <li>Comenta cada función con su responsabilidad en una línea</li>
+          </ul>
+        </div>
+        <div class="ej-preview">
+          <div class="pv-label">Así correrá tu cajero</div>
+          <div class="term">
+            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — atm_v3.py</span></div>
+            <div class="term-body">
+              <span class="plain">=== CAJERO UNITEC ===</span><br/>
+              <span class="prompt">PIN: </span><span class="plain">1234</span><br/>
+              <span class="ok">✔ PIN correcto</span><br/>
+              <span class="plain">1) Saldo  2) Retirar  3) Depositar</span><br/>
+              <span class="prompt">Opción: </span><span class="plain">2</span><br/>
+              <span class="prompt">Monto: </span><span class="plain">500</span><br/>
+              <span class="warn">Entregando $500.00…</span><br/>
+              <span class="ok">Saldo nuevo: $1000.00</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -798,30 +835,31 @@ promedio = suma / <span class="fn">len</span>(cals)
     <div class="panel">
       <h3 class="display">Criterios de <em>evaluación</em></h3>
       <ol class="crit-list">
-        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el programa corre completo sin reventar (ojo con salirte de los índices: <span class="mono">IndexError</span> en Python, fuera de rango en C++).</li>
-        <li><strong>Lógica correcta</strong> — el promedio, la máxima y la mínima son los valores reales de la lista.</li>
-        <li><strong>Funcionamiento óptimo</strong> — el recorrido usa <span class="mono">for</span> y el tamaño de la colección (<span class="mono">.size()</span> en C++, <span class="mono">len()</span> en Python), y funciona aunque cambies la lista.</li>
-        <li><strong>Autenticidad</strong> — código escrito por ti, no copiado de un compañero.</li>
+        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el cajero corre completo sin reventar.</li>
+        <li><strong>Lógica correcta</strong> — retira, deposita y valida igual que la versión anterior.</li>
+        <li><strong>Funcionamiento óptimo</strong> — al menos 4 funciones, cada una con una sola responsabilidad y nombre claro.</li>
+        <li><strong>Autenticidad</strong> — refactorización hecha por ti, no copiada de un compañero.</li>
       </ol>
+      <p class="pond-note">Ponderación del curso · Actividades de aprendizaje 10% · Examen Bimestral 40% (examen 20% + prácticas y entregables 20%) · Examen Final 50% (examen 25% + prácticas 25%). Los entregables se evalúan desde tu repositorio de GitHub.</p>
     </div>
 
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.cpp</span>
-        <span class="ev-txt"><strong>estadisticas.cpp</strong> (y, si quieres, <span class="mono">estadisticas.py</span> como apoyo) — el programa que calcula promedio, máxima y mínima recorriendo la colección con <span class="mono">for</span>.</span>
-      </div>
-      <div class="evid-item">
-        <span class="file-ic">.md</span>
-        <span class="ev-txt"><strong>README.md</strong> — explica qué hace tu programa y qué pasaría si la lista estuviera vacía.</span>
+        <span class="file-ic">.py</span>
+        <span class="ev-txt"><strong>atm_v3.py</strong> — el cajero refactorizado en funciones bien nombradas.</span>
       </div>
       <div class="evid-item">
         <span class="file-ic">.png</span>
-        <span class="ev-txt"><strong>Captura</strong> de la terminal mostrando los resultados con al menos dos listas distintas.</span>
+        <span class="ev-txt"><strong>Captura</strong> de la terminal mostrando un retiro y un depósito funcionando.</span>
+      </div>
+      <div class="evid-item">
+        <span class="file-ic">git</span>
+        <span class="ev-txt"><strong>Commit</strong> con mensaje claro: <span class="mono">"sesion-20: ATM 3.0 refactorizado en funciones"</span>.</span>
       </div>
       <div class="conclu-note">
-        <h4>Entrega vía GitHub</h4>
-        <p>Sube tu trabajo a la carpeta <span class="mono">sesion-20/</span> de tu repositorio con un commit claro, p. ej. <span class="mono">"sesion-20: estadísticas de una lista"</span>. El repositorio es tu entregable del curso.</p>
+        <h4>No olvides tus conclusiones</h4>
+        <p>Al final del archivo, en forma de <span class="mono">#</span> comentario, escribe en qué se volvió más fácil tu código al partirlo en funciones, y qué función te costó más decidir. La reflexión es parte de la entrega.</p>
       </div>
     </div>
   </section>
@@ -830,21 +868,21 @@ promedio = suma / <span class="fn">len</span>(cals)
   <section class="cierre reveal">
     <div class="small-caps">Una última cosa antes de cerrar</div>
     <div class="quote display">
-      «El orden y la <span class="em-ochre">conexión</span> de las ideas<br/>
-      es el mismo que el orden y la conexión<br/>
-      de <span class="em">las cosas</span>.»
+      «La forma de atacar un problema complejo<br/>
+      es <span class="em-ochre">dividirlo</span> en partes más sencillas,<br/>
+      y resolver <span class="em">cada parte por separado</span>.»
     </div>
-    <div class="quote-author">— Baruch Spinoza</div>
-    <div class="quote-meta">Ética, demostrada según el orden geométrico · 1677</div>
+    <div class="quote-author">— René Descartes</div>
+    <div class="quote-meta">Discurso del método, segunda parte · 1637</div>
     <div class="sig">C. D. Vaca
       <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
     </div>
   </section>
 
   <footer>
-    Sesión 20 <span class="dot">·</span> El primer arreglo <span class="dot">·</span> 26-3
+    Sesión 20 <span class="dot">·</span> Divide y vencerás <span class="dot">·</span> 26-3
     <div class="nav-prev">
-      ← Vuelve a <a href="../sesion-19/index.html">Sesión 19 · Divide y vencerás</a>
+      ← Vuelve a <a href="../sesion-19/index.html">Sesión 19 · Práctica 4 · El casillero</a>
       &nbsp;·&nbsp;
       <a href="../">índice del curso</a>
     </div>
