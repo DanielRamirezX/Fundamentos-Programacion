@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sesión 20 · Divide y vencerás · Funciones, def, return y modularidad</title>
+<title>Sesión 20 · Práctica 5 · Diseño modular, funciones y aplicaciones gráficas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     --ochre: #b5852a; --ochre-deep: #8a6320;
     --olive: #5d6638; --olive-deep: #424a26;
     --line: rgba(42,29,20,.18);
-    --term-blue: #4a6b86;
+    --term-blue: #4a6b86; --grid-blue: #4a6b86;
     --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
   }
   *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
@@ -59,7 +59,7 @@
   .hero .lede em{ color: var(--ink); font-style: italic; }
   .hero .lede strong{ color: var(--blood); font-weight: 600; }
 
-  /* CONTINUACIÓN BANNER */
+  /* BANNERS */
   .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
   .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
   .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
@@ -93,8 +93,10 @@
   .sec-prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
   .sec-prose p em{ color: var(--blood-dark); font-style: italic; }
   .sec-prose p strong{ color: var(--blood); font-weight: 600; }
+  .sec-prose p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
   .keypoint{ margin: 24px 0; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
   .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+  .keypoint .mono{ font-family: "JetBrains Mono", monospace; font-style: normal; background: var(--paper); padding: 1px 6px; font-size: .8em; border: 1px solid var(--line); }
 
   /* divide y vencerás: estudio de caso lado a lado */
   .compint{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 36px; }
@@ -109,7 +111,7 @@
   .ci-card p{ margin: 0 0 10px; font-size: .96rem; line-height: 1.55; }
   .ci-card.c p{ color: var(--ink-soft); } .ci-card.py p{ color: rgba(239,230,210,.8); }
   .ci-card p strong{ font-weight: 600; } .ci-card.c p strong{ color: var(--blood); } .ci-card.py p strong{ color: #f0c8a0; }
-  .ci-card .ci-flow{ font-family: "JetBrains Mono", monospace; font-size: .82rem; margin-top: 14px; padding: 12px 14px; }
+  .ci-card .ci-flow{ font-family: "JetBrains Mono", monospace; font-size: .82rem; margin-top: 14px; padding: 12px 14px; white-space: pre; overflow-x: auto; }
   .ci-card.c .ci-flow{ background: var(--paper); color: var(--ink-soft); } .ci-card.py .ci-flow{ background: rgba(239,230,210,.08); color: #c8dd96; }
 
   /* anatomía de una función */
@@ -146,7 +148,7 @@
   @media (max-width: 880px){ .code-grid{ grid-template-columns: 1fr; } }
   .code-cap{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 10px; }
 
-  /* print vs return */
+  /* dos cards de contraste */
   .teoria-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
   @media (max-width: 820px){ .teoria-grid{ grid-template-columns: 1fr; } }
   .teoria-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ochre); padding: 22px 24px 24px; }
@@ -159,7 +161,7 @@
   .teoria-card .verdict{ margin-top: 14px; font-family: "JetBrains Mono", monospace; font-size: .78rem; padding: 9px 12px; background: var(--paper); border-left: 3px solid var(--ochre); color: var(--ink-soft); }
   .teoria-card.blood .verdict{ border-left-color: var(--blood); }
 
-  /* regla UFUR cards */
+  /* fundamentos (ventajas/objetivos) cards */
   .principios{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
   @media (max-width: 820px){ .principios{ grid-template-columns: 1fr; } }
   .pri-card{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 24px 24px 26px; position: relative; }
@@ -168,44 +170,66 @@
   .pri-card p{ margin: 0; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; }
   .pri-card p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
 
-  /* EXERCISES */
+  /* VENTANA GRÁFICA (mockup de la app) */
+  .gwin{ border: 1.5px solid var(--ink); background: #f4efe0; overflow: hidden; }
+  .gwin .gw-bar{ background: var(--ink); padding: 8px 14px; display: flex; gap: 7px; align-items: center; }
+  .gwin .gw-bar .dot{ width: 10px; height: 10px; border-radius: 50%; }
+  .gwin .gw-bar .r{ background: #c0563d; } .gwin .gw-bar .y{ background: var(--ochre); } .gwin .gw-bar .g{ background: var(--olive); }
+  .gwin .gw-bar .tt{ margin-left: 8px; font-family: "JetBrains Mono", monospace; font-size: .7rem; color: rgba(239,230,210,.6); }
+  .gwin .gw-canvas{ display: block; width: 100%; height: auto; background: #f4efe0; }
+  .gwin .gw-cap{ padding: 10px 15px; font-size: .82rem; color: var(--ink-soft); font-style: italic; border-top: 1px dashed var(--line); }
+  .gwin .gw-cap strong{ color: var(--blood-dark); font-style: normal; }
+
+  /* MAPA DE MÓDULOS */
+  .modmap{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
+  @media (max-width: 820px){ .modmap{ grid-template-columns: 1fr; } }
+  .mod{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 20px 20px 22px; }
+  .mod.figuras{ border-top: 4px solid var(--olive); }
+  .mod.interfaz{ border-top: 4px solid var(--ochre); }
+  .mod.principal{ border-top: 4px solid var(--blood); }
+  .mod .mod-k{ font-family: "JetBrains Mono", monospace; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
+  .mod h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; margin: 0 0 12px; color: var(--ink); }
+  .mod .fnchip{ font-family: "JetBrains Mono", monospace; font-size: .76rem; background: var(--paper); border: 1px solid var(--line); padding: 7px 10px; margin-bottom: 8px; color: var(--olive-deep); display: block; }
+  .mod.interfaz .fnchip{ color: var(--ochre-deep); }
+  .mod.principal .fnchip{ color: var(--blood-dark); }
+  .mod p{ margin: 10px 0 0; font-size: .88rem; color: var(--ink-soft); line-height: 1.5; }
+  .mod p strong{ color: var(--ink); }
+
+  /* ENTREGABLE */
   .ejercicios{ margin: 100px 0; }
+  .ej-intro{ color: var(--ink-soft); font-size: 1.05rem; max-width: 760px; margin: 0 0 30px; }
+  .ej-intro strong{ color: var(--blood); }
   .ej-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 26px; position: relative; }
   .ej-card .ej-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
-  .ej-card .ej-body{ padding: 30px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  .ej-card .ej-pill{ position: absolute; top: -14px; right: 26px; background: var(--olive); color: var(--paper); padding: 5px 14px; font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
+  .ej-card .ej-body{ padding: 32px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
   @media (max-width: 860px){ .ej-card .ej-body{ grid-template-columns: 1fr; gap: 18px; } }
   .ej-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 12px; color: var(--ink); }
   .ej-card .ej-desc{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0 0 16px; }
   .ej-card .ej-desc em{ color: var(--blood-dark); font-style: italic; }
   .ej-card .ej-desc strong{ color: var(--blood); }
+  .ej-card .ej-desc .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
   .ej-card .reqs{ margin: 0; padding: 0; list-style: none; }
   .ej-card .reqs li{ padding: 8px 0 8px 26px; position: relative; font-size: .94rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
   .ej-card .reqs li:last-child{ border-bottom: none; }
   .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
   .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  .ej-card .reqs li strong{ color: var(--ink); }
   .ej-preview .pv-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
-  /* terminal preview */
-  .term{ background: #16110c; border: 1px solid var(--ink); font-family: "JetBrains Mono", monospace; font-size: .82rem; }
-  .term .term-bar{ background: rgba(239,230,210,.07); padding: 8px 14px; display: flex; gap: 7px; align-items: center; }
-  .term .term-bar .dot{ width: 10px; height: 10px; border-radius: 50%; } .term .term-bar .r{ background: #c0563d; } .term .term-bar .y{ background: var(--ochre); } .term .term-bar .g{ background: var(--olive); }
-  .term .term-bar .tt{ margin-left: 8px; font-size: .7rem; color: rgba(239,230,210,.4); }
-  .term .term-body{ padding: 18px 20px; line-height: 1.7; color: #d9ccb0; }
-  .term .plain{ color: #e8e0cc; }
-  .term .prompt{ color: rgba(217,204,176,.55); }
-  .term .ok{ color: #8fbf6f; } .term .warn{ color: #e8c35a; } .term .bad{ color: #e06050; }
 
-  /* mapa de funciones del ATM */
-  .map-table{ border: 1.5px solid var(--ink); background: var(--paper-deep); margin: 26px 0 10px; }
-  .map-row{ display: grid; grid-template-columns: 1.1fr 1.4fr 1fr; align-items: stretch; border-bottom: 1px solid var(--line); }
-  .map-row:last-child{ border-bottom: none; }
-  .map-row.header{ background: var(--ink); }
-  .map-row.header .map-cell{ color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
-  .map-cell{ padding: 14px 18px; border-right: 1px dashed var(--line); display: flex; align-items: center; font-size: .92rem; }
-  .map-cell:last-child{ border-right: none; }
-  .map-cell.fn-side{ font-family: "JetBrains Mono", monospace; font-size: .82rem; color: var(--olive-deep); font-weight: 700; }
-  .map-cell.resp{ color: var(--ink); }
-  .map-cell.io{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--blood-dark); }
-  @media (max-width: 700px){ .map-row, .map-row.header{ grid-template-columns: 1fr 1.2fr; } .map-cell.io{ display: none; } }
+  /* mock del documento (Word/PDF) */
+  .doc-mock{ background: #f7f2e4; border: 1px solid var(--ink); box-shadow: 6px 6px 0 rgba(42,29,20,.12); padding: 26px 30px; }
+  .doc-mock .dm-title{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; text-align: center; color: var(--ink); border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 14px; }
+  .doc-mock .dm-sec{ display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .doc-mock .dm-sec:last-child{ border-bottom: none; }
+  .doc-mock .dm-sec .dm-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 700; color: var(--blood); font-size: .95rem; }
+  .doc-mock .dm-sec .dm-t{ font-size: .92rem; color: var(--ink-soft); line-height: 1.4; }
+  .doc-mock .dm-sec .dm-t strong{ color: var(--ink); }
+
+  .choose-note{ margin-top: 6px; padding: 18px 24px; background: var(--ink); color: var(--paper); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+  .choose-note .ic{ width: 30px; height: 30px; color: #f0c8a0; flex-shrink: 0; }
+  .choose-note p{ margin: 0; font-size: .98rem; line-height: 1.5; color: rgba(239,230,210,.88); }
+  .choose-note p strong{ color: #f0c8a0; }
 
   /* EVAL + EVIDENCIA */
   .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
@@ -223,11 +247,20 @@
   .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
   .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
   .evid-item .ev-txt strong{ color: var(--ink); }
+  .evid-item .ev-txt .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; }
   .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
   .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
   .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
   .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
-  .pond-note{ margin-top: 14px; font-size: .82rem; color: var(--ink-faint); font-style: italic; line-height: 1.5; }
+  .pond{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--ochre); }
+  .pond h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 8px; color: var(--ochre-deep); font-size: 1.05rem; }
+  .pond p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.55; }
+  .pond p strong{ color: var(--ink); }
+  .biblio{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--grid-blue); }
+  .biblio h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 8px; color: var(--grid-blue); font-size: 1.05rem; }
+  .biblio p{ margin: 0 0 8px; font-size: .88rem; color: var(--ink-soft); line-height: 1.5; padding-left: 18px; text-indent: -18px; }
+  .biblio p:last-child{ margin-bottom: 0; }
+  .biblio p em{ font-style: italic; }
 
   /* CIERRE */
   .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
@@ -259,6 +292,53 @@
   .cs-pane .code-block{ border-top:none; }
   @media (max-width:480px){ .cs-flag{ display:none; } }
 
+  /* DOWNLOAD SCAFFOLD (plano) */
+  .download-box{ margin-top: 26px; background: var(--ink); color: var(--paper); padding: 0; overflow: hidden; }
+  .download-box .db-head{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 24px 32px; border-bottom: 1px solid rgba(239,230,210,.12); }
+  @media (max-width: 640px){ .download-box .db-head{ grid-template-columns: 1fr; } }
+  .download-box .db-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 6px; color: #f0c8a0; }
+  .download-box .db-head .file-meta{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: rgba(239,230,210,.55); }
+  .dl-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--olive); color: var(--paper); text-decoration: none; padding: 13px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.02rem; transition: all .3s ease; white-space: nowrap; border: none; cursor: pointer; }
+  .dl-btn:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
+  .dl-btn svg{ width: 18px; height: 18px; }
+  .dl-col{ display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  @media (max-width: 640px){ .dl-col{ align-items: flex-start; } }
+  .dl-alt{ font-family: "JetBrains Mono", monospace; font-size: .76rem; color: rgba(239,230,210,.6); text-decoration: none; border-bottom: 1px dashed rgba(239,230,210,.3); transition: color .25s ease, border-color .25s ease; }
+  .dl-alt:hover{ color: #f0c8a0; border-bottom-color: #f0c8a0; }
+  .download-box .db-body{ padding: 22px 32px 26px; }
+  .download-box .db-body > p{ margin: 0; font-size: .98rem; color: rgba(239,230,210,.85); line-height: 1.55; }
+  .download-box .db-body > p strong{ color: #f0c8a0; }
+
+  /* SOLUCIÓN SELLADA */
+  .solucion{ margin-top: 48px; border: 2px dashed var(--blood); background: var(--paper-deep); padding: 30px 32px 32px; position: relative; }
+  .solucion .sol-label{ position: absolute; top: -13px; left: 26px; background: var(--blood); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; }
+  .solucion .sol-head{ display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: center; }
+  @media (max-width: 720px){ .solucion .sol-head{ grid-template-columns: 1fr; } }
+  .solucion h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 6px; color: var(--blood-dark); }
+  .solucion .sol-hint{ margin: 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.5; max-width: 580px; }
+  .solucion .sol-hint strong{ color: var(--blood); }
+  .sol-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--blood); color: var(--paper); border: none; cursor: pointer; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; }
+  .sol-btn:hover{ background: var(--blood-dark); transform: translateY(-2px); box-shadow: 0 4px 0 var(--blood-dark); }
+  .sol-btn svg{ width: 18px; height: 18px; transition: transform .3s ease; }
+  .sol-btn.open svg{ transform: rotate(180deg); }
+  .sol-body{ margin-top: 26px; border-top: 1px dashed var(--line); padding-top: 26px; }
+  .sol-body[hidden]{ display: none; }
+  .sol-sub{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.1rem; color: var(--ink); margin: 6px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .sol-sub.two{ margin-top: 44px; }
+  .sol-flow{ overflow-x: auto; }
+  .sol-flow svg{ display: block; width: 100%; max-width: 720px; min-width: 560px; margin: 0 auto; }
+  .sol-legend{ display: flex; flex-wrap: wrap; gap: 12px 26px; justify-content: center; margin-top: 20px; font-size: .85rem; color: var(--ink-soft); }
+  .sol-legend .li{ display: flex; align-items: center; gap: 9px; }
+  .sol-legend .li svg{ width: 30px; height: 20px; flex-shrink: 0; }
+  .sol-caption{ margin: 16px auto 0; max-width: 660px; text-align: center; font-size: .9rem; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
+  .sol-caption strong{ color: var(--blood-dark); font-style: normal; }
+
+  /* CICLO DE ANIMACIÓN (cuadro por cuadro) */
+  .framecycle{ display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; }
+  .framecycle .fstep{ font-family: "JetBrains Mono", monospace; font-size: .8rem; background: var(--ink); color: #f0c8a0; padding: 11px 15px; }
+  .framecycle .farr{ color: var(--blood); font-weight: 700; font-size: 1.1rem; }
+  .framecycle .floop{ width: 100%; text-align: center; margin-top: 8px; font-style: italic; color: var(--ink-faint); font-size: .86rem; }
+
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -272,167 +352,203 @@
   <div class="top">
     <div class="left">
       <span class="seal">V.</span>
-      <span class="meta">Cuaderno del profesor · Sesión 20 · Funciones · def · return · Modularidad</span>
+      <span class="meta">Cuaderno del profesor · Sesión 20 · Práctica 5 de 6 (institucional)</span>
     </div>
     <div class="right">
       Jueves 23.07.2026 · 18:00 – 20:00<br/>
-      <span style="color:var(--blood)">UNITEC Atizapán · Retoma la sesión 17</span>
+      <span style="color:var(--blood)">Laboratorio de Cómputo · clave MCT040</span>
     </div>
   </div>
 
   <!-- HERO -->
   <section class="hero">
     <div class="session-no display">20</div>
-    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <div class="kicker">Práctica de laboratorio · Ciclo 26-3</div>
     <h1 class="display">
-      Divide<br/>y <span class="em">vencerás</span>.
+      El taller<br/>de <span class="em">figuras</span>.
     </h1>
     <p class="lede">
-      En la sesión 17 blindamos nuestros programas para que no se rompan cuando todo falla, y en el
-      laboratorio hemos venido afilando ciclos y arreglos, práctica tras práctica.
-      Hoy atacamos el otro enemigo, el más silencioso: el <strong>desorden</strong>. Un programa de ochenta líneas
-      que hace de todo es una maraña que nadie —ni tú dentro de un mes— puede leer. La solución es antigua y
-      elegante: <em>parte el problema en pedazos pequeños</em>, resuelve cada pedazo por separado y dale un nombre.
-      Eso es una <strong>función</strong>. Hoy aprendes a <span class="underline-ochre">dividir para vencer</span>.
+      Práctica institucional 5 de 6. La empresa <strong>«Mundo-gráfico»</strong> nos encarga una aplicación que
+      <em>dibuje y manipule</em> figuras en pantalla —círculos, rectángulos, líneas— y las mueva y agrande de
+      forma interactiva. No la escribiremos de un tirón: la <strong>partimos en piezas</strong>. Cada figura,
+      cada operación, será una <em>función</em> con su nombre y su única tarea. Un programa así es un taller
+      donde cada herramienta sabe hacer una sola cosa —y por eso todo
+      <span class="underline-ochre">encaja y se puede cambiar sin miedo</span>.
     </p>
     <p class="lede" style="margin-top:18px; font-size:1.02rem; color:var(--ink-faint);">
-      <em>Nota del curso:</em> desde la sesión 09 el lenguaje principal es <strong>C++</strong> (más cercano al temario tipo C de UNITEC);
-      el código se muestra en C++ por defecto y conservas <strong>Python como apoyo</strong> en la otra pestaña. Pulsa las pestañas de cada bloque para alternar.
+      <em>Nota del curso:</em> la práctica pide un programa <strong>en C++ modular</strong> con <strong>Dev C++</strong>;
+      para la parte gráfica usamos la librería <strong>graphics.h</strong> (WinBGIm) y conservamos
+      <strong>Python con turtle</strong> como puente en la otra pestaña. Pulsa las pestañas de cada bloque para alternar.
     </p>
 
     <div class="cont-banner">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4 4.2 4.2M3 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4 4.2-4.2"/></svg>
       <div class="txt">
-        <strong>Esta sesión retoma la 17.</strong> Ya sabes cómo evitar que un programa reviente; hoy aprendes
-        a evitar que se vuelva <em>imposible de leer</em>. Las dos cosas hacen un programa profesional.
+        <strong>Esta práctica cierra la unidad de funciones.</strong> Reúne el diseño modular —divide y vencerás—
+        con el <em>manejo de funciones</em> (uno y varios parámetros, y la devolución del resultado) y lo lleva,
+        por primera vez, a una <strong>aplicación gráfica</strong>.
+      </div>
+    </div>
+
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      <div class="txt">
+        <strong>Todo se entrega en Blackboard,</strong> en la actividad <strong>«Práctica 5»</strong>:
+        tu programa <em>.cpp</em>, su copia en <em>.txt</em> y un documento PDF o Word con título, introducción,
+        desarrollo, conclusiones y bibliografía en formato APA. Los detalles, al final.
       </div>
     </div>
 
     <div class="ficha">
-      <span class="f-label">FICHA DE LA SESIÓN</span>
+      <span class="f-label">FICHA DE LA PRÁCTICA</span>
       <div class="ficha-grid">
         <div class="ficha-cell wide">
-          <div class="fc-label">Objetivo</div>
-          <div class="fc-value obj">Aplicar el principio de divide y vencerás mediante funciones en C++ (y Python como apoyo) —parámetros y return—, para estructurar programas modulares, legibles y reutilizables.</div>
+          <div class="fc-label">Objetivo de la práctica</div>
+          <div class="fc-value obj">Diseñar un programa en C++ modular que utilice funciones con diferentes parámetros y devolución de resultados, aplicando los principios del diseño modular y sus ventajas, así como el desarrollo de gráficas de números o funciones matemáticas y animaciones básicas para una interfaz visual interactiva.</div>
         </div>
         <div class="ficha-cell">
-          <div class="fc-label">Profesor</div>
-          <div class="fc-value">Carlos Daniel Vaca Ramírez</div>
+          <div class="fc-label">Temas y subtemas</div>
+          <div class="fc-value">5.1 Fundamentos del diseño modular · 5.2 Manejo de funciones · 5.3 Aplicaciones gráficas</div>
         </div>
         <div class="ficha-cell">
-          <div class="fc-label">Tema</div>
-          <div class="fc-value">Diseño modular y funciones</div>
+          <div class="fc-label">Duración</div>
+          <div class="fc-value">2 horas</div>
         </div>
         <div class="ficha-cell">
-          <div class="fc-label">Práctica</div>
-          <div class="fc-value">Refactorizar el cajero ATM</div>
+          <div class="fc-label">Escenario</div>
+          <div class="fc-value">Laboratorio de cómputo · seguridad N/A</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Lenguaje</div>
+          <div class="fc-value">C++ modular</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Software oficial</div>
+          <div class="fc-value">Dev C++ · librería graphics.h</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Nuestro puente</div>
+          <div class="fc-value">Python · turtle</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Aporta el alumno</div>
+          <div class="fc-value">Memoria USB para su programa</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Entrega</div>
-          <div class="fc-value">ATM 3.0 en GitHub</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Conceptos clave</div>
-          <div class="fc-value">función · parámetro · return</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Software</div>
-          <div class="fc-value">C++ (g++) · Python 3.12 + VS Code</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Regla del día</div>
-          <div class="fc-value">Una función, una responsabilidad</div>
+          <div class="fc-value">Blackboard · actividad «Práctica 5»</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONCEPT 0: DIVIDE Y VENCERÁS (estudio de caso) -->
+  <!-- SECCIÓN i: 5.1 FUNDAMENTOS DEL DISEÑO MODULAR -->
   <section class="sec reveal">
     <div class="s-head">
-      <div class="n blood display">0</div>
+      <div class="n display">i.</div>
       <div>
-        <h2 class="display">El principio de <em class="blood">divide y vencerás</em>.</h2>
-        <p>Es la estrategia más vieja del oficio: ningún problema grande se resuelve de un golpe. <strong>Se parte en problemas pequeños</strong>, cada uno fácil de entender y de probar. En programación, cada pedazo se llama función.</p>
+        <h2 class="display">5.1 · Fundamentos del <em>diseño modular</em>.</h2>
+        <p>Ningún problema grande se resuelve de un golpe. La estrategia más vieja del oficio es <strong>partirlo en problemas pequeños</strong>, cada uno fácil de entender y de probar. En programación, cada pedazo se llama <strong>función</strong>, y a juntar el programa con funciones se le llama diseño modular.</p>
       </div>
     </div>
 
     <div class="sec-prose">
-      <p>Imagina un programa de cajero automático escrito de corrido: ochenta líneas que validan el PIN, consultan el saldo, retiran dinero, depositan, imprimen el recibo… todo amontonado en un solo bloque. Funciona. Pero si mañana cambia la regla del retiro, tienes que <em>leer las ochenta líneas</em> para encontrar dónde tocar. Y si te equivocas, rompes algo que no tenía nada que ver.</p>
-      <p>Ahora imagina el <strong>mismo programa partido en cinco funciones</strong>: <span class="mono">validar_pin</span>, <span class="mono">consultar_saldo</span>, <span class="mono">retirar</span>, <span class="mono">depositar</span> e <span class="mono">imprimir_recibo</span>. Cada una hace una sola cosa, cabe en la pantalla y se lee como una frase. Cambiar la regla del retiro es ahora abrir <em>una sola función</em> y arreglarla ahí. Lo demás ni se entera.</p>
-      <div class="keypoint"><strong>La gran idea:</strong> una función es un nombre que le pones a un trozo de trabajo. En vez de repetir o amontonar código, lo encierras, lo bautizas y lo llamas cuando lo necesitas.</div>
+      <p>Imagina la aplicación de «Mundo-gráfico» escrita de corrido: cien líneas que abren la ventana, dibujan un círculo, un rectángulo y una línea, luego las mueven, las agrandan y refrescan la pantalla… todo amontonado en un solo bloque. Funciona. Pero si mañana quieres <em>cambiar cómo se dibuja el rectángulo</em>, tienes que leer las cien líneas para hallar dónde tocar. Y si te equivocas, rompes el círculo, que no tenía nada que ver.</p>
+      <p>Ahora imagina el <strong>mismo programa partido en funciones</strong>: <span class="mono">dibujar_circulo</span>, <span class="mono">dibujar_rectangulo</span>, <span class="mono">dibujar_linea</span>, <span class="mono">mover_derecha</span>, <span class="mono">cambiar_tamano</span>. Cada una hace una sola cosa, cabe en la pantalla y se lee como una frase. Cambiar el rectángulo es abrir <em>una sola función</em>. Lo demás ni se entera.</p>
     </div>
 
     <div class="compint">
       <div class="ci-card c">
         <div class="ci-tag">antes · todo amontonado</div>
         <h3>El bloque monolítico</h3>
-        <p>Un solo muro de 80 líneas. Para entender qué hace el retiro, hay que leerlo <strong>todo</strong>. Si copias y pegas el mismo cálculo tres veces, tienes <strong>tres lugares</strong> que mantener.</p>
-        <div class="ci-flow"># 80 líneas seguidas
-# ...validar... saldo...
-# ...retirar... recibo...
-# todo en main, sin nombres</div>
+        <p>Un solo muro de 100 líneas. Para entender cómo se dibuja una figura, hay que leerlo <strong>todo</strong>. Si repites el mismo trazo tres veces, tienes <strong>tres lugares</strong> que mantener.</p>
+        <div class="ci-flow">// 100 líneas seguidas
+// abrir... círculo...
+// rectángulo... línea...
+// mover... agrandar...
+// todo en main, sin nombres</div>
       </div>
       <div class="ci-card py">
         <div class="ci-tag">después · modular</div>
-        <h3>Cinco funciones</h3>
-        <p>Cada tarea tiene su nombre y su lugar. El programa principal se vuelve un <strong>índice legible</strong> que solo llama funciones. Cada pieza se prueba <strong>por separado</strong>.</p>
-        <div class="ci-flow">validar_pin()
-consultar_saldo()
-retirar()
-imprimir_recibo()</div>
+        <h3>Funciones con nombre</h3>
+        <p>Cada tarea tiene su nombre y su lugar. El <span class="mono">main</span> se vuelve un <strong>índice legible</strong> que solo llama funciones. Cada pieza se prueba <strong>por separado</strong>.</p>
+        <div class="ci-flow">dibujar_circulo(...)
+dibujar_rectangulo(...)
+dibujar_linea(...)
+mover_derecha(...)
+cambiar_tamano(...)</div>
       </div>
     </div>
-    <p class="pond-note">Mismo resultado en pantalla, distinta arquitectura por dentro. El monolito y los módulos hacen lo mismo hoy; pero solo uno seguirá vivo y editable dentro de seis meses.</p>
+
+    <div class="principios">
+      <div class="pri-card">
+        <div class="pri-n">5.1.1</div>
+        <h4>Divide y vencerás</h4>
+        <p>El principio de fondo: parte el problema en subproblemas pequeños, resuelve cada uno por separado y luego únelos. Una figura a la vez; una función a la vez.</p>
+      </div>
+      <div class="pri-card">
+        <div class="pri-n">5.1.2</div>
+        <h4>Objetivos</h4>
+        <p>Que cada parte tenga <strong>una responsabilidad clara</strong>, que se entienda sola y que el <span class="mono">main</span> solo <em>coordine</em> las piezas sin hacer el trabajo pesado.</p>
+      </div>
+      <div class="pri-card">
+        <div class="pri-n">5.1.3</div>
+        <h4>Ventajas</h4>
+        <p><strong>Legibilidad</strong> (se lee como frases), <strong>reutilización</strong> (una función escrita una vez, usada muchas) y <strong>mantenimiento</strong> (cambias una pieza sin romper las demás).</p>
+      </div>
+    </div>
+
+    <div class="keypoint"><strong>La gran idea:</strong> una función es un nombre que le pones a un trozo de trabajo. En vez de repetir o amontonar código, lo encierras, lo bautizas y lo llamas cuando lo necesitas.</div>
   </section>
 
-  <!-- CONCEPT i: ANATOMÍA DE UNA FUNCIÓN -->
+  <!-- SECCIÓN ii: 5.2 MANEJO DE FUNCIONES -->
   <section class="sec reveal">
     <div class="s-head">
-      <div class="n display">i.</div>
+      <div class="n display">ii.</div>
       <div>
-        <h2 class="display">Anatomía de una <em>función</em>.</h2>
-        <p>Toda función en Python tiene la misma forma. Conócela una vez y las reconocerás todas. Estas son las cinco partes que importan: <strong>la palabra clave, el nombre, el parámetro, el cuerpo y la devolución</strong>.</p>
+        <h2 class="display">5.2 · Manejo de <em>funciones</em>.</h2>
+        <p>Toda función tiene la misma forma. Conócela una vez y las reconocerás todas: <strong>el tipo que devuelve, el nombre, los parámetros, el cuerpo y el return</strong>. Aquí la desarmamos pieza por pieza.</p>
       </div>
     </div>
 
     <div class="anatomy">
-      <span class="a-label">ANATOMÍA · def</span>
+      <span class="a-label">ANATOMÍA · función en C++</span>
       <div class="a-line">
-        <span class="part kw">def</span> <span class="part name">area_circulo</span>(<span class="part param">radio</span>):<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="part ret">return</span> <span class="part val">3.1416 * radio * radio</span>
+        <span class="part kw">int</span> <span class="part name">mover_derecha</span>(<span class="part param">int x, int paso</span>) {<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="part ret">return</span> <span class="part val">x + paso</span>;
       </div>
       <div class="anatomy-legend">
         <div class="leg l1">
-          <div class="leg-h">def</div>
-          <div class="leg-t">La palabra clave que anuncia: «aquí defino una función».</div>
+          <div class="leg-h">int</div>
+          <div class="leg-t">El tipo del dato que la función devolverá. Aquí, un entero.</div>
         </div>
         <div class="leg l2">
-          <div class="leg-h">area_circulo</div>
-          <div class="leg-t">El nombre. Un verbo o sustantivo claro, en snake_case.</div>
+          <div class="leg-h">mover_derecha</div>
+          <div class="leg-t">El nombre: un verbo claro que dice qué hace, en snake_case.</div>
         </div>
         <div class="leg l3">
-          <div class="leg-h">(radio)</div>
-          <div class="leg-t">El parámetro: el dato que la función recibe para trabajar.</div>
+          <div class="leg-h">(int x, int paso)</div>
+          <div class="leg-t">Los parámetros: los datos que recibe para trabajar. Aquí, dos.</div>
         </div>
         <div class="leg l4">
           <div class="leg-h">return</div>
           <div class="leg-t">Devuelve el resultado a quien la llamó. La función entrega su fruto.</div>
         </div>
         <div class="leg l5">
-          <div class="leg-h">3.1416 * …</div>
-          <div class="leg-t">El cuerpo: el trabajo en sí, siempre sangrado 4 espacios.</div>
+          <div class="leg-h">x + paso</div>
+          <div class="leg-t">El cuerpo: el trabajo en sí; su resultado es lo que se devuelve.</div>
         </div>
       </div>
     </div>
 
     <div class="sec-prose">
-      <p>Definir una función no la ejecuta: solo le enseña a Python <em>cómo</em> hacer algo y lo guarda con un nombre. Para que trabaje, hay que <strong>llamarla</strong> por su nombre y pasarle el argumento entre paréntesis. Entonces el dato entra por el parámetro, el cuerpo corre, y <span class="mono">return</span> entrega el resultado de vuelta.</p>
+      <p>Definir una función no la ejecuta: solo le enseña al programa <em>cómo</em> hacer algo y lo guarda con un nombre. Para que trabaje, hay que <strong>llamarla</strong> por su nombre y pasarle los argumentos entre paréntesis. Entonces los datos entran por los parámetros, el cuerpo corre, y <span class="mono">return</span> entrega el resultado de vuelta.</p>
     </div>
 
+    <!-- 5.2.1 / 5.2.2 · parámetros -->
     <div class="code-grid">
       <div>
-        <p class="code-cap">Definir · enseñar la receta</p>
+        <p class="code-cap">Definir · una figura con varios parámetros</p>
         <div class="codeswitch">
           <div class="cs-tabs">
             <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
@@ -442,28 +558,29 @@ imprimir_recibo()</div>
           <div class="cs-pane" data-lang="cpp">
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.cpp</span></div>
-<pre><span class="com">// PASO 1 · definimos la función</span>
-<span class="com">// (esto NO la ejecuta todavía)</span>
-<span class="kw">double</span> <span class="fn">area_circulo</span>(<span class="kw">double</span> radio) {
-    <span class="com">// recibe el radio, devuelve el área</span>
-    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio;
-}</pre>
+<pre><span class="com">// 5.2.2 · VARIOS parametros:</span>
+<span class="com">// posicion, tamano y color</span>
+<span class="kw">void</span> <span class="fn">dibujar_circulo</span>(<span class="kw">int</span> x, <span class="kw">int</span> y, <span class="kw">int</span> radio, <span class="kw">int</span> color) {
+    <span class="fn">setcolor</span>(color);      <span class="com">// color del trazo</span>
+    <span class="fn">circle</span>(x, y, radio);   <span class="com">// dibuja el circulo</span>
+}   <span class="com">// void: no devuelve nada, solo dibuja</span></pre>
             </div>
           </div>
           <div class="cs-pane" data-lang="py" hidden>
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.py</span></div>
-<pre><span class="com"># PASO 1 · definimos la función</span>
-<span class="com"># (esto NO la ejecuta todavía)</span>
-<span class="kw">def</span> <span class="fn">area_circulo</span>(radio):
-    <span class="com"># recibe el radio, devuelve el área</span>
-    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio</pre>
+<pre><span class="com"># 5.2.2 · VARIOS parámetros:</span>
+<span class="com"># posición, tamaño y color</span>
+<span class="kw">def</span> <span class="fn">dibujar_circulo</span>(x, y, radio, color):
+    t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(x, y); t.<span class="fn">pendown</span>()
+    t.<span class="fn">color</span>(color)     <span class="com"># color del trazo</span>
+    t.<span class="fn">circle</span>(radio)    <span class="com"># dibuja el círculo</span></pre>
             </div>
           </div>
         </div>
       </div>
       <div>
-        <p class="code-cap">Llamar · usar la receta</p>
+        <p class="code-cap">Llamar · usar la receta con distintos datos</p>
         <div class="codeswitch">
           <div class="cs-tabs">
             <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
@@ -473,52 +590,66 @@ imprimir_recibo()</div>
           <div class="cs-pane" data-lang="cpp">
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.cpp</span></div>
-<pre><span class="com">// PASO 2 · la llamamos con un argumento</span>
-<span class="kw">double</span> chico  = <span class="fn">area_circulo</span>(<span class="num">2</span>);
-<span class="kw">double</span> grande = <span class="fn">area_circulo</span>(<span class="num">10</span>);
+<pre><span class="com">// la misma funcion, dos figuras distintas</span>
+<span class="fn">dibujar_circulo</span>(<span class="num">150</span>, <span class="num">200</span>, <span class="num">60</span>, GREEN);  <span class="out">// grande, verde</span>
+<span class="fn">dibujar_circulo</span>(<span class="num">400</span>, <span class="num">120</span>, <span class="num">25</span>, RED);    <span class="out">// chico, rojo</span>
 
-cout &lt;&lt; chico  &lt;&lt; endl;   <span class="out">// 12.5664</span>
-cout &lt;&lt; grande &lt;&lt; endl;   <span class="out">// 314.16</span></pre>
+<span class="com">// 5.2.1 · UN parametro y devolucion:</span>
+<span class="kw">double</span> <span class="fn">area_circulo</span>(<span class="kw">double</span> radio) {
+    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio;   <span class="com">// recibe uno, devuelve uno</span>
+}</pre>
             </div>
           </div>
           <div class="cs-pane" data-lang="py" hidden>
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.py</span></div>
-<pre><span class="com"># PASO 2 · la llamamos con un argumento</span>
-chico = <span class="fn">area_circulo</span>(<span class="num">2</span>)
-grande = <span class="fn">area_circulo</span>(<span class="num">10</span>)
+<pre><span class="com"># la misma función, dos figuras distintas</span>
+<span class="fn">dibujar_circulo</span>(-<span class="num">150</span>, <span class="num">0</span>, <span class="num">60</span>, <span class="str">"green"</span>)  <span class="out"># grande, verde</span>
+<span class="fn">dibujar_circulo</span>(<span class="num">120</span>, <span class="num">80</span>, <span class="num">25</span>, <span class="str">"red"</span>)   <span class="out"># chico, rojo</span>
 
-<span class="fn">print</span>(chico)   <span class="out"># 12.5664</span>
-<span class="fn">print</span>(grande)  <span class="out"># 314.16</span></pre>
+<span class="com"># 5.2.1 · UN parámetro y devolución:</span>
+<span class="kw">def</span> <span class="fn">area_circulo</span>(radio):
+    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio   <span class="com"># recibe uno, devuelve uno</span></pre>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="keypoint"><strong>Una función, escrita una vez; usada muchas.</strong> No reescribimos la fórmula del área dos veces: la definimos una sola vez y la llamamos con distintos radios. Eso es <em>reutilización</em>, el premio de modularizar.</div>
-  </section>
-
-  <!-- CONCEPT ii: PRINT vs RETURN -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n blood display">ii.</div>
-      <div>
-        <h2 class="display">El gran malentendido: <em class="blood">print()</em> no es <em class="blood">return</em>.</h2>
-        <p>Es la confusión número uno de quien empieza con funciones. Las dos hacen «que algo salga» de la función, pero son cosas distintas. <strong>Una le habla al humano; la otra le habla al programa.</strong></p>
       </div>
     </div>
 
     <div class="teoria-grid">
       <div class="teoria-card">
-        <h3>print() · <span class="mono-fn">le habla al humano</span></h3>
-        <p><strong>Muestra</strong> un texto en la pantalla y se acabó. Es para que <em>tú</em> lo leas. El programa no se queda con nada: lo dicho, dicho está. Si intentas guardar lo que «devuelve», recibes un <span class="mono">None</span> vacío.</p>
-        <div class="verdict"># sirve para AVISAR, no para calcular</div>
+        <h3>5.2.1 · Un parámetro</h3>
+        <span class="mono-fn">area_circulo(radio)</span>
+        <p>Recibe <strong>un solo dato</strong> para trabajar. <span class="mono">area_circulo(30)</span> toma el radio y devuelve su área. Una entrada, un resultado.</p>
+        <div class="verdict">// una función, un dato de entrada</div>
+      </div>
+      <div class="teoria-card blood">
+        <h3>5.2.2 · Varios parámetros</h3>
+        <span class="mono-fn">dibujar_circulo(x, y, radio, color)</span>
+        <p>Recibe <strong>varios datos</strong>, separados por comas y <em>en orden</em>. Con ellos, una sola función dibuja círculos en cualquier lugar, tamaño y color.</p>
+        <div class="verdict">// una función, muchos datos de entrada</div>
+      </div>
+    </div>
+
+    <!-- 5.2.3 · devolución del resultado -->
+    <div class="s-head" style="margin-top:60px;">
+      <div class="n blood display" style="font-size:clamp(40px,6vw,72px);">5.2.3</div>
+      <div>
+        <h2 class="display" style="font-size:clamp(26px,4vw,44px);">Devolución del resultado: <em class="blood">return</em> no es dibujar.</h2>
+        <p>La confusión número uno con las funciones. Dibujar (o imprimir) y <span class="mono">return</span> parecen «sacar algo» de la función, pero son cosas distintas: <strong>una le habla a la pantalla; la otra le habla al programa.</strong></p>
+      </div>
+    </div>
+
+    <div class="teoria-grid">
+      <div class="teoria-card">
+        <h3>Dibujar / imprimir · <span class="mono-fn">le habla a la pantalla</span></h3>
+        <p><strong>Pinta</strong> algo y se acabó. Es para que <em>tú</em> lo veas. El programa no se queda con ningún valor: si la función es <span class="mono">void</span>, no puedes guardar lo que «devuelve».</p>
+        <div class="verdict">// sirve para MOSTRAR, no para calcular</div>
       </div>
       <div class="teoria-card blood">
         <h3>return · <span class="mono-fn">le habla al programa</span></h3>
-        <p><strong>Entrega</strong> un valor de vuelta a quien llamó la función. Ese valor se puede <em>guardar en una variable, sumar, comparar o pasar a otra función</em>. Es la materia prima con la que el programa sigue trabajando.</p>
-        <div class="verdict"># sirve para CALCULAR y seguir usando</div>
+        <p><strong>Entrega</strong> un valor a quien llamó la función. Ese valor se puede <em>guardar, comparar, acumular o pasar a otra función</em>. Es la materia prima con la que el programa sigue trabajando.</p>
+        <div class="verdict">// sirve para CALCULAR y seguir usando</div>
       </div>
     </div>
 
@@ -530,303 +661,491 @@ grande = <span class="fn">area_circulo</span>(<span class="num">10</span>)
       </div>
       <div class="cs-pane" data-lang="cpp">
         <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">print_vs_return.cpp</span></div>
-<pre><span class="com">// ──────── Versión que solo IMPRIME (void) ────────</span>
-<span class="kw">void</span> <span class="fn">cuadrado_imprime</span>(<span class="kw">int</span> numero) {
-    cout &lt;&lt; numero * numero &lt;&lt; endl;   <span class="com">// muestra en pantalla y nada más</span>
-}   <span class="com">// void: no entrega ningún valor</span>
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">dibujar_vs_return.cpp</span></div>
+<pre><span class="com">// ──────── Solo DIBUJA (void): habla a la pantalla ────────</span>
+<span class="kw">void</span> <span class="fn">dibujar_circulo</span>(<span class="kw">int</span> x, <span class="kw">int</span> y, <span class="kw">int</span> radio, <span class="kw">int</span> color) {
+    <span class="fn">setcolor</span>(color);
+    <span class="fn">circle</span>(x, y, radio);   <span class="com">// pinta y nada mas</span>
+}   <span class="com">// void: no entrega ningun valor</span>
+<span class="com">// int nueva = dibujar_circulo(...);  →  ERROR: void no devuelve nada</span>
 
-<span class="fn">cuadrado_imprime</span>(<span class="num">5</span>);   <span class="out">// imprime: 25</span>
-<span class="com">// int resultado = cuadrado_imprime(5);  →  ERROR: void no devuelve nada</span>
 
-
-<span class="com">// ──────── Versión que DEVUELVE ────────</span>
-<span class="kw">int</span> <span class="fn">cuadrado</span>(<span class="kw">int</span> numero) {
-    <span class="kw">return</span> numero * numero;   <span class="com">// entrega el valor a quien llamó</span>
+<span class="com">// ──────── DEVUELVE (return): habla al programa ────────</span>
+<span class="kw">int</span> <span class="fn">mover_derecha</span>(<span class="kw">int</span> x, <span class="kw">int</span> paso) {
+    <span class="kw">return</span> x + paso;   <span class="com">// entrega la nueva posicion</span>
 }
 
-<span class="kw">int</span> resultado = <span class="fn">cuadrado</span>(<span class="num">5</span>);   <span class="com">// resultado vale 25 de verdad</span>
-<span class="kw">int</span> total = resultado + <span class="num">1</span>;     <span class="com">// ¡ahora sí podemos seguir calculando!</span>
-cout &lt;&lt; total &lt;&lt; endl;            <span class="out">// imprime: 26</span></pre>
+<span class="kw">int</span> x = <span class="num">60</span>;
+x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>);   <span class="com">// x ahora vale 65: lo guardamos</span>
+x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>);   <span class="com">// y otra vez: 70. Podemos seguir calculando</span></pre>
         </div>
       </div>
       <div class="cs-pane" data-lang="py" hidden>
         <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">print_vs_return.py</span></div>
-<pre><span class="com"># ──────── Versión que solo IMPRIME ────────</span>
-<span class="kw">def</span> <span class="fn">cuadrado_imprime</span>(numero):
-    <span class="fn">print</span>(numero * numero)   <span class="com"># muestra en pantalla y nada más</span>
-
-resultado = <span class="fn">cuadrado_imprime</span>(<span class="num">5</span>)   <span class="out"># imprime: 25</span>
-<span class="fn">print</span>(resultado)                  <span class="out"># imprime: None  ← no guardó nada</span>
-<span class="com"># total = resultado + 1  →  TypeError: no se puede sumar None</span>
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">dibujar_vs_return.py</span></div>
+<pre><span class="com"># ──────── Solo DIBUJA: habla a la pantalla ────────</span>
+<span class="kw">def</span> <span class="fn">dibujar_circulo</span>(x, y, radio, color):
+    t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(x, y); t.<span class="fn">pendown</span>()
+    t.<span class="fn">color</span>(color); t.<span class="fn">circle</span>(radio)   <span class="com"># pinta y nada más</span>
 
 
-<span class="com"># ──────── Versión que DEVUELVE ────────</span>
-<span class="kw">def</span> <span class="fn">cuadrado</span>(numero):
-    <span class="kw">return</span> numero * numero    <span class="com"># entrega el valor a quien llamó</span>
+<span class="com"># ──────── DEVUELVE (return): habla al programa ────────</span>
+<span class="kw">def</span> <span class="fn">mover_derecha</span>(x, paso):
+    <span class="kw">return</span> x + paso    <span class="com"># entrega la nueva posición</span>
 
-resultado = <span class="fn">cuadrado</span>(<span class="num">5</span>)            <span class="com"># resultado vale 25 de verdad</span>
-total = resultado + <span class="num">1</span>             <span class="com"># ¡ahora sí podemos seguir calculando!</span>
-<span class="fn">print</span>(total)                     <span class="out"># imprime: 26</span></pre>
+x = -<span class="num">240</span>
+x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>)   <span class="com"># x avanza y lo guardamos</span>
+x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>)   <span class="com"># podemos seguir calculando</span></pre>
         </div>
       </div>
     </div>
 
-    <div class="keypoint"><strong>Regla práctica:</strong> si necesitas <em>usar</em> el resultado más adelante, usa <span class="mono">return</span>. Reserva <span class="mono">print()</span> para el último momento, cuando ya solo quieres mostrarle algo a la persona. Una función bien hecha calcula con <span class="mono">return</span> y deja que <em>otra</em> parte del programa decida si imprimir.</div>
+    <div class="keypoint"><strong>Regla del 5.2.3:</strong> si vas a <em>usar</em> el resultado (moverte otra vez, comparar, acumular), usa <span class="mono">return</span>. Reserva el dibujo para el momento de mostrar. Así separas la <strong>lógica</strong> (calcular la posición) de la <strong>interfaz</strong> (dibujar) — justo lo que pide la práctica.</div>
   </section>
 
-  <!-- CONCEPT iii: UNA FUNCIÓN, UNA RESPONSABILIDAD -->
+  <!-- SECCIÓN iii: 5.3 APLICACIONES GRÁFICAS -->
   <section class="sec reveal">
     <div class="s-head">
       <div class="n display">iii.</div>
       <div>
-        <h2 class="display">Una función, <em>una responsabilidad</em>.</h2>
-        <p>La regla de oro del diseño modular. Si para explicar qué hace tu función tienes que usar la palabra <strong>«y»</strong>, probablemente son dos funciones disfrazadas de una. Pártela.</p>
+        <h2 class="display">5.3 · Aplicaciones <em>gráficas</em>.</h2>
+        <p>Hasta hoy, la salida del programa era texto en la terminal. Ahora abrimos una <strong>ventana</strong> y dibujamos en ella. Con <strong>graphics.h</strong> (Dev C++) bastan tres órdenes para las tres figuras de «Mundo-gráfico»: <span class="mono">circle</span>, <span class="mono">rectangle</span> y <span class="mono">line</span>.</p>
       </div>
     </div>
 
-    <div class="principios">
-      <div class="pri-card">
-        <div class="pri-n">1</div>
-        <h4>Hace una sola cosa</h4>
-        <p>«Calcula el promedio.» No «calcula el promedio <span class="mono">y</span> lo imprime <span class="mono">y</span> lo guarda». Una tarea por función.</p>
-      </div>
-      <div class="pri-card">
-        <div class="pri-n">2</div>
-        <h4>Su nombre lo dice todo</h4>
-        <p>Un verbo claro: <span class="mono">validar_pin</span>, <span class="mono">calcular_iva</span>. Si lees el nombre y ya sabes qué hace, está bien bautizada.</p>
-      </div>
-      <div class="pri-card">
-        <div class="pri-n">3</div>
-        <h4>Cabe en la pantalla</h4>
-        <p>Si necesitas hacer scroll para verla completa, es demasiado larga. Pártela en funciones más pequeñas que se llamen entre sí.</p>
-      </div>
-    </div>
-
-    <div class="codeswitch" style="margin-top:30px;">
-      <div class="cs-tabs">
-        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-        <button type="button" class="cs-tab" data-lang="py">Python</button>
-        <span class="cs-flag">principal &middot; C++</span>
-      </div>
-      <div class="cs-pane" data-lang="cpp">
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">una_responsabilidad.cpp</span></div>
-<pre><span class="com">// ✗ MAL: una función que hace de todo</span>
-<span class="kw">void</span> <span class="fn">procesar</span>(<span class="kw">int</span> nota) {
-    <span class="kw">string</span> estado;
-    <span class="kw">if</span> (nota &gt;= <span class="num">60</span>) {            <span class="com">// decide</span>
-        estado = <span class="str">"APROBADO"</span>;
-    } <span class="kw">else</span> {
-        estado = <span class="str">"REPROBADO"</span>;
-    }
-    cout &lt;&lt; <span class="str">"Resultado: "</span> &lt;&lt; estado;  <span class="com">// y además imprime</span>
-    <span class="com">// hace dos cosas: decidir Y mostrar</span>
-}
-
-
-<span class="com">// ✓ BIEN: cada función, una sola tarea</span>
-<span class="kw">bool</span> <span class="fn">esta_aprobado</span>(<span class="kw">int</span> nota) {
-    <span class="com">// responsabilidad única: DECIDIR</span>
-    <span class="kw">return</span> nota &gt;= <span class="num">60</span>;
-}
-
-<span class="kw">void</span> <span class="fn">mostrar_resultado</span>(<span class="kw">bool</span> aprobado) {
-    <span class="com">// responsabilidad única: MOSTRAR</span>
-    <span class="kw">if</span> (aprobado) {
-        cout &lt;&lt; <span class="str">"Resultado: APROBADO"</span>;
-    } <span class="kw">else</span> {
-        cout &lt;&lt; <span class="str">"Resultado: REPROBADO"</span>;
-    }
-}
-
-<span class="com">// el programa principal solo coordina:</span>
-<span class="fn">mostrar_resultado</span>(<span class="fn">esta_aprobado</span>(<span class="num">75</span>));   <span class="out">// Resultado: APROBADO</span></pre>
-        </div>
-      </div>
-      <div class="cs-pane" data-lang="py" hidden>
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">una_responsabilidad.py</span></div>
-<pre><span class="com"># ✗ MAL: una función que hace de todo</span>
-<span class="kw">def</span> <span class="fn">procesar</span>(nota):
-    <span class="kw">if</span> nota &gt;= <span class="num">60</span>:           <span class="com"># decide</span>
-        estado = <span class="str">"APROBADO"</span>
-    <span class="kw">else</span>:
-        estado = <span class="str">"REPROBADO"</span>
-    <span class="fn">print</span>(<span class="str">"Resultado: "</span> + estado)  <span class="com"># y además imprime</span>
-    <span class="com"># hace dos cosas: decidir Y mostrar</span>
-
-
-<span class="com"># ✓ BIEN: cada función, una sola tarea</span>
-<span class="kw">def</span> <span class="fn">esta_aprobado</span>(nota):
-    <span class="com"># responsabilidad única: DECIDIR</span>
-    <span class="kw">return</span> nota &gt;= <span class="num">60</span>
-
-<span class="kw">def</span> <span class="fn">mostrar_resultado</span>(aprobado):
-    <span class="com"># responsabilidad única: MOSTRAR</span>
-    <span class="kw">if</span> aprobado:
-        <span class="fn">print</span>(<span class="str">"Resultado: APROBADO"</span>)
-    <span class="kw">else</span>:
-        <span class="fn">print</span>(<span class="str">"Resultado: REPROBADO"</span>)
-
-<span class="com"># el programa principal solo coordina:</span>
-<span class="fn">mostrar_resultado</span>(<span class="fn">esta_aprobado</span>(<span class="num">75</span>))   <span class="out"># Resultado: APROBADO</span></pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="keypoint"><strong>Fíjate en la última línea:</strong> <span class="mono">esta_aprobado(75)</span> devuelve <span class="mono">True</span>, y ese valor entra directo a <span class="mono">mostrar_resultado</span>. Las funciones pequeñas <em>encajan unas en otras</em> como piezas. Eso es modularidad de verdad.</div>
-  </section>
-
-  <!-- LIVE CODING / PRÁCTICA: EL ATM -->
-  <section class="ejercicios reveal">
-    <div class="s-head">
-      <div class="n blood display">iv.</div>
+    <!-- 5.3.1 · primitivas de dibujo -->
+    <div class="code-grid">
       <div>
-        <h2 class="display">Live coding: descomponer el <em class="blood">cajero ATM</em>.</h2>
-        <p>Recuperamos el cajero de sesiones pasadas —ese muro de código que crecía sin control— y lo <strong>refactorizamos en clase, en vivo</strong>, función por función. No le cambiamos lo que hace: le cambiamos la forma en que está escrito. Eso es <em>refactorizar</em>.</p>
-      </div>
-    </div>
+        <p class="code-cap">5.3.1 · dibujar las figuras</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">figuras.cpp</span></div>
+<pre><span class="com">// abre el lienzo: ancho, alto, titulo</span>
+<span class="fn">initwindow</span>(<span class="num">600</span>, <span class="num">400</span>, <span class="str">"Mundo-grafico"</span>);
 
-    <div class="sec-prose">
-      <p>Primero acordamos juntos el <strong>mapa de funciones</strong>: qué tareas hay dentro del cajero, qué nombre le ponemos a cada una, qué dato recibe y qué devuelve. Una vez que el mapa está claro, escribir cada función es casi mecánico. <em>El diseño es el trabajo difícil; el código es la consecuencia.</em></p>
-    </div>
+<span class="fn">setcolor</span>(GREEN);
+<span class="fn">circle</span>(<span class="num">150</span>, <span class="num">200</span>, <span class="num">60</span>);            <span class="com">// circulo: centro y radio</span>
 
-    <div class="map-table">
-      <div class="map-row header">
-        <div class="map-cell">Función</div>
-        <div class="map-cell">Su única responsabilidad</div>
-        <div class="map-cell">recibe → devuelve</div>
-      </div>
-      <div class="map-row">
-        <div class="map-cell fn-side">validar_pin(pin)</div>
-        <div class="map-cell resp">Comprobar que el PIN tecleado es correcto.</div>
-        <div class="map-cell io">int → bool</div>
-      </div>
-      <div class="map-row">
-        <div class="map-cell fn-side">retirar(saldo, monto)</div>
-        <div class="map-cell resp">Restar el monto si hay fondos; devolver el saldo nuevo.</div>
-        <div class="map-cell io">float, float → float</div>
-      </div>
-      <div class="map-row">
-        <div class="map-cell fn-side">depositar(saldo, monto)</div>
-        <div class="map-cell resp">Sumar el monto al saldo y devolver el saldo nuevo.</div>
-        <div class="map-cell io">float, float → float</div>
-      </div>
-      <div class="map-row">
-        <div class="map-cell fn-side">mostrar_menu()</div>
-        <div class="map-cell resp">Imprimir las opciones del cajero en pantalla.</div>
-        <div class="map-cell io">() → void</div>
-      </div>
-    </div>
+<span class="fn">setcolor</span>(RED);
+<span class="fn">rectangle</span>(<span class="num">260</span>, <span class="num">140</span>, <span class="num">460</span>, <span class="num">260</span>);   <span class="com">// esquinas: sup-izq, inf-der</span>
 
-    <div class="codeswitch" style="margin-top:26px;">
-      <div class="cs-tabs">
-        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-        <button type="button" class="cs-tab" data-lang="py">Python</button>
-        <span class="cs-flag">principal &middot; C++</span>
-      </div>
-      <div class="cs-pane" data-lang="cpp">
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">atm_funciones.cpp</span></div>
-<pre><span class="com">// Cada función vive sola y se prueba sola.</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">using namespace</span> std;
+<span class="fn">setcolor</span>(YELLOW);
+<span class="fn">line</span>(<span class="num">80</span>, <span class="num">320</span>, <span class="num">520</span>, <span class="num">320</span>);        <span class="com">// linea: de un punto a otro</span>
 
-<span class="kw">const int</span> PIN_CORRECTO = <span class="num">1234</span>;   <span class="com">// constante (como en la sesión 6)</span>
+<span class="fn">delay</span>(<span class="num">4000</span>);      <span class="com">// espera 4 segundos</span>
+<span class="fn">closegraph</span>();     <span class="com">// cierra la ventana</span></pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">figuras.py</span></div>
+<pre><span class="kw">import</span> turtle
+t = turtle.<span class="fn">Turtle</span>()
 
-<span class="kw">bool</span> <span class="fn">validar_pin</span>(<span class="kw">int</span> pin) {
-    <span class="com">// DECIDE: ¿el PIN es correcto? devuelve true o false</span>
-    <span class="kw">return</span> pin == PIN_CORRECTO;
-}
+t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(-<span class="num">150</span>, -<span class="num">60</span>); t.<span class="fn">pendown</span>()
+t.<span class="fn">color</span>(<span class="str">"green"</span>); t.<span class="fn">circle</span>(<span class="num">60</span>)          <span class="com"># círculo</span>
 
-<span class="kw">double</span> <span class="fn">retirar</span>(<span class="kw">double</span> saldo, <span class="kw">double</span> monto) {
-    <span class="com">// CALCULA y devuelve el saldo nuevo</span>
-    <span class="kw">if</span> (monto &gt; saldo) {
-        cout &lt;&lt; <span class="str">"Fondos insuficientes."</span> &lt;&lt; endl;  <span class="com">// avisa al usuario</span>
-        <span class="kw">return</span> saldo;          <span class="com">// y deja el saldo sin cambios</span>
-    }
-    <span class="kw">return</span> saldo - monto;
-}
+t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(-<span class="num">40</span>, <span class="num">60</span>); t.<span class="fn">pendown</span>()
+t.<span class="fn">color</span>(<span class="str">"red"</span>)
+<span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">2</span>):                       <span class="com"># rectángulo: 4 lados</span>
+    t.<span class="fn">forward</span>(<span class="num">200</span>); t.<span class="fn">right</span>(<span class="num">90</span>)
+    t.<span class="fn">forward</span>(<span class="num">120</span>); t.<span class="fn">right</span>(<span class="num">90</span>)
 
-<span class="kw">double</span> <span class="fn">depositar</span>(<span class="kw">double</span> saldo, <span class="kw">double</span> monto) {
-    <span class="kw">return</span> saldo + monto;
-}
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="com">// El programa principal solo COORDINA las piezas:</span>
-    <span class="kw">double</span> saldo = <span class="num">1500.0</span>;
-    <span class="kw">if</span> (<span class="fn">validar_pin</span>(<span class="num">1234</span>)) {
-        saldo = <span class="fn">retirar</span>(saldo, <span class="num">500.0</span>);
-        saldo = <span class="fn">depositar</span>(saldo, <span class="num">200.0</span>);
-        cout &lt;&lt; <span class="str">"Saldo final: "</span> &lt;&lt; saldo;   <span class="out">// Saldo final: 1200</span>
-    }
-    <span class="kw">return</span> <span class="num">0</span>;
-}</pre>
-        </div>
-      </div>
-      <div class="cs-pane" data-lang="py" hidden>
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">atm_funciones.py</span></div>
-<pre><span class="com"># Cada función vive sola y se prueba sola.</span>
-PIN_CORRECTO = <span class="num">1234</span>          <span class="com"># constante (como en la sesión 6)</span>
-
-<span class="kw">def</span> <span class="fn">validar_pin</span>(pin):
-    <span class="com"># DECIDE: ¿el PIN es correcto? devuelve True o False</span>
-    <span class="kw">return</span> pin == PIN_CORRECTO
-
-<span class="kw">def</span> <span class="fn">retirar</span>(saldo, monto):
-    <span class="com"># CALCULA y devuelve el saldo nuevo</span>
-    <span class="kw">if</span> monto &gt; saldo:
-        <span class="fn">print</span>(<span class="str">"Fondos insuficientes."</span>)  <span class="com"># avisa al usuario</span>
-        <span class="kw">return</span> saldo            <span class="com"># y deja el saldo sin cambios</span>
-    <span class="kw">return</span> saldo - monto
-
-<span class="kw">def</span> <span class="fn">depositar</span>(saldo, monto):
-    <span class="kw">return</span> saldo + monto
-
-<span class="com"># El programa principal solo COORDINA las piezas:</span>
-saldo = <span class="num">1500.0</span>
-<span class="kw">if</span> <span class="fn">validar_pin</span>(<span class="num">1234</span>):
-    saldo = <span class="fn">retirar</span>(saldo, <span class="num">500.0</span>)
-    saldo = <span class="fn">depositar</span>(saldo, <span class="num">200.0</span>)
-    <span class="fn">print</span>(<span class="str">"Saldo final:"</span>, saldo)   <span class="out"># Saldo final: 1200.0</span></pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="ej-card" style="margin-top:30px;">
-      <span class="ej-tag">Tu turno · en clase</span>
-      <div class="ej-body">
-        <div>
-          <h3>Refactoriza el cajero</h3>
-          <p class="ej-desc">Toma la versión vieja del cajero (el bloque monolítico) y <strong>pártela en funciones bien nombradas</strong>, sin cambiar lo que el programa hace para el usuario. Cuando termines, el <span class="mono">main</span> debe leerse como un índice de tareas, no como un muro.</p>
-          <ul class="reqs">
-            <li>Al menos <span class="mono">4 funciones</span> con una sola responsabilidad cada una</li>
-            <li>Usa <span class="mono">return</span> para calcular; reserva <span class="mono">print()</span> para mostrar</li>
-            <li>Nombres en <span class="mono">snake_case</span> que digan qué hace cada función</li>
-            <li>El saldo inicial vive en una <span class="mono">constante</span></li>
-            <li>Comenta cada función con su responsabilidad en una línea</li>
-          </ul>
-        </div>
-        <div class="ej-preview">
-          <div class="pv-label">Así correrá tu cajero</div>
-          <div class="term">
-            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — atm_v3.py</span></div>
-            <div class="term-body">
-              <span class="plain">=== CAJERO UNITEC ===</span><br/>
-              <span class="prompt">PIN: </span><span class="plain">1234</span><br/>
-              <span class="ok">✔ PIN correcto</span><br/>
-              <span class="plain">1) Saldo  2) Retirar  3) Depositar</span><br/>
-              <span class="prompt">Opción: </span><span class="plain">2</span><br/>
-              <span class="prompt">Monto: </span><span class="plain">500</span><br/>
-              <span class="warn">Entregando $500.00…</span><br/>
-              <span class="ok">Saldo nuevo: $1000.00</span>
+t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(-<span class="num">220</span>, -<span class="num">140</span>); t.<span class="fn">pendown</span>()
+t.<span class="fn">color</span>(<span class="str">"orange"</span>); t.<span class="fn">goto</span>(<span class="num">220</span>, -<span class="num">140</span>)   <span class="com"># línea</span></pre>
             </div>
           </div>
         </div>
       </div>
+      <div>
+        <p class="code-cap">Así se ve la ventana al correr</p>
+        <div class="gwin">
+          <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">Mundo-grafico — 600 × 400</span></div>
+          <svg class="gw-canvas" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ventana con un círculo verde, un rectángulo rojo y una línea amarilla">
+            <circle cx="130" cy="150" r="58" fill="none" stroke="#5d6638" stroke-width="3"/>
+            <rect x="245" y="98" width="200" height="115" fill="none" stroke="#a02418" stroke-width="3"/>
+            <line x1="70" y1="250" x2="490" y2="250" stroke="#b5852a" stroke-width="3.5" stroke-linecap="round"/>
+            <text x="130" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#5d6638">circle()</text>
+            <text x="345" y="160" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#a02418">rectangle()</text>
+            <text x="280" y="240" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#8a6320">line()</text>
+          </svg>
+          <div class="gw-cap"><strong>Tres funciones, tres figuras.</strong> El color es un parámetro más: cámbialo y cambia el trazo.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="keypoint" style="margin-top:34px;"><strong>5.3.1 · también sirve para números:</strong> la misma idea dibuja la <em>gráfica de una función matemática</em>. Si recorres los valores de <span class="mono">x</span> y para cada uno pones un punto en <span class="mono">(x, f(x))</span>, la ventana traza la curva. Un círculo o una parábola: al final, todo es dibujar puntos y líneas con funciones.</div>
+
+    <!-- 5.3.2 · animación básica -->
+    <div class="code-grid" style="margin-top:50px;">
+      <div>
+        <p class="code-cap">5.3.2 · animación básica</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">animacion.cpp</span></div>
+<pre><span class="com">// mover = borrar, redibujar un poco mas alla, repetir</span>
+<span class="kw">int</span> x = <span class="num">60</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">60</span>; i++) {   <span class="com">// 60 cuadros</span>
+    <span class="fn">cleardevice</span>();                  <span class="com">// borra el cuadro anterior</span>
+    <span class="fn">dibujar_circulo</span>(x, <span class="num">200</span>, <span class="num">40</span>, GREEN);
+    <span class="fn">delay</span>(<span class="num">30</span>);                     <span class="com">// 30 ms por cuadro</span>
+    x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>);      <span class="com">// avanza 5 px a la derecha</span>
+}</pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">animacion.py</span></div>
+<pre><span class="com"># mover = borrar, redibujar un poco más allá, repetir</span>
+x = -<span class="num">240</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">60</span>):        <span class="com"># 60 cuadros</span>
+    t.<span class="fn">clear</span>()                <span class="com"># borra el cuadro anterior</span>
+    <span class="fn">dibujar_circulo</span>(x, <span class="num">0</span>, <span class="num">40</span>, <span class="str">"green"</span>)
+    x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>)   <span class="com"># avanza 5 px a la derecha</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="code-cap">El círculo cruza la ventana</p>
+        <div class="gwin">
+          <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">animación — cuadro por cuadro</span></div>
+          <svg class="gw-canvas" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Un círculo dibujado en varias posiciones, avanzando hacia la derecha">
+            <circle cx="90"  cy="110" r="34" fill="none" stroke="#5d6638" stroke-width="2.5" opacity="0.25"/>
+            <circle cx="200" cy="110" r="34" fill="none" stroke="#5d6638" stroke-width="2.5" opacity="0.45"/>
+            <circle cx="310" cy="110" r="34" fill="none" stroke="#5d6638" stroke-width="2.5" opacity="0.7"/>
+            <circle cx="440" cy="110" r="34" fill="none" stroke="#5d6638" stroke-width="3.2"/>
+            <line x1="130" y1="110" x2="404" y2="110" stroke="#a02418" stroke-width="2" stroke-dasharray="5 6" marker-end="url(#mv)"/>
+            <defs>
+              <marker id="mv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#a02418"/>
+              </marker>
+            </defs>
+            <text x="270" y="185" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#8a6320">x = mover_derecha(x, 5)</text>
+          </svg>
+          <div class="gw-cap"><strong>La ilusión del movimiento:</strong> borrar, redibujar un poco más a la derecha, esperar. Sesenta veces por segundo, parece que se mueve.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN iv: LIVE CODING · MUNDO-GRÁFICO -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">iv.</div>
+      <div>
+        <h2 class="display">Live coding: armamos <em class="blood">«Mundo-gráfico»</em>.</h2>
+        <p>Ahora juntamos las tres partes en <strong>una sola aplicación modular</strong>. La construimos <strong>en vivo, en clase</strong>, módulo por módulo. En esta página queda el <strong>plano</strong>: los pasos y las firmas de las funciones, no las respuestas.</p>
+      </div>
+    </div>
+
+    <div class="sec-prose">
+      <p>Primero acordamos juntos el <strong>mapa de módulos</strong> (instrucción 1 de la práctica): qué tareas hay, en qué módulo vive cada una y qué función la resuelve. Una vez que el mapa está claro, escribir cada función es casi mecánico. <em>El diseño es el trabajo difícil; el código es la consecuencia.</em></p>
+    </div>
+
+    <div class="modmap">
+      <div class="mod figuras">
+        <div class="mod-k">módulo · lógica</div>
+        <h4>Operaciones con figuras</h4>
+        <span class="fnchip">dibujar_circulo(x, y, radio, color)</span>
+        <span class="fnchip">dibujar_rectangulo(x, y, ancho, alto, color)</span>
+        <span class="fnchip">dibujar_linea(x1, y1, x2, y2, color)</span>
+        <span class="fnchip">mover_derecha(x, paso) → int</span>
+        <span class="fnchip">cambiar_tamano(radio, cuanto) → int</span>
+        <p><strong>Crear, mover y cambiar de tamaño.</strong> Combina funciones de varios parámetros (dibujar) con funciones que devuelven (mover, redimensionar).</p>
+      </div>
+      <div class="mod interfaz">
+        <div class="mod-k">módulo · interfaz</div>
+        <h4>Interfaz gráfica</h4>
+        <span class="fnchip">initwindow(ancho, alto, titulo)</span>
+        <span class="fnchip">cleardevice()</span>
+        <span class="fnchip">delay(ms)</span>
+        <span class="fnchip">closegraph()</span>
+        <p><strong>El lienzo.</strong> Abre la ventana, la limpia entre cuadros y la cierra. Es donde las figuras aparecen y se refrescan.</p>
+      </div>
+      <div class="mod principal">
+        <div class="mod-k">módulo · principal</div>
+        <h4>Programa principal</h4>
+        <span class="fnchip">main()</span>
+        <p><strong>No dibuja ni calcula: coordina.</strong> Llama a las figuras, corre el ciclo de animación y espera al usuario. Se lee como un índice de tareas.</p>
+      </div>
+    </div>
+
+    <!-- Plano descargable -->
+    <div class="codeswitch full" style="margin-top:44px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">plano guiado &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mundo_grafico.cpp</span></div>
+<pre><span class="com">// MUNDO-GRAFICO · PLANO GUIADO — escribe el cuerpo de cada funcion</span>
+
+<span class="com">// PASO 1: incluye &lt;graphics.h&gt; y &lt;iostream&gt;</span>
+
+<span class="kw">using namespace</span> std;
+
+<span class="com">// ---- MODULO DE FIGURAS (varios parametros) ----</span>
+<span class="com">// PASO 2: void dibujar_circulo(int x, int y, int radio, int color)</span>
+<span class="com">// PASO 3: void dibujar_rectangulo(int x, int y, int ancho, int alto, int color)</span>
+<span class="com">// PASO 4: void dibujar_linea(int x1, int y1, int x2, int y2, int color)</span>
+
+<span class="com">// ---- OPERACIONES (devolucion con return) ----</span>
+<span class="com">// PASO 5: int mover_derecha(int x, int paso)   → return x + paso;</span>
+<span class="com">// PASO 6: int cambiar_tamano(int radio, int cuanto)</span>
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// PASO 7: initwindow(600, 400, "Mundo-grafico");</span>
+    <span class="com">// PASO 8: dibuja una escena llamando a TUS funciones</span>
+    <span class="com">// PASO 9: ANIMACION → cleardevice / dibujar / delay / mover_derecha</span>
+    <span class="com">// PASO 10: getch();  closegraph();</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="com">/* CONCLUSIONES: ¿para que sirve el diseno modular? */</span></pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mundo_grafico.py</span></div>
+<pre><span class="com"># MUNDO-GRÁFICO · PLANO GUIADO — escribe el cuerpo de cada función</span>
+<span class="kw">import</span> turtle
+
+<span class="com"># PASO 1: t = turtle.Turtle();  pantalla = turtle.Screen()</span>
+
+<span class="com"># ---- MÓDULO DE FIGURAS (varios parámetros) ----</span>
+<span class="com"># PASO 2: def dibujar_circulo(x, y, radio, color)</span>
+<span class="com"># PASO 3: def dibujar_rectangulo(x, y, ancho, alto, color)</span>
+<span class="com"># PASO 4: def dibujar_linea(x1, y1, x2, y2, color)</span>
+
+<span class="com"># ---- OPERACIONES (devolución con return) ----</span>
+<span class="com"># PASO 5: def mover_derecha(x, paso):  return x + paso</span>
+<span class="com"># PASO 6: def cambiar_tamano(radio, cuanto)</span>
+
+<span class="com"># PASO 7: dibuja una escena llamando a TUS funciones</span>
+<span class="com"># PASO 8: ANIMACIÓN → t.clear() / dibujar / x = mover_derecha(x, 5)</span>
+<span class="com"># PASO 9: pantalla.mainloop()</span>
+
+<span class="com"># CONCLUSIONES: ¿para qué sirve el diseño modular?</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="download-box">
+      <div class="db-head">
+        <div>
+          <h3>Mundo-gráfico · el plano de la aplicación</h3>
+          <div class="file-meta">mundo_grafico.cpp · 10 pasos guiados · C++ (y Python como apoyo)</div>
+        </div>
+        <div class="dl-col">
+          <a class="dl-btn" href="mundo_grafico.cpp" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+            Descargar el plano (C++)
+          </a>
+          <a class="dl-alt" href="mundo_grafico.py" download>↓ versión en Python (turtle)</a>
+        </div>
+      </div>
+      <div class="db-body">
+        <p>Solo los pasos <strong>PASO a PASO</strong> y las firmas de cada función. Ábrelo en Dev C++ (o VS Code) y ve escribiendo el cuerpo de cada una mientras armamos la aplicación. <strong>Cada línea la escribes tú.</strong></p>
+      </div>
+    </div>
+
+    <!-- SOLUCIÓN SELLADA -->
+    <div class="solucion">
+      <span class="sol-label">Solución sellada</span>
+      <div class="sol-head">
+        <div>
+          <h3>La lógica, sin la sintaxis.</h3>
+          <p class="sol-hint">Si te atoras, aquí está el <strong>flujo entero</strong> de la aplicación —como diagrama, no como código—. Traducirlo a funciones de C++ sigue siendo <strong>tu trabajo</strong>, y es justo lo que se evalúa. Ábrelo solo después de intentarlo.</p>
+        </div>
+        <button type="button" class="sol-btn" id="solBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="sb-txt">Ver la solución</span>
+        </button>
+      </div>
+
+      <div class="sol-body" id="solBody" hidden>
+        <div class="sol-sub">A · El flujo del programa principal</div>
+        <div class="sol-flow">
+          <svg viewBox="0 0 760 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo: abrir ventana, dibujar la escena, animar en un ciclo y cerrar">
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#2a1d14"/>
+              </marker>
+            </defs>
+
+            <!-- INICIO -->
+            <ellipse cx="300" cy="38" rx="70" ry="24" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="44" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="16" fill="#efe6d2">INICIO</text>
+            <line x1="300" y1="62" x2="300" y2="88" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- proceso: abrir ventana -->
+            <rect x="185" y="90" width="230" height="46" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="118" text-anchor="middle" font-family="Newsreader, serif" font-size="14.5" fill="#2a1d14">Abrir la ventana (initwindow)</text>
+            <line x1="300" y1="136" x2="300" y2="160" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- E/S: dibujar escena -->
+            <path d="M165,162 L455,162 L431,214 L141,214 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="298" y="184" text-anchor="middle" font-family="Newsreader, serif" font-size="14" fill="#2a1d14">Dibujar la escena inicial:</text>
+            <text x="298" y="203" text-anchor="middle" font-family="Newsreader, serif" font-size="14" fill="#2a1d14">círculo · rectángulo · línea</text>
+            <line x1="300" y1="214" x2="300" y2="240" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- proceso i = 0 -->
+            <rect x="228" y="242" width="144" height="44" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="270" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="#2a1d14">i = 0</text>
+            <line x1="300" y1="286" x2="300" y2="312" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- decision ¿i < 60? -->
+            <polygon points="300,315 405,372 300,429 195,372" fill="#efe6d2" stroke="#a02418" stroke-width="2"/>
+            <text x="300" y="377" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="#2a1d14">¿i &lt; 60?</text>
+            <text x="412" y="336" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">animación</text>
+
+            <!-- No -> cerrar -> FIN -->
+            <line x1="405" y1="372" x2="470" y2="372" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="437" y="360" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">No</text>
+            <rect x="472" y="348" width="252" height="48" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="598" y="370" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Esperar una tecla y cerrar</text>
+            <text x="598" y="387" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#6e1810">closegraph()</text>
+            <line x1="598" y1="396" x2="598" y2="424" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <ellipse cx="598" cy="450" rx="48" ry="23" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="598" y="456" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="15" fill="#efe6d2">FIN</text>
+
+            <!-- Si -> loop de animacion -->
+            <line x1="300" y1="429" x2="300" y2="455" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="318" y="448" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">Sí</text>
+
+            <rect x="200" y="457" width="200" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="483" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Borrar pantalla (cleardevice)</text>
+            <line x1="300" y1="499" x2="300" y2="521" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <rect x="170" y="523" width="260" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="549" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Dibujar el círculo en x</text>
+            <line x1="300" y1="565" x2="300" y2="587" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <rect x="188" y="589" width="224" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="615" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13.5" fill="#2a1d14">x = mover_derecha(x, 5)</text>
+            <line x1="300" y1="631" x2="300" y2="653" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <rect x="235" y="655" width="130" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="681" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#2a1d14">i = i + 1</text>
+
+            <!-- loop back a la decision por la izquierda -->
+            <path d="M235,676 L110,676 L110,372 L195,372" fill="none" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="150" y="666" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">siguiente cuadro</text>
+          </svg>
+        </div>
+        <div class="sol-legend">
+          <span class="li"><svg viewBox="0 0 30 20"><ellipse cx="15" cy="10" rx="13" ry="8" fill="#5d6638" stroke="#2a1d14"/></svg> inicio / fin</span>
+          <span class="li"><svg viewBox="0 0 30 20"><rect x="2" y="3" width="26" height="14" fill="#e6dbc2" stroke="#2a1d14"/></svg> proceso</span>
+          <span class="li"><svg viewBox="0 0 30 20"><path d="M7,3 L28,3 L23,17 L2,17 Z" fill="#efe6d2" stroke="#2a1d14"/></svg> entrada / salida</span>
+          <span class="li"><svg viewBox="0 0 30 20"><polygon points="15,1 29,10 15,19 1,10" fill="#efe6d2" stroke="#a02418" stroke-width="1.5"/></svg> decisión</span>
+        </div>
+
+        <div class="sol-sub two">B · La animación, cuadro por cuadro</div>
+        <div class="framecycle">
+          <span class="fstep">borrar · cleardevice()</span>
+          <span class="farr">→</span>
+          <span class="fstep">dibujar en x</span>
+          <span class="farr">→</span>
+          <span class="fstep">esperar · delay(30)</span>
+          <span class="farr">→</span>
+          <span class="fstep">x = mover_derecha(x, 5)</span>
+          <span class="floop">↺ y vuelve a empezar, 60 veces — cada vuelta es un cuadro de la animación</span>
+        </div>
+        <p class="sol-caption">La animación no tiene misterio: es el mismo ciclo <span class="mono" style="font-family:'JetBrains Mono',monospace">for</span> de siempre, encerrando <strong>cuatro pasos</strong>. La figura no se mueve — se <strong>borra y se vuelve a dibujar</strong> un poco más allá. Tan rápido que el ojo lo ve moverse.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN v: ENTREGABLE -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">v.</div>
+      <div>
+        <h2 class="display">Tu <em class="blood">entregable</em>: un programa y un documento.</h2>
+        <p>La Práctica 5 tiene <strong>dos piezas</strong>: la aplicación modular de «Mundo-gráfico» y un documento breve, en PDF o Word, que cuenta cómo la lograste. Todo se sube a la actividad <strong>«Práctica 5»</strong> en Blackboard.</p>
+      </div>
+    </div>
+
+    <p class="ej-intro">Diseña <strong>el programa en C++ modular</strong> que dibuje y manipule las figuras de «Mundo-gráfico», usando funciones con parámetros y devolución de resultados. Guárdalo también en tu memoria USB — el laboratorio no perdona los archivos huérfanos.</p>
+
+    <div class="ej-card">
+      <span class="ej-tag">Parte A</span>
+      <span class="ej-pill">programa · mundo_grafico.cpp</span>
+      <div class="ej-body">
+        <div>
+          <h3>La aplicación modular</h3>
+          <p class="ej-desc">Un programa <strong>modular</strong> que dibuje <em>círculos, rectángulos y líneas</em> con funciones de varios parámetros (posición, tamaño y color), y que las <strong>mueva</strong> y <strong>cambie de tamaño</strong> con funciones que devuelven el resultado. Parte del plano <span class="mono">mundo_grafico.cpp</span>.</p>
+          <ul class="reqs">
+            <li>Los <strong>tres módulos</strong>: figuras, interfaz gráfica y principal</li>
+            <li>Funciones para <span class="mono">crear</span> figuras con parámetros de posición, tamaño y color</li>
+            <li>Funciones para <span class="mono">mover</span> y <span class="mono">cambiar_tamano</span> con <span class="mono">return</span></li>
+            <li>El <span class="mono">main</span> solo <strong>coordina</strong>: llama funciones, no amontona</li>
+            <li>Una <strong>animación básica</strong> (borrar, redibujar, avanzar)</li>
+            <li>Comentarios y tus <strong>conclusiones</strong> al final del código</li>
+          </ul>
+        </div>
+        <div class="ej-preview">
+          <div class="pv-label">Así debe verse la ventana</div>
+          <div class="gwin">
+            <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">mundo_grafico</span></div>
+            <svg class="gw-canvas" viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ventana con círculo, rectángulo y línea">
+              <circle cx="120" cy="130" r="52" fill="none" stroke="#5d6638" stroke-width="3"/>
+              <rect x="228" y="85" width="185" height="105" fill="none" stroke="#a02418" stroke-width="3"/>
+              <line x1="70" y1="222" x2="480" y2="222" stroke="#b5852a" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+            <div class="gw-cap"><strong>Tres figuras, cada una desde su función.</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ej-card">
+      <span class="ej-tag">Parte B</span>
+      <span class="ej-pill">documento · pdf / word</span>
+      <div class="ej-body">
+        <div>
+          <h3>El documento de la práctica</h3>
+          <p class="ej-desc">Un documento en <strong>PDF o Word</strong> que narre tu práctica: qué hiciste, cómo la modularizaste y qué aprendiste. Breve y honesto vale más que largo y copiado. La conclusión responde a una pregunta concreta.</p>
+          <ul class="reqs">
+            <li><strong>Título</strong> — de la práctica, con tu nombre, materia y fecha</li>
+            <li><strong>Introducción</strong> — qué es el diseño modular y las funciones</li>
+            <li><strong>Desarrollo</strong> — cómo dividiste en módulos y funciones, con capturas del código y de la ventana gráfica</li>
+            <li><strong>Conclusiones</strong> — responde: <em>¿para qué sirve el diseño modular en la programación?</em></li>
+            <li><strong>Bibliografía</strong> — en formato <strong>APA</strong> (abajo las tres referencias base)</li>
+          </ul>
+        </div>
+        <div class="ej-preview">
+          <div class="pv-label">Estructura del documento</div>
+          <div class="doc-mock">
+            <div class="dm-title">Práctica 5 · Diseño modular, funciones y gráficas</div>
+            <div class="dm-sec"><span class="dm-n">1.</span><span class="dm-t"><strong>Título</strong> — práctica, alumno, materia, fecha</span></div>
+            <div class="dm-sec"><span class="dm-n">2.</span><span class="dm-t"><strong>Introducción</strong> — diseño modular y funciones</span></div>
+            <div class="dm-sec"><span class="dm-n">3.</span><span class="dm-t"><strong>Desarrollo</strong> — módulos, funciones + capturas</span></div>
+            <div class="dm-sec"><span class="dm-n">4.</span><span class="dm-t"><strong>Conclusiones</strong> — ¿para qué sirve la modularidad?</span></div>
+            <div class="dm-sec"><span class="dm-n">5.</span><span class="dm-t"><strong>Bibliografía</strong> — formato APA</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="choose-note">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg>
+      <p><strong>Importante:</strong> todo se entrega en la actividad <strong>«Práctica 5» de Blackboard</strong>: el código fuente <strong>.cpp</strong>, su copia en <strong>.txt</strong> y el documento <strong>PDF o Word</strong>. Las conclusiones van <strong>dos veces</strong>: como comentario al final del programa y como sección del documento.</p>
     </div>
   </section>
 
@@ -835,31 +1154,40 @@ saldo = <span class="num">1500.0</span>
     <div class="panel">
       <h3 class="display">Criterios de <em>evaluación</em></h3>
       <ol class="crit-list">
-        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el cajero corre completo sin reventar.</li>
-        <li><strong>Lógica correcta</strong> — retira, deposita y valida igual que la versión anterior.</li>
-        <li><strong>Funcionamiento óptimo</strong> — al menos 4 funciones, cada una con una sola responsabilidad y nombre claro.</li>
-        <li><strong>Autenticidad</strong> — refactorización hecha por ti, no copiada de un compañero.</li>
+        <li><strong>Desarrollo de funciones que logran la modularidad</strong> — la aplicación está partida en funciones con una sola responsabilidad, no en un bloque monolítico.</li>
+        <li><strong>Organización del código</strong> — respeta la estructura por funciones y módulos; el <span class="mono">main</span> solo coordina.</li>
+        <li><strong>La aplicación gráfica funciona</strong> — dibuja las figuras y refleja las operaciones (mover, cambiar tamaño) en la ventana.</li>
+        <li><strong>Documento compilado en Dev C++</strong> — el programa compila y corre; se entrega junto con su documento. Autenticidad: hecho por ti.</li>
       </ol>
-      <p class="pond-note">Ponderación del curso · Actividades de aprendizaje 10% · Examen Bimestral 40% (examen 20% + prácticas y entregables 20%) · Examen Final 50% (examen 25% + prácticas 25%). Los entregables se evalúan desde tu repositorio de GitHub.</p>
+      <div class="pond">
+        <h4>Cómo cuenta en el curso</h4>
+        <p>Esta práctica suma al bloque de <strong>prácticas y entregables</strong>. Recuerda la aritmética del curso: Actividades 10% · Examen Bimestral 40% (examen 20% + prácticas 20%) · Examen Final 50% (examen 25% + prácticas 25%).</p>
+      </div>
     </div>
 
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>atm_v3.py</strong> — el cajero refactorizado en funciones bien nombradas.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>mundo_grafico.cpp</strong> — el programa modular, tal como lo compilaste (documento ejecutable o archivo en extensión <span class="mono">.cpp</span>).</span>
       </div>
       <div class="evid-item">
-        <span class="file-ic">.png</span>
-        <span class="ev-txt"><strong>Captura</strong> de la terminal mostrando un retiro y un depósito funcionando.</span>
+        <span class="file-ic">.txt</span>
+        <span class="ev-txt"><strong>Copia del código en texto plano</strong> — el programa pegado en el Bloc de notas.</span>
       </div>
       <div class="evid-item">
-        <span class="file-ic">git</span>
-        <span class="ev-txt"><strong>Commit</strong> con mensaje claro: <span class="mono">"sesion-20: ATM 3.0 refactorizado en funciones"</span>.</span>
+        <span class="file-ic">.pdf / .docx</span>
+        <span class="ev-txt"><strong>El documento</strong> con Título, Introducción, Desarrollo, Conclusiones y Bibliografía en formato APA (Parte B).</span>
       </div>
       <div class="conclu-note">
-        <h4>No olvides tus conclusiones</h4>
-        <p>Al final del archivo, en forma de <span class="mono">#</span> comentario, escribe en qué se volvió más fácil tu código al partirlo en funciones, y qué función te costó más decidir. La reflexión es parte de la entrega.</p>
+        <h4>No olvides tus conclusiones en el código</h4>
+        <p>Al final del programa, en forma de comentario (<span class="mono">/* ... */</span> en C++, <span class="mono">#</span> en Python), responde: <em>¿para qué sirve el diseño modular en la programación?</em>, con tus observaciones y lo aprendido.</p>
+      </div>
+      <div class="biblio">
+        <h4>Bibliografía de la práctica (formato APA)</h4>
+        <p>Corona Nakamura, M. A. y Ancona Valdez, M. de los Á. (2011). <em>Diseño de algoritmos y su codificación en lenguaje C.</em> McGraw-Hill.</p>
+        <p>Joyanes Aguilar, L. (2013). <em>Fundamentos generales de programación.</em> McGraw-Hill.</p>
+        <p>Joyanes Aguilar, L. y Zahonero Martínez, I. (2014). <em>Programación en C/C++, Java y UML.</em> McGraw-Hill.</p>
       </div>
     </div>
   </section>
@@ -873,14 +1201,14 @@ saldo = <span class="num">1500.0</span>
       y resolver <span class="em">cada parte por separado</span>.»
     </div>
     <div class="quote-author">— René Descartes</div>
-    <div class="quote-meta">Discurso del método, segunda parte · 1637</div>
+    <div class="quote-meta">Discurso del método, segunda parte · 1637 · el alma del diseño modular</div>
     <div class="sig">C. D. Vaca
       <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
     </div>
   </section>
 
   <footer>
-    Sesión 20 <span class="dot">·</span> Divide y vencerás <span class="dot">·</span> 26-3
+    Sesión 20 <span class="dot">·</span> Práctica 5 · El taller de figuras <span class="dot">·</span> 26-3
     <div class="nav-prev">
       ← Vuelve a <a href="../sesion-19/index.html">Sesión 19 · Práctica 4 · El casillero</a>
       &nbsp;·&nbsp;
@@ -905,6 +1233,17 @@ saldo = <span class="num">1500.0</span>
     var lang = tab.getAttribute("data-lang");
     sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
     sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
+
+  /* ===== Solución sellada ===== */
+  const solBtn = document.getElementById('solBtn');
+  const solBody = document.getElementById('solBody');
+  solBtn.addEventListener('click', function(){
+    const abrir = solBody.hidden;
+    solBody.hidden = !abrir;
+    solBtn.classList.toggle('open', abrir);
+    solBtn.querySelector('.sb-txt').textContent = abrir ? 'Ocultar la solución' : 'Ver la solución';
+    if (abrir) solBody.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 </script>
 
