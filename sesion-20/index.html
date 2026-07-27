@@ -368,25 +368,24 @@
       El taller<br/>de <span class="em">figuras</span>.
     </h1>
     <p class="lede">
-      Práctica institucional 5 de 6. La empresa <strong>«Mundo-gráfico»</strong> nos encarga una aplicación que
-      <em>dibuje y manipule</em> figuras en pantalla —círculos, rectángulos, líneas— y las mueva y agrande de
-      forma interactiva. No la escribiremos de un tirón: la <strong>partimos en piezas</strong>. Cada figura,
-      cada operación, será una <em>función</em> con su nombre y su única tarea. Un programa así es un taller
-      donde cada herramienta sabe hacer una sola cosa —y por eso todo
+      Práctica institucional 5 de 6. La empresa <strong>«Mundo-gráfico»</strong> nos encarga un programa sencillo que
+      <em>imprima figuras con caracteres en la consola</em>. No la escribiremos de un tirón: la <strong>partimos en piezas</strong>.
+      Una función mostrará el título, otra dibujará una línea, otra construirá un cuadrado y otra calculará su área.
+      Cada herramienta sabe hacer una sola cosa —y por eso todo
       <span class="underline-ochre">encaja y se puede cambiar sin miedo</span>.
     </p>
     <p class="lede" style="margin-top:18px; font-size:1.02rem; color:var(--ink-faint);">
-      <em>Nota del curso:</em> la práctica pide un programa <strong>en C++ modular</strong> con <strong>Dev C++</strong>;
-      para la parte gráfica usamos la librería <strong>graphics.h</strong> (WinBGIm) y conservamos
-      <strong>Python con turtle</strong> como puente en la otra pestaña. Pulsa las pestañas de cada bloque para alternar.
+      <em>Nota del curso:</em> trabajaremos con <strong>C++ modular</strong> en <strong>Dev C++</strong> y únicamente con
+      la consola. No necesitas instalar <span class="mono">graphics.h</span>: las figuras se forman con símbolos
+      como <span class="mono">*</span>, <span class="mono">#</span> y <span class="mono">-</span>.
     </p>
 
     <div class="cont-banner">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4 4.2 4.2M3 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4 4.2-4.2"/></svg>
       <div class="txt">
         <strong>Esta práctica cierra la unidad de funciones.</strong> Reúne el diseño modular —divide y vencerás—
-        con el <em>manejo de funciones</em> (uno y varios parámetros, y la devolución del resultado) y lo lleva,
-        por primera vez, a una <strong>aplicación gráfica</strong>.
+        con el <em>manejo de funciones</em> (uno y varios parámetros, y la devolución del resultado) mediante
+        <strong>figuras de texto impresas en consola</strong>.
       </div>
     </div>
 
@@ -404,7 +403,7 @@
       <div class="ficha-grid">
         <div class="ficha-cell wide">
           <div class="fc-label">Objetivo de la práctica</div>
-          <div class="fc-value obj">Diseñar un programa en C++ modular que utilice funciones con diferentes parámetros y devolución de resultados, aplicando los principios del diseño modular y sus ventajas, así como el desarrollo de gráficas de números o funciones matemáticas y animaciones básicas para una interfaz visual interactiva.</div>
+          <div class="fc-value obj">Diseñar un programa sencillo en C++ que divida responsabilidades en funciones, utilice parámetros y devolución de resultados, y represente figuras mediante caracteres impresos en la consola.</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Temas y subtemas</div>
@@ -424,11 +423,11 @@
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Software oficial</div>
-          <div class="fc-value">Dev C++ · librería graphics.h</div>
+          <div class="fc-value">Dev C++ · consola estándar</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Nuestro puente</div>
-          <div class="fc-value">Python · turtle</div>
+          <div class="fc-value">Python · impresión en consola</div>
         </div>
         <div class="ficha-cell">
           <div class="fc-label">Aporta el alumno</div>
@@ -453,30 +452,38 @@
     </div>
 
     <div class="sec-prose">
-      <p>Imagina la aplicación de «Mundo-gráfico» escrita de corrido: cien líneas que abren la ventana, dibujan un círculo, un rectángulo y una línea, luego las mueven, las agrandan y refrescan la pantalla… todo amontonado en un solo bloque. Funciona. Pero si mañana quieres <em>cambiar cómo se dibuja el rectángulo</em>, tienes que leer las cien líneas para hallar dónde tocar. Y si te equivocas, rompes el círculo, que no tenía nada que ver.</p>
-      <p>Ahora imagina el <strong>mismo programa partido en funciones</strong>: <span class="mono">dibujar_circulo</span>, <span class="mono">dibujar_rectangulo</span>, <span class="mono">dibujar_linea</span>, <span class="mono">mover_derecha</span>, <span class="mono">cambiar_tamano</span>. Cada una hace una sola cosa, cabe en la pantalla y se lee como una frase. Cambiar el rectángulo es abrir <em>una sola función</em>. Lo demás ni se entera.</p>
+      <p>Imagina el programa escrito de corrido: <span class="mono">main</span> pide el lado, contiene los dos ciclos que dibujan el cuadrado y además calcula el área. Funciona, pero las responsabilidades están mezcladas.</p>
+      <p>Ahora imagina el <strong>mismo programa partido en funciones</strong>: <span class="mono">dibujar_cuadrado</span> se ocupa del dibujo, <span class="mono">area_cuadrado</span> hace el cálculo y <span class="mono">main</span> solamente coordina. El resultado es el mismo; la organización es mucho mejor.</p>
     </div>
 
     <div class="compint">
       <div class="ci-card c">
         <div class="ci-tag">antes · todo amontonado</div>
-        <h3>El bloque monolítico</h3>
-        <p>Un solo muro de 100 líneas. Para entender cómo se dibuja una figura, hay que leerlo <strong>todo</strong>. Si repites el mismo trazo tres veces, tienes <strong>tres lugares</strong> que mantener.</p>
-        <div class="ci-flow">// 100 líneas seguidas
-// abrir... círculo...
-// rectángulo... línea...
-// mover... agrandar...
-// todo en main, sin nombres</div>
+        <h3>Todo dentro de main</h3>
+        <p>La entrada, el dibujo y el cálculo están mezclados. Para reutilizar el cuadrado habría que copiar los ciclos.</p>
+        <div class="ci-flow">int main() {
+  int lado; cin &gt;&gt; lado;
+  for (int f = 0; f &lt; lado; f++) {
+    for (int c = 0; c &lt; lado; c++)
+      cout &lt;&lt; "* ";
+    cout &lt;&lt; endl;
+  }
+  cout &lt;&lt; lado * lado;
+}</div>
       </div>
       <div class="ci-card py">
         <div class="ci-tag">después · modular</div>
-        <h3>Funciones con nombre</h3>
-        <p>Cada tarea tiene su nombre y su lugar. El <span class="mono">main</span> se vuelve un <strong>índice legible</strong> que solo llama funciones. Cada pieza se prueba <strong>por separado</strong>.</p>
-        <div class="ci-flow">dibujar_circulo(...)
-dibujar_rectangulo(...)
-dibujar_linea(...)
-mover_derecha(...)
-cambiar_tamano(...)</div>
+        <h3>Responsabilidades separadas</h3>
+        <p>El <span class="mono">main</span> se vuelve un índice legible. Cada función tiene una sola tarea y puede reutilizarse.</p>
+        <div class="ci-flow">void dibujar_cuadrado(int lado) { ... }
+int area_cuadrado(int lado) {
+  return lado * lado;
+}
+int main() {
+  cin &gt;&gt; lado;
+  dibujar_cuadrado(lado);
+  cout &lt;&lt; area_cuadrado(lado);
+}</div>
       </div>
     </div>
 
@@ -514,8 +521,8 @@ cambiar_tamano(...)</div>
     <div class="anatomy">
       <span class="a-label">ANATOMÍA · función en C++</span>
       <div class="a-line">
-        <span class="part kw">int</span> <span class="part name">mover_derecha</span>(<span class="part param">int x, int paso</span>) {<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="part ret">return</span> <span class="part val">x + paso</span>;
+        <span class="part kw">int</span> <span class="part name">area_cuadrado</span>(<span class="part param">int lado</span>) {<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="part ret">return</span> <span class="part val">lado * lado</span>;
       </div>
       <div class="anatomy-legend">
         <div class="leg l1">
@@ -523,19 +530,19 @@ cambiar_tamano(...)</div>
           <div class="leg-t">El tipo del dato que la función devolverá. Aquí, un entero.</div>
         </div>
         <div class="leg l2">
-          <div class="leg-h">mover_derecha</div>
+          <div class="leg-h">area_cuadrado</div>
           <div class="leg-t">El nombre: un verbo claro que dice qué hace, en snake_case.</div>
         </div>
         <div class="leg l3">
-          <div class="leg-h">(int x, int paso)</div>
-          <div class="leg-t">Los parámetros: los datos que recibe para trabajar. Aquí, dos.</div>
+          <div class="leg-h">(int lado)</div>
+          <div class="leg-t">El parámetro: el dato que recibe para trabajar. Aquí, uno.</div>
         </div>
         <div class="leg l4">
           <div class="leg-h">return</div>
           <div class="leg-t">Devuelve el resultado a quien la llamó. La función entrega su fruto.</div>
         </div>
         <div class="leg l5">
-          <div class="leg-h">x + paso</div>
+          <div class="leg-h">lado * lado</div>
           <div class="leg-t">El cuerpo: el trabajo en sí; su resultado es lo que se devuelve.</div>
         </div>
       </div>
@@ -548,7 +555,7 @@ cambiar_tamano(...)</div>
     <!-- 5.2.1 / 5.2.2 · parámetros -->
     <div class="code-grid">
       <div>
-        <p class="code-cap">Definir · una figura con varios parámetros</p>
+        <p class="code-cap">Definir · una línea con varios parámetros</p>
         <div class="codeswitch">
           <div class="cs-tabs">
             <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
@@ -559,22 +566,23 @@ cambiar_tamano(...)</div>
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.cpp</span></div>
 <pre><span class="com">// 5.2.2 · VARIOS parametros:</span>
-<span class="com">// posicion, tamano y color</span>
-<span class="kw">void</span> <span class="fn">dibujar_circulo</span>(<span class="kw">int</span> x, <span class="kw">int</span> y, <span class="kw">int</span> radio, <span class="kw">int</span> color) {
-    <span class="fn">setcolor</span>(color);      <span class="com">// color del trazo</span>
-    <span class="fn">circle</span>(x, y, radio);   <span class="com">// dibuja el circulo</span>
-}   <span class="com">// void: no devuelve nada, solo dibuja</span></pre>
+<span class="com">// cantidad de caracteres y simbolo</span>
+<span class="kw">void</span> <span class="fn">dibujar_linea</span>(<span class="kw">int</span> largo, <span class="kw">char</span> simbolo) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; largo; i++)
+        cout &lt;&lt; simbolo;
+    cout &lt;&lt; endl;
+}   <span class="com">// void: muestra, no devuelve</span></pre>
             </div>
           </div>
           <div class="cs-pane" data-lang="py" hidden>
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.py</span></div>
 <pre><span class="com"># 5.2.2 · VARIOS parámetros:</span>
-<span class="com"># posición, tamaño y color</span>
-<span class="kw">def</span> <span class="fn">dibujar_circulo</span>(x, y, radio, color):
-    t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(x, y); t.<span class="fn">pendown</span>()
-    t.<span class="fn">color</span>(color)     <span class="com"># color del trazo</span>
-    t.<span class="fn">circle</span>(radio)    <span class="com"># dibuja el círculo</span></pre>
+<span class="com"># cantidad de caracteres y símbolo</span>
+<span class="kw">def</span> <span class="fn">dibujar_linea</span>(largo, simbolo):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(largo):
+        <span class="fn">print</span>(simbolo, end=<span class="str">""</span>)
+    <span class="fn">print</span>()</pre>
             </div>
           </div>
         </div>
@@ -590,26 +598,26 @@ cambiar_tamano(...)</div>
           <div class="cs-pane" data-lang="cpp">
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.cpp</span></div>
-<pre><span class="com">// la misma funcion, dos figuras distintas</span>
-<span class="fn">dibujar_circulo</span>(<span class="num">150</span>, <span class="num">200</span>, <span class="num">60</span>, GREEN);  <span class="out">// grande, verde</span>
-<span class="fn">dibujar_circulo</span>(<span class="num">400</span>, <span class="num">120</span>, <span class="num">25</span>, RED);    <span class="out">// chico, rojo</span>
+<pre><span class="com">// la misma funcion con datos distintos</span>
+<span class="fn">dibujar_linea</span>(<span class="num">10</span>, <span class="str">'-'</span>);  <span class="out">// ----------</span>
+<span class="fn">dibujar_linea</span>(<span class="num">5</span>, <span class="str">'#'</span>);   <span class="out">// #####</span>
 
 <span class="com">// 5.2.1 · UN parametro y devolucion:</span>
-<span class="kw">double</span> <span class="fn">area_circulo</span>(<span class="kw">double</span> radio) {
-    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio;   <span class="com">// recibe uno, devuelve uno</span>
+<span class="kw">int</span> <span class="fn">area_cuadrado</span>(<span class="kw">int</span> lado) {
+    <span class="kw">return</span> lado * lado;
 }</pre>
             </div>
           </div>
           <div class="cs-pane" data-lang="py" hidden>
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.py</span></div>
-<pre><span class="com"># la misma función, dos figuras distintas</span>
-<span class="fn">dibujar_circulo</span>(-<span class="num">150</span>, <span class="num">0</span>, <span class="num">60</span>, <span class="str">"green"</span>)  <span class="out"># grande, verde</span>
-<span class="fn">dibujar_circulo</span>(<span class="num">120</span>, <span class="num">80</span>, <span class="num">25</span>, <span class="str">"red"</span>)   <span class="out"># chico, rojo</span>
+<pre><span class="com"># la misma función con datos distintos</span>
+<span class="fn">dibujar_linea</span>(<span class="num">10</span>, <span class="str">"-"</span>)  <span class="out"># ----------</span>
+<span class="fn">dibujar_linea</span>(<span class="num">5</span>, <span class="str">"#"</span>)   <span class="out"># #####</span>
 
 <span class="com"># 5.2.1 · UN parámetro y devolución:</span>
-<span class="kw">def</span> <span class="fn">area_circulo</span>(radio):
-    <span class="kw">return</span> <span class="num">3.1416</span> * radio * radio   <span class="com"># recibe uno, devuelve uno</span></pre>
+<span class="kw">def</span> <span class="fn">area_cuadrado</span>(lado):
+    <span class="kw">return</span> lado * lado</pre>
             </div>
           </div>
         </div>
@@ -619,14 +627,14 @@ cambiar_tamano(...)</div>
     <div class="teoria-grid">
       <div class="teoria-card">
         <h3>5.2.1 · Un parámetro</h3>
-        <span class="mono-fn">area_circulo(radio)</span>
-        <p>Recibe <strong>un solo dato</strong> para trabajar. <span class="mono">area_circulo(30)</span> toma el radio y devuelve su área. Una entrada, un resultado.</p>
+        <span class="mono-fn">area_cuadrado(lado)</span>
+        <p>Recibe <strong>un solo dato</strong> para trabajar. <span class="mono">area_cuadrado(4)</span> recibe el lado y devuelve <span class="mono">16</span>.</p>
         <div class="verdict">// una función, un dato de entrada</div>
       </div>
       <div class="teoria-card blood">
         <h3>5.2.2 · Varios parámetros</h3>
-        <span class="mono-fn">dibujar_circulo(x, y, radio, color)</span>
-        <p>Recibe <strong>varios datos</strong>, separados por comas y <em>en orden</em>. Con ellos, una sola función dibuja círculos en cualquier lugar, tamaño y color.</p>
+        <span class="mono-fn">dibujar_linea(largo, simbolo)</span>
+        <p>Recibe <strong>dos datos</strong>, separados por coma y en orden. Con ellos, la misma función imprime líneas de distintos tamaños y símbolos.</p>
         <div class="verdict">// una función, muchos datos de entrada</div>
       </div>
     </div>
@@ -662,45 +670,37 @@ cambiar_tamano(...)</div>
       <div class="cs-pane" data-lang="cpp">
         <div class="code-block">
           <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">dibujar_vs_return.cpp</span></div>
-<pre><span class="com">// ──────── Solo DIBUJA (void): habla a la pantalla ────────</span>
-<span class="kw">void</span> <span class="fn">dibujar_circulo</span>(<span class="kw">int</span> x, <span class="kw">int</span> y, <span class="kw">int</span> radio, <span class="kw">int</span> color) {
-    <span class="fn">setcolor</span>(color);
-    <span class="fn">circle</span>(x, y, radio);   <span class="com">// pinta y nada mas</span>
-}   <span class="com">// void: no entrega ningun valor</span>
-<span class="com">// int nueva = dibujar_circulo(...);  →  ERROR: void no devuelve nada</span>
-
-
-<span class="com">// ──────── DEVUELVE (return): habla al programa ────────</span>
-<span class="kw">int</span> <span class="fn">mover_derecha</span>(<span class="kw">int</span> x, <span class="kw">int</span> paso) {
-    <span class="kw">return</span> x + paso;   <span class="com">// entrega la nueva posicion</span>
+<pre><span class="com">// IMPRIME: habla a la pantalla</span>
+<span class="kw">void</span> <span class="fn">dibujar_linea</span>(<span class="kw">int</span> largo, <span class="kw">char</span> simbolo) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; largo; i++) cout &lt;&lt; simbolo;
 }
 
-<span class="kw">int</span> x = <span class="num">60</span>;
-x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>);   <span class="com">// x ahora vale 65: lo guardamos</span>
-x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>);   <span class="com">// y otra vez: 70. Podemos seguir calculando</span></pre>
+<span class="com">// DEVUELVE: habla al programa</span>
+<span class="kw">int</span> <span class="fn">area_cuadrado</span>(<span class="kw">int</span> lado) {
+    <span class="kw">return</span> lado * lado;
+}
+
+<span class="kw">int</span> area = <span class="fn">area_cuadrado</span>(<span class="num">4</span>); <span class="com">// guardamos 16</span></pre>
         </div>
       </div>
       <div class="cs-pane" data-lang="py" hidden>
         <div class="code-block">
           <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">dibujar_vs_return.py</span></div>
-<pre><span class="com"># ──────── Solo DIBUJA: habla a la pantalla ────────</span>
-<span class="kw">def</span> <span class="fn">dibujar_circulo</span>(x, y, radio, color):
-    t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(x, y); t.<span class="fn">pendown</span>()
-    t.<span class="fn">color</span>(color); t.<span class="fn">circle</span>(radio)   <span class="com"># pinta y nada más</span>
+<pre><span class="com"># IMPRIME: habla a la pantalla</span>
+<span class="kw">def</span> <span class="fn">dibujar_linea</span>(largo, simbolo):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(largo):
+        <span class="fn">print</span>(simbolo, end=<span class="str">""</span>)
 
+<span class="com"># DEVUELVE: habla al programa</span>
+<span class="kw">def</span> <span class="fn">area_cuadrado</span>(lado):
+    <span class="kw">return</span> lado * lado
 
-<span class="com"># ──────── DEVUELVE (return): habla al programa ────────</span>
-<span class="kw">def</span> <span class="fn">mover_derecha</span>(x, paso):
-    <span class="kw">return</span> x + paso    <span class="com"># entrega la nueva posición</span>
-
-x = -<span class="num">240</span>
-x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>)   <span class="com"># x avanza y lo guardamos</span>
-x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>)   <span class="com"># podemos seguir calculando</span></pre>
+area = <span class="fn">area_cuadrado</span>(<span class="num">4</span>) <span class="com"># guardamos 16</span></pre>
         </div>
       </div>
     </div>
 
-    <div class="keypoint"><strong>Regla del 5.2.3:</strong> si vas a <em>usar</em> el resultado (moverte otra vez, comparar, acumular), usa <span class="mono">return</span>. Reserva el dibujo para el momento de mostrar. Así separas la <strong>lógica</strong> (calcular la posición) de la <strong>interfaz</strong> (dibujar) — justo lo que pide la práctica.</div>
+    <div class="keypoint"><strong>Regla del 5.2.3:</strong> si vas a <em>usar</em> el resultado después, usa <span class="mono">return</span>. Reserva la impresión para mostrar información. Así separas el <strong>cálculo</strong> del <strong>dibujo en consola</strong>.</div>
   </section>
 
   <!-- SECCIÓN iii: 5.3 APLICACIONES GRÁFICAS -->
@@ -708,15 +708,14 @@ x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>)   <span
     <div class="s-head">
       <div class="n display">iii.</div>
       <div>
-        <h2 class="display">5.3 · Aplicaciones <em>gráficas</em>.</h2>
-        <p>Hasta hoy, la salida del programa era texto en la terminal. Ahora abrimos una <strong>ventana</strong> y dibujamos en ella. Con <strong>graphics.h</strong> (Dev C++) bastan tres órdenes para las tres figuras de «Mundo-gráfico»: <span class="mono">circle</span>, <span class="mono">rectangle</span> y <span class="mono">line</span>.</p>
+        <h2 class="display">5.3 · Figuras <em>en consola</em>.</h2>
+        <p>Una figura también puede representarse con texto. En esta versión reducida no abrimos una ventana: usamos ciclos y <span class="mono">cout</span> para formar líneas y cuadrados con caracteres.</p>
       </div>
     </div>
 
-    <!-- 5.3.1 · primitivas de dibujo -->
     <div class="code-grid">
       <div>
-        <p class="code-cap">5.3.1 · dibujar las figuras</p>
+        <p class="code-cap">5.3.1 · una línea con caracteres</p>
         <div class="codeswitch">
           <div class="cs-tabs">
             <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
@@ -726,66 +725,49 @@ x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>)   <span
           <div class="cs-pane" data-lang="cpp">
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">figuras.cpp</span></div>
-<pre><span class="com">// abre el lienzo: ancho, alto, titulo</span>
-<span class="fn">initwindow</span>(<span class="num">600</span>, <span class="num">400</span>, <span class="str">"Mundo-grafico"</span>);
+<pre><span class="kw">void</span> <span class="fn">dibujar_linea</span>(<span class="kw">int</span> largo, <span class="kw">char</span> simbolo) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; largo; i++) {
+        cout &lt;&lt; simbolo;
+    }
+    cout &lt;&lt; endl;
+}
 
-<span class="fn">setcolor</span>(GREEN);
-<span class="fn">circle</span>(<span class="num">150</span>, <span class="num">200</span>, <span class="num">60</span>);            <span class="com">// circulo: centro y radio</span>
-
-<span class="fn">setcolor</span>(RED);
-<span class="fn">rectangle</span>(<span class="num">260</span>, <span class="num">140</span>, <span class="num">460</span>, <span class="num">260</span>);   <span class="com">// esquinas: sup-izq, inf-der</span>
-
-<span class="fn">setcolor</span>(YELLOW);
-<span class="fn">line</span>(<span class="num">80</span>, <span class="num">320</span>, <span class="num">520</span>, <span class="num">320</span>);        <span class="com">// linea: de un punto a otro</span>
-
-<span class="fn">delay</span>(<span class="num">4000</span>);      <span class="com">// espera 4 segundos</span>
-<span class="fn">closegraph</span>();     <span class="com">// cierra la ventana</span></pre>
+<span class="fn">dibujar_linea</span>(<span class="num">10</span>, <span class="str">'-'</span>); <span class="out">// ----------</span></pre>
             </div>
           </div>
           <div class="cs-pane" data-lang="py" hidden>
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">figuras.py</span></div>
-<pre><span class="kw">import</span> turtle
-t = turtle.<span class="fn">Turtle</span>()
+<pre><span class="kw">def</span> <span class="fn">dibujar_linea</span>(largo, simbolo):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(largo):
+        <span class="fn">print</span>(simbolo, end=<span class="str">""</span>)
+    <span class="fn">print</span>()
 
-t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(-<span class="num">150</span>, -<span class="num">60</span>); t.<span class="fn">pendown</span>()
-t.<span class="fn">color</span>(<span class="str">"green"</span>); t.<span class="fn">circle</span>(<span class="num">60</span>)          <span class="com"># círculo</span>
-
-t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(-<span class="num">40</span>, <span class="num">60</span>); t.<span class="fn">pendown</span>()
-t.<span class="fn">color</span>(<span class="str">"red"</span>)
-<span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">2</span>):                       <span class="com"># rectángulo: 4 lados</span>
-    t.<span class="fn">forward</span>(<span class="num">200</span>); t.<span class="fn">right</span>(<span class="num">90</span>)
-    t.<span class="fn">forward</span>(<span class="num">120</span>); t.<span class="fn">right</span>(<span class="num">90</span>)
-
-t.<span class="fn">penup</span>(); t.<span class="fn">goto</span>(-<span class="num">220</span>, -<span class="num">140</span>); t.<span class="fn">pendown</span>()
-t.<span class="fn">color</span>(<span class="str">"orange"</span>); t.<span class="fn">goto</span>(<span class="num">220</span>, -<span class="num">140</span>)   <span class="com"># línea</span></pre>
+<span class="fn">dibujar_linea</span>(<span class="num">10</span>, <span class="str">"-"</span>) <span class="out"># ----------</span></pre>
             </div>
           </div>
         </div>
       </div>
       <div>
-        <p class="code-cap">Así se ve la ventana al correr</p>
+        <p class="code-cap">Así se ve la consola al correr</p>
         <div class="gwin">
-          <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">Mundo-grafico — 600 × 400</span></div>
-          <svg class="gw-canvas" viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ventana con un círculo verde, un rectángulo rojo y una línea amarilla">
-            <circle cx="130" cy="150" r="58" fill="none" stroke="#5d6638" stroke-width="3"/>
-            <rect x="245" y="98" width="200" height="115" fill="none" stroke="#a02418" stroke-width="3"/>
-            <line x1="70" y1="250" x2="490" y2="250" stroke="#b5852a" stroke-width="3.5" stroke-linecap="round"/>
-            <text x="130" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#5d6638">circle()</text>
-            <text x="345" y="160" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#a02418">rectangle()</text>
-            <text x="280" y="240" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#8a6320">line()</text>
-          </svg>
-          <div class="gw-cap"><strong>Tres funciones, tres figuras.</strong> El color es un parámetro más: cámbialo y cambia el trazo.</div>
+          <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — Mundo-gráfico</span></div>
+          <div class="term-body" style="min-height:300px;padding:54px 70px;font-size:1.2rem;">
+            <span class="head-l">--- Mundo-grafico ---</span><br/><br/>
+            Escribe el lado: <span class="num-l">4</span><br/><br/>
+            * * * *<br/>* * * *<br/>* * * *<br/>* * * *<br/><br/>
+            Área: <span class="num-l">16</span><br/>--------------------
+          </div>
+          <div class="gw-cap"><strong>La figura es texto.</strong> Los ciclos forman los renglones y las funciones organizan el trabajo.</div>
         </div>
       </div>
     </div>
 
-    <div class="keypoint" style="margin-top:34px;"><strong>5.3.1 · también sirve para números:</strong> la misma idea dibuja la <em>gráfica de una función matemática</em>. Si recorres los valores de <span class="mono">x</span> y para cada uno pones un punto en <span class="mono">(x, f(x))</span>, la ventana traza la curva. Un círculo o una parábola: al final, todo es dibujar puntos y líneas con funciones.</div>
+    <div class="keypoint" style="margin-top:34px;"><strong>La práctica se mantiene pequeña:</strong> primero entendemos cómo dividir responsabilidades usando la consola. La misma organización por funciones podrá reutilizarse más adelante en una aplicación con interfaz gráfica.</div>
 
-    <!-- 5.3.2 · animación básica -->
     <div class="code-grid" style="margin-top:50px;">
       <div>
-        <p class="code-cap">5.3.2 · animación básica</p>
+        <p class="code-cap">5.3.2 · un cuadrado con dos for</p>
         <div class="codeswitch">
           <div class="cs-tabs">
             <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
@@ -795,47 +777,38 @@ t.<span class="fn">color</span>(<span class="str">"orange"</span>); t.<span clas
           <div class="cs-pane" data-lang="cpp">
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">animacion.cpp</span></div>
-<pre><span class="com">// mover = borrar, redibujar un poco mas alla, repetir</span>
-<span class="kw">int</span> x = <span class="num">60</span>;
-<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">60</span>; i++) {   <span class="com">// 60 cuadros</span>
-    <span class="fn">cleardevice</span>();                  <span class="com">// borra el cuadro anterior</span>
-    <span class="fn">dibujar_circulo</span>(x, <span class="num">200</span>, <span class="num">40</span>, GREEN);
-    <span class="fn">delay</span>(<span class="num">30</span>);                     <span class="com">// 30 ms por cuadro</span>
-    x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>);      <span class="com">// avanza 5 px a la derecha</span>
+<pre><span class="kw">void</span> <span class="fn">dibujar_cuadrado</span>(<span class="kw">int</span> lado, <span class="kw">char</span> simbolo) {
+    <span class="kw">for</span> (<span class="kw">int</span> fila = <span class="num">0</span>; fila &lt; lado; fila++) {
+        <span class="kw">for</span> (<span class="kw">int</span> columna = <span class="num">0</span>; columna &lt; lado; columna++) {
+            cout &lt;&lt; simbolo &lt;&lt; <span class="str">" "</span>;
+        }
+        cout &lt;&lt; endl;
+    }
 }</pre>
             </div>
           </div>
           <div class="cs-pane" data-lang="py" hidden>
             <div class="code-block">
               <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">animacion.py</span></div>
-<pre><span class="com"># mover = borrar, redibujar un poco más allá, repetir</span>
-x = -<span class="num">240</span>
-<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">60</span>):        <span class="com"># 60 cuadros</span>
-    t.<span class="fn">clear</span>()                <span class="com"># borra el cuadro anterior</span>
-    <span class="fn">dibujar_circulo</span>(x, <span class="num">0</span>, <span class="num">40</span>, <span class="str">"green"</span>)
-    x = <span class="fn">mover_derecha</span>(x, <span class="num">5</span>)   <span class="com"># avanza 5 px a la derecha</span></pre>
+<pre><span class="kw">def</span> <span class="fn">dibujar_cuadrado</span>(lado, simbolo):
+    <span class="kw">for</span> fila <span class="kw">in</span> <span class="fn">range</span>(lado):
+        <span class="kw">for</span> columna <span class="kw">in</span> <span class="fn">range</span>(lado):
+            <span class="fn">print</span>(simbolo, end=<span class="str">" "</span>)
+        <span class="fn">print</span>()</pre>
             </div>
           </div>
         </div>
       </div>
       <div>
-        <p class="code-cap">El círculo cruza la ventana</p>
+        <p class="code-cap">Cómo trabajan los dos ciclos</p>
         <div class="gwin">
-          <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">animación — cuadro por cuadro</span></div>
-          <svg class="gw-canvas" viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Un círculo dibujado en varias posiciones, avanzando hacia la derecha">
-            <circle cx="90"  cy="110" r="34" fill="none" stroke="#5d6638" stroke-width="2.5" opacity="0.25"/>
-            <circle cx="200" cy="110" r="34" fill="none" stroke="#5d6638" stroke-width="2.5" opacity="0.45"/>
-            <circle cx="310" cy="110" r="34" fill="none" stroke="#5d6638" stroke-width="2.5" opacity="0.7"/>
-            <circle cx="440" cy="110" r="34" fill="none" stroke="#5d6638" stroke-width="3.2"/>
-            <line x1="130" y1="110" x2="404" y2="110" stroke="#a02418" stroke-width="2" stroke-dasharray="5 6" marker-end="url(#mv)"/>
-            <defs>
-              <marker id="mv" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                <path d="M0,0 L10,5 L0,10 z" fill="#a02418"/>
-              </marker>
-            </defs>
-            <text x="270" y="185" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#8a6320">x = mover_derecha(x, 5)</text>
-          </svg>
-          <div class="gw-cap"><strong>La ilusión del movimiento:</strong> borrar, redibujar un poco más a la derecha, esperar. Sesenta veces por segundo, parece que se mueve.</div>
+          <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">dos ciclos anidados</span></div>
+          <div class="term-body" style="min-height:220px;padding:45px 60px;">
+            <span class="head-l">for exterior</span> → elige el renglón<br/><br/>
+            &nbsp;&nbsp;<span class="head-l">for interior</span> → imprime los símbolos<br/><br/>
+            &nbsp;&nbsp;al terminar → <span class="keep">salto de línea</span>
+          </div>
+          <div class="gw-cap"><strong>Exterior = filas; interior = columnas.</strong> Ésta es toda la lógica del cuadrado.</div>
         </div>
       </div>
     </div>
@@ -847,39 +820,34 @@ x = -<span class="num">240</span>
       <div class="n blood display">iv.</div>
       <div>
         <h2 class="display">Live coding: armamos <em class="blood">«Mundo-gráfico»</em>.</h2>
-        <p>Ahora juntamos las tres partes en <strong>una sola aplicación modular</strong>. La construimos <strong>en vivo, en clase</strong>, módulo por módulo. En esta página queda el <strong>plano</strong>: los pasos y las firmas de las funciones, no las respuestas.</p>
+        <p>Juntamos funciones pequeñas en <strong>un programa modular de consola</strong>. En esta página queda el <strong>plano</strong>: los pasos y las firmas, no las respuestas.</p>
       </div>
     </div>
 
     <div class="sec-prose">
-      <p>Primero acordamos juntos el <strong>mapa de módulos</strong> (instrucción 1 de la práctica): qué tareas hay, en qué módulo vive cada una y qué función la resuelve. Una vez que el mapa está claro, escribir cada función es casi mecánico. <em>El diseño es el trabajo difícil; el código es la consecuencia.</em></p>
+      <p>El mapa es corto: unas funciones muestran, una calcula y <span class="mono">main</span> coordina. Cada responsabilidad tiene un nombre y un lugar.</p>
     </div>
 
     <div class="modmap">
       <div class="mod figuras">
-        <div class="mod-k">módulo · lógica</div>
-        <h4>Operaciones con figuras</h4>
-        <span class="fnchip">dibujar_circulo(x, y, radio, color)</span>
-        <span class="fnchip">dibujar_rectangulo(x, y, ancho, alto, color)</span>
-        <span class="fnchip">dibujar_linea(x1, y1, x2, y2, color)</span>
-        <span class="fnchip">mover_derecha(x, paso) → int</span>
-        <span class="fnchip">cambiar_tamano(radio, cuanto) → int</span>
-        <p><strong>Crear, mover y cambiar de tamaño.</strong> Combina funciones de varios parámetros (dibujar) con funciones que devuelven (mover, redimensionar).</p>
+        <div class="mod-k">responsabilidad · mostrar</div>
+        <h4>Figuras de consola</h4>
+        <span class="fnchip">mostrar_titulo()</span>
+        <span class="fnchip">dibujar_linea(largo, simbolo)</span>
+        <span class="fnchip">dibujar_cuadrado(lado, simbolo)</span>
+        <p><strong>Imprimen, no calculan.</strong> Los parámetros permiten cambiar el tamaño y el símbolo sin repetir el código.</p>
       </div>
       <div class="mod interfaz">
-        <div class="mod-k">módulo · interfaz</div>
-        <h4>Interfaz gráfica</h4>
-        <span class="fnchip">initwindow(ancho, alto, titulo)</span>
-        <span class="fnchip">cleardevice()</span>
-        <span class="fnchip">delay(ms)</span>
-        <span class="fnchip">closegraph()</span>
-        <p><strong>El lienzo.</strong> Abre la ventana, la limpia entre cuadros y la cierra. Es donde las figuras aparecen y se refrescan.</p>
+        <div class="mod-k">responsabilidad · calcular</div>
+        <h4>Resultado con return</h4>
+        <span class="fnchip">area_cuadrado(lado) → int</span>
+        <p><strong>Calcula, no imprime.</strong> Devuelve <span class="mono">lado * lado</span> para que el programa pueda utilizar el resultado.</p>
       </div>
       <div class="mod principal">
         <div class="mod-k">módulo · principal</div>
         <h4>Programa principal</h4>
         <span class="fnchip">main()</span>
-        <p><strong>No dibuja ni calcula: coordina.</strong> Llama a las figuras, corre el ciclo de animación y espera al usuario. Se lee como un índice de tareas.</p>
+        <p><strong>No repite el trabajo: coordina.</strong> Pide el lado y llama las funciones en el orden correcto.</p>
       </div>
     </div>
 
@@ -893,54 +861,35 @@ x = -<span class="num">240</span>
       <div class="cs-pane" data-lang="cpp">
         <div class="code-block">
           <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mundo_grafico.cpp</span></div>
-<pre><span class="com">// MUNDO-GRAFICO · PLANO GUIADO — escribe el cuerpo de cada funcion</span>
-
-<span class="com">// PASO 1: incluye &lt;graphics.h&gt; y &lt;iostream&gt;</span>
-
+<pre><span class="com">// MUNDO-GRAFICO · PLANO GUIADO</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
 <span class="kw">using namespace</span> std;
 
-<span class="com">// ---- MODULO DE FIGURAS (varios parametros) ----</span>
-<span class="com">// PASO 2: void dibujar_circulo(int x, int y, int radio, int color)</span>
-<span class="com">// PASO 3: void dibujar_rectangulo(int x, int y, int ancho, int alto, int color)</span>
-<span class="com">// PASO 4: void dibujar_linea(int x1, int y1, int x2, int y2, int color)</span>
-
-<span class="com">// ---- OPERACIONES (devolucion con return) ----</span>
-<span class="com">// PASO 5: int mover_derecha(int x, int paso)   → return x + paso;</span>
-<span class="com">// PASO 6: int cambiar_tamano(int radio, int cuanto)</span>
+<span class="com">// PASO 1: void mostrar_titulo()</span>
+<span class="com">// PASO 2: void dibujar_linea(int largo, char simbolo)</span>
+<span class="com">// PASO 3: void dibujar_cuadrado(int lado, char simbolo)</span>
+<span class="com">// PASO 4: int area_cuadrado(int lado)</span>
+<span class="com">// PASO 5: void mostrar_reporte(int lado)</span>
 
 <span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="com">// PASO 7: initwindow(600, 400, "Mundo-grafico");</span>
-    <span class="com">// PASO 8: dibuja una escena llamando a TUS funciones</span>
-    <span class="com">// PASO 9: ANIMACION → cleardevice / dibujar / delay / mover_derecha</span>
-    <span class="com">// PASO 10: getch();  closegraph();</span>
+    <span class="com">// PASO 6: mostrar titulo</span>
+    <span class="com">// PASO 7: pedir el lado</span>
+    <span class="com">// PASO 8: mostrar reporte</span>
+    <span class="com">// PASO 9: dibujar linea final</span>
     <span class="kw">return</span> <span class="num">0</span>;
-}
-
-<span class="com">/* CONCLUSIONES: ¿para que sirve el diseno modular? */</span></pre>
+}</pre>
         </div>
       </div>
       <div class="cs-pane" data-lang="py" hidden>
         <div class="code-block">
           <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mundo_grafico.py</span></div>
-<pre><span class="com"># MUNDO-GRÁFICO · PLANO GUIADO — escribe el cuerpo de cada función</span>
-<span class="kw">import</span> turtle
-
-<span class="com"># PASO 1: t = turtle.Turtle();  pantalla = turtle.Screen()</span>
-
-<span class="com"># ---- MÓDULO DE FIGURAS (varios parámetros) ----</span>
-<span class="com"># PASO 2: def dibujar_circulo(x, y, radio, color)</span>
-<span class="com"># PASO 3: def dibujar_rectangulo(x, y, ancho, alto, color)</span>
-<span class="com"># PASO 4: def dibujar_linea(x1, y1, x2, y2, color)</span>
-
-<span class="com"># ---- OPERACIONES (devolución con return) ----</span>
-<span class="com"># PASO 5: def mover_derecha(x, paso):  return x + paso</span>
-<span class="com"># PASO 6: def cambiar_tamano(radio, cuanto)</span>
-
-<span class="com"># PASO 7: dibuja una escena llamando a TUS funciones</span>
-<span class="com"># PASO 8: ANIMACIÓN → t.clear() / dibujar / x = mover_derecha(x, 5)</span>
-<span class="com"># PASO 9: pantalla.mainloop()</span>
-
-<span class="com"># CONCLUSIONES: ¿para qué sirve el diseño modular?</span></pre>
+<pre><span class="com"># MUNDO-GRÁFICO · PLANO GUIADO</span>
+<span class="com"># PASO 1: def mostrar_titulo()</span>
+<span class="com"># PASO 2: def dibujar_linea(largo, simbolo)</span>
+<span class="com"># PASO 3: def dibujar_cuadrado(lado, simbolo)</span>
+<span class="com"># PASO 4: def area_cuadrado(lado)</span>
+<span class="com"># PASO 5: def mostrar_reporte(lado)</span>
+<span class="com"># PASO 6: pedir el lado y llamar las funciones</span></pre>
         </div>
       </div>
     </div>
@@ -949,38 +898,49 @@ x = -<span class="num">240</span>
       <div class="db-head">
         <div>
           <h3>Mundo-gráfico · el plano de la aplicación</h3>
-          <div class="file-meta">mundo_grafico.cpp · 10 pasos guiados · C++ (y Python como apoyo)</div>
+          <div class="file-meta">mundo_grafico.cpp · 9 pasos guiados · C++ (y Python como apoyo)</div>
         </div>
         <div class="dl-col">
           <a class="dl-btn" href="mundo_grafico.cpp" download>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
             Descargar el plano (C++)
           </a>
-          <a class="dl-alt" href="mundo_grafico.py" download>↓ versión en Python (turtle)</a>
+          <a class="dl-alt" href="mundo_grafico.py" download>↓ versión en Python (consola)</a>
         </div>
       </div>
       <div class="db-body">
-        <p>Solo los pasos <strong>PASO a PASO</strong> y las firmas de cada función. Ábrelo en Dev C++ (o VS Code) y ve escribiendo el cuerpo de cada una mientras armamos la aplicación. <strong>Cada línea la escribes tú.</strong></p>
+        <p>Solo contiene los pasos y las firmas. Ábrelo en Dev C++ y escribe el cuerpo de cada función. <strong>No requiere ninguna biblioteca gráfica.</strong></p>
       </div>
     </div>
 
     <!-- SOLUCIÓN SELLADA -->
     <div class="solucion">
-      <span class="sol-label">Solución sellada</span>
+      <span class="sol-label">Ruta de solución</span>
       <div class="sol-head">
         <div>
-          <h3>La lógica, sin la sintaxis.</h3>
-          <p class="sol-hint">Si te atoras, aquí está el <strong>flujo entero</strong> de la aplicación —como diagrama, no como código—. Traducirlo a funciones de C++ sigue siendo <strong>tu trabajo</strong>, y es justo lo que se evalúa. Ábrelo solo después de intentarlo.</p>
+          <h3>La lógica, sin regalar el código.</h3>
+          <p class="sol-hint">Si te atoras, abre esta ruta. Muestra el orden de las responsabilidades; traducirlas a funciones de C++ sigue siendo <strong>tu trabajo</strong>.</p>
         </div>
         <button type="button" class="sol-btn" id="solBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
-          <span class="sb-txt">Ver la solución</span>
+          <span class="sb-txt">Ver la ruta</span>
         </button>
       </div>
 
       <div class="sol-body" id="solBody" hidden>
-        <div class="sol-sub">A · El flujo del programa principal</div>
-        <div class="sol-flow">
+        <div class="sol-sub">El recorrido del programa</div>
+        <div class="framecycle">
+          <span class="fstep">pedir lado</span>
+          <span class="farr">→</span>
+          <span class="fstep">dibujar cuadrado</span>
+          <span class="farr">→</span>
+          <span class="fstep">calcular área</span>
+          <span class="farr">→</span>
+          <span class="fstep">mostrar resultado</span>
+          <span class="floop">main coordina; cada función conserva una responsabilidad</span>
+        </div>
+        <p class="sol-caption">El doble <span class="mono">for</span> pertenece a <span class="mono">dibujar_cuadrado</span>; la multiplicación pertenece a <span class="mono">area_cuadrado</span>.</p>
+        <div class="sol-flow" style="display:none">
           <svg viewBox="0 0 760 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo: abrir ventana, dibujar la escena, animar en un ciclo y cerrar">
             <defs>
               <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -1048,15 +1008,15 @@ x = -<span class="num">240</span>
             <text x="150" y="666" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">siguiente cuadro</text>
           </svg>
         </div>
-        <div class="sol-legend">
+        <div class="sol-legend" style="display:none">
           <span class="li"><svg viewBox="0 0 30 20"><ellipse cx="15" cy="10" rx="13" ry="8" fill="#5d6638" stroke="#2a1d14"/></svg> inicio / fin</span>
           <span class="li"><svg viewBox="0 0 30 20"><rect x="2" y="3" width="26" height="14" fill="#e6dbc2" stroke="#2a1d14"/></svg> proceso</span>
           <span class="li"><svg viewBox="0 0 30 20"><path d="M7,3 L28,3 L23,17 L2,17 Z" fill="#efe6d2" stroke="#2a1d14"/></svg> entrada / salida</span>
           <span class="li"><svg viewBox="0 0 30 20"><polygon points="15,1 29,10 15,19 1,10" fill="#efe6d2" stroke="#a02418" stroke-width="1.5"/></svg> decisión</span>
         </div>
 
-        <div class="sol-sub two">B · La animación, cuadro por cuadro</div>
-        <div class="framecycle">
+        <div class="sol-sub two" style="display:none">B · La animación, cuadro por cuadro</div>
+        <div class="framecycle" style="display:none">
           <span class="fstep">borrar · cleardevice()</span>
           <span class="farr">→</span>
           <span class="fstep">dibujar en x</span>
@@ -1066,7 +1026,7 @@ x = -<span class="num">240</span>
           <span class="fstep">x = mover_derecha(x, 5)</span>
           <span class="floop">↺ y vuelve a empezar, 60 veces — cada vuelta es un cuadro de la animación</span>
         </div>
-        <p class="sol-caption">La animación no tiene misterio: es el mismo ciclo <span class="mono" style="font-family:'JetBrains Mono',monospace">for</span> de siempre, encerrando <strong>cuatro pasos</strong>. La figura no se mueve — se <strong>borra y se vuelve a dibujar</strong> un poco más allá. Tan rápido que el ojo lo ve moverse.</p>
+        <p class="sol-caption" style="display:none">Referencia anterior de animación.</p>
       </div>
     </div>
   </section>
@@ -1081,34 +1041,35 @@ x = -<span class="num">240</span>
       </div>
     </div>
 
-    <p class="ej-intro">Diseña <strong>el programa en C++ modular</strong> que dibuje y manipule las figuras de «Mundo-gráfico», usando funciones con parámetros y devolución de resultados. Guárdalo también en tu memoria USB — el laboratorio no perdona los archivos huérfanos.</p>
+    <p class="ej-intro">Diseña <strong>un programa modular en C++</strong> que imprima una línea y un cuadrado con caracteres, usando funciones con parámetros y devolución de resultados.</p>
 
     <div class="ej-card">
       <span class="ej-tag">Parte A</span>
       <span class="ej-pill">programa · mundo_grafico.cpp</span>
       <div class="ej-body">
         <div>
-          <h3>La aplicación modular</h3>
-          <p class="ej-desc">Un programa <strong>modular</strong> que dibuje <em>círculos, rectángulos y líneas</em> con funciones de varios parámetros (posición, tamaño y color), y que las <strong>mueva</strong> y <strong>cambie de tamaño</strong> con funciones que devuelven el resultado. Parte del plano <span class="mono">mundo_grafico.cpp</span>.</p>
+          <h3>Figuras de texto en consola</h3>
+          <p class="ej-desc">Un programa <strong>modular</strong> que pida el lado, dibuje un cuadrado con asteriscos y muestre su área. Parte del plano <span class="mono">mundo_grafico.cpp</span>.</p>
           <ul class="reqs">
-            <li>Los <strong>tres módulos</strong>: figuras, interfaz gráfica y principal</li>
-            <li>Funciones para <span class="mono">crear</span> figuras con parámetros de posición, tamaño y color</li>
-            <li>Funciones para <span class="mono">mover</span> y <span class="mono">cambiar_tamano</span> con <span class="mono">return</span></li>
+            <li><span class="mono">mostrar_titulo()</span> para presentar el programa</li>
+            <li><span class="mono">dibujar_linea(largo, simbolo)</span> con varios parámetros</li>
+            <li><span class="mono">dibujar_cuadrado(lado, simbolo)</span> con dos ciclos <span class="mono">for</span></li>
+            <li><span class="mono">area_cuadrado(lado)</span> con <span class="mono">return</span></li>
             <li>El <span class="mono">main</span> solo <strong>coordina</strong>: llama funciones, no amontona</li>
-            <li>Una <strong>animación básica</strong> (borrar, redibujar, avanzar)</li>
             <li>Comentarios y tus <strong>conclusiones</strong> al final del código</li>
           </ul>
         </div>
         <div class="ej-preview">
-          <div class="pv-label">Así debe verse la ventana</div>
+          <div class="pv-label">Así debe verse la consola</div>
           <div class="gwin">
             <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">mundo_grafico</span></div>
-            <svg class="gw-canvas" viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ventana con círculo, rectángulo y línea">
-              <circle cx="120" cy="130" r="52" fill="none" stroke="#5d6638" stroke-width="3"/>
-              <rect x="228" y="85" width="185" height="105" fill="none" stroke="#a02418" stroke-width="3"/>
-              <line x1="70" y1="222" x2="480" y2="222" stroke="#b5852a" stroke-width="3.5" stroke-linecap="round"/>
-            </svg>
-            <div class="gw-cap"><strong>Tres figuras, cada una desde su función.</strong></div>
+            <div class="term-body" style="min-height:260px;padding:42px 55px;">
+              <span class="head-l">--- Mundo-grafico ---</span><br/><br/>
+              Lado: <span class="num-l">4</span><br/><br/>
+              * * * *<br/>* * * *<br/>* * * *<br/>* * * *<br/><br/>
+              Área: <span class="num-l">16</span>
+            </div>
+            <div class="gw-cap"><strong>Un cuadrado de texto, construido por una función.</strong></div>
           </div>
         </div>
       </div>
@@ -1124,7 +1085,7 @@ x = -<span class="num">240</span>
           <ul class="reqs">
             <li><strong>Título</strong> — de la práctica, con tu nombre, materia y fecha</li>
             <li><strong>Introducción</strong> — qué es el diseño modular y las funciones</li>
-            <li><strong>Desarrollo</strong> — cómo dividiste en módulos y funciones, con capturas del código y de la ventana gráfica</li>
+            <li><strong>Desarrollo</strong> — cómo dividiste las responsabilidades, con capturas del código y de la consola</li>
             <li><strong>Conclusiones</strong> — responde: <em>¿para qué sirve el diseño modular en la programación?</em></li>
             <li><strong>Bibliografía</strong> — en formato <strong>APA</strong> (abajo las tres referencias base)</li>
           </ul>
@@ -1156,7 +1117,7 @@ x = -<span class="num">240</span>
       <ol class="crit-list">
         <li><strong>Desarrollo de funciones que logran la modularidad</strong> — la aplicación está partida en funciones con una sola responsabilidad, no en un bloque monolítico.</li>
         <li><strong>Organización del código</strong> — respeta la estructura por funciones y módulos; el <span class="mono">main</span> solo coordina.</li>
-        <li><strong>La aplicación gráfica funciona</strong> — dibuja las figuras y refleja las operaciones (mover, cambiar tamaño) en la ventana.</li>
+        <li><strong>El programa de consola funciona</strong> — imprime la línea y el cuadrado, y calcula correctamente el área.</li>
         <li><strong>Documento compilado en Dev C++</strong> — el programa compila y corre; se entrega junto con su documento. Autenticidad: hecho por ti.</li>
       </ol>
       <div class="pond">

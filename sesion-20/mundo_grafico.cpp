@@ -1,79 +1,39 @@
 // =============================================================
-//  PRACTICA 5 · Diseno modular, funciones y aplicaciones graficas
-//  "Mundo-grafico" · aplicacion modular de figuras geometricas
-//  Fundamentos de Programacion · UNITEC Atizapan · Ciclo 26-3
+//  PRACTICA 5 · Diseno modular y funciones
+//  "Mundo-grafico" · figuras impresas en consola
 // =============================================================
-//  Este archivo es un PLANO: trae los pasos y las firmas de las
-//  funciones comentadas. Escribe TU el cuerpo de cada funcion.
-//  No borres los pasos: al final quedaran como los comentarios
-//  que documentan tu programa.
-//
-//  Meta: dibujar figuras (circulo, rectangulo, linea) con
-//  funciones modulares y luego moverlas / cambiarlas de tamano.
-//  Software oficial: Dev C++ con la libreria graphics.h (WinBGIm).
-//
-//  Recuerda los tres modulos que acordamos en clase:
-//    - MODULO DE FIGURAS   -> crea y dibuja las figuras
-//    - OPERACIONES         -> mueve y cambia el tamano
-//    - MODULO PRINCIPAL    -> main(): coordina e interactua
+//  PLANO GUIADO: escribe el cuerpo de cada funcion.
+//  No necesitas graphics.h ni una ventana grafica.
+//  Las figuras se forman con caracteres en la consola.
 // =============================================================
-
-// PASO 1: incluye las librerias
-//         #include <graphics.h>   // dibujo: circle, rectangle, line, setcolor
-//         #include <iostream>
-
+#include <iostream>
 using namespace std;
 
-// ---------- MODULO DE FIGURAS (funciones con VARIOS parametros) ----------
+// PASO 1: void mostrar_titulo()
+//   Imprime: "--- Mundo-grafico ---"
 
-// PASO 2: void dibujar_circulo(int x, int y, int radio, int color)
-//   Funcion con VARIOS parametros. En el cuerpo:
-//     setcolor(color);        // color del trazo
-//     circle(x, y, radio);    // dibuja el circulo
-//   No devuelve nada -> por eso es void.
+// PASO 2: void dibujar_linea(int largo, char simbolo)
+//   Usa un for para imprimir "simbolo" tantas veces como indique largo.
+//   Al terminar, imprime endl.
 
-// PASO 3: void dibujar_rectangulo(int x, int y, int ancho, int alto, int color)
-//   setcolor(color);
-//   rectangle(x, y, x + ancho, y + alto);
+// PASO 3: void dibujar_cuadrado(int lado, char simbolo)
+//   Usa DOS for anidados. Cada renglón debe tener "lado" símbolos.
 
-// PASO 4: void dibujar_linea(int x1, int y1, int x2, int y2, int color)
-//   setcolor(color);
-//   line(x1, y1, x2, y2);
+// PASO 4: int area_cuadrado(int lado)
+//   Devuelve lado * lado con return.
 
-// ---------- OPERACIONES (DEVOLUCION del resultado con return) ----------
-
-// PASO 5: int mover_derecha(int x, int paso)
-//   Funcion que RECIBE la posicion y el paso, y DEVUELVE la nueva
-//   posicion:  return x + paso;
-
-// PASO 6: int cambiar_tamano(int radio, int cuanto)
-//   Devuelve el nuevo radio:  return radio + cuanto;
-
-// ---------- MODULO PRINCIPAL (coordina las piezas) ----------
+// PASO 5: void mostrar_reporte(int lado)
+//   Llama a dibujar_cuadrado(lado, '*') y muestra el área llamando
+//   a area_cuadrado(lado). Esta función coordina, no repite el dibujo.
 
 int main() {
-
-    // PASO 7: abre la ventana grafica
-    //         initwindow(600, 400, "Mundo-grafico");
-
-    // PASO 8: dibuja UNA escena llamando a TUS funciones del modulo
-    //         de figuras (elige posiciones, tamanos y colores):
-    //         dibujar_circulo(...);  dibujar_rectangulo(...);  dibujar_linea(...);
-
-    // PASO 9: ANIMACION BASICA. Un ciclo (por ejemplo 60 vueltas) que:
-    //         1) borra la pantalla        -> cleardevice();
-    //         2) dibuja el circulo en x   -> dibujar_circulo(x, y, radio, color);
-    //         3) espera un momento        -> delay(30);
-    //         4) mueve la figura          -> x = mover_derecha(x, 5);
-
-    // PASO 10: espera una tecla y cierra la ventana
-    //          getch();  closegraph();
-
+    // PASO 6: llama a mostrar_titulo().
+    // PASO 7: pide al usuario el lado del cuadrado.
+    // PASO 8: llama a mostrar_reporte(lado).
+    // PASO 9: llama a dibujar_linea(20, '-').
     return 0;
 }
 
-/* CONCLUSIONES:
-   ¿Para que sirve el diseno modular en la programacion?
-   Escribe aqui una redaccion breve con tus observaciones sobre
-   los resultados y los conocimientos adquiridos al concluir la
-   practica. */
+/* CONCLUSIÓN:
+   ¿Para qué sirve el diseño modular en la programación?
+   Escribe una respuesta breve con lo aprendido. */
