@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sesión 22 · Dos dimensiones · Matrices, listas de listas y su declaración en Python</title>
+<title>Sesión 22 · Práctica 6 · Tipos de datos estructurados: estructuras, cadenas y matrices</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
     --ochre: #b5852a; --ochre-deep: #8a6320;
     --olive: #5d6638; --olive-deep: #424a26;
     --line: rgba(42,29,20,.18);
-    --grid-blue: #4a6b86; --grid-purple: #6b5080;
+    --grid-blue: #4a6b86;
     --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
   }
   *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
@@ -58,16 +58,24 @@
   .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
   .hero .lede em{ color: var(--ink); font-style: italic; }
   .hero .lede strong{ color: var(--blood); font-weight: 600; }
-  .hero .who{ position: relative; z-index: 2; margin-top: 54px; display: flex; gap: 36px; flex-wrap: wrap; align-items: flex-end; }
-  .who-block{ border-left: 2px solid var(--ink); padding: 4px 0 4px 16px; }
-  .who-block .label{ display:block; font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
-  .who-block .value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; }
 
-  /* CONTINUACIÓN BANNER */
+  /* BANNERS */
   .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
   .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
   .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
   .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+
+  /* FICHA */
+  .ficha{ margin: 50px 0 0; border: 1.5px solid var(--ink); background: var(--paper-deep); position: relative; }
+  .ficha .f-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .ficha-grid{ display: grid; grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 820px){ .ficha-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 480px){ .ficha-grid{ grid-template-columns: 1fr; } }
+  .ficha-cell{ padding: 18px 22px; border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
+  .ficha-cell .fc-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
+  .ficha-cell .fc-value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.02rem; color: var(--ink); line-height: 1.3; }
+  .ficha-cell.wide{ grid-column: 1 / -1; border-right: none; }
+  .ficha-cell .fc-value.obj{ font-style: italic; font-weight: 400; font-size: 1.05rem; line-height: 1.5; }
 
   /* SECTION HEADERS */
   .sec{ margin: 100px 0; }
@@ -82,18 +90,14 @@
   .sec .s-head p strong{ color: var(--blood); }
   .sec .s-head p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 7px; border: 1px solid var(--line); font-size: .85em; }
 
-  /* PROSE + CODE 2-col */
-  .twocol{ display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
-  @media (max-width: 880px){ .twocol{ grid-template-columns: 1fr; gap: 22px; } }
-  .prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
-  .prose p em{ color: var(--blood-dark); font-style: italic; }
-  .prose p strong{ color: var(--blood); font-weight: 600; }
-  .prose ul{ margin: 0 0 16px; padding-left: 20px; }
-  .prose ul li{ font-size: 1rem; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.5; }
-  .prose ul li strong{ color: var(--ink); }
-  .prose ul li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
-  .keypoint{ margin-top: 18px; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
+  .sec-prose{ max-width: 760px; }
+  .sec-prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
+  .sec-prose p em{ color: var(--blood-dark); font-style: italic; }
+  .sec-prose p strong{ color: var(--blood); font-weight: 600; }
+  .sec-prose p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .keypoint{ margin: 24px 0; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
   .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
+  .keypoint .mono{ font-family: "JetBrains Mono", monospace; font-style: normal; background: var(--paper); padding: 1px 6px; font-size: .8em; border: 1px solid var(--line); }
 
   /* CODE BLOCK */
   .code-block{ background: var(--ink); position: relative; overflow: hidden; }
@@ -103,94 +107,148 @@
   .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
   .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
   .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
+  .code-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; align-items: start; }
+  @media (max-width: 880px){ .code-grid{ grid-template-columns: 1fr; } }
+  .code-cap{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 10px; }
 
-  /* MATRIX VISUAL (tabla filas × columnas) */
-  .matrix-vis{ margin-top: 30px; background: var(--paper-deep); border: 1.5px solid var(--ink); padding: 30px 26px 32px; position: relative; }
-  .matrix-vis .mv-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
-  .mv-stage{ display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; }
-  @media (max-width: 620px){ .mv-stage{ grid-template-columns: 1fr; gap: 10px; } }
-  .mv-row-axis{ writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--blood); }
-  .mv-board{ }
-  .mv-col-axis{ text-align: center; font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ochre-deep); margin-bottom: 10px; }
-  .mv-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 460px; }
-  .mv-cell{ background: var(--paper); border: 1.5px solid var(--ink); padding: 14px 10px; text-align: center; }
-  .mv-cell .coord{ font-family: "JetBrains Mono", monospace; font-size: .72rem; color: var(--ink-faint); display: block; }
-  .mv-cell .val{ font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: 1.5rem; color: var(--ink); line-height: 1.1; }
-  .mv-cell.diag{ border-color: var(--ochre-deep); box-shadow: inset 0 0 0 2px rgba(181,133,42,.25); }
-  .matrix-vis .mv-foot{ margin-top: 20px; font-style: italic; color: var(--ink-soft); font-size: .95rem; }
-  .matrix-vis .mv-foot strong{ color: var(--ochre-deep); font-style: normal; }
-  .matrix-vis .mv-foot .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  /* dos cards de contraste */
+  .teoria-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  @media (max-width: 820px){ .teoria-grid{ grid-template-columns: 1fr; } }
+  .teoria-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ochre); padding: 22px 24px 24px; }
+  .teoria-card.blood{ border-top-color: var(--blood); }
+  .teoria-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.25rem; margin: 0 0 8px; color: var(--ochre-deep); }
+  .teoria-card.blood h3{ color: var(--blood-dark); }
+  .teoria-card .mono-fn{ font-family: "JetBrains Mono", monospace; font-size: .8rem; color: var(--blood); background: var(--paper); padding: 2px 8px; border: 1px solid var(--line); }
+  .teoria-card p{ margin: 12px 0 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.55; }
+  .teoria-card p strong{ color: var(--ink); }
+  .teoria-card .verdict{ margin-top: 14px; font-family: "JetBrains Mono", monospace; font-size: .78rem; padding: 9px 12px; background: var(--paper); border-left: 3px solid var(--ochre); color: var(--ink-soft); }
+  .teoria-card.blood .verdict{ border-left-color: var(--blood); }
 
-  /* MEMORY vs MIND (cómo se ve vs cómo la imaginamos) */
-  .versus{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
-  @media (max-width: 760px){ .versus{ grid-template-columns: 1fr; } }
-  .vs-card{ padding: 24px 26px; border: 1.5px solid var(--ink); }
-  .vs-card.a{ background: var(--paper-deep); }
-  .vs-card.b{ background: var(--ink); color: var(--paper); }
-  .vs-card .vs-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
-  .vs-card.a .vs-tag{ color: var(--blood); } .vs-card.b .vs-tag{ color: #f0c8a0; }
-  .vs-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 10px; }
-  .vs-card.a h3{ color: var(--ink); } .vs-card.b h3{ color: var(--paper); }
-  .vs-card p{ margin: 0 0 12px; font-size: .96rem; line-height: 1.55; }
-  .vs-card.a p{ color: var(--ink-soft); } .vs-card.b p{ color: rgba(239,230,210,.82); }
-  .vs-card p strong{ font-weight: 600; } .vs-card.a p strong{ color: var(--blood); } .vs-card.b p strong{ color: #f0c8a0; }
-  .vs-mem{ font-family: "JetBrains Mono", monospace; font-size: .8rem; background: var(--paper); border: 1px solid var(--line); padding: 12px 14px; line-height: 1.7; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 6px; }
-  .vs-mem .chunk{ border: 1px solid var(--ink); padding: 2px 8px; background: var(--paper-deep); white-space: nowrap; }
-  .vs-mem .chunk.r0{ border-bottom: 3px solid var(--blood); } .vs-mem .chunk.r1{ border-bottom: 3px solid var(--ochre); } .vs-mem .chunk.r2{ border-bottom: 3px solid var(--olive); }
-  .vs-mind{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 220px; }
-  .vs-mind .mc{ background: rgba(239,230,210,.1); border: 1px solid rgba(239,230,210,.25); padding: 10px 4px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: .82rem; color: #f0c8a0; }
+  /* tres tarjetas de subtema (6.1.1 / 6.1.2 / 6.1.3) */
+  .principios{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+  @media (max-width: 820px){ .principios{ grid-template-columns: 1fr; } }
+  .pri-card{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 24px 24px 26px; position: relative; }
+  .pri-card .pri-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 2.4rem; color: var(--ochre); line-height: 1; margin-bottom: 10px; }
+  .pri-card.blood .pri-n{ color: var(--blood); }
+  .pri-card h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.18rem; margin: 0 0 8px; color: var(--ink); }
+  .pri-card p{ margin: 0; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; }
+  .pri-card p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
 
-  /* DECLARATION CARDS (formas de declarar) */
-  .decl-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 30px; }
-  @media (max-width: 880px){ .decl-grid{ grid-template-columns: 1fr; } }
-  .decl-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ochre); padding: 22px 24px 24px; }
-  .decl-card.two{ border-top-color: var(--blood); }
-  .decl-card.three{ border-top-color: var(--olive); }
-  .decl-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.2rem; margin: 0 0 8px; color: var(--ochre-deep); }
-  .decl-card.two h3{ color: var(--blood-dark); } .decl-card.three h3{ color: var(--olive-deep); }
-  .decl-card pre{ margin: 0 0 12px; padding: 14px 16px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .8rem; line-height: 1.7; overflow-x: auto; }
-  .decl-card pre .kw{ color: var(--c-kw); } .decl-card pre .str{ color: var(--c-str); } .decl-card pre .num{ color: var(--c-num); } .decl-card pre .com{ color: var(--c-com); font-style: italic; } .decl-card pre .fn{ color: var(--c-fn); }
-  .decl-card p{ margin: 0; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; }
-  .decl-card p strong{ color: var(--ink); }
+  /* CELDAS · arreglo y cadena */
+  .cells-wrap{ margin-top: 32px; border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 26px 26px 22px; position: relative; }
+  .cells-wrap .cw-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .cells{ display: flex; flex-wrap: wrap; gap: 8px; }
+  .cell{ text-align: center; }
+  .cell .c-idx{ font-family: "JetBrains Mono", monospace; font-size: .68rem; color: var(--ink-faint); margin-bottom: 5px; }
+  .cell .c-box{ border: 1.5px solid var(--ink); background: var(--paper); padding: 12px 14px; font-family: "JetBrains Mono", monospace; font-size: .8rem; min-width: 82px; color: var(--ink); }
+  .cell .c-box.on{ background: var(--olive); color: var(--paper); border-color: var(--olive-deep); font-weight: 700; }
+  .cell .c-box.off{ color: var(--ink-faint); background: var(--paper-darker); }
+  .cell.ch .c-box{ min-width: 34px; padding: 11px 0; }
+  .cell.ch .c-box.esp{ background: var(--blood); color: var(--paper); border-color: var(--blood-dark); }
+  .cells-cap{ margin-top: 16px; font-size: .92rem; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
+  .cells-cap strong{ color: var(--blood-dark); font-style: normal; }
 
-  /* TRAP / WARNING (el error del *) */
-  .trap{ margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: stretch; }
-  @media (max-width: 820px){ .trap{ grid-template-columns: 1fr; } }
-  .trap .trap-card{ border: 1.5px solid var(--ink); padding: 0; overflow: hidden; }
-  .trap .trap-card.bad{ background: var(--paper-deep); border-color: var(--blood); }
-  .trap .trap-card.good{ background: var(--paper-deep); border-color: var(--olive); }
-  .trap .trap-head{ padding: 12px 20px; font-family: "JetBrains Mono", monospace; font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--paper); }
-  .trap .trap-card.bad .trap-head{ background: var(--blood); } .trap .trap-card.good .trap-head{ background: var(--olive-deep); }
-  .trap .trap-card pre{ margin: 0; padding: 16px 20px; background: var(--ink); color: var(--c-base); font-family: "JetBrains Mono", monospace; font-size: .8rem; line-height: 1.7; overflow-x: auto; }
-  .trap .trap-card pre .kw{ color: var(--c-kw); } .trap .trap-card pre .str{ color: var(--c-str); } .trap .trap-card pre .num{ color: var(--c-num); } .trap .trap-card pre .com{ color: var(--c-com); font-style: italic; } .trap .trap-card pre .fn{ color: var(--c-fn); } .trap .trap-card pre .out{ color: rgba(239,230,210,.55); } .trap .trap-card pre .err{ color: #f0a890; }
-  .trap .trap-foot{ padding: 14px 20px; font-size: .92rem; line-height: 1.5; }
-  .trap .trap-card.bad .trap-foot{ color: var(--blood-dark); } .trap .trap-card.good .trap-foot{ color: var(--olive-deep); }
-  .trap .trap-foot strong{ color: var(--ink); }
+  /* MATRIZ DE SERIACIÓN */
+  .matriz{ margin-top: 30px; border: 1.5px solid var(--ink); background: var(--paper-deep); overflow-x: auto; }
+  .mtable{ border-collapse: collapse; width: 100%; min-width: 620px; font-family: "JetBrains Mono", monospace; font-size: .78rem; }
+  .mtable th, .mtable td{ border: 1px solid var(--line); padding: 11px 12px; text-align: center; }
+  .mtable thead th{ background: var(--ink); color: rgba(239,230,210,.8); font-weight: 400; font-size: .7rem; letter-spacing: .06em; }
+  .mtable thead th.corner{ color: #f0c8a0; text-align: left; font-style: italic; }
+  .mtable tbody th{ background: var(--paper-darker); color: var(--ink); text-align: left; font-weight: 700; white-space: nowrap; }
+  .mtable td.uno{ background: rgba(160,36,24,.16); color: var(--blood); font-weight: 700; }
+  .mtable td.cero{ color: var(--ink-faint); }
+  .matriz-cap{ padding: 14px 18px; font-size: .9rem; font-style: italic; color: var(--ink-soft); border-top: 1px dashed var(--line); line-height: 1.5; }
+  .matriz-cap strong{ color: var(--blood-dark); font-style: normal; }
 
-  /* EXERCISE / PRACTICE */
+  /* RECORRIDOS · renglón vs columna */
+  .travpair{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 8px; }
+  @media (max-width: 760px){ .travpair{ grid-template-columns: 1fr; } }
+  .trav{ border: 1.5px solid var(--ink); background: var(--paper); padding: 20px 22px 22px; }
+  .trav-t{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; margin-bottom: 16px; color: var(--ink); text-align: center; }
+  .trav-t em{ color: var(--blood-dark); }
+  .tgrid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-width: 160px; margin: 0 auto; }
+  .tcell{ aspect-ratio: 1 / 1; border: 1px solid var(--line); background: var(--paper-deep); display: flex; align-items: center; justify-content: center; font-family: "JetBrains Mono", monospace; font-size: .82rem; color: var(--ink-faint); }
+  .tcell.hl{ background: var(--ochre); color: var(--paper); border-color: var(--ochre-deep); font-weight: 700; }
+  .tcell.hlc{ background: var(--blood); color: var(--paper); border-color: var(--blood-dark); font-weight: 700; }
+  .trav-c{ margin-top: 18px; font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: #f0c8a0; padding: 11px 12px; text-align: center; }
+
+  /* ESTRUCTURAS DE DATOS · tarjetas */
+  .structs{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
+  @media (max-width: 820px){ .structs{ grid-template-columns: 1fr; } }
+  .stc{ border: 1.5px solid var(--ink); background: var(--paper-deep); }
+  .stc .stc-head{ background: var(--ink); padding: 13px 20px; font-family: "JetBrains Mono", monospace; font-size: .84rem; color: var(--c-base); }
+  .stc .stc-head .kw{ color: var(--c-kw); }
+  .stc .stc-head .nm{ color: #f0d8b0; font-weight: 700; }
+  .stc .stc-body{ padding: 4px 20px 18px; }
+  .fld{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 11px 0; border-bottom: 1px dashed var(--line); align-items: baseline; }
+  .fld:last-child{ border-bottom: none; }
+  .fld .f-t{ font-family: "JetBrains Mono", monospace; font-size: .74rem; padding: 3px 8px; background: var(--paper); border: 1px solid var(--line); color: var(--blood-dark); white-space: nowrap; }
+  .fld .f-t.arr{ color: var(--olive-deep); border-color: var(--olive); }
+  .fld .f-d{ font-size: .9rem; color: var(--ink-soft); line-height: 1.45; }
+  .fld .f-d strong{ color: var(--ink); }
+
+  /* MAPA DE FUNCIONES */
+  .modmap{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
+  @media (max-width: 820px){ .modmap{ grid-template-columns: 1fr; } }
+  .mod{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 20px 20px 22px; }
+  .mod.a{ border-top: 4px solid var(--olive); }
+  .mod.b{ border-top: 4px solid var(--ochre); }
+  .mod.c{ border-top: 4px solid var(--blood); }
+  .mod .mod-k{ font-family: "JetBrains Mono", monospace; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
+  .mod h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; margin: 0 0 12px; color: var(--ink); }
+  .mod .fnchip{ font-family: "JetBrains Mono", monospace; font-size: .74rem; background: var(--paper); border: 1px solid var(--line); padding: 7px 10px; margin-bottom: 8px; color: var(--olive-deep); display: block; word-break: break-word; }
+  .mod.b .fnchip{ color: var(--ochre-deep); }
+  .mod.c .fnchip{ color: var(--blood-dark); }
+  .mod p{ margin: 10px 0 0; font-size: .88rem; color: var(--ink-soft); line-height: 1.5; }
+  .mod p strong{ color: var(--ink); }
+
+  /* TERMINAL */
+  .term{ background: #16110c; border: 1px solid var(--ink); font-family: "JetBrains Mono", monospace; font-size: .8rem; }
+  .term .term-bar{ background: rgba(239,230,210,.07); padding: 8px 14px; display: flex; gap: 7px; align-items: center; }
+  .term .term-bar .dot{ width: 10px; height: 10px; border-radius: 50%; }
+  .term .term-bar .r{ background: #c0563d; } .term .term-bar .y{ background: var(--ochre); } .term .term-bar .g{ background: var(--olive); }
+  .term .term-bar .tt{ margin-left: 8px; font-size: .7rem; color: rgba(239,230,210,.4); }
+  .term .term-body{ padding: 18px 20px; line-height: 1.75; color: #d9ccb0; overflow-x: auto; }
+  .term .prompt{ color: rgba(239,230,210,.5); }
+  .term .head-l{ color: #f0c8a0; }
+  .term .keep{ color: #c8dd96; }
+  .term .num-l{ color: #f5b08c; }
+
+  /* ENTREGABLE */
   .ejercicios{ margin: 100px 0; }
+  .ej-intro{ color: var(--ink-soft); font-size: 1.05rem; max-width: 760px; margin: 0 0 30px; }
+  .ej-intro strong{ color: var(--blood); }
   .ej-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 26px; position: relative; }
   .ej-card .ej-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
-  .ej-card .ej-body{ padding: 30px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  .ej-card .ej-pill{ position: absolute; top: -14px; right: 26px; background: var(--olive); color: var(--paper); padding: 5px 14px; font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
+  .ej-card .ej-body{ padding: 32px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
   @media (max-width: 860px){ .ej-card .ej-body{ grid-template-columns: 1fr; gap: 18px; } }
   .ej-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 12px; color: var(--ink); }
   .ej-card .ej-desc{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0 0 16px; }
   .ej-card .ej-desc em{ color: var(--blood-dark); font-style: italic; }
   .ej-card .ej-desc strong{ color: var(--blood); }
+  .ej-card .ej-desc .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
   .ej-card .reqs{ margin: 0; padding: 0; list-style: none; }
   .ej-card .reqs li{ padding: 8px 0 8px 26px; position: relative; font-size: .94rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
   .ej-card .reqs li:last-child{ border-bottom: none; }
   .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
   .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
+  .ej-card .reqs li strong{ color: var(--ink); }
   .ej-preview .pv-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
-  .term{ background: #16110c; border: 1px solid var(--ink); font-family: "JetBrains Mono", monospace; font-size: .82rem; }
-  .term .term-bar{ background: rgba(239,230,210,.07); padding: 8px 14px; display: flex; gap: 7px; align-items: center; }
-  .term .term-bar .dot{ width: 10px; height: 10px; border-radius: 50%; } .term .term-bar .r{ background: #c0563d; } .term .term-bar .y{ background: var(--ochre); } .term .term-bar .g{ background: var(--olive); }
-  .term .term-bar .tt{ margin-left: 8px; font-size: .7rem; color: rgba(239,230,210,.4); }
-  .term .term-body{ padding: 18px 20px; line-height: 1.85; color: #d9ccb0; }
-  .term .grid-line{ color: #e8e0cc; letter-spacing: .08em; }
-  .term .sep{ color: #b5852a; }
-  .term .dim{ color: rgba(217,204,176,.5); }
+
+  /* mock del documento (Word/PDF) */
+  .doc-mock{ background: #f7f2e4; border: 1px solid var(--ink); box-shadow: 6px 6px 0 rgba(42,29,20,.12); padding: 26px 30px; }
+  .doc-mock .dm-title{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; text-align: center; color: var(--ink); border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 14px; }
+  .doc-mock .dm-sec{ display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+  .doc-mock .dm-sec:last-child{ border-bottom: none; }
+  .doc-mock .dm-sec .dm-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 700; color: var(--blood); font-size: .95rem; }
+  .doc-mock .dm-sec .dm-t{ font-size: .92rem; color: var(--ink-soft); line-height: 1.4; }
+  .doc-mock .dm-sec .dm-t strong{ color: var(--ink); }
+
+  .choose-note{ margin-top: 6px; padding: 18px 24px; background: var(--ink); color: var(--paper); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
+  .choose-note .ic{ width: 30px; height: 30px; color: #f0c8a0; flex-shrink: 0; }
+  .choose-note p{ margin: 0; font-size: .98rem; line-height: 1.5; color: rgba(239,230,210,.88); }
+  .choose-note p strong{ color: #f0c8a0; }
 
   /* EVAL + EVIDENCIA */
   .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
@@ -203,22 +261,33 @@
   .crit-list li:last-child{ border-bottom: none; }
   .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
   .crit-list li strong{ color: var(--blood-dark); }
+  .crit-list li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
   .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
   .evid-item:last-child{ border-bottom: none; }
   .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
   .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
   .evid-item .ev-txt strong{ color: var(--ink); }
+  .evid-item .ev-txt .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; }
   .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
   .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
   .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
   .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
+  .pond{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--ochre); }
+  .pond h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 8px; color: var(--ochre-deep); font-size: 1.05rem; }
+  .pond p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.55; }
+  .pond p strong{ color: var(--ink); }
+  .biblio{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--grid-blue); }
+  .biblio h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 8px; color: var(--grid-blue); font-size: 1.05rem; }
+  .biblio p{ margin: 0 0 8px; font-size: .88rem; color: var(--ink-soft); line-height: 1.5; padding-left: 18px; text-indent: -18px; }
+  .biblio p:last-child{ margin-bottom: 0; }
+  .biblio p em{ font-style: italic; }
 
   /* CIERRE */
   .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
   .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
   .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
   .cierre .small-caps{ color: var(--blood); }
-  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(24px, 3.6vw, 42px); line-height: 1.22; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
   .cierre .quote .em{ color: var(--blood); font-weight: 600; }
   .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
   .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
@@ -242,19 +311,107 @@
   .cs-pane[hidden]{ display:none; }
   .cs-pane .code-block{ border-top:none; }
   @media (max-width:480px){ .cs-flag{ display:none; } }
-  /* switch dentro de tarjetas claras (decl-card / trap-card): pestañas sobre el papel */
-  .codeswitch.in-card{ margin: 0 0 12px; }
-  .codeswitch.in-card .cs-tabs{ background:transparent; border:none; border-bottom:1px solid var(--line); gap:4px; }
-  .codeswitch.in-card .cs-tab{ color:var(--ink-faint); padding:6px 12px; font-size:.68rem; }
-  .codeswitch.in-card .cs-tab:hover{ color:var(--ink); }
-  .codeswitch.in-card .cs-tab.active{ color:var(--blood); border-bottom-color:var(--blood); background:transparent; }
-  .codeswitch.in-card .cs-flag{ color:var(--ink-faint); padding-right:4px; }
-  .codeswitch.in-card .cs-pane{ margin-top:10px; }
-  .codeswitch.in-card .cs-pane pre{ margin:0; }
+
+  /* DOWNLOAD SCAFFOLD (plano) */
+  .download-box{ margin-top: 26px; background: var(--ink); color: var(--paper); padding: 0; overflow: hidden; }
+  .download-box .db-head{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 24px 32px; border-bottom: 1px solid rgba(239,230,210,.12); }
+  @media (max-width: 640px){ .download-box .db-head{ grid-template-columns: 1fr; } }
+  .download-box .db-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 6px; color: #f0c8a0; }
+  .download-box .db-head .file-meta{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: rgba(239,230,210,.55); }
+  .dl-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--olive); color: var(--paper); text-decoration: none; padding: 13px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.02rem; transition: all .3s ease; white-space: nowrap; border: none; cursor: pointer; }
+  .dl-btn:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
+  .dl-btn svg{ width: 18px; height: 18px; }
+  .dl-col{ display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  @media (max-width: 640px){ .dl-col{ align-items: flex-start; } }
+  .dl-alt{ font-family: "JetBrains Mono", monospace; font-size: .76rem; color: rgba(239,230,210,.6); text-decoration: none; border-bottom: 1px dashed rgba(239,230,210,.3); transition: color .25s ease, border-color .25s ease; }
+  .dl-alt:hover{ color: #f0c8a0; border-bottom-color: #f0c8a0; }
+  .download-box .db-body{ padding: 22px 32px 26px; }
+  .download-box .db-body > p{ margin: 0; font-size: .98rem; color: rgba(239,230,210,.85); line-height: 1.55; }
+  .download-box .db-body > p strong{ color: #f0c8a0; }
+
+  /* SOLUCIÓN SELLADA */
+  .solucion{ margin-top: 48px; border: 2px dashed var(--blood); background: var(--paper-deep); padding: 30px 32px 32px; position: relative; }
+  .solucion .sol-label{ position: absolute; top: -13px; left: 26px; background: var(--blood); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; }
+  .solucion .sol-head{ display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: center; }
+  @media (max-width: 720px){ .solucion .sol-head{ grid-template-columns: 1fr; } }
+  .solucion h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 6px; color: var(--blood-dark); }
+  .solucion .sol-hint{ margin: 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.5; max-width: 580px; }
+  .solucion .sol-hint strong{ color: var(--blood); }
+  .sol-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--blood); color: var(--paper); border: none; cursor: pointer; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; }
+  .sol-btn:hover{ background: var(--blood-dark); transform: translateY(-2px); box-shadow: 0 4px 0 var(--blood-dark); }
+  .sol-btn svg{ width: 18px; height: 18px; transition: transform .3s ease; }
+  .sol-btn.open svg{ transform: rotate(180deg); }
+  .sol-body{ margin-top: 26px; border-top: 1px dashed var(--line); padding-top: 26px; }
+  .sol-body[hidden]{ display: none; }
+  .sol-sub{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.1rem; color: var(--ink); margin: 6px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .sol-sub.two{ margin-top: 44px; }
+  .sol-flow{ overflow-x: auto; }
+  .sol-flow svg{ display: block; width: 100%; max-width: 740px; min-width: 580px; margin: 0 auto; }
+  .sol-legend{ display: flex; flex-wrap: wrap; gap: 12px 26px; justify-content: center; margin-top: 20px; font-size: .85rem; color: var(--ink-soft); }
+  .sol-legend .li{ display: flex; align-items: center; gap: 9px; }
+  .sol-legend .li svg{ width: 30px; height: 20px; flex-shrink: 0; }
+  .sol-caption{ margin: 16px auto 0; max-width: 680px; text-align: center; font-size: .9rem; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
+  .sol-caption strong{ color: var(--blood-dark); font-style: normal; }
+
+  /* ===== § iv · LA ESTRUCTURA ===== */
+
+  /* animación · tres variables sueltas se vuelven UNA estructura */
+  .estr-anim{ margin-top: 32px; border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 34px 26px 22px; position: relative; }
+  .estr-anim .ea-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .ea-scroll{ overflow-x: auto; padding: 10px 0 6px; }
+  .ea-stage{ position: relative; min-width: 560px; display: flex; justify-content: center; align-items: center; padding: 14px 0; }
+  .ea-frame{ position: absolute; top: 0; bottom: 0; left: 50%; width: 452px; border: 2.5px solid var(--blood); background: rgba(160,36,24,.07); opacity: 0; transform: translateX(-50%) scale(1.07); animation: ea-frame 7s ease-in-out infinite; }
+  .ea-frame .ea-fl{ position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--blood); color: var(--paper); font-family: "JetBrains Mono", monospace; font-size: .7rem; letter-spacing: .1em; padding: 3px 14px; white-space: nowrap; }
+  .ea-row{ display: flex; gap: 10px; position: relative; z-index: 2; }
+  .ea-v{ width: 136px; border: 1.5px solid var(--ink); background: var(--paper); padding: 13px 10px 14px; text-align: center; }
+  .ea-v.v1{ animation: ea-left 7s ease-in-out infinite; }
+  .ea-v.v3{ animation: ea-right 7s ease-in-out infinite; }
+  .ea-v .ea-t{ display: block; font-family: "JetBrains Mono", monospace; font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
+  .ea-v .ea-n{ display: block; font-family: "JetBrains Mono", monospace; font-size: .84rem; font-weight: 700; color: var(--blood-dark); margin: 4px 0 9px; }
+  .ea-v .ea-val{ display: block; font-family: "JetBrains Mono", monospace; font-size: .76rem; background: var(--paper-deep); border: 1px solid var(--line); padding: 7px 3px; color: var(--ink); }
+  .estr-anim .ea-cap{ margin: 18px 0 0; font-size: .95rem; font-style: italic; color: var(--ink-soft); line-height: 1.5; text-align: center; }
+  .estr-anim .ea-cap strong{ color: var(--blood-dark); font-style: normal; }
+  @keyframes ea-left{  0%,12%{ transform: translateX(-52px); } 40%,86%{ transform: translateX(0); } 100%{ transform: translateX(-52px); } }
+  @keyframes ea-right{ 0%,12%{ transform: translateX(52px); }  40%,86%{ transform: translateX(0); } 100%{ transform: translateX(52px); } }
+  @keyframes ea-frame{ 0%,22%{ opacity: 0; transform: translateX(-50%) scale(1.07); } 44%,86%{ opacity: 1; transform: translateX(-50%) scale(1); } 100%{ opacity: 0; transform: translateX(-50%) scale(1.07); } }
+
+  /* anatomía de la declaración */
+  .anatomia{ margin-top: 32px; overflow-x: auto; }
+  .anatomia svg{ display: block; width: 100%; max-width: 790px; min-width: 700px; margin: 0 auto; }
+
+  /* el arreglo de estructuras · fila de fichas */
+  .reg-fila{ display: flex; gap: 14px; margin-top: 30px; overflow-x: auto; padding-bottom: 8px; }
+  .registro{ min-width: 196px; flex: 1; border: 1.5px solid var(--ink); background: var(--paper-deep); }
+  .registro .rg-head{ background: var(--ink); color: #f0c8a0; font-family: "JetBrains Mono", monospace; font-size: .74rem; padding: 9px 12px; text-align: center; letter-spacing: .06em; }
+  .registro.hl{ border-color: var(--blood); }
+  .registro.hl .rg-head{ background: var(--blood); color: var(--paper); }
+  .registro .rg-row{ display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; padding: 10px 13px; border-bottom: 1px dashed var(--line); font-family: "JetBrains Mono", monospace; font-size: .73rem; }
+  .registro .rg-row:last-child{ border-bottom: none; }
+  .registro .rg-k{ color: var(--ink-faint); }
+  .registro .rg-v{ color: var(--ink); font-weight: 700; text-align: right; }
+  .registro .rg-v.no{ color: var(--ink-faint); font-weight: 400; }
+  .reg-cap{ margin: 14px 0 0; font-size: .95rem; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
+  .reg-cap strong{ color: var(--blood-dark); font-style: normal; }
+
+  /* cómo se llega a un campo */
+  .acceso{ margin-top: 34px; border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 34px 26px 26px; position: relative; text-align: center; }
+  .acceso .ac-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
+  .ac-expr{ display: inline-flex; align-items: flex-start; flex-wrap: wrap; justify-content: center; gap: 0 2px; }
+  .ac-p{ display: flex; flex-direction: column; align-items: center; }
+  .ac-c{ font-family: "JetBrains Mono", monospace; font-size: 1.45rem; font-weight: 700; color: var(--ink); padding: 4px 5px 7px; border-bottom: 3px solid var(--ochre); }
+  .ac-p.blood .ac-c{ color: var(--blood); border-bottom-color: var(--blood); }
+  .ac-l{ margin-top: 10px; font-size: .76rem; font-style: italic; color: var(--ink-soft); max-width: 132px; line-height: 1.35; }
+  .ac-read{ margin: 28px 0 0; font-family: "Fraunces", serif; font-style: italic; font-size: 1.1rem; color: var(--ink); }
+  .ac-read strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+  .ac-read .mono{ font-family: "JetBrains Mono", monospace; font-style: normal; background: var(--paper); border: 1px solid var(--line); padding: 1px 9px; font-size: .88em; }
 
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce){ *, *::before, *::after{ animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  @media (prefers-reduced-motion: reduce){
+    .ea-v.v1, .ea-v.v3{ animation: none !important; transform: none !important; }
+    .ea-frame{ animation: none !important; opacity: 1 !important; transform: translateX(-50%) !important; }
+  }
 </style>
 </head>
 <body>
@@ -265,467 +422,1150 @@
   <div class="top">
     <div class="left">
       <span class="seal">V.</span>
-      <span class="meta">Cuaderno del profesor · Sesión 22 · Matrices · Listas de listas · Declaración</span>
+      <span class="meta">Cuaderno del profesor · Sesión 22 · Práctica 6 de 6 (institucional)</span>
     </div>
     <div class="right">
       Jueves 30.07.2026 · 18:00 – 20:00<br/>
-      <span style="color:var(--blood)">UNITEC Atizapán · Continuación de la sesión 21</span>
+      <span style="color:var(--blood)">Laboratorio de Cómputo · clave MCT040</span>
     </div>
   </div>
 
   <!-- HERO -->
   <section class="hero">
     <div class="session-no display">22</div>
-    <div class="kicker">Fundamentos de Programación · Ciclo 26-3</div>
+    <div class="kicker">Práctica de laboratorio · Ciclo 26-3</div>
     <h1 class="display">
-      Dos <span class="em">dimensiones</span>.
+      El <span class="em">expediente</span>.
     </h1>
     <p class="lede">
-      Durante tres sesiones la lista fue tu única forma de guardar muchos datos: una <em>fila</em>, un renglón
-      largo de casillas numeradas. La clase pasada aprendiste a <strong>buscar y ordenar</strong> dentro de
-      esa fila. Pero el mundo no siempre es una línea. Un tablero, una hoja de cálculo, una imagen, un mapa
-      —todo eso vive en <strong>filas y columnas</strong>. Hoy la lista aprende a doblarse sobre sí misma y
-      nace la <strong>matriz</strong>: una lista <em>de listas</em>. <span class="underline-ochre">Hoy le damos profundidad a los datos</span>.
+      Práctica institucional 6 de 6 —<em>la última</em>. La Universidad <strong>«UniData»</strong> nos encarga
+      un sistema que lleve la cuenta de los <em>créditos aprobados</em> de cada estudiante y que sepa,
+      además, qué materias <em>abren la puerta</em> a cuáles. Para eso ya no basta una variable suelta:
+      necesitamos <strong>arreglos</strong> que guarden muchas materias, <strong>cadenas</strong> que
+      guarden sus nombres, una <strong>estructura</strong> que mantenga juntos los datos de cada materia
+      y una <strong>matriz</strong> que dibuje el mapa del plan de estudios.
+      <span class="underline-ochre">Hoy los datos dejan de estar sueltos y adquieren forma</span>.
     </p>
-    <p class="lede" style="margin-top:18px; font-size:1.02rem;">
-      <em>Nota del cuaderno:</em> desde la sesión 09 el código va en <strong>C++</strong> (principal, la pestaña activa)
-      con su equivalente en <em>Python</em> como apoyo en la otra pestaña. La matriz que aquí es lista de listas se
-      vuelve, en C++, un <span class="mono" style="font-family:'JetBrains Mono',monospace; background:var(--paper-deep); padding:1px 6px; font-size:.85em;">vector&lt;vector&lt;T&gt;&gt;</span>: la idea es la misma, cambia el dialecto.
+    <p class="lede" style="margin-top:18px; font-size:1.02rem; color:var(--ink-faint);">
+      <em>Nota del curso:</em> la práctica pide un programa <strong>en C++</strong> con <strong>Dev C++</strong>;
+      lo escribimos igual en VS Code si lo prefieres, y conservamos <strong>Python</strong> como puente en la
+      otra pestaña de cada bloque de código.
     </p>
 
     <div class="cont-banner">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 9h18M9 9v11M15 9v11"/></svg>
       <div class="txt">
-        <strong>Esta sesión continúa la 21.</strong> Allí dominamos la lista de una dimensión —buscar, ordenar,
-        recorrer. Hoy apilamos varias de esas listas, una sobre otra, para construir una tabla. Y la próxima
-        sesión —<em>El tablero del mundo</em>— le daremos vida con el doble <span class="mono">for</span>.
+        <strong>Esta práctica cierra el practicario.</strong> Es la sexta y última, y reúne las cuatro formas
+        de <em>agrupar datos</em>: el arreglo (muchos datos en fila), la cadena (muchos caracteres en fila),
+        la <em>estructura</em> —<span class="mono">struct</span> en C++, diccionario en Python— que junta datos
+        de <em>distinto</em> tipo, y la matriz (datos en renglones y columnas).
       </div>
     </div>
 
-    <div class="who">
-      <div class="who-block">
-        <span class="label">Profesor</span>
-        <span class="value">Carlos Daniel Vaca Ramírez</span>
+    <div class="cont-banner">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      <div class="txt">
+        <strong>Todo se entrega en Blackboard,</strong> en la actividad <strong>«Práctica 6»</strong>:
+        tu programa <em>.cpp</em>, su copia en <em>.txt</em> y un documento PDF o Word con
+        <strong>portada</strong>, introducción, desarrollo, conclusiones y bibliografía en formato APA.
+        Los detalles, al final.
       </div>
-      <div class="who-block">
-        <span class="label">Tema</span>
-        <span class="value">7.4 – 7.5 Arreglos bidimensionales</span>
-      </div>
-      <div class="who-block">
-        <span class="label">Práctica</span>
-        <span class="value">Tablero de gato vacío (3×3)</span>
-      </div>
-      <div class="who-block">
-        <span class="label">Entrega</span>
-        <span class="value">Tu tablero en GitHub</span>
+    </div>
+
+    <div class="ficha">
+      <span class="f-label">FICHA DE LA PRÁCTICA</span>
+      <div class="ficha-grid">
+        <div class="ficha-cell wide">
+          <div class="fc-label">Objetivo de la práctica</div>
+          <div class="fc-value obj">Aplicar y desarrollar programas en C++ que utilicen tipos de datos estructurados como arreglos, cadenas y matrices, incluyendo las propiedades y manipulación de cada uno.</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Temas y subtemas</div>
+          <div class="fc-value">6.1 Arreglos · 6.2 Cadenas · 6.3 Matrices · estructuras</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Duración</div>
+          <div class="fc-value">2 horas</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Escenario</div>
+          <div class="fc-value">Laboratorio de cómputo · seguridad N/A</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Lenguaje</div>
+          <div class="fc-value">C++ estructurado</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Software oficial</div>
+          <div class="fc-value">Dev C++</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Nuestro puente</div>
+          <div class="fc-value">Python · listas, diccionarios y listas de listas</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Aporta el alumno</div>
+          <div class="fc-value">Memoria USB para su programa</div>
+        </div>
+        <div class="ficha-cell">
+          <div class="fc-label">Entrega</div>
+          <div class="fc-value">Blackboard · actividad «Práctica 6»</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- CONCEPT i: QUÉ ES UNA MATRIZ -->
+  <!-- SECCIÓN i: 6.1 ARREGLOS -->
   <section class="sec reveal">
     <div class="s-head">
       <div class="n display">i.</div>
       <div>
-        <h2 class="display">Una lista <em>de listas</em>.</h2>
-        <p>Un <strong>arreglo bidimensional</strong> —una <span class="mono">matriz</span>— es, en Python, simplemente una lista cuyos elementos son <em>también</em> listas. Cada lista interior es una <strong>fila</strong>; cada posición dentro de ella, una <strong>columna</strong>.</p>
+        <h2 class="display">6.1 · Los <em>arreglos</em>.</h2>
+        <p>Una variable guarda <strong>un</strong> dato. Pero un estudiante no aprueba una materia: aprueba diez. Un arreglo es <strong>un solo nombre para muchos datos del mismo tipo</strong>, numerados por su posición. En lugar de <span class="mono">materia1</span>, <span class="mono">materia2</span>, <span class="mono">materia3</span>… tienes <span class="mono">materia[0]</span>, <span class="mono">materia[1]</span>, <span class="mono">materia[2]</span>.</p>
       </div>
     </div>
 
-    <div class="twocol">
-      <div class="prose">
-        <p>Piensa en una lista normal como un <em>cajón con casillas en fila</em>: <span class="mono">[10, 20, 30]</span>. Para llegar a un dato usabas <em>un</em> índice: <span class="mono">notas[0]</span>.</p>
-        <p>Una matriz es un <em>archivero</em>: cada cajón guarda, a su vez, otro cajón de casillas. Por eso para llegar a un dato necesitas <strong>dos índices</strong>: primero <em>qué fila</em>, y luego <em>qué columna</em> dentro de esa fila.</p>
-        <ul>
-          <li><span class="mono">tablero[0]</span> te da la <strong>primera fila completa</strong> (una lista).</li>
-          <li><span class="mono">tablero[0][2]</span> te da la <strong>casilla</strong> de la fila 0, columna 2.</li>
-          <li>Como en las listas, <em>todo se cuenta desde cero</em>.</li>
-        </ul>
-        <div class="keypoint"><strong>Regla del cuaderno:</strong> el primer corchete elige la <em>fila</em>; el segundo, la <em>columna</em>. Léelo siempre como <span class="mono">matriz[fila][columna]</span>.</div>
+    <div class="sec-prose">
+      <p>Piensa en una fila de casilleros pegados: todos del mismo tamaño, todos numerados, y todos bajo un mismo letrero. Ese letrero es el nombre del arreglo; el número del casillero es el <em>índice</em>. Para llegar a cualquiera de ellos no recorres la fila: <strong>vas directo</strong>, porque conoces su número.</p>
+      <p>Y de ahí salen sus dos propiedades importantes. Primera: <strong>el índice empieza en cero</strong>, de modo que un arreglo de tres elementos va del <span class="mono">0</span> al <span class="mono">2</span> —nunca al 3—. Segunda: <strong>el tamaño se decide al declararlo y ya no cambia</strong>. Por eso, cuando no sabes cuántas materias aprobará un alumno, declaras un arreglo con espacio de sobra y llevas aparte una cuenta de <em>cuántos usaste de verdad</em>.</p>
+    </div>
+
+    <div class="cells-wrap">
+      <span class="cw-label">UN ARREGLO · int creditos[3]</span>
+      <div class="cells">
+        <div class="cell"><div class="c-idx">[0]</div><div class="c-box on">8</div></div>
+        <div class="cell"><div class="c-idx">[1]</div><div class="c-box on">10</div></div>
+        <div class="cell"><div class="c-idx">[2]</div><div class="c-box on">6</div></div>
+        <div class="cell"><div class="c-idx">[3]</div><div class="c-box off">✗</div></div>
       </div>
-      <div class="codeswitch">
-        <div class="cs-tabs">
-          <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-          <button type="button" class="cs-tab" data-lang="py">Python</button>
-          <span class="cs-flag">principal &middot; C++</span>
-        </div>
-        <div class="cs-pane" data-lang="cpp">
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primera_matriz.cpp</span></div>
-<pre><span class="com">// Una matriz de 3 filas y 3 columnas</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+      <p class="cells-cap"><strong>Tres casilleros, del 0 al 2.</strong> El casillero <span class="mono">[3]</span> no existe: pedirlo es el error más común con arreglos, y C++ no te avisa —simplemente lee basura. Cuenta siempre desde cero.</p>
+    </div>
+
+    <div class="principios">
+      <div class="pri-card">
+        <div class="pri-n">6.1.1</div>
+        <h4>Definición y propiedades</h4>
+        <p>Muchos datos <strong>del mismo tipo</strong> bajo un solo nombre. Índice desde <span class="mono">0</span>, tamaño fijo y acceso directo a cualquier posición.</p>
+      </div>
+      <div class="pri-card">
+        <div class="pri-n">6.1.2</div>
+        <h4>Con un arreglo</h4>
+        <p>Un <span class="mono">for</span> que lo recorre de principio a fin y va <strong>acumulando</strong>: sumar créditos, hallar el mayor, contar cuántos cumplen algo.</p>
+      </div>
+      <div class="pri-card blood">
+        <div class="pri-n">6.1.3</div>
+        <h4>Con dos o más</h4>
+        <p>Varios arreglos <strong>en paralelo</strong>: el mismo índice <span class="mono">i</span> apunta al mismo dato en todos. <span class="mono">materia[2]</span> vale <span class="mono">creditos[2]</span>.</p>
+      </div>
+    </div>
+
+    <div class="code-grid">
+      <div>
+        <p class="code-cap">6.1.2 · recorrer un arreglo y acumular</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">un_arreglo.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
 <span class="kw">using namespace</span> std;
 
 <span class="kw">int</span> <span class="fn">main</span>() {
-    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; matriz = {
-        {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>},   <span class="com">// fila 0</span>
-        {<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>},   <span class="com">// fila 1</span>
-        {<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>},   <span class="com">// fila 2</span>
-    };
+    <span class="com">// UN arreglo: muchos datos, un solo nombre</span>
+    <span class="kw">int</span> creditos[<span class="num">3</span>] = {<span class="num">8</span>, <span class="num">10</span>, <span class="num">6</span>};
 
-    <span class="com">// Dos indices -> una sola casilla</span>
-    cout &lt;&lt; matriz[<span class="num">0</span>][<span class="num">2</span>] &lt;&lt; endl;   <span class="out">// 3</span>
-    cout &lt;&lt; matriz[<span class="num">2</span>][<span class="num">0</span>] &lt;&lt; endl;   <span class="out">// 7</span>
+    cout &lt;&lt; creditos[<span class="num">0</span>] &lt;&lt; endl;   <span class="out">// 8  (el primero)</span>
+    cout &lt;&lt; creditos[<span class="num">2</span>] &lt;&lt; endl;   <span class="out">// 6  (el ultimo)</span>
 
-    <span class="com">// Cuantas filas y cuantas columnas hay</span>
-    cout &lt;&lt; matriz.<span class="fn">size</span>() &lt;&lt; endl;      <span class="out">// 3  (filas)</span>
-    cout &lt;&lt; matriz[<span class="num">0</span>].<span class="fn">size</span>() &lt;&lt; endl;   <span class="out">// 3  (columnas)</span>
+    <span class="com">// recorrido: el for camina por los indices</span>
+    <span class="kw">int</span> suma = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">3</span>; i++) {
+        suma = suma + creditos[i];   <span class="com">// acumula</span>
+    }
+    cout &lt;&lt; <span class="str">"Total: "</span> &lt;&lt; suma &lt;&lt; endl;  <span class="out">// 24</span>
     <span class="kw">return</span> <span class="num">0</span>;
 }</pre>
+            </div>
           </div>
-        </div>
-        <div class="cs-pane" data-lang="py" hidden>
-          <div class="code-block">
-            <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">primera_matriz.py</span></div>
-<pre><span class="com"># Una matriz de 3 filas y 3 columnas</span>
-matriz = [
-    [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>],   <span class="com"># fila 0</span>
-    [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>],   <span class="com"># fila 1</span>
-    [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>],   <span class="com"># fila 2</span>
-]
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">un_arreglo.py</span></div>
+<pre><span class="com"># UN arreglo: en Python, una lista</span>
+creditos = [<span class="num">8</span>, <span class="num">10</span>, <span class="num">6</span>]
 
-<span class="com"># Un solo indice -> una fila entera (lista)</span>
-<span class="fn">print</span>(matriz[<span class="num">0</span>])        <span class="out"># [1, 2, 3]</span>
+<span class="fn">print</span>(creditos[<span class="num">0</span>])          <span class="out"># 8  (el primero)</span>
+<span class="fn">print</span>(creditos[<span class="num">2</span>])          <span class="out"># 6  (el último)</span>
 
-<span class="com"># Dos indices -> una sola casilla</span>
-<span class="fn">print</span>(matriz[<span class="num">0</span>][<span class="num">2</span>])     <span class="out"># 3</span>
-<span class="fn">print</span>(matriz[<span class="num">2</span>][<span class="num">0</span>])     <span class="out"># 7</span>
+<span class="com"># recorrido: el for camina por los índices</span>
+suma = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    suma = suma + creditos[i]   <span class="com"># acumula</span>
 
-<span class="com"># Cuantas filas y cuantas columnas hay</span>
-<span class="fn">print</span>(<span class="fn">len</span>(matriz))       <span class="out"># 3  (filas)</span>
-<span class="fn">print</span>(<span class="fn">len</span>(matriz[<span class="num">0</span>]))    <span class="out"># 3  (columnas)</span></pre>
+<span class="fn">print</span>(<span class="str">"Total:"</span>, suma)       <span class="out"># 24</span></pre>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- MATRIX VISUAL: la representación tabular -->
-    <div class="matrix-vis">
-      <span class="mv-label">LA REPRESENTACIÓN TABULAR</span>
-      <div class="mv-stage">
-        <div class="mv-row-axis">filas →</div>
-        <div class="mv-board">
-          <div class="mv-col-axis">columnas →</div>
-          <div class="mv-grid">
-            <div class="mv-cell diag"><span class="coord">[0][0]</span><span class="val">1</span></div>
-            <div class="mv-cell"><span class="coord">[0][1]</span><span class="val">2</span></div>
-            <div class="mv-cell"><span class="coord">[0][2]</span><span class="val">3</span></div>
-            <div class="mv-cell"><span class="coord">[1][0]</span><span class="val">4</span></div>
-            <div class="mv-cell diag"><span class="coord">[1][1]</span><span class="val">5</span></div>
-            <div class="mv-cell"><span class="coord">[1][2]</span><span class="val">6</span></div>
-            <div class="mv-cell"><span class="coord">[2][0]</span><span class="val">7</span></div>
-            <div class="mv-cell"><span class="coord">[2][1]</span><span class="val">8</span></div>
-            <div class="mv-cell diag"><span class="coord">[2][2]</span><span class="val">9</span></div>
-          </div>
-        </div>
-      </div>
-      <p class="mv-foot"><strong>Así la imaginamos:</strong> una rejilla. Cada casilla lleva su par de coordenadas <span class="mono">[fila][columna]</span>. Las resaltadas en ocre son la <em>diagonal principal</em> —donde la fila y la columna coinciden—, la misma diagonal que decide muchas partidas de gato.</p>
-    </div>
-  </section>
-
-  <!-- CONCEPT ii: MEMORIA vs MENTE -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n blood display">ii.</div>
       <div>
-        <h2 class="display">Cómo se <em class="blood">guarda</em>, cómo se <em class="blood">imagina</em>.</h2>
-        <p>La tabla con renglones y columnas vive solo en <strong>tu cabeza</strong>. En la memoria de la computadora no hay rejillas: hay una lista que contiene, una tras otra, tres listas más pequeñas. La cuadrícula es la <em>metáfora</em>; la lista de listas es la <em>realidad</em>.</p>
-      </div>
-    </div>
-
-    <div class="versus">
-      <div class="vs-card a">
-        <div class="vs-tag">en la memoria · la realidad</div>
-        <h3>Una lista que contiene listas</h3>
-        <p>La máquina no sabe de filas ni columnas. Solo guarda una lista grande cuyos tres elementos son, cada uno, una lista chica. La «forma» de tabla la pones tú al leerla con dos índices.</p>
-        <div class="vs-mem">
-          <span class="chunk r0">[1, 2, 3]</span>
-          <span class="chunk r1">[4, 5, 6]</span>
-          <span class="chunk r2">[7, 8, 9]</span>
-        </div>
-      </div>
-      <div class="vs-card b">
-        <div class="vs-tag">en tu mente · la metáfora</div>
-        <h3>Una rejilla de filas y columnas</h3>
-        <p>Cuando programas, conviene <strong>verla como tabla</strong>: tres renglones apilados, tres columnas alineadas. Esa imagen mental es la que te dice qué par de índices usar para tocar cada casilla.</p>
-        <div class="vs-mind">
-          <div class="mc">1</div><div class="mc">2</div><div class="mc">3</div>
-          <div class="mc">4</div><div class="mc">5</div><div class="mc">6</div>
-          <div class="mc">7</div><div class="mc">8</div><div class="mc">9</div>
-        </div>
-      </div>
-    </div>
-
-    <p style="color:var(--ink-soft); font-style:italic; font-size:1rem; max-width:780px; margin-top:26px;">El truco de un buen programador es <strong style="color:var(--blood); font-style:normal;">mantener las dos imágenes a la vez</strong>: pensar en tabla para diseñar, recordar que es lista de listas para escribir el código correcto.</p>
-  </section>
-
-  <!-- CONCEPT iii: CÓMO DECLARARLA -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n display">iii.</div>
-      <div>
-        <h2 class="display">Tres maneras de <em>declararla</em>.</h2>
-        <p>Declarar una matriz es <strong>darle existencia y forma</strong> antes de usarla. Según de dónde vengan los datos, hay tres caminos: escribirlos a mano, generarlos vacíos, o llenarlos pidiéndolos al usuario. <span class="mono">7.5 — Declaración de arreglos bidimensionales.</span></p>
-      </div>
-    </div>
-
-    <div class="decl-grid">
-      <div class="decl-card">
-        <h3>1 · Con valores fijos</h3>
-        <div class="codeswitch in-card">
+        <p class="code-cap">6.1.3 · dos o más arreglos en paralelo</p>
+        <div class="codeswitch">
           <div class="cs-tabs">
             <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
             <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">C++</span>
+            <span class="cs-flag">principal &middot; C++</span>
           </div>
           <div class="cs-pane" data-lang="cpp">
-<pre><span class="com">// los escribes a mano</span>
-vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; tabla = {
-    {<span class="num">8</span>, <span class="num">6</span>, <span class="num">9</span>},
-    {<span class="num">7</span>, <span class="num">5</span>, <span class="num">4</span>},
-};</pre>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">dos_arreglos.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// TRES arreglos que caminan juntos:</span>
+    <span class="com">// el MISMO indice apunta a la MISMA materia</span>
+    <span class="kw">string</span> materia[<span class="num">3</span>]  = {<span class="str">"Algebra"</span>, <span class="str">"Calculo I"</span>, <span class="str">"Estadistica"</span>};
+    <span class="kw">int</span>    creditos[<span class="num">3</span>] = {<span class="num">8</span>, <span class="num">10</span>, <span class="num">6</span>};
+    <span class="kw">bool</span>   aprobada[<span class="num">3</span>] = {<span class="kw">true</span>, <span class="kw">true</span>, <span class="kw">false</span>};
+
+    <span class="kw">int</span> suma = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">3</span>; i++) {
+        <span class="kw">if</span> (aprobada[i]) {            <span class="com">// mismo i en los tres</span>
+            cout &lt;&lt; materia[i] &lt;&lt; <span class="str">" -&gt; "</span>
+                 &lt;&lt; creditos[i] &lt;&lt; endl;
+            suma = suma + creditos[i];
+        }
+    }
+    cout &lt;&lt; <span class="str">"Aprobados: "</span> &lt;&lt; suma &lt;&lt; endl;  <span class="out">// 18</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+            </div>
           </div>
           <div class="cs-pane" data-lang="py" hidden>
-<pre><span class="com"># los escribes a mano</span>
-tabla = [
-    [<span class="num">8</span>, <span class="num">6</span>, <span class="num">9</span>],
-    [<span class="num">7</span>, <span class="num">5</span>, <span class="num">4</span>],
-]</pre>
-          </div>
-        </div>
-        <p>La más directa. Sirve cuando ya <strong>conoces los datos</strong>: un mapa fijo, un calendario, una matriz de ejemplo.</p>
-      </div>
-      <div class="decl-card two">
-        <h3>2 · Vacía con un patrón</h3>
-        <div class="codeswitch in-card">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-<pre><span class="com">// 3 filas de 3 ceros, bien hecha</span>
-vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; tablero(
-    <span class="num">3</span>, vector&lt;<span class="kw">int</span>&gt;(<span class="num">3</span>, <span class="num">0</span>));</pre>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-<pre><span class="com"># 3 filas de 3 ceros, bien hecha</span>
-tablero = [[<span class="num">0</span>] * <span class="num">3</span>
-           <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)]</pre>
-          </div>
-        </div>
-        <p>Para reservar el espacio antes de saber el contenido. El constructor de <span class="mono">vector</span> (o la <em>comprehension</em> en Python) crea <strong>una fila nueva por vuelta</strong>.</p>
-      </div>
-      <div class="decl-card three">
-        <h3>3 · Llenada por entrada</h3>
-        <div class="codeswitch in-card">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-<pre><span class="com">// el usuario dicta cada valor</span>
-vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; datos(<span class="num">2</span>, vector&lt;<span class="kw">int</span>&gt;(<span class="num">3</span>));
-<span class="kw">for</span> (<span class="kw">int</span> f = <span class="num">0</span>; f &lt; <span class="num">2</span>; f++)
-    <span class="kw">for</span> (<span class="kw">int</span> c = <span class="num">0</span>; c &lt; <span class="num">3</span>; c++)
-        cin &gt;&gt; datos[f][c];</pre>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-<pre><span class="com"># el usuario dicta cada valor</span>
-fila1 = <span class="fn">input</span>(<span class="str">"Fila 1: "</span>).<span class="fn">split</span>()
-fila2 = <span class="fn">input</span>(<span class="str">"Fila 2: "</span>).<span class="fn">split</span>()
-datos = [fila1, fila2]</pre>
-          </div>
-        </div>
-        <p>Cuando los datos llegan en tiempo de ejecución. Lees <strong>una fila completa</strong> y la apilas en la matriz.</p>
-      </div>
-    </div>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">dos_arreglos.py</span></div>
+<pre><span class="com"># TRES listas que caminan juntas:</span>
+<span class="com"># el MISMO índice apunta a la MISMA materia</span>
+materia  = [<span class="str">"Álgebra"</span>, <span class="str">"Cálculo I"</span>, <span class="str">"Estadística"</span>]
+creditos = [<span class="num">8</span>, <span class="num">10</span>, <span class="num">6</span>]
+aprobada = [<span class="kw">True</span>, <span class="kw">True</span>, <span class="kw">False</span>]
 
-    <!-- TRAP: el clásico error del [[0]*3]*3 -->
-    <div class="trap">
-      <div class="trap-card bad">
-        <div class="trap-head">✗ La trampa más famosa</div>
-        <div class="codeswitch in-card">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-<pre><span class="com">// Parece bien... pero NO lo hagas</span>
-vector&lt;<span class="kw">int</span>&gt; fila(<span class="num">3</span>, <span class="num">0</span>);
-vector&lt;vector&lt;<span class="kw">int</span>&gt;*&gt; tablero = {&amp;fila, &amp;fila, &amp;fila};
+suma = <span class="num">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    <span class="kw">if</span> aprobada[i]:              <span class="com"># mismo i en las tres</span>
+        <span class="fn">print</span>(materia[i], <span class="str">"-&gt;"</span>, creditos[i])
+        suma = suma + creditos[i]
 
-(*tablero[<span class="num">0</span>])[<span class="num">0</span>] = <span class="num">1</span>;
-<span class="err">// fila 0,1,2 -> 1 0 0  (las TRES)</span>
-<span class="com">// ¡los 3 punteros miran la MISMA fila!</span></pre>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-<pre><span class="com"># Parece bien... pero NO lo hagas</span>
-tablero = [[<span class="num">0</span>] * <span class="num">3</span>] * <span class="num">3</span>
-
-tablero[<span class="num">0</span>][<span class="num">0</span>] = <span class="num">1</span>
-<span class="fn">print</span>(tablero)
-<span class="err"># [[1, 0, 0], [1, 0, 0], [1, 0, 0]]</span>
-<span class="com"># ¡cambiaste UNA y se movieron las TRES!</span></pre>
-          </div>
-        </div>
-        <div class="trap-foot"><strong>¿Por qué?</strong> En Python el <span class="mono">* 3</span> no copia: deja <em>tres referencias a la misma fila</em>. En C++ el equivalente es guardar tres <em>punteros</em> al mismo objeto. Tocar una es tocarlas todas.</div>
-      </div>
-      <div class="trap-card good">
-        <div class="trap-head">✓ La forma correcta</div>
-        <div class="codeswitch in-card">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-<pre><span class="com">// una fila NUEVA e independiente por vuelta</span>
-vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; tablero(<span class="num">3</span>, vector&lt;<span class="kw">int</span>&gt;(<span class="num">3</span>, <span class="num">0</span>));
-
-tablero[<span class="num">0</span>][<span class="num">0</span>] = <span class="num">1</span>;
-<span class="out">// fila 0 -> 1 0 0 ; filas 1 y 2 -> 0 0 0</span>
-<span class="com">// solo se movio la casilla correcta</span></pre>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-<pre><span class="com"># una fila NUEVA por cada vuelta</span>
-tablero = [[<span class="num">0</span>] * <span class="num">3</span> <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>)]
-
-tablero[<span class="num">0</span>][<span class="num">0</span>] = <span class="num">1</span>
-<span class="fn">print</span>(tablero)
-<span class="out"># [[1, 0, 0], [0, 0, 0], [0, 0, 0]]</span>
-<span class="com"># solo se movio la casilla correcta</span></pre>
-          </div>
-        </div>
-        <div class="trap-foot"><strong>La diferencia:</strong> el constructor de <span class="mono">vector</span> (y la <span class="mono">comprehension</span> de Python) construyen una fila <em>independiente</em> en cada iteración. Tres filas, tres objetos distintos.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRÁCTICA: TABLERO DE GATO -->
-  <section class="ejercicios reveal">
-    <div class="s-head">
-      <div class="n blood display">iv.</div>
-      <div>
-        <h2 class="display">La <em class="blood">práctica</em> de hoy.</h2>
-        <p>Vas a representar un <strong>tablero de gato</strong> (tres en raya) de <span class="mono">3×3</span> con una matriz, y a <strong>dibujarlo vacío</strong> en la consola. Hoy no hay jugadas todavía —eso será la sesión 23—; hoy basta con que la cuadrícula nazca, limpia y bien alineada.</p>
-      </div>
-    </div>
-
-    <div class="ej-card">
-      <span class="ej-tag">Entregable</span>
-      <div class="ej-body">
-        <div>
-          <h3>Tablero de gato vacío</h3>
-          <p class="ej-desc">Un programa que <strong>declare</strong> una matriz de 3×3 llena de espacios en blanco y la <strong>dibuje en consola</strong> como un tablero de gato de verdad, con sus líneas separadoras. Debe verse como el de la derecha.</p>
-          <ul class="reqs">
-            <li>Declara la matriz con la forma correcta: <span class="mono">[[" "] * 3 for _ in range(3)]</span></li>
-            <li>Dibuja las <span class="mono">3 filas</span> separadas por una línea horizontal</li>
-            <li>Separa las columnas con barras verticales <span class="mono">|</span></li>
-            <li>No uses la <em>trampa</em> del <span class="mono">[...] * 3</span> que vimos arriba</li>
-            <li>Comenta tu código y cierra con tus <span class="mono">conclusiones</span></li>
-          </ul>
-        </div>
-        <div class="ej-preview">
-          <div class="pv-label">Así se verá (tablero vacío)</div>
-          <div class="term">
-            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — tablero_gato.py</span></div>
-            <div class="term-body">
-              <span class="dim">$ python tablero_gato.py</span><br/>
-              <span class="grid-line">&nbsp;&nbsp;&nbsp;<span class="sep">|</span>&nbsp;&nbsp;&nbsp;<span class="sep">|</span>&nbsp;&nbsp;&nbsp;</span><br/>
-              <span class="sep">---+---+---</span><br/>
-              <span class="grid-line">&nbsp;&nbsp;&nbsp;<span class="sep">|</span>&nbsp;&nbsp;&nbsp;<span class="sep">|</span>&nbsp;&nbsp;&nbsp;</span><br/>
-              <span class="sep">---+---+---</span><br/>
-              <span class="grid-line">&nbsp;&nbsp;&nbsp;<span class="sep">|</span>&nbsp;&nbsp;&nbsp;<span class="sep">|</span>&nbsp;&nbsp;&nbsp;</span>
+<span class="fn">print</span>(<span class="str">"Aprobados:"</span>, suma)      <span class="out"># 18</span></pre>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="codeswitch">
-      <div class="cs-tabs">
-        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-        <button type="button" class="cs-tab" data-lang="py">Python</button>
-        <span class="cs-flag">principal &middot; C++</span>
+    <div class="keypoint"><strong>El error de una unidad:</strong> si el arreglo tiene <span class="mono">3</span> elementos, el <span class="mono">for</span> va de <span class="mono">i = 0</span> mientras <span class="mono">i &lt; 3</span>. Nunca <span class="mono">i &lt;= 3</span>. Ese <em>«uno de más»</em> es la falla clásica de los arreglos, y en C++ no truena: te da un dato falso.</div>
+  </section>
+
+  <!-- SECCIÓN ii: 6.2 CADENAS -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">ii.</div>
+      <div>
+        <h2 class="display">6.2 · Las <em>cadenas</em>.</h2>
+        <p>Una cadena es texto: el nombre de una materia, el de un alumno, su matrícula. Y aquí está la revelación de hoy: <strong>una cadena es también un arreglo</strong> —un arreglo de caracteres—. Todo lo que aprendiste arriba se aplica letra por letra.</p>
       </div>
-      <div class="cs-pane" data-lang="cpp">
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tablero_gato.cpp · punto de partida</span></div>
-<pre><span class="com">// =====================================================</span>
-<span class="com">// Sesion 22 - Tablero de gato vacio (3x3)</span>
-<span class="com">// Fundamentos de Programacion - UNITEC Atizapan 26-3</span>
-<span class="com">// =====================================================</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+    </div>
+
+    <div class="sec-prose">
+      <p>En C++ tienes dos formas de escribir texto. La clásica, heredada de C, es <span class="mono">char nombre[40]</span>: un arreglo de caracteres tal cual. La moderna y cómoda es <span class="mono">string</span>, que hace lo mismo pero se encarga sola del tamaño y sabe crecer. <strong>Usaremos <span class="mono">string</span></strong>, sin olvidar que por dentro sigue siendo una fila de casilleros con letras.</p>
+      <p>De esa naturaleza doble salen sus tres operaciones básicas: preguntarle su <strong>longitud</strong> —cuántos caracteres tiene—, <strong>indexar</strong> —pedir la letra de la posición <span class="mono">i</span>— y <strong>recorrerla</strong> con un <span class="mono">for</span>, exactamente como recorriste el arreglo de créditos.</p>
+    </div>
+
+    <div class="cells-wrap">
+      <span class="cw-label">UNA CADENA · string materia = "Calculo I"</span>
+      <div class="cells">
+        <div class="cell ch"><div class="c-idx">0</div><div class="c-box">C</div></div>
+        <div class="cell ch"><div class="c-idx">1</div><div class="c-box">a</div></div>
+        <div class="cell ch"><div class="c-idx">2</div><div class="c-box">l</div></div>
+        <div class="cell ch"><div class="c-idx">3</div><div class="c-box">c</div></div>
+        <div class="cell ch"><div class="c-idx">4</div><div class="c-box">u</div></div>
+        <div class="cell ch"><div class="c-idx">5</div><div class="c-box">l</div></div>
+        <div class="cell ch"><div class="c-idx">6</div><div class="c-box">o</div></div>
+        <div class="cell ch"><div class="c-idx">7</div><div class="c-box esp">␣</div></div>
+        <div class="cell ch"><div class="c-idx">8</div><div class="c-box">I</div></div>
+      </div>
+      <p class="cells-cap"><strong>9 caracteres, del 0 al 8.</strong> El espacio en rojo (posición 7) también ocupa un lugar —y es justo lo que usarás para <em>contar palabras</em>: cuenta los espacios y súmale uno.</p>
+    </div>
+
+    <div class="code-grid">
+      <div>
+        <p class="code-cap">6.2.2 · longitud, indexación y recorrido</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cadenas.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
 <span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
 <span class="kw">using namespace</span> std;
 
-<span class="kw">const int</span> FILAS = <span class="num">3</span>;
-<span class="kw">const int</span> COLUMNAS = <span class="num">3</span>;
-<span class="kw">const</span> <span class="kw">string</span> VACIO = <span class="str">" "</span>;
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">string</span> materia = <span class="str">"Calculo I"</span>;
 
-<span class="com">// 2) La dibujamos fila por fila.</span>
-<span class="kw">void</span> <span class="fn">dibujar</span>(<span class="kw">const</span> vector&lt;vector&lt;<span class="kw">string</span>&gt;&gt;&amp; tab) {
-    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; (<span class="kw">int</span>)tab.<span class="fn">size</span>(); i++) {
-        <span class="kw">const</span> <span class="kw">auto</span>&amp; fila = tab[i];
-        <span class="com">// " X | O |   " -> unimos las 3 casillas con barras</span>
-        cout &lt;&lt; <span class="str">" "</span> &lt;&lt; fila[<span class="num">0</span>] &lt;&lt; <span class="str">" | "</span> &lt;&lt; fila[<span class="num">1</span>]
-             &lt;&lt; <span class="str">" | "</span> &lt;&lt; fila[<span class="num">2</span>] &lt;&lt; <span class="str">" "</span> &lt;&lt; endl;
-        <span class="com">// linea separadora entre renglones (no tras el ultimo)</span>
-        <span class="kw">if</span> (i &lt; (<span class="kw">int</span>)tab.<span class="fn">size</span>() - <span class="num">1</span>)
-            cout &lt;&lt; <span class="str">"---+---+---"</span> &lt;&lt; endl;
+    <span class="com">// LONGITUD: cuantos caracteres tiene</span>
+    cout &lt;&lt; materia.<span class="fn">length</span>() &lt;&lt; endl;   <span class="out">// 9</span>
+
+    <span class="com">// INDEXACION: la letra de la posicion i</span>
+    cout &lt;&lt; materia[<span class="num">0</span>] &lt;&lt; endl;          <span class="out">// C</span>
+
+    <span class="com">// RECORRIDO: caracter por caracter</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">9</span>; i++) {
+        cout &lt;&lt; materia[i] &lt;&lt; <span class="str">" "</span>;
+    }
+    cout &lt;&lt; endl;                <span class="out">// C a l c u l o   I</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">cadenas.py</span></div>
+<pre>materia = <span class="str">"Calculo I"</span>
+
+<span class="com"># LONGITUD: cuántos caracteres tiene</span>
+<span class="fn">print</span>(<span class="fn">len</span>(materia))            <span class="out"># 9</span>
+
+<span class="com"># INDEXACIÓN: la letra de la posición i</span>
+<span class="fn">print</span>(materia[<span class="num">0</span>])            <span class="out"># C</span>
+
+<span class="com"># RECORRIDO: carácter por carácter</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">9</span>):
+    <span class="fn">print</span>(materia[i], end=<span class="str">" "</span>)
+
+<span class="fn">print</span>()                    <span class="out"># C a l c u l o   I</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="code-cap">6.2.3 · contar las palabras de un nombre</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">palabras.cpp</span></div>
+<pre><span class="com">// Cada espacio separa una palabra de la siguiente.</span>
+<span class="com">// Entonces: palabras = espacios + 1</span>
+
+<span class="kw">string</span> materia = <span class="str">"Calculo I"</span>;
+
+<span class="kw">int</span> palabras = <span class="num">1</span>;        <span class="com">// siempre hay al menos una</span>
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">9</span>; i++) {
+    <span class="kw">if</span> (materia[i] == <span class="str">' '</span>) {   <span class="com">// comillas SIMPLES:</span>
+        palabras = palabras + <span class="num">1</span>;   <span class="com">// es un caracter</span>
     }
 }
 
+cout &lt;&lt; <span class="str">"Palabras: "</span> &lt;&lt; palabras &lt;&lt; endl;   <span class="out">// 2</span>
+
+<span class="com">// Es el mismo recorrido de siempre: cambia lo</span>
+<span class="com">// que hacemos en cada vuelta.</span></pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">palabras.py</span></div>
+<pre><span class="com"># Cada espacio separa una palabra de la siguiente.</span>
+<span class="com"># Entonces: palabras = espacios + 1</span>
+
+materia = <span class="str">"Calculo I"</span>
+
+palabras = <span class="num">1</span>            <span class="com"># siempre hay al menos una</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">9</span>):
+    <span class="kw">if</span> materia[i] == <span class="str">" "</span>:
+        palabras = palabras + <span class="num">1</span>
+
+<span class="fn">print</span>(<span class="str">"Palabras:"</span>, palabras)          <span class="out"># 2</span>
+
+<span class="com"># Es el mismo recorrido de siempre: cambia lo</span>
+<span class="com"># que hacemos en cada vuelta.</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SECCIÓN iii: 6.3 MATRICES -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">iii.</div>
+      <div>
+        <h2 class="display">6.3 · Las <em>matrices</em>.</h2>
+        <p>Si el arreglo es una fila de casilleros, la matriz es <strong>un edificio de casilleros</strong>: renglones y columnas. Se declara con <em>dos</em> corchetes —<span class="mono">seriacion[fila][columna]</span>— y se recorre con <em>dos</em> ciclos <span class="mono">for</span>, uno dentro del otro.</p>
+      </div>
+    </div>
+
+    <div class="sec-prose">
+      <p>«UniData» necesita saber qué materias son <strong>seriadas</strong>: cuáles no puedes cursar hasta aprobar otra. Eso es una relación entre <em>pares</em> de materias, y un arreglo simple no la puede guardar —haría falta un arreglo por cada materia—. La matriz sí: cada <strong>renglón</strong> es una materia, cada <strong>columna</strong> es otra materia, y en el cruce ponemos un <span class="mono">1</span> si la de la columna <em>depende</em> de la del renglón.</p>
+      <p>Para esta práctica basta con una sola pregunta: <em>«¿qué materia abre cada renglón?»</em>. Recorremos un renglón completo a la vez y mostramos las columnas que tienen un <span class="mono">1</span>.</p>
+    </div>
+
+    <div class="matriz">
+      <table class="mtable">
+        <thead>
+          <tr>
+            <th class="corner">renglón ↓ abre a la columna →</th>
+            <th>Álgebra</th><th>Cálculo I</th><th>Estadística</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>Álgebra</th><td class="cero">0</td><td class="uno">1</td><td class="cero">0</td></tr>
+          <tr><th>Cálculo I</th><td class="cero">0</td><td class="cero">0</td><td class="uno">1</td></tr>
+          <tr><th>Estadística</th><td class="cero">0</td><td class="cero">0</td><td class="cero">0</td></tr>
+        </tbody>
+      </table>
+      <div class="matriz-cap"><strong>Todo el plan de estudios en nueve números.</strong> El renglón «Álgebra» tiene un <span class="mono">1</span> en la columna de Cálculo I: aprobar Álgebra abre Cálculo I. Y ése, a su vez, abre Estadística. Estadística no abre ninguna: es el final de la cadena.</div>
+    </div>
+
+    <div class="code-grid">
+      <div>
+        <p class="code-cap">6.3.1 · declarar e inicializar la matriz</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">matriz.cpp</span></div>
+<pre><span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;string&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">const</span> <span class="kw">int</span> PLAN = <span class="num">3</span>;
+
 <span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="com">// 1) Declaramos la matriz con la forma CORRECTA:</span>
-    <span class="com">//    aqui cada fila ya nace independiente.</span>
-    vector&lt;vector&lt;<span class="kw">string</span>&gt;&gt; tablero(FILAS, vector&lt;<span class="kw">string</span>&gt;(COLUMNAS, VACIO));
+    <span class="kw">string</span> plan[PLAN] = {<span class="str">"Algebra"</span>, <span class="str">"Calculo I"</span>,
+                         <span class="str">"Estadistica"</span>};
 
-    <span class="fn">dibujar</span>(tablero);
+    <span class="com">// renglon = materia;  columna = la que DEPENDE</span>
+    <span class="kw">int</span> seriacion[PLAN][PLAN] = {
+        {<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>},   <span class="com">// Algebra abre Calculo I</span>
+        {<span class="num">0</span>, <span class="num">0</span>, <span class="num">1</span>},   <span class="com">// Calculo I abre Estadistica</span>
+        {<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>}    <span class="com">// Estadistica no abre nada</span>
+    };
 
-    <span class="com">// RETO: ¿como dibujarias un tablero NxN sin escribir</span>
-    <span class="com">// fila[0], fila[1], fila[2] a mano? Pista: otro for interno.</span>
+    <span class="com">// un dato suelto: renglon 0, columna 1</span>
+    cout &lt;&lt; seriacion[<span class="num">0</span>][<span class="num">1</span>] &lt;&lt; endl;   <span class="out">// 1</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">matriz.py</span></div>
+<pre><span class="com"># En Python la matriz es una LISTA DE LISTAS</span>
+PLAN = <span class="num">3</span>
+
+plan = [<span class="str">"Álgebra"</span>, <span class="str">"Cálculo I"</span>, <span class="str">"Estadística"</span>]
+
+<span class="com"># renglón = materia;  columna = la que DEPENDE</span>
+seriacion = [
+    [<span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>],   <span class="com"># Álgebra abre Cálculo I</span>
+    [<span class="num">0</span>, <span class="num">0</span>, <span class="num">1</span>],   <span class="com"># Cálculo I abre Estadística</span>
+    [<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>]    <span class="com"># Estadística no abre nada</span>
+]
+
+<span class="com"># un dato suelto: renglón 0, columna 1</span>
+<span class="fn">print</span>(seriacion[<span class="num">0</span>][<span class="num">1</span>])   <span class="out"># 1</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="code-cap">6.3.2 · recorrerla con dos for anidados</p>
+        <div class="codeswitch">
+          <div class="cs-tabs">
+            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+            <button type="button" class="cs-tab" data-lang="py">Python</button>
+            <span class="cs-flag">principal &middot; C++</span>
+          </div>
+          <div class="cs-pane" data-lang="cpp">
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorridos.cpp</span></div>
+<pre><span class="com">// ¿Que abre cada materia?</span>
+<span class="com">// El for de AFUERA recorre los renglones y</span>
+<span class="com">// el de ADENTRO, las columnas de ese renglon.</span>
+
+<span class="kw">for</span> (<span class="kw">int</span> f = <span class="num">0</span>; f &lt; PLAN; f++) {        <span class="com">// exterior</span>
+    cout &lt;&lt; plan[f] &lt;&lt; <span class="str">" abre: "</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> c = <span class="num">0</span>; c &lt; PLAN; c++) {    <span class="com">// interior</span>
+        <span class="kw">if</span> (seriacion[f][c] == <span class="num">1</span>) {
+            cout &lt;&lt; plan[c] &lt;&lt; <span class="str">" "</span>;
+        }
+    }
+    cout &lt;&lt; endl;   <span class="com">// se acabo el renglon</span>
+}
+
+<span class="out">// Algebra abre: Calculo I</span>
+<span class="out">// Calculo I abre: Estadistica</span>
+<span class="out">// Estadistica abre:</span></pre>
+            </div>
+          </div>
+          <div class="cs-pane" data-lang="py" hidden>
+            <div class="code-block">
+              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">recorridos.py</span></div>
+<pre><span class="com"># ¿Qué abre cada materia?</span>
+<span class="com"># El for de AFUERA recorre los renglones y</span>
+<span class="com"># el de ADENTRO, las columnas de ese renglón.</span>
+
+<span class="kw">for</span> f <span class="kw">in</span> <span class="fn">range</span>(PLAN):              <span class="com"># exterior</span>
+    <span class="fn">print</span>(plan[f], <span class="str">"abre:"</span>, end=<span class="str">" "</span>)
+
+    <span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(PLAN):          <span class="com"># interior</span>
+        <span class="kw">if</span> seriacion[f][c] == <span class="num">1</span>:
+            <span class="fn">print</span>(plan[c], end=<span class="str">" "</span>)
+
+    <span class="fn">print</span>()                    <span class="com"># se acabó el renglón</span>
+
+<span class="out"># Álgebra abre: Cálculo I</span>
+<span class="out"># Cálculo I abre: Estadística</span>
+<span class="out"># Estadística abre:</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="travpair" style="margin-top:34px;">
+      <div class="trav">
+        <div class="trav-t">Por renglones — <em>¿qué abre esta materia?</em></div>
+        <div class="tgrid">
+          <div class="tcell hl">0</div><div class="tcell hl">1</div><div class="tcell hl">0</div>
+          <div class="tcell">0</div><div class="tcell">0</div><div class="tcell">1</div>
+          <div class="tcell">0</div><div class="tcell">0</div><div class="tcell">0</div>
+        </div>
+        <div class="trav-c">exterior = f (renglón) · interior = c</div>
+      </div>
+    </div>
+
+    <div class="keypoint" style="margin-top:34px;"><strong>6.3.2 · un paso a la vez:</strong> el <span class="mono">for</span> de afuera fija una materia y el de adentro revisa sus tres columnas. Cuando encuentra un <span class="mono">1</span>, muestra la materia que se abre. Sólo necesitas este recorrido por renglones.</div>
+  </section>
+
+  <!-- SECCIÓN iv: LA ESTRUCTURA -->
+  <section class="sec reveal">
+    <div class="s-head">
+      <div class="n display">iv.</div>
+      <div>
+        <h2 class="display">La <em>estructura</em>.</h2>
+        <p>Un arreglo guarda muchos datos <strong>del mismo tipo</strong>. Pero una materia son tres datos <em>de tipos distintos</em> —un nombre, un número y un estado— que tienen que viajar juntos. Ésa es la pieza nueva de hoy: la <strong>estructura</strong>. En C++ se llama <span class="mono">struct</span>; en Python, <em>diccionario</em>.</p>
+      </div>
+    </div>
+
+    <div class="sec-prose">
+      <p>Empecemos por el problema. Con lo que sabemos hasta ahora, guardar una materia nos obliga a declarar <strong>tres variables sueltas</strong>: una para el nombre, otra para los créditos y otra para el estado. Y si son tres materias, tres <em>arreglos paralelos</em> —el subtema 6.1.3 de la sección i—, donde lo único que mantiene entera a cada materia es que todas usen el mismo índice.</p>
+      <p>Funciona… pero es frágil. Son <strong>tres cosas que hay que mantener sincronizadas a mano</strong>: si ordenas una y olvidas las otras dos, los datos se cruzan y el programa no te avisa. Lo que necesitamos es una <em>caja</em> que los guarde juntos y de la que ya nadie los pueda separar.</p>
+      <p>Esa caja es la <strong>estructura</strong>: un tipo de dato que <em>tú</em> inventas, con los campos que <em>tú</em> decidas. A partir de que la declares, <span class="mono">Materia</span> vale tanto como <span class="mono">int</span> o <span class="mono">string</span> — puedes declarar una, copiarla, pasarla a una función y hacer un arreglo de ellas.</p>
+    </div>
+
+    <div class="estr-anim">
+      <span class="ea-label">DE TRES SUELTAS · A UNA SOLA</span>
+      <div class="ea-scroll">
+        <div class="ea-stage">
+          <div class="ea-frame"><span class="ea-fl">Materia</span></div>
+          <div class="ea-row">
+            <div class="ea-v v1">
+              <span class="ea-t">string</span>
+              <span class="ea-n">nombre</span>
+              <span class="ea-val">"Calculo I"</span>
+            </div>
+            <div class="ea-v v2">
+              <span class="ea-t">int</span>
+              <span class="ea-n">creditos</span>
+              <span class="ea-val">10</span>
+            </div>
+            <div class="ea-v v3">
+              <span class="ea-t">bool</span>
+              <span class="ea-n">aprobada</span>
+              <span class="ea-val">true</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="ea-cap"><strong>Los mismos tres datos, con y sin caja.</strong> Sueltos, nada dice que pertenecen a la misma materia. Dentro de la estructura, ya no hay forma de separarlos por accidente.</p>
+    </div>
+
+    <div class="sec-prose" style="margin-top:44px;">
+      <p>Declararla es escribir <em>el molde</em>: le pones nombre al tipo nuevo y enlistas sus campos. Ojo con el detalle que más errores causa —<strong>el punto y coma al cerrar la llave</strong>—, porque el compilador señala la línea siguiente y uno se vuelve loco buscando ahí.</p>
+    </div>
+
+    <div class="anatomia">
+      <svg viewBox="0 0 790 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Anatomía de una estructura en C++: la palabra clave struct, el nombre del tipo que inventa el programador, los tres campos y el punto y coma obligatorio al final">
+        <defs>
+          <marker id="an" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#a02418"/>
+          </marker>
+        </defs>
+
+        <!-- etiquetas de arriba -->
+        <text x="76" y="24" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="13.5" fill="#6e1810">palabra clave</text>
+        <path d="M76,32 L76,64" stroke="#a02418" stroke-width="1.6" fill="none" marker-end="url(#an)"/>
+
+        <text x="312" y="24" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="13.5" fill="#6e1810">el nombre del tipo · lo inventas tú</text>
+        <path d="M312,32 C312,50 210,44 158,64" stroke="#a02418" stroke-width="1.6" fill="none" marker-end="url(#an)"/>
+
+        <!-- el bloque de codigo -->
+        <rect x="20" y="68" width="384" height="184" fill="#2a1d14"/>
+
+        <text x="44" y="102" font-family="JetBrains Mono, monospace" font-size="17" fill="#efe6d2"><tspan fill="#f0c8a0">struct</tspan> <tspan fill="#f0d8b0" font-weight="700">Materia</tspan> {</text>
+        <text x="70" y="136" font-family="JetBrains Mono, monospace" font-size="17" fill="#efe6d2"><tspan fill="#f0c8a0">string</tspan> nombre;</text>
+        <text x="70" y="166" font-family="JetBrains Mono, monospace" font-size="17" fill="#efe6d2"><tspan fill="#f0c8a0">int</tspan> creditos;</text>
+        <text x="70" y="196" font-family="JetBrains Mono, monospace" font-size="17" fill="#efe6d2"><tspan fill="#f0c8a0">bool</tspan> aprobada;</text>
+        <text x="44" y="232" font-family="JetBrains Mono, monospace" font-size="17" fill="#efe6d2">}<tspan fill="#f5b08c" font-weight="700">;</tspan></text>
+
+        <!-- guiones conectores -->
+        <path d="M408,131 L428,131" stroke="#b5852a" stroke-width="1.6"/>
+        <path d="M408,161 L428,161" stroke="#b5852a" stroke-width="1.6"/>
+        <path d="M408,191 L428,191" stroke="#b5852a" stroke-width="1.6"/>
+        <path d="M408,227 L428,227" stroke="#a02418" stroke-width="1.6"/>
+
+        <!-- anotaciones de la derecha -->
+        <text x="436" y="136" font-family="Newsreader, serif" font-size="14" fill="#4a3a2c">campo 1 · el nombre — una <tspan font-style="italic" fill="#6e1810">cadena</tspan></text>
+        <text x="436" y="166" font-family="Newsreader, serif" font-size="14" fill="#4a3a2c">campo 2 · los créditos — un <tspan font-style="italic" fill="#6e1810">número</tspan></text>
+        <text x="436" y="196" font-family="Newsreader, serif" font-size="14" fill="#4a3a2c">campo 3 · el estado — <tspan font-style="italic" fill="#6e1810">sí o no</tspan></text>
+        <text x="436" y="232" font-family="Newsreader, serif" font-size="14" font-weight="600" fill="#a02418">¡el punto y coma es obligatorio!</text>
+
+        <!-- pie -->
+        <text x="212" y="276" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="13.5" fill="#8a7a6a">esto es sólo el molde: todavía no guarda nada</text>
+      </svg>
+    </div>
+
+    <div class="sec-prose" style="margin-top:40px;">
+      <p>Con el molde escrito, ya puedes crear estructuras y llenarlas. Aquí va con un ejemplo cualquiera —un libro— para que veas la forma completa; <strong>las estructuras de la práctica las escribes tú</strong>.</p>
+    </div>
+
+    <div class="codeswitch" style="margin-top:24px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">struct &middot; diccionario</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">que_es_una_estructura.cpp</span></div>
+<pre><span class="com">// Un ejemplo cualquiera para ver la SINTAXIS.</span>
+
+<span class="kw">struct</span> Libro {        <span class="com">// nombre del nuevo tipo</span>
+    <span class="kw">string</span> titulo;    <span class="com">// campo 1 (cadena)</span>
+    <span class="kw">int</span>    paginas;   <span class="com">// campo 2 (numero)</span>
+    <span class="kw">bool</span>   leido;     <span class="com">// campo 3 (estado)</span>
+};                    <span class="com">// ← el punto y coma es OBLIGATORIO</span>
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    Libro l;                      <span class="com">// declarar uno</span>
+    l.titulo  = <span class="str">"El Quijote"</span>;   <span class="com">// el PUNTO llega al campo</span>
+    l.paginas = <span class="num">863</span>;
+    l.leido   = <span class="kw">false</span>;
+
+    <span class="com">// y ahora lo importante para la practica:</span>
+    Libro repisa[<span class="num">3</span>];            <span class="com">// un ARREGLO de estructuras</span>
+    repisa[<span class="num">0</span>] = l;              <span class="com">// cada casillero, un libro entero</span>
+
+    cout &lt;&lt; repisa[<span class="num">0</span>].titulo &lt;&lt; endl;   <span class="out">// El Quijote</span>
     <span class="kw">return</span> <span class="num">0</span>;
 }</pre>
         </div>
       </div>
       <div class="cs-pane" data-lang="py" hidden>
         <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">tablero_gato.py · punto de partida</span></div>
-<pre><span class="com"># =====================================================</span>
-<span class="com"># Sesion 22 - Tablero de gato vacio (3x3)</span>
-<span class="com"># Fundamentos de Programacion - UNITEC Atizapan 26-3</span>
-<span class="com"># =====================================================</span>
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">que_es_una_estructura.py</span></div>
+<pre><span class="com"># Python no tiene struct: usa un DICCIONARIO,</span>
+<span class="com"># que es lo mismo con otra sintaxis.</span>
 
-FILAS = <span class="num">3</span>
-COLUMNAS = <span class="num">3</span>
-VACIO = <span class="str">" "</span>
+libro = {
+    <span class="str">"titulo"</span>:  <span class="str">"El Quijote"</span>,   <span class="com"># campo 1 (cadena)</span>
+    <span class="str">"paginas"</span>: <span class="num">863</span>,            <span class="com"># campo 2 (número)</span>
+    <span class="str">"leido"</span>:   <span class="kw">False</span>           <span class="com"># campo 3 (estado)</span>
+}
 
-<span class="com"># 1) Declaramos la matriz con la forma CORRECTA:</span>
-<span class="com">#    una fila nueva e independiente por cada vuelta.</span>
-tablero = [[VACIO] * COLUMNAS <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(FILAS)]
+<span class="fn">print</span>(libro[<span class="str">"titulo"</span>])       <span class="com"># los CORCHETES llegan al campo</span>
 
-<span class="com"># 2) La dibujamos fila por fila.</span>
-<span class="kw">def</span> <span class="fn">dibujar</span>(tab):
-    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(tab)):
-        fila = tab[i]
-        <span class="com"># " X | O |   " -> unimos las 3 casillas con barras</span>
-        <span class="fn">print</span>(<span class="str">f" {fila[0]} | {fila[1]} | {fila[2]} "</span>)
-        <span class="com"># linea separadora entre renglones (no tras el ultimo)</span>
-        <span class="kw">if</span> i &lt; <span class="fn">len</span>(tab) - <span class="num">1</span>:
-            <span class="fn">print</span>(<span class="str">"---+---+---"</span>)
+<span class="com"># y ahora lo importante para la práctica:</span>
+repisa = []                  <span class="com"># una LISTA de diccionarios</span>
+repisa.<span class="fn">append</span>(libro)        <span class="com"># cada casillero, un libro entero</span>
 
-<span class="fn">dibujar</span>(tablero)
-
-<span class="com"># RETO: ¿como dibujarias un tablero NxN sin escribir</span>
-<span class="com"># fila[0], fila[1], fila[2] a mano? Pista: " | ".join(...)</span></pre>
+<span class="fn">print</span>(repisa[<span class="num">0</span>][<span class="str">"titulo"</span>])   <span class="out"># El Quijote</span></pre>
         </div>
       </div>
+    </div>
+
+    <div class="sec-prose" style="margin-top:44px;">
+      <p>Y ahora la jugada que hace posible toda la práctica: si <span class="mono">Materia</span> ya es un tipo, entonces <strong>puedes hacer un arreglo de ellas</strong>. Cada casillero deja de guardar un número suelto y pasa a guardar una <em>ficha completa</em>.</p>
+    </div>
+
+    <div class="reg-fila">
+      <div class="registro hl">
+        <div class="rg-head">aprobadas[0]</div>
+        <div class="rg-row"><span class="rg-k">nombre</span><span class="rg-v">"Algebra"</span></div>
+        <div class="rg-row"><span class="rg-k">creditos</span><span class="rg-v">8</span></div>
+        <div class="rg-row"><span class="rg-k">aprobada</span><span class="rg-v">true</span></div>
+      </div>
+      <div class="registro">
+        <div class="rg-head">aprobadas[1]</div>
+        <div class="rg-row"><span class="rg-k">nombre</span><span class="rg-v">"Calculo I"</span></div>
+        <div class="rg-row"><span class="rg-k">creditos</span><span class="rg-v">10</span></div>
+        <div class="rg-row"><span class="rg-k">aprobada</span><span class="rg-v">true</span></div>
+      </div>
+      <div class="registro">
+        <div class="rg-head">aprobadas[2]</div>
+        <div class="rg-row"><span class="rg-k">nombre</span><span class="rg-v">"Estadistica"</span></div>
+        <div class="rg-row"><span class="rg-k">creditos</span><span class="rg-v">6</span></div>
+        <div class="rg-row"><span class="rg-k">aprobada</span><span class="rg-v no">false</span></div>
+      </div>
+    </div>
+    <p class="reg-cap"><strong>Un arreglo de estructuras: tres casilleros, tres fichas completas.</strong> Compáralo con la sección i, donde estos mismos nueve datos vivían repartidos en tres arreglos distintos. Aquí el <span class="mono">for</span> de siempre recorre <em>materias</em>, no columnas sueltas.</p>
+
+    <div class="acceso">
+      <span class="ac-label">CÓMO SE LLEGA A UN DATO</span>
+      <div class="ac-expr">
+        <div class="ac-p">
+          <span class="ac-c">aprobadas</span>
+          <span class="ac-l">el arreglo</span>
+        </div>
+        <div class="ac-p">
+          <span class="ac-c">[0]</span>
+          <span class="ac-l">¿cuál casillero?</span>
+        </div>
+        <div class="ac-p blood">
+          <span class="ac-c">.</span>
+          <span class="ac-l">se lee «su»</span>
+        </div>
+        <div class="ac-p">
+          <span class="ac-c">creditos</span>
+          <span class="ac-l">¿cuál campo?</span>
+        </div>
+      </div>
+      <p class="ac-read">«los <strong>créditos</strong> de la materia <strong>0</strong>» → <span class="mono">8</span></p>
+      <p class="ac-read" style="margin-top:12px; font-size:.95rem; color:var(--ink-soft);">En Python el punto se cambia por corchetes: <span class="mono">aprobadas[0]["creditos"]</span>.</p>
+    </div>
+
+    <div class="teoria-grid" style="margin-top:44px;">
+      <div class="teoria-card">
+        <h3>Sin estructura</h3>
+        <span class="mono-fn">materia[i] · creditos[i] · aprobada[i]</span>
+        <p><strong>Tres arreglos paralelos.</strong> Una materia queda repartida en tres lugares y el índice es lo único que la mantiene entera.</p>
+        <div class="verdict">3 arreglos que cuidar · 1 error los descuadra</div>
+      </div>
+      <div class="teoria-card blood">
+        <h3>Con estructura</h3>
+        <span class="mono-fn">aprobadas[i].nombre · aprobadas[i].creditos</span>
+        <p><strong>Un arreglo de estructuras.</strong> Cada casillero guarda la materia <em>completa</em>. Se mueve, se copia y se pasa a una función como una sola cosa.</p>
+        <div class="verdict">1 arreglo que cuidar · imposible descuadrar</div>
+      </div>
+    </div>
+
+    <div class="keypoint" style="margin-top:34px;"><strong>La regla, en una línea:</strong> un <em>arreglo</em> guarda muchos datos <strong>del mismo tipo</strong>; una <em>estructura</em> guarda pocos datos <strong>de distinto tipo</strong>. Y se combinan: un <span class="mono">arreglo de estructuras</span> es una fila de casilleros donde cada casillero es una ficha completa. Eso es la práctica de hoy.</div>
+  </section>
+
+  <!-- SECCIÓN v: LIVE CODING · UNIDATA -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">v.</div>
+      <div>
+        <h2 class="display">Live coding: armamos <em class="blood">«UniData»</em>.</h2>
+        <p>Ya tenemos las cuatro piezas sueltas —arreglo, cadena, matriz y estructura—. Ahora las juntamos en <strong>un solo sistema</strong>, que construimos <strong>en vivo, en clase</strong>. En esta página queda el <strong>plano</strong>: los pasos y las firmas, no las respuestas.</p>
+      </div>
+    </div>
+
+    <div class="sec-prose">
+      <p><strong>Indicación 1 de la práctica:</strong> dos estructuras. Una para la <em>materia</em> y otra para el <em>estudiante</em> —y la del estudiante lleva dentro un <strong>arreglo de materias</strong>, justo el que acabamos de dibujar. Éste es el mapa que acordamos en clase; la sintaxis la escribes tú.</p>
+    </div>
+
+    <div class="structs">
+      <div class="stc">
+        <div class="stc-head"><span class="kw">struct</span> <span class="nm">Materia</span> { … };</div>
+        <div class="stc-body">
+          <div class="fld">
+            <span class="f-t">string nombre</span>
+            <span class="f-d"><strong>El nombre de la materia.</strong> Una <em>cadena</em> — puede traer espacios, así que léela con <span class="mono">getline</span>.</span>
+          </div>
+          <div class="fld">
+            <span class="f-t">int creditos</span>
+            <span class="f-d"><strong>Cuántos créditos vale.</strong> Es el número que después vas a sumar.</span>
+          </div>
+          <div class="fld">
+            <span class="f-t">bool aprobada</span>
+            <span class="f-d"><strong>El estado:</strong> aprobada o no aprobada. Un <span class="mono">bool</span> basta.</span>
+          </div>
+        </div>
+      </div>
+      <div class="stc">
+        <div class="stc-head"><span class="kw">struct</span> <span class="nm">Estudiante</span> { … };</div>
+        <div class="stc-body">
+          <div class="fld">
+            <span class="f-t">string nombre</span>
+            <span class="f-d"><strong>El nombre del estudiante.</strong> Otra cadena.</span>
+          </div>
+          <div class="fld">
+            <span class="f-t">string matricula</span>
+            <span class="f-d"><strong>Su número de matrícula.</strong> Cadena, no <span class="mono">int</span>: puede empezar con cero y no se hacen cuentas con ella.</span>
+          </div>
+          <div class="fld">
+            <span class="f-t arr">Materia aprobadas[MAX]</span>
+            <span class="f-d"><strong>El arreglo de materias aprobadas.</strong> Aquí se juntan las dos estructuras: un arreglo cuyo tipo es <em>tu propia</em> estructura.</span>
+          </div>
+          <div class="fld">
+            <span class="f-t">int cuantas</span>
+            <span class="f-d"><strong>Cuántas registró de verdad.</strong> El arreglo tiene tamaño fijo; este contador dice hasta dónde está lleno.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-prose" style="margin-top:40px;">
+      <p><strong>Indicaciones 2 y 3:</strong> tres funciones sobre el arreglo de materias. Fíjate en el patrón —las tres <em>recorren lo mismo</em> y cambian solo en qué hacen en cada vuelta: una <em>llena</em>, otra <em>acumula</em> y la tercera <em>cuenta</em>. Las tres reciben el arreglo directo (<span class="mono">alumno.aprobadas</span>), que en C++ ya viaja por referencia: <strong>no necesitan</strong> <span class="mono">&amp;</span>.</p>
+    </div>
+
+    <div class="modmap">
+      <div class="mod a">
+        <div class="mod-k">indicación 2 · llenar</div>
+        <h4>Ingresar materias</h4>
+        <span class="fnchip">ingresar_materias(Materia lista[], int cuantas)</span>
+        <p><strong>Llena el arreglo de estructuras.</strong> Un <span class="mono">for</span> que, en cada vuelta, pide nombre, créditos y estado y los guarda en <span class="mono">lista[i].nombre</span>, <span class="mono">lista[i].creditos</span> y <span class="mono">lista[i].aprobada</span>.</p>
+      </div>
+      <div class="mod b">
+        <div class="mod-k">indicación 2 · acumular</div>
+        <h4>Sumar créditos</h4>
+        <span class="fnchip">sumar_creditos(Materia lista[], int cuantas) → int</span>
+        <p><strong>Recorre y suma.</strong> El mismo <span class="mono">for</span>, pero acumulando <span class="mono">lista[i].creditos</span> cuando <span class="mono">lista[i].aprobada</span> es cierto. <em>Devuelve</em> el total con <span class="mono">return</span>.</p>
+      </div>
+      <div class="mod c">
+        <div class="mod-k">indicación 3 · contar</div>
+        <h4>Contar materias</h4>
+        <span class="fnchip">contar_materias(Materia lista[], int cuantas) → int</span>
+        <p><strong>Recorre y cuenta.</strong> Cuántas de las materias registradas están aprobadas. Recorrer para contar es el otro uso clásico del ciclo.</p>
+      </div>
+    </div>
+
+    <div class="keypoint" style="margin-top:30px;"><strong>Y la matriz, que no se te olvide:</strong> la indicación 3 pide además <em>definir la matriz de materias seriadas</em> —renglón = materia, columna = las que dependen de ella— y hacer algo con ella. Con <strong>tres materias basta</strong>: es una matriz de 3×3, nueve números. Es el criterio de evaluación <span class="mono">«operaciones dentro de la matriz»</span>: recórrela con el doble <span class="mono">for</span> y muestra el mapa.</div>
+
+    <!-- Plano descargable -->
+    <div class="codeswitch full" style="margin-top:44px;">
+      <div class="cs-tabs">
+        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
+        <button type="button" class="cs-tab" data-lang="py">Python</button>
+        <span class="cs-flag">plano guiado &middot; C++</span>
+      </div>
+      <div class="cs-pane" data-lang="cpp">
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">unidata.cpp</span></div>
+<pre><span class="com">// UNIDATA · PLANO GUIADO — escribe el codigo de cada paso</span>
+
+<span class="com">// PASO 1: incluye &lt;iostream&gt; y &lt;string&gt;</span>
+
+<span class="kw">using namespace</span> std;
+<span class="kw">const</span> <span class="kw">int</span> MAX = <span class="num">3</span>;    <span class="com">// caben en el arreglo</span>
+<span class="kw">const</span> <span class="kw">int</span> PLAN = <span class="num">3</span>;   <span class="com">// materias del plan</span>
+
+<span class="com">// ---- LAS DOS ESTRUCTURAS (indicacion 1) ----</span>
+<span class="com">// PASO 2: struct Materia    → nombre, creditos, aprobada</span>
+<span class="com">// PASO 3: struct Estudiante → nombre, matricula,</span>
+<span class="com">//         Materia aprobadas[MAX], cuantas</span>
+
+<span class="com">// ---- LAS TRES FUNCIONES (indicaciones 2 y 3) ----</span>
+<span class="com">// PASO 4: void ingresar_materias(Materia lista[], int cuantas)</span>
+<span class="com">// PASO 5: int  sumar_creditos(Materia lista[], int cuantas)</span>
+<span class="com">// PASO 6: int  contar_materias(Materia lista[], int cuantas)</span>
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="com">// PASO 7: string plan[PLAN] + int seriacion[PLAN][PLAN]</span>
+    <span class="com">// PASO 8: declara un Estudiante, lee sus datos, llama a</span>
+    <span class="com">//         ingresar_materias(alumno.aprobadas, alumno.cuantas)</span>
+    <span class="com">//         y muestra el reporte</span>
+    <span class="com">// PASO 9: doble for ANIDADO sobre la matriz</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="com">/* CONCLUSIONES: ¿por que usar arreglos?</span>
+<span class="com">   ¿para que sirven las cadenas y las matrices? */</span></pre>
+        </div>
+      </div>
+      <div class="cs-pane" data-lang="py" hidden>
+        <div class="code-block">
+          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">unidata.py</span></div>
+<pre><span class="com"># UNIDATA · PLANO GUIADO — escribe el código de cada paso</span>
+
+PLAN = <span class="num">3</span>
+
+<span class="com"># ---- LAS DOS ESTRUCTURAS (indicación 1) ----</span>
+<span class="com"># PASO 1: una MATERIA = {"nombre", "creditos", "aprobada"}</span>
+<span class="com"># PASO 2: un ESTUDIANTE = {"nombre", "matricula",</span>
+<span class="com">#                          "aprobadas": []}</span>
+
+<span class="com"># ---- LAS TRES FUNCIONES (indicaciones 2 y 3) ----</span>
+<span class="com"># PASO 3: def ingresar_materias(lista, cuantas)</span>
+<span class="com"># PASO 4: def sumar_creditos(lista, cuantas)</span>
+<span class="com"># PASO 5: def contar_materias(lista, cuantas)</span>
+
+<span class="com"># ---- EL PROGRAMA PRINCIPAL ----</span>
+<span class="com"># PASO 6: plan = ["Álgebra", ...]  +  seriacion = [[...], ...]</span>
+<span class="com"># PASO 7: crea al alumno, llama a ingresar_materias</span>
+<span class="com">#         y muestra el reporte</span>
+<span class="com"># PASO 8: doble for ANIDADO sobre la matriz</span>
+
+<span class="com"># CONCLUSIONES: ¿por qué usar arreglos?</span>
+<span class="com"># ¿para qué sirven las cadenas y las matrices?</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="download-box">
+      <div class="db-head">
+        <div>
+          <h3>UniData · el plano del sistema</h3>
+          <div class="file-meta">unidata.cpp · 9 pasos guiados · C++ (y Python como apoyo)</div>
+        </div>
+        <div class="dl-col">
+          <a class="dl-btn" href="unidata.cpp" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
+            Descargar el plano (C++)
+          </a>
+          <a class="dl-alt" href="unidata.py" download>↓ versión en Python</a>
+        </div>
+      </div>
+      <div class="db-body">
+        <p>Solo los pasos <strong>PASO a PASO</strong>, con la pista de qué va en cada uno. Ábrelo en Dev C++ (o VS Code) y ve escribiendo el código debajo de cada paso mientras armamos el sistema. <strong>Cada línea la escribes tú.</strong></p>
+      </div>
+    </div>
+
+    <!-- SOLUCIÓN SELLADA -->
+    <div class="solucion">
+      <span class="sol-label">Solución sellada</span>
+      <div class="sol-head">
+        <div>
+          <h3>La lógica, sin la sintaxis.</h3>
+          <p class="sol-hint">Si te atoras, aquí está el <strong>flujo entero</strong> del programa —como diagrama, no como código—. Traducirlo a arreglos, funciones y ciclos de C++ sigue siendo <strong>tu trabajo</strong>, y es justo lo que se evalúa. Ábrelo solo después de intentarlo.</p>
+        </div>
+        <button type="button" class="sol-btn" id="solBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="sb-txt">Ver la solución</span>
+        </button>
+      </div>
+
+      <div class="sol-body" id="solBody" hidden>
+        <div class="sol-sub">A · El flujo del programa principal</div>
+        <div class="sol-flow">
+          <svg viewBox="0 0 760 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo: leer los datos del alumno, llenar el arreglo de materias, calcular créditos y recorrer la matriz de seriación">
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#2a1d14"/>
+              </marker>
+            </defs>
+
+            <!-- INICIO -->
+            <ellipse cx="300" cy="38" rx="70" ry="24" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="44" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="16" fill="#efe6d2">INICIO</text>
+            <line x1="300" y1="62" x2="300" y2="88" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- E/S: leer alumno -->
+            <path d="M165,90 L455,90 L431,142 L141,142 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="298" y="112" text-anchor="middle" font-family="Newsreader, serif" font-size="14" fill="#2a1d14">Leer nombre y matrícula</text>
+            <text x="298" y="131" text-anchor="middle" font-family="Newsreader, serif" font-size="13" fill="#6e1810">(cadenas)</text>
+            <line x1="300" y1="142" x2="300" y2="168" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- proceso: cuantas materias -->
+            <rect x="175" y="170" width="250" height="46" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="198" text-anchor="middle" font-family="Newsreader, serif" font-size="14" fill="#2a1d14">Leer cuántas materias aprobó</text>
+            <line x1="300" y1="216" x2="300" y2="242" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- proceso i = 0 -->
+            <rect x="228" y="244" width="144" height="44" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="272" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="#2a1d14">i = 0</text>
+            <line x1="300" y1="288" x2="300" y2="314" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <!-- decision -->
+            <polygon points="300,317 412,374 300,431 188,374" fill="#efe6d2" stroke="#a02418" stroke-width="2"/>
+            <text x="300" y="379" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#2a1d14">¿i &lt; cuantas?</text>
+            <text x="420" y="336" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">llenar el arreglo</text>
+
+            <!-- No -> calcular -->
+            <line x1="412" y1="374" x2="470" y2="374" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="441" y="362" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">No</text>
+
+            <rect x="472" y="350" width="256" height="50" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="600" y="371" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Calcular total y créditos</text>
+            <text x="600" y="390" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11.5" fill="#6e1810">contar_materias · sumar_creditos</text>
+            <line x1="600" y1="400" x2="600" y2="426" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <path d="M496,428 L728,428 L704,478 L472,478 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="600" y="459" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Mostrar el expediente</text>
+            <line x1="600" y1="478" x2="600" y2="504" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <rect x="472" y="506" width="256" height="56" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="600" y="528" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Recorrer la MATRIZ (doble for):</text>
+            <text x="600" y="548" text-anchor="middle" font-family="Newsreader, serif" font-size="13" fill="#6e1810">¿qué materias abre cada una?</text>
+            <line x1="600" y1="562" x2="600" y2="590" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <ellipse cx="600" cy="616" rx="48" ry="23" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="600" y="622" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="15" fill="#efe6d2">FIN</text>
+
+            <!-- Si -> llenar arreglo -->
+            <line x1="300" y1="431" x2="300" y2="457" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="318" y="450" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">Sí</text>
+
+            <path d="M188,459 L440,459 L416,501 L164,501 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="302" y="486" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Leer nombre, créditos y estado</text>
+            <line x1="300" y1="501" x2="300" y2="523" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <rect x="170" y="525" width="260" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="551" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#2a1d14">guardar en lista[i] (la estructura)</text>
+            <line x1="300" y1="567" x2="300" y2="589" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+
+            <rect x="235" y="591" width="130" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
+            <text x="300" y="617" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#2a1d14">i = i + 1</text>
+
+            <!-- loop back -->
+            <path d="M235,612 L110,612 L110,374 L188,374" fill="none" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
+            <text x="152" y="602" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">siguiente materia</text>
+          </svg>
+        </div>
+        <div class="sol-legend">
+          <span class="li"><svg viewBox="0 0 30 20"><ellipse cx="15" cy="10" rx="13" ry="8" fill="#5d6638" stroke="#2a1d14"/></svg> inicio / fin</span>
+          <span class="li"><svg viewBox="0 0 30 20"><rect x="2" y="3" width="26" height="14" fill="#e6dbc2" stroke="#2a1d14"/></svg> proceso</span>
+          <span class="li"><svg viewBox="0 0 30 20"><path d="M7,3 L28,3 L23,17 L2,17 Z" fill="#efe6d2" stroke="#2a1d14"/></svg> entrada / salida</span>
+          <span class="li"><svg viewBox="0 0 30 20"><polygon points="15,1 29,10 15,19 1,10" fill="#efe6d2" stroke="#a02418" stroke-width="1.5"/></svg> decisión</span>
+        </div>
+
+        <div class="sol-sub two">B · Qué hace cada pieza en una línea</div>
+        <div class="modmap" style="margin-top:8px;">
+          <div class="mod a">
+            <div class="mod-k">estructura + arreglo</div>
+            <h4>Un for, tres usos</h4>
+            <span class="fnchip">llenar → lista[i].nombre = ...</span>
+            <span class="fnchip">sumar → total += lista[i].creditos</span>
+            <span class="fnchip">contar → total = total + 1</span>
+            <p>El mismo recorrido con tres finales distintos. Si escribes bien el primero, los otros dos son variaciones de tres líneas.</p>
+          </div>
+          <div class="mod b">
+            <div class="mod-k">cadena</div>
+            <h4>getline, no cin</h4>
+            <span class="fnchip">getline(cin, lista[i].nombre);</span>
+            <span class="fnchip">cin.ignore();  ← antes del getline</span>
+            <p>«Cálculo I» son dos palabras: <span class="mono">cin &gt;&gt;</span> se queda con la primera. Usa <span class="mono">getline</span> y limpia el <em>enter</em> pendiente con <span class="mono">cin.ignore()</span>.</p>
+          </div>
+          <div class="mod c">
+            <div class="mod-k">matriz</div>
+            <h4>El doble for</h4>
+            <span class="fnchip">for (f...) { for (c...) { } }</span>
+            <span class="fnchip">if (seriacion[f][c] == 1)</span>
+            <p>El exterior fija el renglón; el interior barre sus columnas. Un salto de línea al cerrar el <em>for</em> exterior y la salida queda acomodada.</p>
+          </div>
+        </div>
+        <p class="sol-caption">Ningún paso es nuevo: el arreglo es la fila de casilleros, la cadena es una fila de letras y la matriz es el <strong>doble ciclo anidado</strong> que ya usaste en la Práctica 4. Lo único que se agrega hoy es la <strong>estructura</strong>, que mete los tres datos de una materia en un solo casillero del arreglo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN vi: ENTREGABLE -->
+  <section class="ejercicios reveal">
+    <div class="s-head">
+      <div class="n blood display">vi.</div>
+      <div>
+        <h2 class="display">Tu <em class="blood">entregable</em>: un programa y un documento.</h2>
+        <p>La Práctica 6 tiene <strong>dos piezas</strong>: el sistema «UniData» y un documento breve, en PDF o Word, que cuenta cómo lo lograste. Todo se sube a la actividad <strong>«Práctica 6»</strong> en Blackboard.</p>
+      </div>
+    </div>
+
+    <p class="ej-intro">Crea <strong>un programa en C++</strong> que utilice <em>arreglos, cadenas y matrices</em> para llevar el expediente de créditos de «UniData». Guárdalo también en tu memoria USB — el laboratorio no perdona los archivos huérfanos.</p>
+
+    <div class="ej-card">
+      <span class="ej-tag">Parte A</span>
+      <span class="ej-pill">programa · unidata.cpp</span>
+      <div class="ej-body">
+        <div>
+          <h3>El sistema de créditos</h3>
+          <p class="ej-desc">Un programa con las <strong>dos estructuras</strong>, las <strong>tres funciones</strong> sobre el arreglo de materias y la <strong>matriz</strong> de materias seriadas del plan. Parte del plano <span class="mono">unidata.cpp</span>.</p>
+          <ul class="reqs">
+            <li><strong>Estructura Materia</strong> — nombre (cadena), número de créditos y estado</li>
+            <li><strong>Estructura Estudiante</strong> — nombre, matrícula y un <span class="mono">arreglo</span> de materias aprobadas</li>
+            <li>Función que <strong>ingresa</strong> las materias aprobadas en el arreglo</li>
+            <li>Función que <strong>suma los créditos</strong> de las materias aprobadas</li>
+            <li>Función que <strong>recorre y cuenta</strong> cuántas materias aprobadas tiene el estudiante</li>
+            <li>Una <span class="mono">matriz</span> de <strong>materias seriadas</strong> —basta de <strong>3×3</strong>—: renglón = materia, columna = las que dependen de ella</li>
+            <li>Comentarios y tus <strong>conclusiones</strong> al final del código</li>
+          </ul>
+        </div>
+        <div class="ej-preview">
+          <div class="pv-label">Así debe verse al correr</div>
+          <div class="term">
+            <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — unidata</span></div>
+            <div class="term-body">
+              <span class="prompt">$ ./unidata</span><br/><br/>
+              <span class="head-l">===== UniData · expediente =====</span><br/>
+              Alumno:    Ana Lopez Ruiz<br/>
+              Matricula: 20260427<br/><br/>
+              Materias aprobadas: <span class="num-l">2</span><br/>
+              Creditos aprobados:   <span class="num-l">18</span><br/><br/>
+              <span class="head-l">--- Seriacion del plan ---</span><br/>
+              <span class="keep">Algebra</span>     abre: Calculo I<br/>
+              <span class="keep">Calculo I</span>   abre: Estadistica<br/>
+              <span class="keep">Estadistica</span> abre: (ninguna)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ej-card">
+      <span class="ej-tag">Parte B</span>
+      <span class="ej-pill">documento · pdf / word</span>
+      <div class="ej-body">
+        <div>
+          <h3>El documento de la práctica</h3>
+          <p class="ej-desc">Un documento en <strong>PDF o Word</strong> que narre tu práctica: qué hiciste, cómo estructuraste los datos y qué aprendiste. Breve y honesto vale más que largo y copiado. Las conclusiones responden a <em>dos preguntas concretas</em>.</p>
+          <ul class="reqs">
+            <li><strong>Portada</strong> — nombre de la práctica, alumno, matrícula, materia, profesor y fecha</li>
+            <li><strong>Introducción</strong> — qué son los arreglos, las cadenas y las matrices</li>
+            <li><strong>Desarrollo</strong> — tus estructuras, tus funciones y tu matriz, con capturas del código y de la ejecución</li>
+            <li><strong>Conclusiones</strong> — responde: <em>¿por qué es importante utilizar arreglos?</em> y <em>¿para qué sirven las cadenas y las matrices?</em></li>
+            <li><strong>Bibliografía</strong> — en formato <strong>APA</strong> (abajo las dos referencias base)</li>
+          </ul>
+        </div>
+        <div class="ej-preview">
+          <div class="pv-label">Estructura del documento</div>
+          <div class="doc-mock">
+            <div class="dm-title">Práctica 6 · Tipos de datos estructurados</div>
+            <div class="dm-sec"><span class="dm-n">1.</span><span class="dm-t"><strong>Portada</strong> — práctica, alumno, matrícula, materia, profesor, fecha</span></div>
+            <div class="dm-sec"><span class="dm-n">2.</span><span class="dm-t"><strong>Introducción</strong> — arreglos, cadenas y matrices</span></div>
+            <div class="dm-sec"><span class="dm-n">3.</span><span class="dm-t"><strong>Desarrollo</strong> — estructuras, funciones y matriz + capturas</span></div>
+            <div class="dm-sec"><span class="dm-n">4.</span><span class="dm-t"><strong>Conclusiones</strong> — las dos preguntas de la práctica</span></div>
+            <div class="dm-sec"><span class="dm-n">5.</span><span class="dm-t"><strong>Bibliografía</strong> — formato APA</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="choose-note">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg>
+      <p><strong>Importante:</strong> todo se entrega en la actividad <strong>«Práctica 6» de Blackboard</strong>: el código fuente <strong>.cpp</strong>, su copia en <strong>.txt</strong> y el documento <strong>PDF o Word</strong>. Las conclusiones van <strong>dos veces</strong>: como comentario al final del programa y como sección del documento.</p>
     </div>
   </section>
 
@@ -734,30 +1574,39 @@ tablero = [[VACIO] * COLUMNAS <span class="kw">for</span> _ <span class="kw">in<
     <div class="panel">
       <h3 class="display">Criterios de <em>evaluación</em></h3>
       <ol class="crit-list">
-        <li><strong>Sin errores de sintaxis ni de ejecución</strong> — el programa corre completo y dibuja el tablero sin reventar.</li>
-        <li><strong>Lógica correcta</strong> — la matriz es realmente 3×3, con filas <em>independientes</em> (nada de la trampa del <span class="mono">*</span>).</li>
-        <li><strong>Funcionamiento óptimo</strong> — el tablero se ve alineado, con sus separadores de filas y columnas.</li>
-        <li><strong>Autenticidad</strong> — código escrito por ti, no copiado de un compañero.</li>
+        <li><strong>Declaración de las estructuras</strong> — las dos estructuras existen, con todos sus campos y con el arreglo de materias dentro del estudiante.</li>
+        <li><strong>Operaciones dentro de la matriz</strong> — la matriz de materias seriadas está definida y se recorre con el doble <span class="mono">for</span> para obtener algo útil.</li>
+        <li><strong>Organización y estructuración</strong> — variables con nombre claro, tipos de datos correctos y sintaxis limpia; el programa <strong>compila</strong> sin errores.</li>
+        <li><strong>Autenticidad</strong> — código escrito por ti, con tus comentarios y tus conclusiones.</li>
       </ol>
+      <div class="pond">
+        <h4>Cómo cuenta en el curso</h4>
+        <p>Ésta es la última de las seis prácticas y suma al bloque de <strong>prácticas y entregables</strong>. Recuerda la aritmética del curso: Actividades 10% · Examen Bimestral 40% (examen 20% + prácticas 20%) · Examen Final 50% (examen 25% + prácticas 25%).</p>
+      </div>
     </div>
 
     <div class="panel">
       <h3 class="display">Evidencia a <em>entregar</em></h3>
       <div class="evid-item">
-        <span class="file-ic">.py</span>
-        <span class="ev-txt"><strong>tablero_gato.py</strong> — declara la matriz 3×3 vacía y la dibuja en consola con sus líneas separadoras.</span>
+        <span class="file-ic">.cpp</span>
+        <span class="ev-txt"><strong>unidata.cpp</strong> — el programa con arreglos, cadenas y matrices (documento ejecutable o archivo en extensión <span class="mono">.cpp</span>).</span>
       </div>
       <div class="evid-item">
-        <span class="file-ic">.png</span>
-        <span class="ev-txt"><strong>Captura</strong> de la terminal mostrando el tablero vacío dibujado tal como lo pide la práctica.</span>
+        <span class="file-ic">.txt</span>
+        <span class="ev-txt"><strong>Copia del código en texto plano</strong> — el programa pegado en el Bloc de notas.</span>
       </div>
       <div class="evid-item">
-        <span class="file-ic">.md</span>
-        <span class="ev-txt"><strong>README.md</strong> — breve nota: cómo declaraste la matriz y por qué evitaste la trampa del <span class="mono">[...] * 3</span>.</span>
+        <span class="file-ic">.pdf / .docx</span>
+        <span class="ev-txt"><strong>El documento</strong> con Portada, Introducción, Desarrollo, Conclusiones y Bibliografía en formato APA (Parte B).</span>
       </div>
       <div class="conclu-note">
-        <h4>Entrega vía GitHub</h4>
-        <p>Sube tu trabajo a la carpeta <span class="mono">sesion-22/</span> de tu repositorio con un commit claro, p. ej. <span class="mono">"sesion-22: tablero de gato vacío"</span>. El repositorio es tu entregable del curso.</p>
+        <h4>No olvides tus conclusiones en el código</h4>
+        <p>Al final del programa, en forma de comentario (<span class="mono">/* ... */</span> en C++, <span class="mono">#</span> en Python), responde las dos preguntas: <em>¿por qué es importante utilizar arreglos?</em> y <em>¿para qué sirven las cadenas y las matrices?</em></p>
+      </div>
+      <div class="biblio">
+        <h4>Bibliografía de la práctica (formato APA)</h4>
+        <p>Joyanes Aguilar, L. (2013). <em>Fundamentos generales de programación.</em> McGraw-Hill.</p>
+        <p>Joyanes Aguilar, L. y Zahonero Martínez, I. (2014). <em>Programación en C/C++, Java y UML.</em> McGraw-Hill.</p>
       </div>
     </div>
   </section>
@@ -766,20 +1615,21 @@ tablero = [[VACIO] * COLUMNAS <span class="kw">for</span> _ <span class="kw">in<
   <section class="cierre reveal">
     <div class="small-caps">Una última cosa antes de cerrar</div>
     <div class="quote display">
-      «El universo (que otros llaman la Biblioteca) se compone de un<br/>
-      número <span class="em-ochre">indefinido</span>, y tal vez <span class="em">infinito</span>, de galerías.»
+      «Muéstrame tus <span class="em-ochre">diagramas de flujo</span> y ocúltame tus tablas,<br/>
+      y seguiré desconcertado. Muéstrame tus <span class="em">tablas</span><br/>
+      y no necesitaré tus diagramas: serán evidentes.»
     </div>
-    <div class="quote-author">— Jorge Luis Borges</div>
-    <div class="quote-meta">«La biblioteca de Babel», Ficciones, 1944 · anaqueles y galerías: filas y columnas sin fin</div>
+    <div class="quote-author">— Frederick P. Brooks</div>
+    <div class="quote-meta">The Mythical Man-Month · 1975 · primero los datos, después el algoritmo</div>
     <div class="sig">C. D. Vaca
       <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
     </div>
   </section>
 
   <footer>
-    Sesión 22 <span class="dot">·</span> Dos dimensiones <span class="dot">·</span> 26-3
+    Sesión 22 <span class="dot">·</span> Práctica 6 · El expediente <span class="dot">·</span> 26-3
     <div class="nav-prev">
-      ← Vuelve a <a href="../sesion-21/index.html">Sesión 21 · Buscar y ordenar</a>
+      ← Vuelve a <a href="../sesion-21/index.html">Sesión 21 · Práctica 5 · El taller de figuras</a>
       &nbsp;·&nbsp;
       <a href="../">índice del curso</a>
     </div>
@@ -802,6 +1652,17 @@ tablero = [[VACIO] * COLUMNAS <span class="kw">for</span> _ <span class="kw">in<
     var lang = tab.getAttribute("data-lang");
     sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
     sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
+  });
+
+  /* ===== Solución sellada ===== */
+  const solBtn = document.getElementById('solBtn');
+  const solBody = document.getElementById('solBody');
+  solBtn.addEventListener('click', function(){
+    const abrir = solBody.hidden;
+    solBody.hidden = !abrir;
+    solBtn.classList.toggle('open', abrir);
+    solBtn.querySelector('.sb-txt').textContent = abrir ? 'Ocultar la solución' : 'Ver la solución';
+    if (abrir) solBody.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 </script>
 
