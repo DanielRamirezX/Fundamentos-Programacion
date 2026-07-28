@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sesión 20 · Práctica 5 · Diseño modular, funciones y aplicaciones gráficas</title>
+<title>Sesión 20 · Sin sesión · Evento en Auditorio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,300;1,9..144,600;1,9..144,900&family=Newsreader:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -15,8 +15,6 @@
     --ochre: #b5852a; --ochre-deep: #8a6320;
     --olive: #5d6638; --olive-deep: #424a26;
     --line: rgba(42,29,20,.18);
-    --term-blue: #4a6b86; --grid-blue: #4a6b86;
-    --c-kw: #f0c8a0; --c-str: #c8dd96; --c-num: #f5b08c; --c-com: rgba(239,230,210,.45); --c-fn: #f0d8b0; --c-base: #efe6d2;
   }
   *{box-sizing:border-box} html,body{margin:0;padding:0} html{ scroll-behavior: smooth; }
   body{
@@ -36,9 +34,6 @@
   .display{ font-family: "Fraunces", serif; font-optical-sizing: auto; font-variation-settings: "SOFT" 100, "WONK" 1; letter-spacing: -.015em; line-height: 1; }
   .mono{ font-family: "JetBrains Mono", monospace; }
   .small-caps{ text-transform: uppercase; letter-spacing: .22em; font-size: .72rem; font-weight: 600; }
-  .underline-ochre{ position: relative; padding-bottom: .15em; }
-  .underline-ochre::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:.35em; background-repeat:no-repeat; background-position:0 100%; background-size:0% .35em; transition: background-size 1.4s cubic-bezier(.6,0,.2,1) .3s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'><path d='M2 5 Q 50 1 100 4 T 198 5' stroke='%23b5852a' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>"); }
-  .in.underline-ochre::after, .in .underline-ochre::after{ background-size: 100% .35em; }
 
   /* TOP BAR */
   .top{ display:flex; justify-content: space-between; align-items: center; padding: 22px 0 16px; border-bottom: 1.5px solid var(--ink); margin-bottom: 60px; }
@@ -48,296 +43,47 @@
   .top .right{ text-align:right; font-size:.78rem; letter-spacing:.05em; }
 
   /* HERO */
-  .hero{ position: relative; padding: 30px 0 60px; }
+  .hero{ position: relative; padding: 30px 0 40px; }
   .hero .session-no{ position: absolute; top: -40px; right: -10px; font-family: "Fraunces", serif; font-weight: 900; font-size: clamp(180px, 28vw, 360px); line-height: .85; color: var(--paper-deep); z-index: 0; user-select: none; letter-spacing: -.05em; }
-  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--ochre); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
-  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--ochre); }
-  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(54px, 8.5vw, 120px); line-height: .95; margin: 0 0 32px; letter-spacing: -.02em; }
+  .hero .kicker{ position: relative; z-index: 2; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: var(--blood); margin-bottom: 28px; display:flex; align-items:center; gap: 16px; }
+  .hero .kicker::before{ content:""; display:inline-block; width: 50px; height: 2px; background: var(--blood); }
+  .hero h1{ position: relative; z-index: 2; font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(48px, 7.5vw, 104px); line-height: .98; margin: 0 0 32px; letter-spacing: -.02em; }
   .hero h1 .em{ font-style: italic; font-weight: 600; color: var(--blood); }
-  .hero h1 .em-ochre{ font-style: italic; font-weight: 600; color: var(--ochre); }
-  .hero .lede{ position: relative; z-index: 2; max-width: 760px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
+  .hero .lede{ position: relative; z-index: 2; max-width: 720px; font-size: 1.22rem; line-height: 1.55; color: var(--ink-soft); }
   .hero .lede em{ color: var(--ink); font-style: italic; }
   .hero .lede strong{ color: var(--blood); font-weight: 600; }
 
-  /* BANNERS */
-  .cont-banner{ margin: 40px 0 0; padding: 18px 26px; background: var(--paper-deep); border: 1.5px solid var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; position: relative; z-index: 2; }
-  .cont-banner .ic{ width: 34px; height: 34px; color: var(--blood); flex-shrink: 0; }
-  .cont-banner .txt{ font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
-  .cont-banner .txt strong{ color: var(--blood); font-style: normal; font-weight: 600; }
+  /* AVISO SELLADO */
+  .aviso{ margin: 56px 0 0; border: 2px solid var(--blood); background: var(--paper-deep); padding: 46px 44px 44px; position: relative; text-align: center; }
+  .aviso .av-label{ position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--blood); color: var(--paper); padding: 5px 18px; font-size: .7rem; letter-spacing: .22em; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+  .aviso .ic{ width: 56px; height: 56px; color: var(--blood); margin-bottom: 20px; }
+  .aviso .av-txt{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; color: var(--ink); letter-spacing: -.01em; max-width: 820px; margin: 0 auto; }
+  .aviso .av-sub{ margin-top: 24px; font-size: 1.02rem; color: var(--ink-soft); max-width: 620px; margin-left: auto; margin-right: auto; line-height: 1.55; }
+  .aviso .av-sub strong{ color: var(--blood); font-weight: 600; }
 
   /* FICHA */
   .ficha{ margin: 50px 0 0; border: 1.5px solid var(--ink); background: var(--paper-deep); position: relative; }
   .ficha .f-label{ position: absolute; top: -13px; left: 26px; background: var(--ink); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
-  .ficha-grid{ display: grid; grid-template-columns: repeat(4, 1fr); }
-  @media (max-width: 820px){ .ficha-grid{ grid-template-columns: repeat(2,1fr); } }
-  @media (max-width: 480px){ .ficha-grid{ grid-template-columns: 1fr; } }
+  .ficha-grid{ display: grid; grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 820px){ .ficha-grid{ grid-template-columns: 1fr; } }
   .ficha-cell{ padding: 18px 22px; border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
   .ficha-cell .fc-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
   .ficha-cell .fc-value{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.02rem; color: var(--ink); line-height: 1.3; }
-  .ficha-cell.wide{ grid-column: 1 / -1; border-right: none; }
-  .ficha-cell .fc-value.obj{ font-style: italic; font-weight: 400; font-size: 1.05rem; line-height: 1.5; }
 
-  /* SECTION HEADERS */
-  .sec{ margin: 100px 0; }
-  .sec .s-head{ display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: end; margin-bottom: 30px; }
-  @media (max-width: 700px){ .sec .s-head{ grid-template-columns: 1fr; gap: 8px; } }
-  .sec .s-head .n{ font-family: "Fraunces", serif; font-weight: 900; font-style: italic; font-size: clamp(56px, 8vw, 110px); line-height: .8; color: var(--ochre); }
-  .sec .s-head .n.blood{ color: var(--blood); }
-  .sec .s-head h2{ font-family: "Fraunces", serif; font-weight: 300; font-size: clamp(30px, 4.5vw, 54px); line-height: 1; margin: 0 0 12px; letter-spacing: -.01em; }
-  .sec .s-head h2 em{ font-style: italic; color: var(--ochre); font-weight: 600; }
-  .sec .s-head h2 em.blood{ color: var(--blood); }
-  .sec .s-head p{ margin: 0; color: var(--ink-soft); font-size: 1.05rem; max-width: 720px; }
-  .sec .s-head p strong{ color: var(--blood); }
+  /* DESTINO */
+  .destino{ margin: 56px 0 0; display: grid; grid-template-columns: auto 1fr auto; gap: 26px; align-items: center; background: var(--ink); color: var(--paper); padding: 30px 34px; }
+  @media (max-width: 760px){ .destino{ grid-template-columns: 1fr; text-align: left; } }
+  .destino .d-ic{ width: 38px; height: 38px; color: #f0c8a0; flex-shrink: 0; }
+  .destino h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 6px; color: #f0c8a0; }
+  .destino p{ margin: 0; font-size: .98rem; color: rgba(239,230,210,.85); line-height: 1.5; }
+  .destino .go{ display: inline-flex; align-items: center; gap: 10px; background: var(--olive); color: var(--paper); text-decoration: none; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.02rem; transition: all .3s ease; white-space: nowrap; }
+  .destino .go:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
+  .destino .go svg{ width: 18px; height: 18px; }
 
-  .sec-prose{ max-width: 760px; }
-  .sec-prose p{ font-size: 1.05rem; color: var(--ink); margin: 0 0 16px; line-height: 1.6; }
-  .sec-prose p em{ color: var(--blood-dark); font-style: italic; }
-  .sec-prose p strong{ color: var(--blood); font-weight: 600; }
-  .sec-prose p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
-  .keypoint{ margin: 24px 0; padding: 16px 20px; background: var(--paper-deep); border-left: 4px solid var(--ochre); font-family: "Fraunces", serif; font-style: italic; font-size: 1.05rem; color: var(--ink); }
-  .keypoint strong{ color: var(--ochre-deep); font-style: normal; }
-  .keypoint .mono{ font-family: "JetBrains Mono", monospace; font-style: normal; background: var(--paper); padding: 1px 6px; font-size: .8em; border: 1px solid var(--line); }
-
-  /* divide y vencerás: estudio de caso lado a lado */
-  .compint{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 36px; }
-  @media (max-width: 760px){ .compint{ grid-template-columns: 1fr; } }
-  .ci-card{ padding: 24px 26px; border: 1.5px solid var(--ink); }
-  .ci-card.c{ background: var(--paper-deep); }
-  .ci-card.py{ background: var(--ink); color: var(--paper); }
-  .ci-card .ci-tag{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
-  .ci-card.c .ci-tag{ color: var(--blood); } .ci-card.py .ci-tag{ color: #f0c8a0; }
-  .ci-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.3rem; margin: 0 0 10px; }
-  .ci-card.c h3{ color: var(--ink); } .ci-card.py h3{ color: var(--paper); }
-  .ci-card p{ margin: 0 0 10px; font-size: .96rem; line-height: 1.55; }
-  .ci-card.c p{ color: var(--ink-soft); } .ci-card.py p{ color: rgba(239,230,210,.8); }
-  .ci-card p strong{ font-weight: 600; } .ci-card.c p strong{ color: var(--blood); } .ci-card.py p strong{ color: #f0c8a0; }
-  .ci-card .ci-flow{ font-family: "JetBrains Mono", monospace; font-size: .82rem; margin-top: 14px; padding: 12px 14px; white-space: pre; overflow-x: auto; }
-  .ci-card.c .ci-flow{ background: var(--paper); color: var(--ink-soft); } .ci-card.py .ci-flow{ background: rgba(239,230,210,.08); color: #c8dd96; }
-
-  /* anatomía de una función */
-  .anatomy{ margin: 34px 0; border: 1.5px solid var(--ink); background: var(--ink); padding: 30px 28px; position: relative; }
-  .anatomy .a-label{ position: absolute; top: -13px; left: 26px; background: var(--blood); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; }
-  .anatomy .a-line{ font-family: "JetBrains Mono", monospace; font-size: clamp(.92rem, 2.4vw, 1.35rem); color: var(--c-base); line-height: 2.1; white-space: nowrap; overflow-x: auto; padding-bottom: 6px; }
-  .anatomy .part{ position: relative; padding: 2px 2px; border-bottom: 2px solid transparent; }
-  .anatomy .part.kw{ color: var(--c-kw); border-bottom-color: var(--c-kw); }
-  .anatomy .part.name{ color: var(--c-fn); border-bottom-color: var(--c-fn); }
-  .anatomy .part.param{ color: var(--c-num); border-bottom-color: var(--c-num); }
-  .anatomy .part.ret{ color: var(--c-kw); border-bottom-color: var(--blood); }
-  .anatomy .part.val{ color: var(--c-str); border-bottom-color: var(--c-str); }
-  .anatomy-legend{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 26px; }
-  @media (max-width: 760px){ .anatomy-legend{ grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 420px){ .anatomy-legend{ grid-template-columns: 1fr; } }
-  .leg{ padding-left: 14px; border-left: 3px solid var(--ochre); }
-  .leg .leg-h{ font-family: "JetBrains Mono", monospace; font-size: .74rem; letter-spacing: .04em; color: #f0c8a0; margin-bottom: 4px; }
-  .leg .leg-t{ font-size: .82rem; color: rgba(239,230,210,.78); line-height: 1.4; }
-  .leg.l1{ border-left-color: var(--c-kw); }
-  .leg.l2{ border-left-color: var(--c-fn); }
-  .leg.l3{ border-left-color: var(--c-num); }
-  .leg.l4{ border-left-color: var(--blood); }
-  .leg.l5{ border-left-color: var(--c-str); }
-
-  /* code block */
-  .code-block{ background: var(--ink); position: relative; overflow: hidden; }
-  .code-block .cb-bar{ display: flex; align-items: center; gap: 8px; padding: 12px 18px; background: rgba(239,230,210,.06); border-bottom: 1px solid rgba(239,230,210,.12); }
-  .code-block .cb-bar .dot{ width: 11px; height: 11px; border-radius: 50%; }
-  .code-block .cb-bar .dot.r{ background: #c0563d; } .code-block .cb-bar .dot.y{ background: var(--ochre); } .code-block .cb-bar .dot.g{ background: var(--olive); }
-  .code-block .cb-bar .fname{ margin-left: 10px; font-family: "JetBrains Mono", monospace; font-size: .75rem; color: rgba(239,230,210,.5); }
-  .code-block pre{ margin: 0; padding: 20px 24px; font-family: "JetBrains Mono", monospace; font-size: .85rem; line-height: 1.75; color: var(--c-base); overflow-x: auto; }
-  .code-block .kw{ color: var(--c-kw); } .code-block .str{ color: var(--c-str); } .code-block .num{ color: var(--c-num); } .code-block .com{ color: var(--c-com); font-style: italic; } .code-block .fn{ color: var(--c-fn); } .code-block .out{ color: rgba(239,230,210,.55); } .code-block .err{ color: #f0a890; }
-  .code-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; align-items: start; }
-  @media (max-width: 880px){ .code-grid{ grid-template-columns: 1fr; } }
-  .code-cap{ font-family: "JetBrains Mono", monospace; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 10px; }
-
-  /* dos cards de contraste */
-  .teoria-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 30px; }
-  @media (max-width: 820px){ .teoria-grid{ grid-template-columns: 1fr; } }
-  .teoria-card{ background: var(--paper-deep); border: 1px solid var(--line); border-top: 4px solid var(--ochre); padding: 22px 24px 24px; }
-  .teoria-card.blood{ border-top-color: var(--blood); }
-  .teoria-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.25rem; margin: 0 0 8px; color: var(--ochre-deep); }
-  .teoria-card.blood h3{ color: var(--blood-dark); }
-  .teoria-card .mono-fn{ font-family: "JetBrains Mono", monospace; font-size: .8rem; color: var(--blood); background: var(--paper); padding: 2px 8px; border: 1px solid var(--line); }
-  .teoria-card p{ margin: 12px 0 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.55; }
-  .teoria-card p strong{ color: var(--ink); }
-  .teoria-card .verdict{ margin-top: 14px; font-family: "JetBrains Mono", monospace; font-size: .78rem; padding: 9px 12px; background: var(--paper); border-left: 3px solid var(--ochre); color: var(--ink-soft); }
-  .teoria-card.blood .verdict{ border-left-color: var(--blood); }
-
-  /* fundamentos (ventajas/objetivos) cards */
-  .principios{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
-  @media (max-width: 820px){ .principios{ grid-template-columns: 1fr; } }
-  .pri-card{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 24px 24px 26px; position: relative; }
-  .pri-card .pri-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 900; font-size: 2.4rem; color: var(--ochre); line-height: 1; margin-bottom: 10px; }
-  .pri-card h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.18rem; margin: 0 0 8px; color: var(--ink); }
-  .pri-card p{ margin: 0; font-size: .92rem; color: var(--ink-soft); line-height: 1.5; }
-  .pri-card p .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
-
-  /* VENTANA GRÁFICA (mockup de la app) */
-  .gwin{ border: 1.5px solid var(--ink); background: #f4efe0; overflow: hidden; }
-  .gwin .gw-bar{ background: var(--ink); padding: 8px 14px; display: flex; gap: 7px; align-items: center; }
-  .gwin .gw-bar .dot{ width: 10px; height: 10px; border-radius: 50%; }
-  .gwin .gw-bar .r{ background: #c0563d; } .gwin .gw-bar .y{ background: var(--ochre); } .gwin .gw-bar .g{ background: var(--olive); }
-  .gwin .gw-bar .tt{ margin-left: 8px; font-family: "JetBrains Mono", monospace; font-size: .7rem; color: rgba(239,230,210,.6); }
-  .gwin .gw-canvas{ display: block; width: 100%; height: auto; background: #f4efe0; }
-  .gwin .gw-cap{ padding: 10px 15px; font-size: .82rem; color: var(--ink-soft); font-style: italic; border-top: 1px dashed var(--line); }
-  .gwin .gw-cap strong{ color: var(--blood-dark); font-style: normal; }
-
-  /* MAPA DE MÓDULOS */
-  .modmap{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 26px; }
-  @media (max-width: 820px){ .modmap{ grid-template-columns: 1fr; } }
-  .mod{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 20px 20px 22px; }
-  .mod.figuras{ border-top: 4px solid var(--olive); }
-  .mod.interfaz{ border-top: 4px solid var(--ochre); }
-  .mod.principal{ border-top: 4px solid var(--blood); }
-  .mod .mod-k{ font-family: "JetBrains Mono", monospace; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
-  .mod h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.15rem; margin: 0 0 12px; color: var(--ink); }
-  .mod .fnchip{ font-family: "JetBrains Mono", monospace; font-size: .76rem; background: var(--paper); border: 1px solid var(--line); padding: 7px 10px; margin-bottom: 8px; color: var(--olive-deep); display: block; }
-  .mod.interfaz .fnchip{ color: var(--ochre-deep); }
-  .mod.principal .fnchip{ color: var(--blood-dark); }
-  .mod p{ margin: 10px 0 0; font-size: .88rem; color: var(--ink-soft); line-height: 1.5; }
-  .mod p strong{ color: var(--ink); }
-
-  /* ENTREGABLE */
-  .ejercicios{ margin: 100px 0; }
-  .ej-intro{ color: var(--ink-soft); font-size: 1.05rem; max-width: 760px; margin: 0 0 30px; }
-  .ej-intro strong{ color: var(--blood); }
-  .ej-card{ border: 2px solid var(--ink); background: var(--paper-deep); margin-bottom: 26px; position: relative; }
-  .ej-card .ej-tag{ position: absolute; top: -14px; left: 26px; background: var(--blood); color: var(--paper); padding: 5px 16px; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .95rem; letter-spacing: .04em; }
-  .ej-card .ej-pill{ position: absolute; top: -14px; right: 26px; background: var(--olive); color: var(--paper); padding: 5px 14px; font-family: "JetBrains Mono", monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
-  .ej-card .ej-body{ padding: 32px 32px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
-  @media (max-width: 860px){ .ej-card .ej-body{ grid-template-columns: 1fr; gap: 18px; } }
-  .ej-card h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 6px 0 12px; color: var(--ink); }
-  .ej-card .ej-desc{ font-size: 1.02rem; color: var(--ink); line-height: 1.6; margin: 0 0 16px; }
-  .ej-card .ej-desc em{ color: var(--blood-dark); font-style: italic; }
-  .ej-card .ej-desc strong{ color: var(--blood); }
-  .ej-card .ej-desc .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
-  .ej-card .reqs{ margin: 0; padding: 0; list-style: none; }
-  .ej-card .reqs li{ padding: 8px 0 8px 26px; position: relative; font-size: .94rem; color: var(--ink-soft); border-bottom: 1px dashed var(--line); line-height: 1.5; }
-  .ej-card .reqs li:last-child{ border-bottom: none; }
-  .ej-card .reqs li::before{ content: "▹"; position: absolute; left: 0; color: var(--blood); font-weight: 700; }
-  .ej-card .reqs li .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; border: 1px solid var(--line); }
-  .ej-card .reqs li strong{ color: var(--ink); }
-  .ej-preview .pv-label{ font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 8px; }
-
-  /* mock del documento (Word/PDF) */
-  .doc-mock{ background: #f7f2e4; border: 1px solid var(--ink); box-shadow: 6px 6px 0 rgba(42,29,20,.12); padding: 26px 30px; }
-  .doc-mock .dm-title{ font-family: "Fraunces", serif; font-weight: 600; font-size: 1.05rem; text-align: center; color: var(--ink); border-bottom: 1.5px solid var(--ink); padding-bottom: 10px; margin-bottom: 14px; }
-  .doc-mock .dm-sec{ display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--line); }
-  .doc-mock .dm-sec:last-child{ border-bottom: none; }
-  .doc-mock .dm-sec .dm-n{ font-family: "Fraunces", serif; font-style: italic; font-weight: 700; color: var(--blood); font-size: .95rem; }
-  .doc-mock .dm-sec .dm-t{ font-size: .92rem; color: var(--ink-soft); line-height: 1.4; }
-  .doc-mock .dm-sec .dm-t strong{ color: var(--ink); }
-
-  .choose-note{ margin-top: 6px; padding: 18px 24px; background: var(--ink); color: var(--paper); display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; }
-  .choose-note .ic{ width: 30px; height: 30px; color: #f0c8a0; flex-shrink: 0; }
-  .choose-note p{ margin: 0; font-size: .98rem; line-height: 1.5; color: rgba(239,230,210,.88); }
-  .choose-note p strong{ color: #f0c8a0; }
-
-  /* EVAL + EVIDENCIA */
-  .cierre-practica{ margin: 100px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
-  @media (max-width: 820px){ .cierre-practica{ grid-template-columns: 1fr; } }
-  .panel{ border: 1.5px solid var(--ink); background: var(--paper-deep); padding: 28px 30px 30px; }
-  .panel h3{ font-family: "Fraunces", serif; font-weight: 300; font-size: 1.7rem; margin: 0 0 18px; letter-spacing: -.01em; }
-  .panel h3 em{ font-style: italic; color: var(--blood); font-weight: 600; }
-  .crit-list{ margin: 0; padding: 0; list-style: none; counter-reset: cr; }
-  .crit-list li{ counter-increment: cr; position: relative; padding: 12px 0 12px 38px; border-bottom: 1px dashed var(--line); font-size: .96rem; color: var(--ink); line-height: 1.45; }
-  .crit-list li:last-child{ border-bottom: none; }
-  .crit-list li::before{ content: counter(cr); position: absolute; left: 0; top: 11px; width: 24px; height: 24px; background: var(--blood); color: var(--paper); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-style: italic; font-weight: 700; font-size: .82rem; }
-  .crit-list li strong{ color: var(--blood-dark); }
-  .evid-item{ display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--line); align-items: start; }
-  .evid-item:last-child{ border-bottom: none; }
-  .evid-item .file-ic{ font-family: "JetBrains Mono", monospace; font-size: .72rem; background: var(--ink); color: var(--paper); padding: 4px 9px; white-space: nowrap; margin-top: 2px; }
-  .evid-item .ev-txt{ font-size: .95rem; color: var(--ink-soft); line-height: 1.45; }
-  .evid-item .ev-txt strong{ color: var(--ink); }
-  .evid-item .ev-txt .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper); padding: 1px 6px; font-size: .85em; }
-  .conclu-note{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--olive); }
-  .conclu-note h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 6px; color: var(--olive-deep); font-size: 1.1rem; }
-  .conclu-note p{ margin: 0; font-size: .93rem; color: var(--ink-soft); line-height: 1.5; }
-  .conclu-note .mono{ font-family: "JetBrains Mono", monospace; background: var(--paper-deep); padding: 1px 6px; font-size: .85em; }
-  .pond{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--ochre); }
-  .pond h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 8px; color: var(--ochre-deep); font-size: 1.05rem; }
-  .pond p{ margin: 0; font-size: .9rem; color: var(--ink-soft); line-height: 1.55; }
-  .pond p strong{ color: var(--ink); }
-  .biblio{ margin-top: 22px; padding: 18px 22px; background: var(--paper); border-left: 4px solid var(--grid-blue); }
-  .biblio h4{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; margin: 0 0 8px; color: var(--grid-blue); font-size: 1.05rem; }
-  .biblio p{ margin: 0 0 8px; font-size: .88rem; color: var(--ink-soft); line-height: 1.5; padding-left: 18px; text-indent: -18px; }
-  .biblio p:last-child{ margin-bottom: 0; }
-  .biblio p em{ font-style: italic; }
-
-  /* CIERRE */
-  .cierre{ margin: 110px 0 80px; padding: 60px 40px; text-align: center; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); position: relative; }
-  .cierre::before, .cierre::after{ content:""; position: absolute; left: 50%; width: 60px; height: 12px; transform: translateX(-50%); background: var(--paper); }
-  .cierre::before{ top: -7px; } .cierre::after{ bottom: -7px; }
-  .cierre .small-caps{ color: var(--blood); }
-  .cierre .quote{ font-family: "Fraunces", serif; font-weight: 300; font-style: italic; font-size: clamp(26px, 4vw, 46px); line-height: 1.2; margin: 22px 0 12px; color: var(--ink); letter-spacing: -.01em; max-width: 900px; margin-left: auto; margin-right: auto; }
-  .cierre .quote .em{ color: var(--blood); font-weight: 600; }
-  .cierre .quote .em-ochre{ color: var(--ochre); font-weight: 600; }
-  .cierre .quote-author{ margin-top: 10px; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
-  .cierre .quote-meta{ margin-top: 4px; font-size: .8rem; color: var(--ink-faint); font-style: italic; }
-  .cierre .sig{ margin-top: 32px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; color: var(--ink); }
-  .cierre .sig::before{ content:"—  "; color: var(--blood); }
-  .cierre .sig small{ display: block; font-style: normal; font-weight: 400; font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); margin-top: 8px; }
-
-  footer{ text-align: center; padding: 36px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
+  footer{ text-align: center; padding: 70px 0 50px; font-size: .78rem; color: var(--ink-soft); letter-spacing: .15em; text-transform: uppercase; }
   footer .dot{ color: var(--blood); margin: 0 10px;}
   footer .nav-prev{ margin-top: 12px; font-family: "Fraunces", serif; font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-soft); font-size: .9rem; }
   footer .nav-prev a{ color: var(--blood); text-decoration: none; border-bottom: 1px solid var(--blood); }
-
-  /* ===== DUAL LANGUAGE SWITCH · C++ principal / Python puente ===== */
-  .codeswitch{ margin: 0; }
-  .cs-tabs{ display:flex; align-items:center; gap:0; background:rgba(239,230,210,.06); border:1px solid rgba(239,230,210,.14); border-bottom:none; }
-  .cs-tab{ font-family:"JetBrains Mono",monospace; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:rgba(239,230,210,.5); background:transparent; border:none; padding:10px 18px; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s ease, border-color .2s ease, background .2s ease; }
-  .cs-tab:hover{ color:rgba(239,230,210,.85); }
-  .cs-tab.active{ color:#f0c8a0; border-bottom-color:var(--blood); background:rgba(239,230,210,.04); }
-  .cs-flag{ margin-left:auto; padding-right:16px; font-family:"JetBrains Mono",monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(239,230,210,.32); }
-  .cs-pane[hidden]{ display:none; }
-  .cs-pane .code-block{ border-top:none; }
-  @media (max-width:480px){ .cs-flag{ display:none; } }
-
-  /* DOWNLOAD SCAFFOLD (plano) */
-  .download-box{ margin-top: 26px; background: var(--ink); color: var(--paper); padding: 0; overflow: hidden; }
-  .download-box .db-head{ display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; padding: 24px 32px; border-bottom: 1px solid rgba(239,230,210,.12); }
-  @media (max-width: 640px){ .download-box .db-head{ grid-template-columns: 1fr; } }
-  .download-box .db-head h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 6px; color: #f0c8a0; }
-  .download-box .db-head .file-meta{ font-family: "JetBrains Mono", monospace; font-size: .78rem; color: rgba(239,230,210,.55); }
-  .dl-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--olive); color: var(--paper); text-decoration: none; padding: 13px 22px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.02rem; transition: all .3s ease; white-space: nowrap; border: none; cursor: pointer; }
-  .dl-btn:hover{ background: var(--olive-deep); transform: translateY(-2px); box-shadow: 0 4px 0 var(--olive-deep); }
-  .dl-btn svg{ width: 18px; height: 18px; }
-  .dl-col{ display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-  @media (max-width: 640px){ .dl-col{ align-items: flex-start; } }
-  .dl-alt{ font-family: "JetBrains Mono", monospace; font-size: .76rem; color: rgba(239,230,210,.6); text-decoration: none; border-bottom: 1px dashed rgba(239,230,210,.3); transition: color .25s ease, border-color .25s ease; }
-  .dl-alt:hover{ color: #f0c8a0; border-bottom-color: #f0c8a0; }
-  .download-box .db-body{ padding: 22px 32px 26px; }
-  .download-box .db-body > p{ margin: 0; font-size: .98rem; color: rgba(239,230,210,.85); line-height: 1.55; }
-  .download-box .db-body > p strong{ color: #f0c8a0; }
-
-  /* SOLUCIÓN SELLADA */
-  .solucion{ margin-top: 48px; border: 2px dashed var(--blood); background: var(--paper-deep); padding: 30px 32px 32px; position: relative; }
-  .solucion .sol-label{ position: absolute; top: -13px; left: 26px; background: var(--blood); color: var(--paper); padding: 4px 14px; font-size: .7rem; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; }
-  .solucion .sol-head{ display: grid; grid-template-columns: 1fr auto; gap: 22px; align-items: center; }
-  @media (max-width: 720px){ .solucion .sol-head{ grid-template-columns: 1fr; } }
-  .solucion h3{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.35rem; margin: 0 0 6px; color: var(--blood-dark); }
-  .solucion .sol-hint{ margin: 0; font-size: .95rem; color: var(--ink-soft); line-height: 1.5; max-width: 580px; }
-  .solucion .sol-hint strong{ color: var(--blood); }
-  .sol-btn{ display: inline-flex; align-items: center; gap: 10px; background: var(--blood); color: var(--paper); border: none; cursor: pointer; padding: 14px 24px; font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.05rem; transition: all .3s ease; white-space: nowrap; }
-  .sol-btn:hover{ background: var(--blood-dark); transform: translateY(-2px); box-shadow: 0 4px 0 var(--blood-dark); }
-  .sol-btn svg{ width: 18px; height: 18px; transition: transform .3s ease; }
-  .sol-btn.open svg{ transform: rotate(180deg); }
-  .sol-body{ margin-top: 26px; border-top: 1px dashed var(--line); padding-top: 26px; }
-  .sol-body[hidden]{ display: none; }
-  .sol-sub{ font-family: "Fraunces", serif; font-style: italic; font-weight: 600; font-size: 1.1rem; color: var(--ink); margin: 6px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
-  .sol-sub.two{ margin-top: 44px; }
-  .sol-flow{ overflow-x: auto; }
-  .sol-flow svg{ display: block; width: 100%; max-width: 720px; min-width: 560px; margin: 0 auto; }
-  .sol-legend{ display: flex; flex-wrap: wrap; gap: 12px 26px; justify-content: center; margin-top: 20px; font-size: .85rem; color: var(--ink-soft); }
-  .sol-legend .li{ display: flex; align-items: center; gap: 9px; }
-  .sol-legend .li svg{ width: 30px; height: 20px; flex-shrink: 0; }
-  .sol-caption{ margin: 16px auto 0; max-width: 660px; text-align: center; font-size: .9rem; font-style: italic; color: var(--ink-soft); line-height: 1.5; }
-  .sol-caption strong{ color: var(--blood-dark); font-style: normal; }
-
-  /* CICLO DE ANIMACIÓN (cuadro por cuadro) */
-  .framecycle{ display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; }
-  .framecycle .fstep{ font-family: "JetBrains Mono", monospace; font-size: .8rem; background: var(--ink); color: #f0c8a0; padding: 11px 15px; }
-  .framecycle .farr{ color: var(--blood); font-weight: 700; font-size: 1.1rem; }
-  .framecycle .floop{ width: 100%; text-align: center; margin-top: 8px; font-style: italic; color: var(--ink-faint); font-size: .86rem; }
 
   .reveal{ opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in{ opacity: 1; transform: none; }
@@ -352,824 +98,84 @@
   <div class="top">
     <div class="left">
       <span class="seal">V.</span>
-      <span class="meta">Cuaderno del profesor · Sesión 20 · Práctica 5 de 6 (institucional)</span>
+      <span class="meta">Cuaderno del profesor · Sesión 20 · Sin sesión</span>
     </div>
     <div class="right">
       Jueves 23.07.2026 · 18:00 – 20:00<br/>
-      <span style="color:var(--blood)">Laboratorio de Cómputo · clave MCT040</span>
+      <span style="color:var(--blood)">Sesión no impartida</span>
     </div>
   </div>
 
   <!-- HERO -->
   <section class="hero">
     <div class="session-no display">20</div>
-    <div class="kicker">Práctica de laboratorio · Ciclo 26-3</div>
+    <div class="kicker">Sesión suspendida · Ciclo 26-3</div>
     <h1 class="display">
-      El taller<br/>de <span class="em">figuras</span>.
+      Sin <span class="em">sesión</span>.
     </h1>
     <p class="lede">
-      Práctica institucional 5 de 6. La empresa <strong>«Mundo-gráfico»</strong> nos encarga un programa sencillo que
-      <em>imprima figuras con caracteres en la consola</em>. No la escribiremos de un tirón: la <strong>partimos en piezas</strong>.
-      Una función mostrará el título, otra dibujará una línea, otra construirá un cuadrado y otra calculará su área.
-      Cada herramienta sabe hacer una sola cosa —y por eso todo
-      <span class="underline-ochre">encaja y se puede cambiar sin miedo</span>.
+      La sesión del <em>jueves 23 de julio</em> no se impartió. El contenido que estaba
+      programado para este día <strong>se recorrió a la sesión 21</strong>, sin perderse:
+      lo vemos completo la siguiente clase.
     </p>
-    <p class="lede" style="margin-top:18px; font-size:1.02rem; color:var(--ink-faint);">
-      <em>Nota del curso:</em> trabajaremos con <strong>C++ modular</strong> en <strong>Dev C++</strong> y únicamente con
-      la consola. No necesitas instalar <span class="mono">graphics.h</span>: las figuras se forman con símbolos
-      como <span class="mono">*</span>, <span class="mono">#</span> y <span class="mono">-</span>.
+  </section>
+
+  <div class="aviso reveal">
+    <span class="av-label">Aviso del profesor</span>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.01"/></svg>
+    <div class="av-txt">
+      «Contenido no visto debido a evento en Auditorio».
+    </div>
+    <p class="av-sub">
+      No hay tema, ni actividad, ni entregable para esta fecha.
+      <strong>Nada de lo programado se elimina</strong>: todo se recorre una sesión.
     </p>
+  </div>
 
-    <div class="cont-banner">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v6m0 6v6M5.6 5.6l4.2 4.2m4.4 4.4 4.2 4.2M3 12h6m6 0h6M5.6 18.4l4.2-4.2m4.4-4.4 4.2-4.2"/></svg>
-      <div class="txt">
-        <strong>Esta práctica cierra la unidad de funciones.</strong> Reúne el diseño modular —divide y vencerás—
-        con el <em>manejo de funciones</em> (uno y varios parámetros, y la devolución del resultado) mediante
-        <strong>figuras de texto impresas en consola</strong>.
+  <div class="ficha reveal">
+    <span class="f-label">FICHA DE LA SESIÓN</span>
+    <div class="ficha-grid">
+      <div class="ficha-cell">
+        <div class="fc-label">Estado</div>
+        <div class="fc-value">No impartida</div>
+      </div>
+      <div class="ficha-cell">
+        <div class="fc-label">Motivo</div>
+        <div class="fc-value">Evento en Auditorio</div>
+      </div>
+      <div class="ficha-cell">
+        <div class="fc-label">Entregable</div>
+        <div class="fc-value">Ninguno</div>
+      </div>
+      <div class="ficha-cell">
+        <div class="fc-label">Fecha</div>
+        <div class="fc-value">Jueves 23.07.2026</div>
+      </div>
+      <div class="ficha-cell">
+        <div class="fc-label">Contenido recorrido a</div>
+        <div class="fc-value">Sesión 21 · Práctica 5</div>
+      </div>
+      <div class="ficha-cell">
+        <div class="fc-label">Efecto en el calendario</div>
+        <div class="fc-value">Todo se recorre una sesión</div>
       </div>
     </div>
+  </div>
 
-    <div class="cont-banner">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-      <div class="txt">
-        <strong>Todo se entrega en Blackboard,</strong> en la actividad <strong>«Práctica 5»</strong>:
-        tu programa <em>.cpp</em>, su copia en <em>.txt</em> y un documento PDF o Word con título, introducción,
-        desarrollo, conclusiones y bibliografía en formato APA. Los detalles, al final.
-      </div>
+  <div class="destino reveal">
+    <svg class="d-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    <div>
+      <h3>El contenido está en la sesión 21</h3>
+      <p>Práctica 5 · «El taller de figuras» — diseño modular, manejo de funciones y figuras en consola.</p>
     </div>
-
-    <div class="ficha">
-      <span class="f-label">FICHA DE LA PRÁCTICA</span>
-      <div class="ficha-grid">
-        <div class="ficha-cell wide">
-          <div class="fc-label">Objetivo de la práctica</div>
-          <div class="fc-value obj">Diseñar un programa sencillo en C++ que divida responsabilidades en funciones, utilice parámetros y devolución de resultados, y represente figuras mediante caracteres impresos en la consola.</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Temas y subtemas</div>
-          <div class="fc-value">5.1 Fundamentos del diseño modular · 5.2 Manejo de funciones · 5.3 Aplicaciones gráficas</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Duración</div>
-          <div class="fc-value">2 horas</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Escenario</div>
-          <div class="fc-value">Laboratorio de cómputo · seguridad N/A</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Lenguaje</div>
-          <div class="fc-value">C++ modular</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Software oficial</div>
-          <div class="fc-value">Dev C++ · consola estándar</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Nuestro puente</div>
-          <div class="fc-value">Python · impresión en consola</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Aporta el alumno</div>
-          <div class="fc-value">Memoria USB para su programa</div>
-        </div>
-        <div class="ficha-cell">
-          <div class="fc-label">Entrega</div>
-          <div class="fc-value">Blackboard · actividad «Práctica 5»</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECCIÓN i: 5.1 FUNDAMENTOS DEL DISEÑO MODULAR -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n display">i.</div>
-      <div>
-        <h2 class="display">5.1 · Fundamentos del <em>diseño modular</em>.</h2>
-        <p>Ningún problema grande se resuelve de un golpe. La estrategia más vieja del oficio es <strong>partirlo en problemas pequeños</strong>, cada uno fácil de entender y de probar. En programación, cada pedazo se llama <strong>función</strong>, y a juntar el programa con funciones se le llama diseño modular.</p>
-      </div>
-    </div>
-
-    <div class="sec-prose">
-      <p>Imagina el programa escrito de corrido: <span class="mono">main</span> pide el lado, contiene los dos ciclos que dibujan el cuadrado y además calcula el área. Funciona, pero las responsabilidades están mezcladas.</p>
-      <p>Ahora imagina el <strong>mismo programa partido en funciones</strong>: <span class="mono">dibujar_cuadrado</span> se ocupa del dibujo, <span class="mono">area_cuadrado</span> hace el cálculo y <span class="mono">main</span> solamente coordina. El resultado es el mismo; la organización es mucho mejor.</p>
-    </div>
-
-    <div class="compint">
-      <div class="ci-card c">
-        <div class="ci-tag">antes · todo amontonado</div>
-        <h3>Todo dentro de main</h3>
-        <p>La entrada, el dibujo y el cálculo están mezclados. Para reutilizar el cuadrado habría que copiar los ciclos.</p>
-        <div class="ci-flow">int main() {
-  int lado; cin &gt;&gt; lado;
-  for (int f = 0; f &lt; lado; f++) {
-    for (int c = 0; c &lt; lado; c++)
-      cout &lt;&lt; "* ";
-    cout &lt;&lt; endl;
-  }
-  cout &lt;&lt; lado * lado;
-}</div>
-      </div>
-      <div class="ci-card py">
-        <div class="ci-tag">después · modular</div>
-        <h3>Responsabilidades separadas</h3>
-        <p>El <span class="mono">main</span> se vuelve un índice legible. Cada función tiene una sola tarea y puede reutilizarse.</p>
-        <div class="ci-flow">void dibujar_cuadrado(int lado) { ... }
-int area_cuadrado(int lado) {
-  return lado * lado;
-}
-int main() {
-  cin &gt;&gt; lado;
-  dibujar_cuadrado(lado);
-  cout &lt;&lt; area_cuadrado(lado);
-}</div>
-      </div>
-    </div>
-
-    <div class="principios">
-      <div class="pri-card">
-        <div class="pri-n">5.1.1</div>
-        <h4>Divide y vencerás</h4>
-        <p>El principio de fondo: parte el problema en subproblemas pequeños, resuelve cada uno por separado y luego únelos. Una figura a la vez; una función a la vez.</p>
-      </div>
-      <div class="pri-card">
-        <div class="pri-n">5.1.2</div>
-        <h4>Objetivos</h4>
-        <p>Que cada parte tenga <strong>una responsabilidad clara</strong>, que se entienda sola y que el <span class="mono">main</span> solo <em>coordine</em> las piezas sin hacer el trabajo pesado.</p>
-      </div>
-      <div class="pri-card">
-        <div class="pri-n">5.1.3</div>
-        <h4>Ventajas</h4>
-        <p><strong>Legibilidad</strong> (se lee como frases), <strong>reutilización</strong> (una función escrita una vez, usada muchas) y <strong>mantenimiento</strong> (cambias una pieza sin romper las demás).</p>
-      </div>
-    </div>
-
-    <div class="keypoint"><strong>La gran idea:</strong> una función es un nombre que le pones a un trozo de trabajo. En vez de repetir o amontonar código, lo encierras, lo bautizas y lo llamas cuando lo necesitas.</div>
-  </section>
-
-  <!-- SECCIÓN ii: 5.2 MANEJO DE FUNCIONES -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n display">ii.</div>
-      <div>
-        <h2 class="display">5.2 · Manejo de <em>funciones</em>.</h2>
-        <p>Toda función tiene la misma forma. Conócela una vez y las reconocerás todas: <strong>el tipo que devuelve, el nombre, los parámetros, el cuerpo y el return</strong>. Aquí la desarmamos pieza por pieza.</p>
-      </div>
-    </div>
-
-    <div class="anatomy">
-      <span class="a-label">ANATOMÍA · función en C++</span>
-      <div class="a-line">
-        <span class="part kw">int</span> <span class="part name">area_cuadrado</span>(<span class="part param">int lado</span>) {<br/>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="part ret">return</span> <span class="part val">lado * lado</span>;
-      </div>
-      <div class="anatomy-legend">
-        <div class="leg l1">
-          <div class="leg-h">int</div>
-          <div class="leg-t">El tipo del dato que la función devolverá. Aquí, un entero.</div>
-        </div>
-        <div class="leg l2">
-          <div class="leg-h">area_cuadrado</div>
-          <div class="leg-t">El nombre: un verbo claro que dice qué hace, en snake_case.</div>
-        </div>
-        <div class="leg l3">
-          <div class="leg-h">(int lado)</div>
-          <div class="leg-t">El parámetro: el dato que recibe para trabajar. Aquí, uno.</div>
-        </div>
-        <div class="leg l4">
-          <div class="leg-h">return</div>
-          <div class="leg-t">Devuelve el resultado a quien la llamó. La función entrega su fruto.</div>
-        </div>
-        <div class="leg l5">
-          <div class="leg-h">lado * lado</div>
-          <div class="leg-t">El cuerpo: el trabajo en sí; su resultado es lo que se devuelve.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="sec-prose">
-      <p>Definir una función no la ejecuta: solo le enseña al programa <em>cómo</em> hacer algo y lo guarda con un nombre. Para que trabaje, hay que <strong>llamarla</strong> por su nombre y pasarle los argumentos entre paréntesis. Entonces los datos entran por los parámetros, el cuerpo corre, y <span class="mono">return</span> entrega el resultado de vuelta.</p>
-    </div>
-
-    <!-- 5.2.1 / 5.2.2 · parámetros -->
-    <div class="code-grid">
-      <div>
-        <p class="code-cap">Definir · una línea con varios parámetros</p>
-        <div class="codeswitch">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">principal &middot; C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.cpp</span></div>
-<pre><span class="com">// 5.2.2 · VARIOS parametros:</span>
-<span class="com">// cantidad de caracteres y simbolo</span>
-<span class="kw">void</span> <span class="fn">dibujar_linea</span>(<span class="kw">int</span> largo, <span class="kw">char</span> simbolo) {
-    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; largo; i++)
-        cout &lt;&lt; simbolo;
-    cout &lt;&lt; endl;
-}   <span class="com">// void: muestra, no devuelve</span></pre>
-            </div>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">definir.py</span></div>
-<pre><span class="com"># 5.2.2 · VARIOS parámetros:</span>
-<span class="com"># cantidad de caracteres y símbolo</span>
-<span class="kw">def</span> <span class="fn">dibujar_linea</span>(largo, simbolo):
-    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(largo):
-        <span class="fn">print</span>(simbolo, end=<span class="str">""</span>)
-    <span class="fn">print</span>()</pre>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <p class="code-cap">Llamar · usar la receta con distintos datos</p>
-        <div class="codeswitch">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">principal &middot; C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.cpp</span></div>
-<pre><span class="com">// la misma funcion con datos distintos</span>
-<span class="fn">dibujar_linea</span>(<span class="num">10</span>, <span class="str">'-'</span>);  <span class="out">// ----------</span>
-<span class="fn">dibujar_linea</span>(<span class="num">5</span>, <span class="str">'#'</span>);   <span class="out">// #####</span>
-
-<span class="com">// 5.2.1 · UN parametro y devolucion:</span>
-<span class="kw">int</span> <span class="fn">area_cuadrado</span>(<span class="kw">int</span> lado) {
-    <span class="kw">return</span> lado * lado;
-}</pre>
-            </div>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">llamar.py</span></div>
-<pre><span class="com"># la misma función con datos distintos</span>
-<span class="fn">dibujar_linea</span>(<span class="num">10</span>, <span class="str">"-"</span>)  <span class="out"># ----------</span>
-<span class="fn">dibujar_linea</span>(<span class="num">5</span>, <span class="str">"#"</span>)   <span class="out"># #####</span>
-
-<span class="com"># 5.2.1 · UN parámetro y devolución:</span>
-<span class="kw">def</span> <span class="fn">area_cuadrado</span>(lado):
-    <span class="kw">return</span> lado * lado</pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="teoria-grid">
-      <div class="teoria-card">
-        <h3>5.2.1 · Un parámetro</h3>
-        <span class="mono-fn">area_cuadrado(lado)</span>
-        <p>Recibe <strong>un solo dato</strong> para trabajar. <span class="mono">area_cuadrado(4)</span> recibe el lado y devuelve <span class="mono">16</span>.</p>
-        <div class="verdict">// una función, un dato de entrada</div>
-      </div>
-      <div class="teoria-card blood">
-        <h3>5.2.2 · Varios parámetros</h3>
-        <span class="mono-fn">dibujar_linea(largo, simbolo)</span>
-        <p>Recibe <strong>dos datos</strong>, separados por coma y en orden. Con ellos, la misma función imprime líneas de distintos tamaños y símbolos.</p>
-        <div class="verdict">// una función, muchos datos de entrada</div>
-      </div>
-    </div>
-
-    <!-- 5.2.3 · devolución del resultado -->
-    <div class="s-head" style="margin-top:60px;">
-      <div class="n blood display" style="font-size:clamp(40px,6vw,72px);">5.2.3</div>
-      <div>
-        <h2 class="display" style="font-size:clamp(26px,4vw,44px);">Devolución del resultado: <em class="blood">return</em> no es dibujar.</h2>
-        <p>La confusión número uno con las funciones. Dibujar (o imprimir) y <span class="mono">return</span> parecen «sacar algo» de la función, pero son cosas distintas: <strong>una le habla a la pantalla; la otra le habla al programa.</strong></p>
-      </div>
-    </div>
-
-    <div class="teoria-grid">
-      <div class="teoria-card">
-        <h3>Dibujar / imprimir · <span class="mono-fn">le habla a la pantalla</span></h3>
-        <p><strong>Pinta</strong> algo y se acabó. Es para que <em>tú</em> lo veas. El programa no se queda con ningún valor: si la función es <span class="mono">void</span>, no puedes guardar lo que «devuelve».</p>
-        <div class="verdict">// sirve para MOSTRAR, no para calcular</div>
-      </div>
-      <div class="teoria-card blood">
-        <h3>return · <span class="mono-fn">le habla al programa</span></h3>
-        <p><strong>Entrega</strong> un valor a quien llamó la función. Ese valor se puede <em>guardar, comparar, acumular o pasar a otra función</em>. Es la materia prima con la que el programa sigue trabajando.</p>
-        <div class="verdict">// sirve para CALCULAR y seguir usando</div>
-      </div>
-    </div>
-
-    <div class="codeswitch" style="margin-top:30px;">
-      <div class="cs-tabs">
-        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-        <button type="button" class="cs-tab" data-lang="py">Python</button>
-        <span class="cs-flag">principal &middot; C++</span>
-      </div>
-      <div class="cs-pane" data-lang="cpp">
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">dibujar_vs_return.cpp</span></div>
-<pre><span class="com">// IMPRIME: habla a la pantalla</span>
-<span class="kw">void</span> <span class="fn">dibujar_linea</span>(<span class="kw">int</span> largo, <span class="kw">char</span> simbolo) {
-    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; largo; i++) cout &lt;&lt; simbolo;
-}
-
-<span class="com">// DEVUELVE: habla al programa</span>
-<span class="kw">int</span> <span class="fn">area_cuadrado</span>(<span class="kw">int</span> lado) {
-    <span class="kw">return</span> lado * lado;
-}
-
-<span class="kw">int</span> area = <span class="fn">area_cuadrado</span>(<span class="num">4</span>); <span class="com">// guardamos 16</span></pre>
-        </div>
-      </div>
-      <div class="cs-pane" data-lang="py" hidden>
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">dibujar_vs_return.py</span></div>
-<pre><span class="com"># IMPRIME: habla a la pantalla</span>
-<span class="kw">def</span> <span class="fn">dibujar_linea</span>(largo, simbolo):
-    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(largo):
-        <span class="fn">print</span>(simbolo, end=<span class="str">""</span>)
-
-<span class="com"># DEVUELVE: habla al programa</span>
-<span class="kw">def</span> <span class="fn">area_cuadrado</span>(lado):
-    <span class="kw">return</span> lado * lado
-
-area = <span class="fn">area_cuadrado</span>(<span class="num">4</span>) <span class="com"># guardamos 16</span></pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="keypoint"><strong>Regla del 5.2.3:</strong> si vas a <em>usar</em> el resultado después, usa <span class="mono">return</span>. Reserva la impresión para mostrar información. Así separas el <strong>cálculo</strong> del <strong>dibujo en consola</strong>.</div>
-  </section>
-
-  <!-- SECCIÓN iii: 5.3 APLICACIONES GRÁFICAS -->
-  <section class="sec reveal">
-    <div class="s-head">
-      <div class="n display">iii.</div>
-      <div>
-        <h2 class="display">5.3 · Figuras <em>en consola</em>.</h2>
-        <p>Una figura también puede representarse con texto. En esta versión reducida no abrimos una ventana: usamos ciclos y <span class="mono">cout</span> para formar líneas y cuadrados con caracteres.</p>
-      </div>
-    </div>
-
-    <div class="code-grid">
-      <div>
-        <p class="code-cap">5.3.1 · una línea con caracteres</p>
-        <div class="codeswitch">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">principal &middot; C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">figuras.cpp</span></div>
-<pre><span class="kw">void</span> <span class="fn">dibujar_linea</span>(<span class="kw">int</span> largo, <span class="kw">char</span> simbolo) {
-    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; largo; i++) {
-        cout &lt;&lt; simbolo;
-    }
-    cout &lt;&lt; endl;
-}
-
-<span class="fn">dibujar_linea</span>(<span class="num">10</span>, <span class="str">'-'</span>); <span class="out">// ----------</span></pre>
-            </div>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">figuras.py</span></div>
-<pre><span class="kw">def</span> <span class="fn">dibujar_linea</span>(largo, simbolo):
-    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(largo):
-        <span class="fn">print</span>(simbolo, end=<span class="str">""</span>)
-    <span class="fn">print</span>()
-
-<span class="fn">dibujar_linea</span>(<span class="num">10</span>, <span class="str">"-"</span>) <span class="out"># ----------</span></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <p class="code-cap">Así se ve la consola al correr</p>
-        <div class="gwin">
-          <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">TERMINAL — Mundo-gráfico</span></div>
-          <div class="term-body" style="min-height:300px;padding:54px 70px;font-size:1.2rem;">
-            <span class="head-l">--- Mundo-grafico ---</span><br/><br/>
-            Escribe el lado: <span class="num-l">4</span><br/><br/>
-            * * * *<br/>* * * *<br/>* * * *<br/>* * * *<br/><br/>
-            Área: <span class="num-l">16</span><br/>--------------------
-          </div>
-          <div class="gw-cap"><strong>La figura es texto.</strong> Los ciclos forman los renglones y las funciones organizan el trabajo.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="keypoint" style="margin-top:34px;"><strong>La práctica se mantiene pequeña:</strong> primero entendemos cómo dividir responsabilidades usando la consola. La misma organización por funciones podrá reutilizarse más adelante en una aplicación con interfaz gráfica.</div>
-
-    <div class="code-grid" style="margin-top:50px;">
-      <div>
-        <p class="code-cap">5.3.2 · un cuadrado con dos for</p>
-        <div class="codeswitch">
-          <div class="cs-tabs">
-            <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-            <button type="button" class="cs-tab" data-lang="py">Python</button>
-            <span class="cs-flag">principal &middot; C++</span>
-          </div>
-          <div class="cs-pane" data-lang="cpp">
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">animacion.cpp</span></div>
-<pre><span class="kw">void</span> <span class="fn">dibujar_cuadrado</span>(<span class="kw">int</span> lado, <span class="kw">char</span> simbolo) {
-    <span class="kw">for</span> (<span class="kw">int</span> fila = <span class="num">0</span>; fila &lt; lado; fila++) {
-        <span class="kw">for</span> (<span class="kw">int</span> columna = <span class="num">0</span>; columna &lt; lado; columna++) {
-            cout &lt;&lt; simbolo &lt;&lt; <span class="str">" "</span>;
-        }
-        cout &lt;&lt; endl;
-    }
-}</pre>
-            </div>
-          </div>
-          <div class="cs-pane" data-lang="py" hidden>
-            <div class="code-block">
-              <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">animacion.py</span></div>
-<pre><span class="kw">def</span> <span class="fn">dibujar_cuadrado</span>(lado, simbolo):
-    <span class="kw">for</span> fila <span class="kw">in</span> <span class="fn">range</span>(lado):
-        <span class="kw">for</span> columna <span class="kw">in</span> <span class="fn">range</span>(lado):
-            <span class="fn">print</span>(simbolo, end=<span class="str">" "</span>)
-        <span class="fn">print</span>()</pre>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <p class="code-cap">Cómo trabajan los dos ciclos</p>
-        <div class="gwin">
-          <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">dos ciclos anidados</span></div>
-          <div class="term-body" style="min-height:220px;padding:45px 60px;">
-            <span class="head-l">for exterior</span> → elige el renglón<br/><br/>
-            &nbsp;&nbsp;<span class="head-l">for interior</span> → imprime los símbolos<br/><br/>
-            &nbsp;&nbsp;al terminar → <span class="keep">salto de línea</span>
-          </div>
-          <div class="gw-cap"><strong>Exterior = filas; interior = columnas.</strong> Ésta es toda la lógica del cuadrado.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECCIÓN iv: LIVE CODING · MUNDO-GRÁFICO -->
-  <section class="ejercicios reveal">
-    <div class="s-head">
-      <div class="n blood display">iv.</div>
-      <div>
-        <h2 class="display">Live coding: armamos <em class="blood">«Mundo-gráfico»</em>.</h2>
-        <p>Juntamos funciones pequeñas en <strong>un programa modular de consola</strong>. En esta página queda el <strong>plano</strong>: los pasos y las firmas, no las respuestas.</p>
-      </div>
-    </div>
-
-    <div class="sec-prose">
-      <p>El mapa es corto: unas funciones muestran, una calcula y <span class="mono">main</span> coordina. Cada responsabilidad tiene un nombre y un lugar.</p>
-    </div>
-
-    <div class="modmap">
-      <div class="mod figuras">
-        <div class="mod-k">responsabilidad · mostrar</div>
-        <h4>Figuras de consola</h4>
-        <span class="fnchip">mostrar_titulo()</span>
-        <span class="fnchip">dibujar_linea(largo, simbolo)</span>
-        <span class="fnchip">dibujar_cuadrado(lado, simbolo)</span>
-        <p><strong>Imprimen, no calculan.</strong> Los parámetros permiten cambiar el tamaño y el símbolo sin repetir el código.</p>
-      </div>
-      <div class="mod interfaz">
-        <div class="mod-k">responsabilidad · calcular</div>
-        <h4>Resultado con return</h4>
-        <span class="fnchip">area_cuadrado(lado) → int</span>
-        <p><strong>Calcula, no imprime.</strong> Devuelve <span class="mono">lado * lado</span> para que el programa pueda utilizar el resultado.</p>
-      </div>
-      <div class="mod principal">
-        <div class="mod-k">módulo · principal</div>
-        <h4>Programa principal</h4>
-        <span class="fnchip">main()</span>
-        <p><strong>No repite el trabajo: coordina.</strong> Pide el lado y llama las funciones en el orden correcto.</p>
-      </div>
-    </div>
-
-    <!-- Plano descargable -->
-    <div class="codeswitch full" style="margin-top:44px;">
-      <div class="cs-tabs">
-        <button type="button" class="cs-tab active" data-lang="cpp">C++</button>
-        <button type="button" class="cs-tab" data-lang="py">Python</button>
-        <span class="cs-flag">plano guiado &middot; C++</span>
-      </div>
-      <div class="cs-pane" data-lang="cpp">
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mundo_grafico.cpp</span></div>
-<pre><span class="com">// MUNDO-GRAFICO · PLANO GUIADO</span>
-<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
-<span class="kw">using namespace</span> std;
-
-<span class="com">// PASO 1: void mostrar_titulo()</span>
-<span class="com">// PASO 2: void dibujar_linea(int largo, char simbolo)</span>
-<span class="com">// PASO 3: void dibujar_cuadrado(int lado, char simbolo)</span>
-<span class="com">// PASO 4: int area_cuadrado(int lado)</span>
-<span class="com">// PASO 5: void mostrar_reporte(int lado)</span>
-
-<span class="kw">int</span> <span class="fn">main</span>() {
-    <span class="com">// PASO 6: mostrar titulo</span>
-    <span class="com">// PASO 7: pedir el lado</span>
-    <span class="com">// PASO 8: mostrar reporte</span>
-    <span class="com">// PASO 9: dibujar linea final</span>
-    <span class="kw">return</span> <span class="num">0</span>;
-}</pre>
-        </div>
-      </div>
-      <div class="cs-pane" data-lang="py" hidden>
-        <div class="code-block">
-          <div class="cb-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="fname">mundo_grafico.py</span></div>
-<pre><span class="com"># MUNDO-GRÁFICO · PLANO GUIADO</span>
-<span class="com"># PASO 1: def mostrar_titulo()</span>
-<span class="com"># PASO 2: def dibujar_linea(largo, simbolo)</span>
-<span class="com"># PASO 3: def dibujar_cuadrado(lado, simbolo)</span>
-<span class="com"># PASO 4: def area_cuadrado(lado)</span>
-<span class="com"># PASO 5: def mostrar_reporte(lado)</span>
-<span class="com"># PASO 6: pedir el lado y llamar las funciones</span></pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="download-box">
-      <div class="db-head">
-        <div>
-          <h3>Mundo-gráfico · el plano de la aplicación</h3>
-          <div class="file-meta">mundo_grafico.cpp · 9 pasos guiados · C++ (y Python como apoyo)</div>
-        </div>
-        <div class="dl-col">
-          <a class="dl-btn" href="mundo_grafico.cpp" download>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 4 5-4M5 21h14"/></svg>
-            Descargar el plano (C++)
-          </a>
-          <a class="dl-alt" href="mundo_grafico.py" download>↓ versión en Python (consola)</a>
-        </div>
-      </div>
-      <div class="db-body">
-        <p>Solo contiene los pasos y las firmas. Ábrelo en Dev C++ y escribe el cuerpo de cada función. <strong>No requiere ninguna biblioteca gráfica.</strong></p>
-      </div>
-    </div>
-
-    <!-- SOLUCIÓN SELLADA -->
-    <div class="solucion">
-      <span class="sol-label">Ruta de solución</span>
-      <div class="sol-head">
-        <div>
-          <h3>La lógica, sin regalar el código.</h3>
-          <p class="sol-hint">Si te atoras, abre esta ruta. Muestra el orden de las responsabilidades; traducirlas a funciones de C++ sigue siendo <strong>tu trabajo</strong>.</p>
-        </div>
-        <button type="button" class="sol-btn" id="solBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
-          <span class="sb-txt">Ver la ruta</span>
-        </button>
-      </div>
-
-      <div class="sol-body" id="solBody" hidden>
-        <div class="sol-sub">El recorrido del programa</div>
-        <div class="framecycle">
-          <span class="fstep">pedir lado</span>
-          <span class="farr">→</span>
-          <span class="fstep">dibujar cuadrado</span>
-          <span class="farr">→</span>
-          <span class="fstep">calcular área</span>
-          <span class="farr">→</span>
-          <span class="fstep">mostrar resultado</span>
-          <span class="floop">main coordina; cada función conserva una responsabilidad</span>
-        </div>
-        <p class="sol-caption">El doble <span class="mono">for</span> pertenece a <span class="mono">dibujar_cuadrado</span>; la multiplicación pertenece a <span class="mono">area_cuadrado</span>.</p>
-        <div class="sol-flow" style="display:none">
-          <svg viewBox="0 0 760 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de flujo: abrir ventana, dibujar la escena, animar en un ciclo y cerrar">
-            <defs>
-              <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                <path d="M0,0 L10,5 L0,10 z" fill="#2a1d14"/>
-              </marker>
-            </defs>
-
-            <!-- INICIO -->
-            <ellipse cx="300" cy="38" rx="70" ry="24" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="300" y="44" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="16" fill="#efe6d2">INICIO</text>
-            <line x1="300" y1="62" x2="300" y2="88" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-
-            <!-- proceso: abrir ventana -->
-            <rect x="185" y="90" width="230" height="46" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="300" y="118" text-anchor="middle" font-family="Newsreader, serif" font-size="14.5" fill="#2a1d14">Abrir la ventana (initwindow)</text>
-            <line x1="300" y1="136" x2="300" y2="160" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-
-            <!-- E/S: dibujar escena -->
-            <path d="M165,162 L455,162 L431,214 L141,214 Z" fill="#efe6d2" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="298" y="184" text-anchor="middle" font-family="Newsreader, serif" font-size="14" fill="#2a1d14">Dibujar la escena inicial:</text>
-            <text x="298" y="203" text-anchor="middle" font-family="Newsreader, serif" font-size="14" fill="#2a1d14">círculo · rectángulo · línea</text>
-            <line x1="300" y1="214" x2="300" y2="240" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-
-            <!-- proceso i = 0 -->
-            <rect x="228" y="242" width="144" height="44" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="300" y="270" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="#2a1d14">i = 0</text>
-            <line x1="300" y1="286" x2="300" y2="312" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-
-            <!-- decision ¿i < 60? -->
-            <polygon points="300,315 405,372 300,429 195,372" fill="#efe6d2" stroke="#a02418" stroke-width="2"/>
-            <text x="300" y="377" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" fill="#2a1d14">¿i &lt; 60?</text>
-            <text x="412" y="336" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">animación</text>
-
-            <!-- No -> cerrar -> FIN -->
-            <line x1="405" y1="372" x2="470" y2="372" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-            <text x="437" y="360" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">No</text>
-            <rect x="472" y="348" width="252" height="48" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="598" y="370" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Esperar una tecla y cerrar</text>
-            <text x="598" y="387" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#6e1810">closegraph()</text>
-            <line x1="598" y1="396" x2="598" y2="424" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-            <ellipse cx="598" cy="450" rx="48" ry="23" fill="#5d6638" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="598" y="456" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="15" fill="#efe6d2">FIN</text>
-
-            <!-- Si -> loop de animacion -->
-            <line x1="300" y1="429" x2="300" y2="455" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-            <text x="318" y="448" font-family="Fraunces, serif" font-style="italic" font-weight="600" font-size="15" fill="#a02418">Sí</text>
-
-            <rect x="200" y="457" width="200" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="300" y="483" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Borrar pantalla (cleardevice)</text>
-            <line x1="300" y1="499" x2="300" y2="521" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-
-            <rect x="170" y="523" width="260" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="300" y="549" text-anchor="middle" font-family="Newsreader, serif" font-size="13.5" fill="#2a1d14">Dibujar el círculo en x</text>
-            <line x1="300" y1="565" x2="300" y2="587" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-
-            <rect x="188" y="589" width="224" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="300" y="615" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13.5" fill="#2a1d14">x = mover_derecha(x, 5)</text>
-            <line x1="300" y1="631" x2="300" y2="653" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-
-            <rect x="235" y="655" width="130" height="42" fill="#e6dbc2" stroke="#2a1d14" stroke-width="1.6"/>
-            <text x="300" y="681" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="14" fill="#2a1d14">i = i + 1</text>
-
-            <!-- loop back a la decision por la izquierda -->
-            <path d="M235,676 L110,676 L110,372 L195,372" fill="none" stroke="#2a1d14" stroke-width="1.8" marker-end="url(#ah)"/>
-            <text x="150" y="666" text-anchor="middle" font-family="Newsreader, serif" font-style="italic" font-size="13" fill="#8a7a6a">siguiente cuadro</text>
-          </svg>
-        </div>
-        <div class="sol-legend" style="display:none">
-          <span class="li"><svg viewBox="0 0 30 20"><ellipse cx="15" cy="10" rx="13" ry="8" fill="#5d6638" stroke="#2a1d14"/></svg> inicio / fin</span>
-          <span class="li"><svg viewBox="0 0 30 20"><rect x="2" y="3" width="26" height="14" fill="#e6dbc2" stroke="#2a1d14"/></svg> proceso</span>
-          <span class="li"><svg viewBox="0 0 30 20"><path d="M7,3 L28,3 L23,17 L2,17 Z" fill="#efe6d2" stroke="#2a1d14"/></svg> entrada / salida</span>
-          <span class="li"><svg viewBox="0 0 30 20"><polygon points="15,1 29,10 15,19 1,10" fill="#efe6d2" stroke="#a02418" stroke-width="1.5"/></svg> decisión</span>
-        </div>
-
-        <div class="sol-sub two" style="display:none">B · La animación, cuadro por cuadro</div>
-        <div class="framecycle" style="display:none">
-          <span class="fstep">borrar · cleardevice()</span>
-          <span class="farr">→</span>
-          <span class="fstep">dibujar en x</span>
-          <span class="farr">→</span>
-          <span class="fstep">esperar · delay(30)</span>
-          <span class="farr">→</span>
-          <span class="fstep">x = mover_derecha(x, 5)</span>
-          <span class="floop">↺ y vuelve a empezar, 60 veces — cada vuelta es un cuadro de la animación</span>
-        </div>
-        <p class="sol-caption" style="display:none">Referencia anterior de animación.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECCIÓN v: ENTREGABLE -->
-  <section class="ejercicios reveal">
-    <div class="s-head">
-      <div class="n blood display">v.</div>
-      <div>
-        <h2 class="display">Tu <em class="blood">entregable</em>: un programa y un documento.</h2>
-        <p>La Práctica 5 tiene <strong>dos piezas</strong>: la aplicación modular de «Mundo-gráfico» y un documento breve, en PDF o Word, que cuenta cómo la lograste. Todo se sube a la actividad <strong>«Práctica 5»</strong> en Blackboard.</p>
-      </div>
-    </div>
-
-    <p class="ej-intro">Diseña <strong>un programa modular en C++</strong> que imprima una línea y un cuadrado con caracteres, usando funciones con parámetros y devolución de resultados.</p>
-
-    <div class="ej-card">
-      <span class="ej-tag">Parte A</span>
-      <span class="ej-pill">programa · mundo_grafico.cpp</span>
-      <div class="ej-body">
-        <div>
-          <h3>Figuras de texto en consola</h3>
-          <p class="ej-desc">Un programa <strong>modular</strong> que pida el lado, dibuje un cuadrado con asteriscos y muestre su área. Parte del plano <span class="mono">mundo_grafico.cpp</span>.</p>
-          <ul class="reqs">
-            <li><span class="mono">mostrar_titulo()</span> para presentar el programa</li>
-            <li><span class="mono">dibujar_linea(largo, simbolo)</span> con varios parámetros</li>
-            <li><span class="mono">dibujar_cuadrado(lado, simbolo)</span> con dos ciclos <span class="mono">for</span></li>
-            <li><span class="mono">area_cuadrado(lado)</span> con <span class="mono">return</span></li>
-            <li>El <span class="mono">main</span> solo <strong>coordina</strong>: llama funciones, no amontona</li>
-            <li>Comentarios y tus <strong>conclusiones</strong> al final del código</li>
-          </ul>
-        </div>
-        <div class="ej-preview">
-          <div class="pv-label">Así debe verse la consola</div>
-          <div class="gwin">
-            <div class="gw-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="tt">mundo_grafico</span></div>
-            <div class="term-body" style="min-height:260px;padding:42px 55px;">
-              <span class="head-l">--- Mundo-grafico ---</span><br/><br/>
-              Lado: <span class="num-l">4</span><br/><br/>
-              * * * *<br/>* * * *<br/>* * * *<br/>* * * *<br/><br/>
-              Área: <span class="num-l">16</span>
-            </div>
-            <div class="gw-cap"><strong>Un cuadrado de texto, construido por una función.</strong></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="ej-card">
-      <span class="ej-tag">Parte B</span>
-      <span class="ej-pill">documento · pdf / word</span>
-      <div class="ej-body">
-        <div>
-          <h3>El documento de la práctica</h3>
-          <p class="ej-desc">Un documento en <strong>PDF o Word</strong> que narre tu práctica: qué hiciste, cómo la modularizaste y qué aprendiste. Breve y honesto vale más que largo y copiado. La conclusión responde a una pregunta concreta.</p>
-          <ul class="reqs">
-            <li><strong>Título</strong> — de la práctica, con tu nombre, materia y fecha</li>
-            <li><strong>Introducción</strong> — qué es el diseño modular y las funciones</li>
-            <li><strong>Desarrollo</strong> — cómo dividiste las responsabilidades, con capturas del código y de la consola</li>
-            <li><strong>Conclusiones</strong> — responde: <em>¿para qué sirve el diseño modular en la programación?</em></li>
-            <li><strong>Bibliografía</strong> — en formato <strong>APA</strong> (abajo las tres referencias base)</li>
-          </ul>
-        </div>
-        <div class="ej-preview">
-          <div class="pv-label">Estructura del documento</div>
-          <div class="doc-mock">
-            <div class="dm-title">Práctica 5 · Diseño modular, funciones y gráficas</div>
-            <div class="dm-sec"><span class="dm-n">1.</span><span class="dm-t"><strong>Título</strong> — práctica, alumno, materia, fecha</span></div>
-            <div class="dm-sec"><span class="dm-n">2.</span><span class="dm-t"><strong>Introducción</strong> — diseño modular y funciones</span></div>
-            <div class="dm-sec"><span class="dm-n">3.</span><span class="dm-t"><strong>Desarrollo</strong> — módulos, funciones + capturas</span></div>
-            <div class="dm-sec"><span class="dm-n">4.</span><span class="dm-t"><strong>Conclusiones</strong> — ¿para qué sirve la modularidad?</span></div>
-            <div class="dm-sec"><span class="dm-n">5.</span><span class="dm-t"><strong>Bibliografía</strong> — formato APA</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="choose-note">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg>
-      <p><strong>Importante:</strong> todo se entrega en la actividad <strong>«Práctica 5» de Blackboard</strong>: el código fuente <strong>.cpp</strong>, su copia en <strong>.txt</strong> y el documento <strong>PDF o Word</strong>. Las conclusiones van <strong>dos veces</strong>: como comentario al final del programa y como sección del documento.</p>
-    </div>
-  </section>
-
-  <!-- EVALUACIÓN + EVIDENCIA -->
-  <section class="cierre-practica reveal">
-    <div class="panel">
-      <h3 class="display">Criterios de <em>evaluación</em></h3>
-      <ol class="crit-list">
-        <li><strong>Desarrollo de funciones que logran la modularidad</strong> — la aplicación está partida en funciones con una sola responsabilidad, no en un bloque monolítico.</li>
-        <li><strong>Organización del código</strong> — respeta la estructura por funciones y módulos; el <span class="mono">main</span> solo coordina.</li>
-        <li><strong>El programa de consola funciona</strong> — imprime la línea y el cuadrado, y calcula correctamente el área.</li>
-        <li><strong>Documento compilado en Dev C++</strong> — el programa compila y corre; se entrega junto con su documento. Autenticidad: hecho por ti.</li>
-      </ol>
-      <div class="pond">
-        <h4>Cómo cuenta en el curso</h4>
-        <p>Esta práctica suma al bloque de <strong>prácticas y entregables</strong>. Recuerda la aritmética del curso: Actividades 10% · Examen Bimestral 40% (examen 20% + prácticas 20%) · Examen Final 50% (examen 25% + prácticas 25%).</p>
-      </div>
-    </div>
-
-    <div class="panel">
-      <h3 class="display">Evidencia a <em>entregar</em></h3>
-      <div class="evid-item">
-        <span class="file-ic">.cpp</span>
-        <span class="ev-txt"><strong>mundo_grafico.cpp</strong> — el programa modular, tal como lo compilaste (documento ejecutable o archivo en extensión <span class="mono">.cpp</span>).</span>
-      </div>
-      <div class="evid-item">
-        <span class="file-ic">.txt</span>
-        <span class="ev-txt"><strong>Copia del código en texto plano</strong> — el programa pegado en el Bloc de notas.</span>
-      </div>
-      <div class="evid-item">
-        <span class="file-ic">.pdf / .docx</span>
-        <span class="ev-txt"><strong>El documento</strong> con Título, Introducción, Desarrollo, Conclusiones y Bibliografía en formato APA (Parte B).</span>
-      </div>
-      <div class="conclu-note">
-        <h4>No olvides tus conclusiones en el código</h4>
-        <p>Al final del programa, en forma de comentario (<span class="mono">/* ... */</span> en C++, <span class="mono">#</span> en Python), responde: <em>¿para qué sirve el diseño modular en la programación?</em>, con tus observaciones y lo aprendido.</p>
-      </div>
-      <div class="biblio">
-        <h4>Bibliografía de la práctica (formato APA)</h4>
-        <p>Corona Nakamura, M. A. y Ancona Valdez, M. de los Á. (2011). <em>Diseño de algoritmos y su codificación en lenguaje C.</em> McGraw-Hill.</p>
-        <p>Joyanes Aguilar, L. (2013). <em>Fundamentos generales de programación.</em> McGraw-Hill.</p>
-        <p>Joyanes Aguilar, L. y Zahonero Martínez, I. (2014). <em>Programación en C/C++, Java y UML.</em> McGraw-Hill.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CIERRE -->
-  <section class="cierre reveal">
-    <div class="small-caps">Una última cosa antes de cerrar</div>
-    <div class="quote display">
-      «La forma de atacar un problema complejo<br/>
-      es <span class="em-ochre">dividirlo</span> en partes más sencillas,<br/>
-      y resolver <span class="em">cada parte por separado</span>.»
-    </div>
-    <div class="quote-author">— René Descartes</div>
-    <div class="quote-meta">Discurso del método, segunda parte · 1637 · el alma del diseño modular</div>
-    <div class="sig">C. D. Vaca
-      <small>Profesor de Fundamentos de Programación · UNITEC Atizapán · Ciclo 26-3</small>
-    </div>
-  </section>
+    <a class="go" href="../sesion-21/index.html">
+      Ir a la sesión 21
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
 
   <footer>
-    Sesión 20 <span class="dot">·</span> Práctica 5 · El taller de figuras <span class="dot">·</span> 26-3
+    Sesión 20 <span class="dot">·</span> Sin sesión · Evento en Auditorio <span class="dot">·</span> 26-3
     <div class="nav-prev">
       ← Vuelve a <a href="../sesion-19/index.html">Sesión 19 · Práctica 4 · El casillero</a>
       &nbsp;·&nbsp;
@@ -1185,27 +191,6 @@ area = <span class="fn">area_cuadrado</span>(<span class="num">4</span>) <span c
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
   reveals.forEach(el => io.observe(el));
-
-  /* ===== Dual language code switch ===== */
-  document.addEventListener("click", function(ev){
-    var tab = ev.target.closest && ev.target.closest(".cs-tab");
-    if(!tab) return;
-    var sw = tab.closest(".codeswitch"); if(!sw) return;
-    var lang = tab.getAttribute("data-lang");
-    sw.querySelectorAll(".cs-tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-lang")===lang); });
-    sw.querySelectorAll(".cs-pane").forEach(function(p){ p.hidden = (p.getAttribute("data-lang")!==lang); });
-  });
-
-  /* ===== Solución sellada ===== */
-  const solBtn = document.getElementById('solBtn');
-  const solBody = document.getElementById('solBody');
-  solBtn.addEventListener('click', function(){
-    const abrir = solBody.hidden;
-    solBody.hidden = !abrir;
-    solBtn.classList.toggle('open', abrir);
-    solBtn.querySelector('.sb-txt').textContent = abrir ? 'Ocultar la solución' : 'Ver la solución';
-    if (abrir) solBody.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
 </script>
 
 </body>

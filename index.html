@@ -378,6 +378,14 @@
     opacity: .85;
   }
 
+  .session.special-suspendida{
+    background: var(--paper-darker);
+    border-color: var(--ink-faint);
+    border-style: dashed;
+    opacity: .9;
+  }
+  .session.special-suspendida h3{ text-decoration: line-through; text-decoration-thickness: 1.5px; text-decoration-color: var(--ink-faint); }
+
   .session-head{
     display: flex;
     align-items: baseline;
@@ -456,6 +464,10 @@
   }
   .session .badge.asueto{
     background: var(--ochre);
+    color: var(--paper);
+  }
+  .session .badge.suspendida{
+    background: var(--ink-soft);
     color: var(--paper);
   }
   .session .countdown{
@@ -700,10 +712,10 @@
     { semana: 9, num: 18, fecha: '2026-07-16', dia: 'Jue', titulo: 'El reloj de arena',                      subtitulo: 'Práctica 3 · Estructuras repetitivas · Cuenta regresiva y gráfica', link: 'sesion-18/', tipo: 'normal' },
     // Semana 10
     { semana: 10, num: 19, fecha: '2026-07-20', dia: 'Lun', titulo: 'El casillero',                          subtitulo: 'Práctica 4 · Estructuras de tipo arreglo · Vectores y matrices', link: 'sesion-19/', tipo: 'normal' },
-    { semana: 10, num: 20, fecha: '2026-07-23', dia: 'Jue', titulo: 'El taller de figuras',                 subtitulo: 'Práctica 5 · Diseño modular, funciones y aplicaciones gráficas', link: 'sesion-20/', tipo: 'normal' },
+    { semana: 10, num: 20, fecha: '2026-07-23', dia: 'Jue', titulo: 'Sin sesión',                            subtitulo: 'Contenido no visto debido a evento en Auditorio · se recorre a la sesión 21', link: 'sesion-20/', tipo: 'suspendida' },
     // Semana 11
-    { semana: 11, num: 21, fecha: '2026-07-27', dia: 'Lun', titulo: 'El expediente',                         subtitulo: 'Práctica 6 · Tipos de datos estructurados · Arreglos, cadenas y matrices', link: 'sesion-21/', tipo: 'normal' },
-    { semana: 11, num: 22, fecha: '2026-07-30', dia: 'Jue', titulo: 'Dos dimensiones',                       subtitulo: 'Matrices · Listas de listas · Declaración',             link: 'sesion-22/', tipo: 'normal' },
+    { semana: 11, num: 21, fecha: '2026-07-27', dia: 'Lun', titulo: 'El taller de figuras',                  subtitulo: 'Práctica 5 · Diseño modular, funciones y figuras en consola', link: 'sesion-21/', tipo: 'normal' },
+    { semana: 11, num: 22, fecha: '2026-07-30', dia: 'Jue', titulo: 'El expediente',                         subtitulo: 'Práctica 6 · Estructuras, arreglos, cadenas y matrices', link: 'sesion-22/', tipo: 'normal' },
     // Semana 12
     { semana: 12, num: 23, fecha: '2026-08-03', dia: 'Lun', titulo: 'El tablero del mundo',                  subtitulo: 'Matrices aplicadas · Recorridos con doble for · Juego del gato', link: 'sesion-23/', tipo: 'normal' },
     { semana: 12, num: 24, fecha: '2026-08-06', dia: 'Jue', titulo: 'Clave y valor',                         subtitulo: 'Diccionarios · Lista de diccionarios · Modelado de datos', link: 'sesion-24/', tipo: 'normal' },
@@ -735,6 +747,12 @@
   }
 
   function badgeHtml(session, status){
+    if (session.tipo === 'suspendida'){
+      return `<span class="badge suspendida">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M6 6l12 12"/></svg>
+        Sin sesión
+      </span>`;
+    }
     if (session.tipo === 'asueto'){
       return `<span class="badge asueto">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>
@@ -787,7 +805,8 @@
     const fechaObj = parseISO(session.fecha);
     let extraClass = '';
 
-    if (session.tipo === 'asueto') extraClass = 'special-asueto locked';
+    if (session.tipo === 'suspendida') extraClass = 'special-suspendida';
+    else if (session.tipo === 'asueto') extraClass = 'special-asueto locked';
     else if (session.tipo === 'examen'){
       extraClass = 'special-exam';
       if (status.state === 'locked') extraClass += ' locked';
@@ -797,7 +816,7 @@
       else if (status.state === 'today') extraClass = 'today';
     }
 
-    const tag = (status.state === 'locked' || session.tipo === 'asueto') ? 'div' : 'a';
+    const tag = ((status.state === 'locked' && session.tipo !== 'suspendida') || session.tipo === 'asueto') ? 'div' : 'a';
     const href = (tag === 'a') ? `href="${session.link}"` : '';
 
     return `
