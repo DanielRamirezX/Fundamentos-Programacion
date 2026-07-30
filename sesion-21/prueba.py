@@ -1,9 +1,6 @@
-
-import turtle
-pantalla = turtle.Screen()
-pantalla.title("Mundo-gráfico")
-pantalla.setup(600, 400)
-pantalla.tracer(0)            # nosotros controlamos cada cuadro
-t = turtle.Turtle()
-t.hideturtle()
-t.speed(0)
+for L in range(1, 11):
+    print(f"--- Tabla del {L} ---")
+    for X in range(1, 11):
+        resultado = L * X
+        print(f"{L} x {X:2} = {resultado:3}")
+    print()
